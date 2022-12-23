@@ -19,7 +19,7 @@ References:
 """
 
 """
-Simplistic XYZ_TO_HDF5 converter for Lawin FTG data
+Simplistic XYZ_TO_HDF5 converter for airborne gravity data
 
 (c) Mark Dransfield 19 Jul 2020
 
