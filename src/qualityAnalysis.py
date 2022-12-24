@@ -4000,6 +4000,8 @@ def checkIntersectionHeights(whizzFile, controls, max_allowed_height=10.0):
     data_is_good = True
     report = ''
     filename = str(whizzFile)
+    num_intersections_checked = 0
+    num_failed_intersections = 0
     
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -4023,14 +4025,21 @@ def checkIntersectionHeights(whizzFile, controls, max_allowed_height=10.0):
                 if _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
                     # print(f'bearings: {bearingt}, {bearingt} -- {np.abs(np.cos(bearingc - bearingt))}')
                     dh = _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bear_ctrl)
+                    num_intersections_checked += 1
                     if dh > max_allowed_height:
+                        num_failed_intersections += 1
                         # print(dh)
                         report += f'\n  {linet} : {linec} intersection height difference = {dh:.1f} > {max_allowed_height:.1f}.'
                         data_is_good = False
                 # else:
                 #     report += f'\n  {linet} : {linec} un-tested since not perpendicular.'
     if data_is_good:
-        report += f'All intersection heights were less than {max_allowed_height:.1f}.'
+        report += f'All {num_intersections_checked} intersection heights were less than {max_allowed_height:.1f}.'
+    else:
+        tmpstr = f'Of {num_intersections_checked} intersections checked'
+        tmpstr += f', {num_failed_intersections} exceeded the '
+        tmpstr += f'{max_allowed_height} m allowed height difference.\n'
+        report = tmpstr + report
     print(report)
     return
 
