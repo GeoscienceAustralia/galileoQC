@@ -696,6 +696,65 @@ def reportWhizz(whizzFile, line='', channel=''):
                 print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
 
 
+def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
+    '''
+    Prints a summary of the flight numbers in a HDF5 Whizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    flightChannel : String, optional
+        The name of the channel containing the flight numbers. The default is 'FLIGHT'.
+    lines : String Array, optional
+        The array of line numbers, each formatted as a string, to report. The default is [] and all lines.
+    detailed : Bool, optional
+        If true, report the line numbers flown in each flight. The default is False.
+
+    Returns
+    -------
+    None.
+
+    '''
+    filename = str(whizzFile)
+        
+    with h5py.File(filename, 'r') as f:
+        
+        whizzHeader = list(f.keys())[0]
+        g = f[whizzHeader]
+        gAttributeNames = list(g.attrs)
+        gLines = g['Lines']
+
+        # The data are stored with flights belonging to lines; we invert this relationship
+        flight_dict = {}
+        if lines == []:
+            lines = list(gLines.keys())
+        numLines = len(lines)
+        for line in lines:
+            this_flight = gLines[line][flightChannel][0]
+            if this_flight in flight_dict:
+                flight_dict[this_flight].append(line)
+            else:
+                flight_dict[this_flight] = [line]
+        sorted_keys = sorted(flight_dict.keys())
+        sorted_flights = {key:flight_dict[key] for key in sorted_keys}
+
+        print(whizzHeader)
+        for attribute in gAttributeNames:
+            print(f'    {attribute:.20}: {g.attrs[attribute]}')
+
+        print(f'\n{len(sorted_flights.keys())} flights over {numLines} lines.')
+
+        print("\nFlights")
+        for flight in sorted_flights:
+            print(f'    {flight:.0f}')
+            if detailed:
+                print(f'        ', end = '')
+                for line in sorted(sorted_flights[flight]):
+                    print(f'L{line}', end = ' ')
+                print('')
+
+
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):
     '''
     Change any of the project attributes in the HDF5 Whizz file. Typically most of this information
