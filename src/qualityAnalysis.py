@@ -19,6 +19,9 @@ Nominal speed 67.5; allowed 54.0 : 81.0 for < 13.0 seconds.
 
 25 lines had some short exceedance(s).
 0 lines failed for exceedance > allowed distance.
+
+TODO:
+1. Trap instances where a channel or line name is not found as a dataset or group and suggest a check on spelling and case.
 """
 
 
@@ -1893,13 +1896,13 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
 
             message = ''
             num_lines_exceeded = 0
-            num_lines_unplanned = 0 # 5 DEC
+            num_lines_unplanned = 0
 
             lines = list(gMeas.keys())
             for line in lines:
                 print(f'Processing line {line}.')
                 planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
-                if planLine in gPlan: # 5 DEC
+                if planLine in gPlan:
                     xP = np.array(gPlan[planLine][planX])
                     yP = np.array(gPlan[planLine][planY])
                     xM = np.array(gMeas[line][measX])
@@ -1942,9 +1945,9 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
                         num_lines_exceeded += 1
                         if plot_flag:
                             _plot_exceeding_line(x, y, allowance, line, planLine, dirn)
-                else: # 5 DEC
-                    print(f'Line {line} not in plan.') # 5 DEC
-                    num_lines_unplanned += 1 # 5 DEC
+                else:
+                    print(f'Line {line} / {planLine} not in plan.')
+                    num_lines_unplanned += 1
 
             message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
             message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message # 5 DEC

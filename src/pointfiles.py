@@ -90,13 +90,22 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
         # all the lines are in g:
         g = f[groupName]['Lines']
 
-        if line_type == 'Xcal_nsw' or line_type == 'SGL_GA':
+        if line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA':
             for line in g:
                 gg = g[line]
                 current_line = gg.attrs['LineNumber']
                 if line_type == 'Xcal_nsw':
                     if current_line < 8999999.0:
                         gg.attrs['PlannedLine'] = np.floor(current_line / 100.0) * 10.0
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10000.0)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                elif line_type == 'Xcal_can':
+                    if current_line < 8999999.0:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10.0) * 10.0
                         gg.attrs['Segment'] = 0
                         gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
                     else:
