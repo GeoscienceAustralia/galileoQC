@@ -953,6 +953,7 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
         if changed:
             print(f'Changed CoordFrame attribute(s) for {whizzFile.name}.')
 
+
 def asegReportChannels(datFilePath):
     '''
     Prints out the indices to the first channel name containg each of ['line',
@@ -1740,77 +1741,6 @@ def readXYZ(filename):
     fid.close()
 
     return geosoftXYZ
-
-
-def gdb2xyz(filename):
-    import subprocess as sbp
-
-
-    inputGdb = "E:/2020_salamander_bell/deliverables/lawin/processed/databases/databases/lawin_airftg_deliverable.gdb"
-    outputGdb = "E:/2020_Salamander_Bell/Deliverables/Lawin/Processed/Databases/Databases/test.adb"
-    maxChannels = 250
-    maxLines = 1000
-    maxBlobs = 1900                 
-    crdict = dict(program = "ExportGDB",
-                  version = "1.0.0",
-                  inputgdb = inputGdb,
-                  outputgdb = outputGdb,
-                  outputmode = "Append",
-                  gdbcompression = "1",
-                  gdbMaxChannels = maxChannels,
-                  gdbMaxLines = maxLines,
-                  gdbMaxBlobs = maxBlobs,
-                  channelIoCsv = "",
-                  outputChannelPrefix = "",
-                  outputChannelSuffix = "",
-                  outputFidRangeOption = "0",
-                  maskChannel = "",
-                  lffFile = "",
-                  dataResample = "No",
-                  resampledBy = "Fid",
-                  newFidIncr = "1",
-                  distChannel = "",                                                                                                       
-                  newDistIncr = 50)                                                                                                    
-    
-    crString = 'CONTROL_BEGIN\n'
-    crString += f'Program              = {crdict["program"]}\n'
-    crString += f'Version              = {crdict["version"]}\n'
-    crString += f'InputGDB             = {crdict["inputgdb"]}\n'
-    crString += f'OutputGDB            = {crdict["outputgdb"]}\n'
-    crString += f'OutputMode           = {crdict["outputmode"]}\n'
-    crString += f'GDBCompression       = {crdict["gdbcompression"]}\n'
-    crString += f'GDBMaxChannels       = {crdict["gdbMaxChannels"]}\n'
-    crString += f'GDBMaxLines          = {crdict["gdbMaxChannels"]}\n'
-    crString += f'GDBMaxBlobs          = {crdict["gdbMaxBlobs"]}\n'
-    crString += f'ChannelIO_CSV        = {crdict["channelIoCsv"]}\n'
-    crString += f'OutChanPrefix        = {crdict["outputChannelPrefix"]}\n'
-    crString += f'OutChanSuffix        = {crdict["outputChannelSuffix"]}\n'
-    crString += f'OutputFidRangeOption = {crdict["outputFidRangeOption"]}\n'
-    crString += f'MaskChannel          = {crdict["maskChannel"]}\n'
-    crString += f'LFFFile              = {crdict["lffFile"]}\n'
-    crString += f'DataResample         = {crdict["dataResample"]}\n'
-    crString += f'ResampledBy          = {crdict["resampledBy"]}\n'
-    crString += f'NewFidIncr           = {crdict["newFidIncr"]}\n'
-    crString += f'DistChannel          = {crdict["distChannel"]}\n'
-    crString += f'NewDistIncr          = {crdict["distChannel"]}\n'
-    crString += 'CONTROL_END\n'
-    
-    # test run:
-    myPath = "E:/2020_Salamander_Bell/Deliverables/Lawin/Processed/Databases/Databases"
-    crFile = myPath + "/gdb2adb.cr"
-    
-    with open(crFile, 'wt') as fid:
-         #  if fid == -1
-         #      fprintf('Error opening control file (%s)\n', crFile)
-         #      error(message)
-         #  end
-         # now print out control file 
-         fid.write(crString)
-         
-    fid.close()
-    
-    myCmd = "C:/Atlas/Atlas.exe " + crFile
-    sbp.check_output(myCmd, shell=True).decode()
 
 
 def renameChannels(nchannels, chanNames):
