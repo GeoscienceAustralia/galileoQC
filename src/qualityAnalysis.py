@@ -186,8 +186,7 @@ def _distance(x, y):
     return np.sqrt(x * x + y * y)
 
 
-def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6,
-              max_vdop=4, max_hdop=4):
+def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, max_vdop=4, max_hdop=4):
     '''
     Checks that the data in a whizzFile meets the requirements for the minimum
     number of satellites, and maximum PDOP, VDOP and HDOP.
@@ -1716,15 +1715,21 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
         print(f'Number failed lines = {num_failed_lines}')
             
 
-def checkOverlaps(whizzFile, min_overlap = 7.6):
+def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], plot_flag=False):
     '''
-    For every line in the file measPath, calculate the overlap with each other
+    For every line in the file whizzFile, calculate the overlap with each other
     line that has the same prefix. Plot a map. Report overlaps.
 
     Parameters
     ----------
     whizzFile : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension, to be checked.
+    min_overlap : Float, optional
+        The minimum overlap distance in km, default 7.6 km.
+    lines : String list, optional.
+        The line numbers to be checked. Default is all lines in the whizzFile.
+    plot_flag : Bool, optional
+        If True, plot exceedances for each failed line.
 
     Returns
     -------
@@ -1733,15 +1738,18 @@ def checkOverlaps(whizzFile, min_overlap = 7.6):
     '''
     from matplotlib.ticker import StrMethodFormatter
     measFile = str(whizzFile)
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
+    if plot_flag:
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
     
     with h5py.File(measFile, 'r') as f:
         gMeas = f[groupName]['Lines']
         east = f[groupName]['CoordinateFrame'].attrs['XChannel']
         nrth = f[groupName]['CoordinateFrame'].attrs['YChannel']
-        lines = list(gMeas.keys())
+        if lines == []:
+            lines = list(gMeas.keys())
         num_coinc_lines = 0
+        report = ''
 
         for idx1 in range(0, len(lines)): #line1 in lines: #gMeas.keys():
             line1 = lines[idx1]
@@ -1787,36 +1795,47 @@ def checkOverlaps(whizzFile, min_overlap = 7.6):
                         overlap = abs(max2 - min2)
                         whole_line = 2
 
-                    plotline1, = ax.plot(e1, n1, color='blue', lw=0.2)
+                    if plot_flag:
+                        plotline1, = ax.plot(e1, n1, color='blue', lw=0.2)
                     
                     if whole_line == 1:
-                        print(f'All of line {line1} in {line2}: length {overlap:.0f} m.')
-                        plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
+                        report += f'  OK: All of line {line1} in {line2}: length {overlap:.0f} m.\n'
+                        if plot_flag:
+                            plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
                     elif whole_line == 2:
-                        print(f'All of line {line2} in {line1}: length {overlap:.0f} m.')
-                        plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
+                        report += f'  OK: All of line {line2} in {line1}: length {overlap:.0f} m.\n'
+                        if plot_flag:
+                            plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
+                    elif overlap < 1:
+                        report += f'  OK: Non-overlapping lines {line1}, {line2}: overlap {overlap:.0f} m < {min_overlap * 1000}.\n'
+                        if plot_flag:
+                            plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
                     elif overlap < min_overlap * 1000.0:
-                        print(f'ERROR: Repeat line {line1}, {line2}: overlap {overlap:.0f} m < {min_overlap * 1000}.')
-                        plotline2, = ax.plot(e2, n2, color='red', lw=0.2)
+                        report += f'\n  ERROR: Repeat line {line1}, {line2}: overlap {overlap:.0f} m < {min_overlap * 1000}.\n\n'
+                        if plot_flag:
+                            plotline2, = ax.plot(e2, n2, color='red', lw=0.2)
                     else:
-                        print(f'Repeat line {line1}, {line2}: overlap by {overlap:.0f} m.')
-                        plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
-    if num_coinc_lines > 0:
+                        report += f'  OK: Repeat line {line1}, {line2}: overlap by {overlap:.0f} m.\n'
+                        if plot_flag:
+                            plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
+
+    print(f'{num_coinc_lines} coincident lines found.')
+    print(report)
+    if num_coinc_lines > 0 and plot_flag:
         ax.set_aspect('equal')
         ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
         ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
         plt.xlabel('X [m]', fontsize = 10)
         plt.ylabel('Y [m]', fontsize = 10)
-        plt.title('Overlap Map', fontsize = 12)
+        plt.suptitle('Overlap Map', fontsize = 12)
+        plt.title('[1st line blue, accepted line green, error line red]', fontsize = 10)
         plt.grid(True)
         for label in ax.get_xticklabels(): label.set_fontsize(10)
         for label in ax.get_yticklabels(): label.set_fontsize(10)
         plt.show()
-    print(f'{num_coinc_lines} coincident lines found.')
 
 
-def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
-    allowance=200.0, maxCounter=14, maxLength=0, plot_flag=False):
+def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, plot_flag=False):
     '''
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
@@ -1824,7 +1843,7 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
     are read from planPath. The measured positions (measX, measY) are read from
     measPath and the perpendicular distance of each from the planned line is
     calculated. If this distance exceeds allowance for maxCounter consecutive
-    fiducial, or maxLength consecutive metres, then an out-of-specification
+    fiducial, or maxDistance consecutive metres, then an out-of-specification
     exceedance is reported for that line.
 
     Parameters
@@ -1847,7 +1866,7 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
     measY : String, optional
         The name of the geoWhizz field or channel containing the measured y position. The
         default is to read the yChannel field name from the Coordinate Frame.
-    allowance : TYPE, optional
+    allowance : Float, optional
         The allowed perpendicular distance for the measured line from the planned
         line. If any portion of a measured line is further than this from the
         planned position for more than the maximum allowed number of fids or the
@@ -1856,7 +1875,7 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
         The maximum number of consecutive fids for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 14.
-    maxLength : Float, optional
+    maxDistance : Float, optional
         The maximum number of consecutive metres for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 0.
@@ -1890,9 +1909,6 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
             if measY == '':
                 measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
             numLines = len(gMeas.items())
-            # devLines = np.zeros(numLines)
-            # devEndFids = np.zeros(numLines)
-            # numErrors = int(0)
 
             message = ''
             num_lines_exceeded = 0
@@ -1900,7 +1916,6 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
 
             lines = list(gMeas.keys())
             for line in lines:
-                print(f'Processing line {line}.')
                 planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
                 if planLine in gPlan:
                     xP = np.array(gPlan[planLine][planX])
@@ -1934,31 +1949,32 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', \
                                 end_x = xM[fid]
                                 end_y = yM[fid]
                                 len_exceedance = _dist([start_x, end_x], [start_y, end_y])[1]
-                                if _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxLength):
+                                if _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance):
                                     message += f'\nL {line} deviates more than {allowance} m for '
-                                    message += f'{num_fids_in_exceedance} fids ({len_exceedance:.0f} m). Max exceedance = {max_deviation:.0f}.'
+                                    message += f'{num_fids_in_exceedance} fids ({len_exceedance:.0f} m), max exceedance = {max_deviation:.0f} m.'
                                     message += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
                                     exceedance_in_line = True
                                 num_fids_in_exceedance = 0
-
-                    if exceedance_in_line:
-                        num_lines_exceeded += 1
-                        if plot_flag:
-                            _plot_exceeding_line(x, y, allowance, line, planLine, dirn)
                 else:
                     print(f'Line {line} / {planLine} not in plan.')
                     num_lines_unplanned += 1
+                if exceedance_in_line:
+                    num_lines_exceeded += 1
+                    if plot_flag:
+                        _plot_exceeding_line(x, y, allowance, line, planLine, dirn)
 
             message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
             message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message # 5 DEC
             print(message)
+            if plot_flag:
+                plt.show()
 
 
-def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxLength):
+def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance):
     '''
-    Given a specification, maxCounter, on number of fids and, maxLength,
-    on length, checks to see if either  num_fids_in_exceedance > maxCounter
-    or len_exceedance > maxLength. If either is True, returns True.
+    Given a specification, maxCounter, on number of fids and, maxDistance,
+    on distance, checks to see if either  num_fids_in_exceedance > maxCounter
+    or len_exceedance > maxDistance. If either is True, returns True.
 
     Parameters
     ----------
@@ -1968,7 +1984,7 @@ def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxLeng
         DESCRIPTION.
     maxCounter : Integer
         DESCRIPTION.
-    maxLength : Float
+    maxDistance : Float
         DESCRIPTION.
 
     Returns
@@ -1976,13 +1992,13 @@ def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxLeng
     Bool.
 
     '''
-    if maxCounter < 1 and maxLength < 1:
+    if maxCounter < 1 and maxDistance < 1:
         return False
     if maxCounter > 0:
         if num_fids_in_exceedance > maxCounter:
             return True
-    if maxLength > 0:
-        if len_exceedance > maxLength:
+    if maxDistance > 0:
+        if len_exceedance > maxDistance:
             return True
     return False
 
@@ -2021,20 +2037,22 @@ def _plot_exceeding_line(x, y, allowance, line, planLine, dirn):
     plt.title(f'Line {line} (plan: {planLine}); Bearing {dirn * 180 / np.pi:.1f} deg'\
         , fontsize = 10)
     plt.grid()
-    plt.show()
+    return
 
    
 def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
-                  measY='', measZ='', allowance=30.0, maxCounter=2,
-                  maxLength=0, plot_flag=False):
+                  measY='', measZ='', allowance=30.0, maxCounter=13,
+                  maxDistance=0.0, plot_flag=False):
     '''
     Reports exceedances of actual vertical position from planned vertical positions
     for an airborne survey Whizz database.
-    The positions (planX, planY, planY) of each planned survey line
-    are read from planPath. The measured positions (measX, measY, measZ) are read from
-    measPath and the vertical distance of each from the planned line is
-    calculated. If this distance exceeds allowance for maxCounter consecutive
-    positions, then an out-of-specification exceedance is reported for that line.
+    The positions (`planX`, `planY`, `planY`) of each planned survey line
+    are read from `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read from
+    `measPath` and the vertical distance of each from the planned line is
+    calculated. If this distance exceeds `allowance` for a distance greater than
+    `maxDistance` m, then an out-of-specification exceedance is reported for that line.
+    If `maxDistance` is less than 1.0, then the test is instead against `maxCounter`
+    consecutive positions. The default for `maxCounter` is 13.
 
     Parameters
     ----------
@@ -2054,14 +2072,15 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
     measY : String, optional
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
-    allowance : TYPE, optional
+    allowance : Float, optional
         DESCRIPTION. The default is 30.0.
-    maxCounter : TYPE, optional
-        DESCRIPTION. The default is 2.
-    maxLength : Float, optional
+    maxCounter : Int, optional
+        The maximum number of consecutive fids for which an exceedance
+        greater than allowance is permitted. The default is 13.
+    maxDistance : Float, optional
         The maximum number of consecutive metres for which an exceedance
-        greater than allowance is permitted. If 0, then the constraint is
-        ignored. The default is 0.
+        greater than allowance is permitted. If 0, then `maxCounter` is
+        used instead of `maxDistance`. The default is 0.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
 
@@ -2075,6 +2094,13 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
     '''
     planfile = str(planPath)
     measFile = str(measPath)
+    if maxDistance > 1.0:
+        counting = False
+    elif maxCounter > 0:
+        counting = True
+    else:
+        print(f'ERROR. Require maxDistance > 1.0 m or maxCounter > 0')
+        print(f'  maxDistance = {maxDistance}, maxCounter = {maxCounter}.')
     
     with h5py.File(planfile, 'r') as fp:
         gPlan = fp[groupName]['Lines']
@@ -2093,12 +2119,10 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                 measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
             if measZ == '':
                 measZ = fm[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
-            # numLines = len(gMeas.items())
-            # devLines = np.zeros(numLines)
-            # devEndFids = np.zeros(numLines)
             numErrors = int(0)
             numErrLines = 0
-            num_lines_unplanned = 0 # 5 DEC
+            num_lines_unplanned = 0
+            report = ''
 
             for line in gMeas.keys():
                 line_flagged = False
@@ -2112,7 +2136,6 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                     zM = np.array(gMeas[line][measZ])
                     
                     # make life easier by transforming to a 2D problem
-                        # get line direction in radians
                     dirn = np.arctan((xP[-1] - xP[0])/(yP[-1] - yP[0]))
                     (xm, ym) = _rotateCoords(xM - xP[0], yM - yP[0], -dirn)
                     (xp0, yp0) = _rotateCoords(xP - xP[0], yP - yP[0], -dirn)
@@ -2147,13 +2170,6 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                             xp = xp[0:jj]
                             yp = yp[0:jj]
                             zp = zp[0:jj]
-                        # fig = plt.figure()
-                        # ax = fig.add_subplot(1,1,1)
-                        # ax.plot(np.diff(yp), 'bo', np.diff(ym), 'g+', np.diff(zp), 'r+')
-                        # plt.title(f'Line {line}')
-                        # plt.grid()
-                        # plt.show()
-                        # continue
                         (zmp, zM_trim) = mhd.interpolateLine(yp, zp, -ym, zM)
                     else:
                         (zmp, zM_trim) = mhd.interpolateLine(-yp, zp, -ym, zM, plot_flag=False)
@@ -2164,7 +2180,6 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                     # initialise fiducial counter and error report for line, assume no exceedances
                     fid = int(0)
                     exceeding = False
-                    report = ''
                 
                     for one_x in z_dev:
                         fid += 1
@@ -2179,23 +2194,21 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                         elif exceeding and in_spec:
                             num_fids = exc_fids
                             exceeding = False
-                            if num_fids > maxCounter:
+                            ex0 = xM[start_fid]
+                            ex1 = xM[start_fid + num_fids]
+                            ey0 = yM[start_fid]
+                            ey1 = yM[start_fid + num_fids]
+                            exc_dist = _displacement2(ex0, ex1, ey0, ey1)
+                            if (counting and num_fids > maxCounter) or (not counting and exc_dist > maxDistance):
                                 if not line_flagged:
                                     numErrLines += 1
                                     line_flagged = True
                                 numErrors += 1
                                 max_dev = np.nanmax(abs(z_dev[start_fid:start_fid + num_fids]))
-                                ex0 = xM[start_fid]
-                                ex1 = xM[start_fid + num_fids]
-                                ey0 = yM[start_fid]
-                                ey1 = yM[start_fid + num_fids]
-                                exc_dist = _displacement2(ex0, ex1, ey0, ey1)
-                                report += f'L {line} deviates more than {allowance:.1f} m for'
-                                report += f' {num_fids} fids ({exc_dist:.0f} m).'
-                                report += f' Max exceedance = {max_dev - allowance:.1f} m.'
+                                report += f'\nL {line} deviates more than {allowance:.1f} m for'
+                                report += f' {num_fids} fids ({exc_dist:.0f} m),'
+                                report += f' max exceedance = {max_dev - allowance:.1f} m.'
                                 report += f'\n  From ({ex0:.0f} E, {ey0:.0f} N) to ({ex1:.0f} E, {ey1:.0f} N).'
-                                print(report)
-                                report = ''
                     if plot_flag and line_flagged:
                         fig = plt.figure()
                         ax = fig.add_subplot(1,1,1)
@@ -2206,12 +2219,15 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                         plt.ylabel('distance along line')
                         plt.title(f'Line {line}')
                         plt.grid()
-                else: # 5 DEC
-                    print(f'Line {line} not in plan.') # 5 DEC
-                    num_lines_unplanned += 1 # 5 DEC
+                else:
+                    print(f'Line {line} not in plan.')
+                    num_lines_unplanned += 1
 
-        print(f'\n{num_lines_unplanned} lines not in plan and not checked.\n') # 5 DEC
+        print(f'\n{num_lines_unplanned} lines not in plan and not checked.\n')
         print(f'Total number of exceedances = {numErrors} over {numErrLines} erroneous lines.')
+        print(report)
+        if plot_flag:
+            plt.show()
                                        
    
 def _rotateCoords(x, y, angle):
@@ -2240,17 +2256,17 @@ def _rotateCoords(x, y, angle):
     return xr, yr
  
     
-def checkClearance(whizzFile, altitude, terrain, nominalClearance, allowance=20.0, maxLength=1000.0, xChannel='', yChannel='', only_low=False):
+def checkClearance(whizzFile, altitude, terrain, nominalClearance, allowance=20.0, maxDistance=1000.0, xChannel='', yChannel='', only_low=False):
     '''
     Checks the data from Whizz HDF5 file for height exceedances against a specification
     requiring heights to be within a relative range (allowance) about a nominal
-    value (nominalClearance) over a particular distance (maxLength).
+    value (nominalClearance) over a particular distance (maxDistance).
     
     The clearance = altitude - terrain, must be within +/- allowance of nominalClearance.
     For each line, the maximum absolute deviation of clearance from nominalClearance is
     reported. 
     If any samples along the line exceed the allowance, then profiles are plotted
-    for visual analysis. No use is made of maxLength (yet).
+    for visual analysis. No use is made of maxDistance (yet).
     The positions (xChannel and yChannel) are only used for plotting.
 
     Parameters
@@ -3035,21 +3051,22 @@ def checkConstantSlope(whizzFile, fields=[]):
     return
 
 
-def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', vel_east='', nominalSpeed=60.0, maxLength=60.0, allowance=0.1, minSafeSpeed=42.0):
+def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', vel_east='', nominalSpeed=60.0, 
+    maxDuration=0.0, maxDistance=0.0, allowance=0.1, minSafeSpeed=42.0, plot_flag=False):
     '''
     Checks the data from Whizz HDF5 file for speed exceedances against a specification
     requiring ground speeds to be within a relative range (allowance) about a nominal
-    value (nominalSpeed) over a particular distance (maxLength).
+    value (nominalSpeed) over a particular distance (maxDistance).
     
     The positions (xChannel and yChannel) are assumed to be sampled uniformly in time
     and the first two time (tChannel) values for the first line in the file are 
     differenced to obtain the sampling interval. From this, the number of samples, N, 
-    for the aircraft to travel maxLength is calculated. The algorithm compares the
-    actual distance flown in N samples with maxLength. If the actual distance is
+    for the aircraft to travel maxDistance is calculated. The algorithm compares the
+    actual distance flown in N samples with maxDistance. If the actual distance is
     greater than
-        maxLength + allowance * maxLength
+        maxDistance + allowance * maxDistance
     or less than 
-        maxLength - allowance * maxLength
+        maxDistance - allowance * maxDistance
     an error is printed.
 
     Parameters
@@ -3067,14 +3084,19 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
         default is to read the tChannel field name from the Coordinate Frame.
     nominalSpeed : Float, optional
         The specified ground speed in m/s. The default is 60.0.
-    maxLength : Float, optional
+    maxDuration : Float, optional
         The time in seconds over which the speed estimate is determined.
-        The default is 60.0.
+        The default is 13.3.
+    maxDistance : Float, optional
+        The distance in metres over which the speed estimate is determined.
+        The default is 1000.0.
     allowance : Float, optional
         The magnitude, relative to the nominalSpeed, of the range of allowed
         speeds. The default is 0.1 (i.e. +/- 10% of nominal).
     minSafeSpeed : Float, optional
         The minimum allowed instantaneous safe speed in m/s. The default is 42.0.
+    plot_flag : Bool, optional
+        If True, plot exceedances for each failed line. Default False.
 
     Returns
     -------
@@ -3082,6 +3104,13 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
 
     '''
     filename = str(whizzFile)
+    if maxDistance > 1.0:
+        check_by_time = False
+    elif maxDuration > 1.0:
+        check_by_time = True
+    else:
+        print(f'ERROR. Require maxDistance > 1.0 m or maxDuration > 1.0')
+        print(f'  maxDistance = {maxDistance}, maxDuration = {maxDuration}.')
     
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -3098,140 +3127,194 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
             title_str += f'{project}'
         if block != '':
             title_str += f' {block}'
-        _reportSpeeds(g, xChannel, yChannel, tChannel, vel_north=vel_north, 
-                     vel_east=vel_east, nominalSpeed=nominalSpeed, maxLength=maxLength, 
-                     allowance=allowance, minSafeSpeed=minSafeSpeed, title_str=title_str)
+        _reportSpeeds(g, maxDuration=maxDuration, maxDistance=maxDistance, xChannel=xChannel, yChannel=yChannel,
+                tChannel=tChannel, vel_north=vel_north, vel_east=vel_east, nominalSpeed=nominalSpeed, 
+                     allowance=allowance, minSafeSpeed=minSafeSpeed, title_str=title_str,
+                     plot_flag=plot_flag)
         
 
-def _reportSpeeds(group, xChannel='X', yChannel='Y', tChannel='time', vel_north='', 
-                 vel_east='', nominalSpeed=60.0, maxLength=60.0, allowance=0.1, 
-                 minSafeSpeed=42.0, title_str=''):
+def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChannel='Y',
+                tChannel='time', vel_north='', vel_east='', nominalSpeed=60.0,
+                allowance=0.1, minSafeSpeed=42.0, title_str='', plot_flag=False):
     '''
     Checks the data from Whizz Line group for speed exceedances against a specification
-    requiring ground speeds to be within a relative range (allowance) about a nominal
-    value (nominalSpeed) over a particular distance (maxLength).
+    requiring ground speeds to be within a relative range (`allowance`) about a nominal
+    value (`nominalSpeed`) over a specified distance (`maxDistance`). If `maxDistance` is
+    not provided, and `maxDuration` is provided, then the check is instead over the
+    specified duration.
     
-    The positions (xChannel and yChannel) are assumed to be sampled uniformly in time
-    and the first two time (tChannel) values for the first line in the group are 
-    differenced to obtain the sampling interval. From this, the number of samples, N, 
-    for the aircraft to travel maxLength is calculated. The algorithm compares the
-    actual distance flown in N samples with maxLength. If the actual distance is
+    If `vel_north` and `vel_east` are both provided, then the data in those channels
+    is used to calculate speed along the line. If not, then speeds are calculated
+    by differencing the positions (`xChannel` and `yChannel`) and dividing by the
+    difference of the first two time (`tChannel`) values for the first line in the
+    group. This assumes that data are sampled uniformly in time.
+    
+    From this, the number of samples, N, 
+    for the aircraft to travel maxDistance is calculated. The algorithm compares the
+    actual distance flown in N samples with maxDistance. If the actual distance is
     greater than
-        maxLength + allowance * maxLength
+        maxDistance + allowance * maxDistance
     or less than 
-        maxLength - allowance * maxLength
+        maxDistance - allowance * maxDistance
     an error is printed.
 
     Parameters
     ----------
     group : HDF5 Group
         The Whizz line group containing the survey line data.
+    maxDuration : Float, optional
+        The time in seconds over which the speed estimate is determined.
+        The default is 0.0.
+    maxDistance : Float, optional
+        The distance in metres over which the speed estimate is determined.
+        The default is 0.0.
     xChannel : String, optional
         The field in the line containing X positions. The default is 'X'.
     yChannel : String, optional
         The field in the line containing Y positions. The default is 'Y'.
     tChannel : String, optional
         The field in the line containing sample times. The default is 'time'.
+    vel_north : String, optional
+        The field in the line containing velocity north. The default is ''.
+    vel_east : String, optional
+        The field in the line containing velocity east. The default is ''.
     nominalSpeed : Float, optional
         The specified ground speed in m/s. The default is 60.0.
-    maxLength : Float, optional
-        The time in seconds over which the speed estimate is determined.
-        The default is 60.0.
     allowance : Float, optional
         The magnitude, relative to the nominalSpeed, of the range of allowed
         speeds. The default is 0.1 (i.e. +/- 10% of nominal).
     minSafeSpeed : Float, optional
         The minimum allowed instantaneous safe speed in m/s. The default is 42.0.
+    title_str : String, optional
+        A title string for the plots. Default ''.
+    plot_flag : Bool, optional
+        If True, plot exceedances for each failed line. Default False.
 
     Returns
     -------
     None.
 
     '''
+    calc_from_pos = False
     if vel_north == '' or vel_east == '':
+        calc_from_pos = True
         print('Velocities not known - will calculate from positions')
-    settings = f'Nominal speed {nominalSpeed:.1f}; '
+
+    check_against_dist = False
+    max_allowed_str = f'{maxDuration:.1f} s'
+    if maxDuration < 1.0:
+        check_against_dist = True
+        max_allowed_str = f'{maxDistance:.1f} m'
+
+    settings = f'Nominal ground speed {nominalSpeed:.1f} m/s; '
     settings += f'allowed {nominalSpeed-allowance*nominalSpeed:.1f} : '
-    settings += f'{nominalSpeed+allowance*nominalSpeed:.1f} for < {maxLength:.1f} seconds.\n'
+    settings += f'{nominalSpeed+allowance*nominalSpeed:.1f} for < {max_allowed_str}.\n'
     print(settings)
+    
     num_failed_lines = 0
-    num_lines_exceed = 0
-    for line in group.keys():
+    num_exceed_lines = 0
+    total_num_lines = 0
+    report = ''
+
+    lines = list(group.keys())
+    total_num_lines = len(lines)
+
+    for line in lines:
         if title_str == '':
             plot_title = f'Line {line}'
         else:
             plot_title = f'{title_str}: Line {line}'
-        lineTooSlow = False
-        lineTooFast = False
-        lineUnsafeSlow = False
-        xPos = np.array(group[line][xChannel])
-        yPos = np.array(group[line][yChannel])
-        t = np.array(group[line][tChannel])
-        sampleTime = t[1] - t[0]
-        if vel_north != '' and vel_east != '':
-            xVel = np.array(group[line][vel_east])
-            yVel = np.array(group[line][vel_north])
-            speed = np.sqrt(xVel * xVel + yVel * yVel)
-        else:
-            xVel = np.diff(xPos) / sampleTime
-            yVel = np.diff(yPos) / sampleTime
-            temp = np.sqrt(xVel * xVel + yVel * yVel)
-            speed = np.append(temp, np.mean(temp))
-        
+
+        x, y, dist, t, speed = _get_data(group[line], xChannel, yChannel, tChannel, vel_north, vel_east)
+
         if speed[speed < minSafeSpeed].size > 0:
             lineUnsafeSlow = True
-            messageUnsafe = f' ground speed < {minSafeSpeed} is unsafe.'
+            print(f'\n For at least one reading, the ground speed was < {minSafeSpeed} (might be unsafe).')
         
         rel_speed = (speed - nominalSpeed) / nominalSpeed
-        
-        # if at least one point exceeds allowance, then check properly.
-        if np.max(rel_speed) > allowance:
-            # First check for high speed ...
-            indices = rel_speed > allowance
-            test = np.concatenate(([indices[0]], indices[:-1] != indices[1:], [True]))
-            test = np.diff(np.where(test)[0])[::2]
-            for dev_len in test:
-                if dev_len > maxLength / sampleTime:
-                    print(f' too fast for {dev_len * sampleTime:.1f} secs > {maxLength:.0f} allowed.')
-                    lineTooFast = True
-                    messageFast = f' ground speed > {nominalSpeed * (1 + allowance):.1f} for more than {maxLength} s'
-            print(f' {test.size} high exceedances < {maxLength / sampleTime:.0f} allowed.')
 
-            # ... then check for slow speed.
-        if np.min(rel_speed) < allowance:
-            indices = rel_speed < -allowance
-            test = np.concatenate(([indices[0]], indices[:-1] != indices[1:], [True]))
-            test = np.diff(np.where(test)[0])[::2]
-            for dev_len in test:
-                if dev_len > maxLength / sampleTime:
-                    print(f' too slow for {dev_len * sampleTime} secs > {maxLength:.0f} allowed.')
-                    lineTooSlow = True
-                    messageSlow = f' ground speed < {nominalSpeed * (1 - allowance):.1f} for more than {maxLength} s'
-        if np.min(rel_speed) < allowance or np.max(rel_speed) > allowance:
-            num_lines_exceed += 1
+        speed_extreme = 0.0
+        num_fids_in_exceedance = 0
+        exceedance_in_line = False
+        too_slow = False
+        line_fails = False
 
-        # Report results
-        if lineTooFast or lineTooSlow or lineUnsafeSlow:
-                num_failed_lines += 1
-                print(f'Line {line}:')
-        if lineTooFast:
-            print(messageFast)
-            _plot_speed(t, speed, nominalSpeed * (1.0 - allowance), 
-                       nominalSpeed * (1.0 + allowance), plot_title=plot_title)
-            
-        if lineTooSlow:
-            print(messageSlow)
-            _plot_speed(t, speed, nominalSpeed * (1.0 - allowance), 
-                       nominalSpeed * (1.0 + allowance), plot_title=plot_title)
-        
-        if lineUnsafeSlow:
-            print(messageUnsafe)
-            _plot_speed(t, speed, nominalSpeed * (1.0 - allowance), 
-                       nominalSpeed * (1.0 + allowance), plot_title=plot_title)
-            
-    print(f'{num_lines_exceed} lines had some short exceedance(s).')
-    print(f'{num_failed_lines} lines failed for exceedance > allowed distance.')
-            
+        for fid in range(0, len(x)):
+            # There is a speed exceedance ...
+            if rel_speed[fid] > allowance or rel_speed[fid] < -allowance:
+                # If a new exceedance, then initialise variables;
+                if num_fids_in_exceedance == 0:
+                    num_exceed_lines += 1
+                    if rel_speed[fid] < -allowance:
+                        too_slow = True
+                    else:
+                        too_slow = False
+                    start_x = x[fid]
+                    start_y = y[fid]
+                    start_t = t[fid]
+                    num_fids_in_exceedance = 1
+                    speed_extreme = speed[fid]
+                # Else increment and update on the current exceedance.
+                else:
+                    # check we haven't swapped from too slow to too fast or vice versa
+                    if (too_slow and rel_speed[fid] > allowance) or ((not too_slow) and rel_speed[fid] < allowance):
+                        print(f'WARNING: Exceedance reversed speed in one fid. NOT BELIEVABLE. At time={t[fid]:.3f}')
+                    num_fids_in_exceedance += 1
+                    if too_slow:
+                        speed_extreme = min(speed[fid], speed_extreme)
+                    else:
+                        speed_extreme = max(speed[fid], speed_extreme)
+            else:
+                if num_fids_in_exceedance > 0: # the current exceedance has ended
+                    end_x = x[fid]
+                    end_y = y[fid]
+                    end_t = t[fid]
+                    dist_exceedance = _dist([start_x, end_x], [start_y, end_y])[1]
+                    durn_exceedance = end_t - start_t
+                    if too_slow:
+                        speed_msg = "too slow"
+                    else:
+                        speed_msg = "too fast"
+                    if _exceedance_fail(durn_exceedance, dist_exceedance, maxDuration, maxDistance):
+                        report += f'\nL {line} {speed_msg} for {durn_exceedance} sec '
+                        report += f'({dist_exceedance:.0f} m), peak exceedance = {speed_extreme:.0f} m/s.'
+                        report += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
+                        exceedance_in_line = True
+                    num_fids_in_exceedance = 0
+                    too_slow = False
+        if exceedance_in_line:
+            num_failed_lines += 1
+            if plot_flag:
+                _plot_speed(t, speed, nominalSpeed * (1.0 - allowance), 
+                   nominalSpeed * (1.0 + allowance), plot_title=plot_title)
+
+    print(f'Checked {total_num_lines} lines and {num_exceed_lines} had some short exceedance(s).')
+    print(f'{num_failed_lines} lines failed for exceedance > allowed.')
+    print(report)
+    if plot_flag:
+        plt.show()
+
+
+def _get_data(line_group, xChannel, yChannel, tChannel, vel_north, vel_east):
+    '''
+    '''
+    x = np.array(line_group[xChannel])
+    y = np.array(line_group[yChannel])
+    t = np.array(line_group[tChannel])
+    distance = np.sqrt(x * x + y * y)
+    if vel_north == '' or vel_east == '':
+        sampleTime = t[1] - t[0]
+        xVel = np.diff(x) / sampleTime
+        yVel = np.diff(y) / sampleTime
+        temp = np.sqrt(xVel * xVel + yVel * yVel)
+        speed = np.append(temp, np.mean(temp))
+    else:
+        xVel = np.array(line_group[vel_east])
+        yVel = np.array(line_group[vel_north])
+        speed = np.sqrt(xVel * xVel + yVel * yVel)
+
+    return x, y, distance, t, speed
+
 
 def _plot_speed(t, speed, min_speed=54, max_speed=66, plot_title=''):
     '''
@@ -3269,7 +3352,6 @@ def _plot_speed(t, speed, min_speed=54, max_speed=66, plot_title=''):
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
     for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
     
     
 def _displacement2(x0, x1, y0, y1):
@@ -4103,7 +4185,6 @@ def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
         return False
 
     return True
-
 
 
 def _calc_bearing(x, y):
