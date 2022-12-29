@@ -19,6 +19,7 @@ groupName = config.groupName
 
 def plot_grid(whizzFile, channel, cellsize, x='', y=''):
     '''
+    WARNING - FAILS ON LARGE DATASETS
     Grids a channel in the whizzFile, and displays it as an image.
     The grid interpolation is performed by Verde's spline function.
     (Another option would be to use pygmt's xyz2grd method.)
@@ -721,7 +722,8 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
     ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     plt.xlabel('X [m]', fontsize = 10)
     plt.ylabel('Y [m]', fontsize = 10)
-    plt.title(plotTitle, fontsize = 12)
+    plt.suptitle(plotTitle, fontsize = 12)
+    plt.title('[planned (red); flown (blue)]', fontsize = 10)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(10)
     for label in ax.get_yticklabels(): label.set_fontsize(10)
