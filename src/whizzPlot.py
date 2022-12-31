@@ -565,7 +565,7 @@ def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=Tr
 
 def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     '''
-    Plot coherence between two signals."
+    Plot coherence between `xchannel and ychannel.
 
 
     Parameters
