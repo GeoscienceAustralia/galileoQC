@@ -589,6 +589,7 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     None.
 
     '''
+    from matplotlib.ticker import StrMethodFormatter
     
     if not np.isnan(minClip) and not np.isnan(maxClip):
         z = np.clip(z, minClip, maxClip)
@@ -609,6 +610,8 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     ax.grid(True)
     ax.axes.set_aspect('equal')
     plt.tight_layout()
+    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs, colorbar=True,
                    azdeg=45, altdeg = 45, blend_mode = 'alpha', alpha = 0.7,
                    extent=(e[0], e[-1], n[0], n[-1]),origin='upper')
