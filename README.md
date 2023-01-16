@@ -8,8 +8,7 @@ AirGravQC is a python package to quality check the airborne gravity dataset deli
 Using the instructions in this [link](https://opus.nci.org.au/display/Help/3.3+Using+a+custom+Python+virtual+environment+in+JupyterLab), and set up a `python3` environment in your specific location. For memory/space limitations for each user, it is suggested that you make this custom python environment in your project directory. The environment will have a folder with the same name in your working directory after it is built:
 
 For the QAQC python scripts, we need to install these extra python3 packages within our new python environment:
-
-	-Xarray (version 2022.12.0 or higher)
+- &nbsp; Xarray (version 2022.12.0 or higher)
 	-Rioxarray
 	-netCDF4
 	-Ipympl
