@@ -38,23 +38,21 @@ In order to run the current QAQC python scripts developed by Dr. Mark Dransfield
 - &nbsp; Navigate to your working directory 
 - &nbsp; Load `python3` package available in NCI
 ``` 
-		[user@ood-vn30 user]$ module load python3/3.9.2
-		  Loading python3/3.9.2
- 		    Loading requirement: intel-mkl/2020.4.304
+[user@ood-vn30 user]$ module load python3/3.9.2
+	Loading python3/3.9.2
+	 Loading requirement: intel-mkl/2020.4.304
 ```
-	- In your working directory you will have two active subfolders:
-
-		- Directory that contains your code and notebooks
- 
-		- Directory that contains your specific python environment
- 
-	- Load your specific python3 environment for instance loading environment call QA
-		
-		[user@ood-vn30 user]$ . QA/bin/activate
-                  (QA) [user@ood-vn30 user]$
-
-	- Run jupyter notebook in your VDI using the command:
-	
-		Jupyter notebook
+In your working directory you will have two active subfolders:
+- &nbsp; Directory that contains your code and notebooks
+- &nbsp; Directory that contains your specific python environment
+- &nbsp; Load your specific python3 environment for instance loading environment called QA 	
+```
+[user@ood-vn30 user]$ . QA/bin/activate
+     (QA) [user@ood-vn30 user]$
+```
+- &nbsp;  Run jupyter notebook in your VDI using the command:
+```
+Jupyter notebook
+```
 
 At this stage, you will be redirected to browser that you can load the specific notebook to test on your airborne gravity dataset. 
