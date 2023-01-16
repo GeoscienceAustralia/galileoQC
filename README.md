@@ -36,12 +36,12 @@ In order to run the current QAQC python scripts developed by Dr. Mark Dransfield
 - &nbsp; Launch the VDI app
 - &nbsp; From the menu choose the Terminal 
 - &nbsp; Navigate to your working directory 
-- &nbsp; Load `python3` package available in NCI 
-
+- &nbsp; Load `python3` package available in NCI
+``` 
 		[user@ood-vn30 user]$ module load python3/3.9.2
 		  Loading python3/3.9.2
  		    Loading requirement: intel-mkl/2020.4.304
-
+```
 	- In your working directory you will have two active subfolders:
 
 		- Directory that contains your code and notebooks
