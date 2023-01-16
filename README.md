@@ -21,16 +21,14 @@ In addition to the above packages, two customised scripts called `graphics.py` a
 
 /path to the working directory in NCI/QA/lib/python3.9/site-packages
 
-After these steps make sure that you have all the following packages as well - if any missing:
+After these steps make sure that you have all the following packages as well- if anything missing:
 
-	-Numpy
- 
+	-Xarray
 	-H5py
-
 	-Verde
-
 	-Pooch
 
+This is the space 
 
 
 	b. Running notebook in NCI
