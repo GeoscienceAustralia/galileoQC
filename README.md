@@ -22,7 +22,10 @@ In addition to the above packages, two customised scripts called `graphics.py` a
 /path to the working directory in NCI/QA/lib/python3.9/site-packages
 
 After these steps make sure that you have all the following packages as well - if any missing:
-	-Numpy 
+	-Numpy
+ 
 	-H5py
+
 	-Verde
-	-Pooch
+
+	-Pooch 
