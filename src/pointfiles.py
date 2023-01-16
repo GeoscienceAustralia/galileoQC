@@ -19,7 +19,7 @@ References:
 """
 
 """
-Simplistic XYZ_TO_HDF5 converter for Lawin FTG data
+Simplistic XYZ_TO_HDF5 converter for airborne gravity data
 
 (c) Mark Dransfield 19 Jul 2020
 
@@ -90,7 +90,9 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
         # all the lines are in g:
         g = f[groupName]['Lines']
 
-        if line_type == 'Xcal_nsw' or line_type == 'SGL_GA':
+        if line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA':
+            print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
+            print('  {:<14} {:<14} {:<14} {:<14} '.format('Line No.','Plan Line No.', 'Segment No.', 'Re-flight No.'))
             for line in g:
                 gg = g[line]
                 current_line = gg.attrs['LineNumber']
@@ -103,18 +105,28 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
                         gg.attrs['PlannedLine'] = np.floor(current_line / 10000.0)
                         gg.attrs['Segment'] = 0
                         gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                elif line_type == 'Xcal_can':
+                    if current_line < 8999999.0:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10.0) * 10.0
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10000.0)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
                 elif line_type == 'SGL_GA':
                     if current_line < 7000:
                         gg.attrs['PlannedLine'] = np.floor(current_line * 10.0) / 10.0
                         current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
                         gg.attrs['Segment'] = current_segment
-                        gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line))
+                        gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
                                                          - 10 * current_segment)
                     else:
                         gg.attrs['PlannedLine'] = np.floor(current_line)
                         gg.attrs['Segment'] = 0
                         gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
-                print(f"m: {current_line}, p: {gg.attrs['PlannedLine']}, s: {gg.attrs['Segment']}, r: {gg.attrs['ReflightNumber']}")
+                print('  {:<14} {:<14} {:<14} {:<14} '.\
+                    format(current_line, gg.attrs['PlannedLine'], gg.attrs['Segment'], gg.attrs['ReflightNumber']))
         elif line != '' and planned_line != '':
             gg = g[line]
             gg.attrs['PlannedLine'] = planned_line
@@ -159,19 +171,27 @@ def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', des
     with h5py.File(filename, 'r+') as f:
         # create all the data structure ready for the datasets
         g = f[groupName]['Lines']
+        changed = False
         
         for line in g.keys():
             dd = g[line][channel]
             if name != '':
                 dd.attrs['Name'] = name
+                changed = True
             if units != '':
                 dd.attrs['Units'] = units
+                changed = True
             if alias != '':
                 dd.attrs['Alias'] = alias
+                changed = True
             if description != '':
                 dd.attrs['Description'] = description
+                changed = True
             if chan_precision > -1:
                 dd.attrs['chan_precision'] = chan_precision
+                changed = True
+        if changed:
+            print(f'Changed channel attribute(s) for {channel} in {whizzFile.name}.')
     return
 
 
@@ -696,6 +716,109 @@ def reportWhizz(whizzFile, line='', channel=''):
                 print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
 
 
+def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
+    '''
+    Prints a summary of the flight numbers in a HDF5 Whizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    flightChannel : String, optional
+        The name of the channel containing the flight numbers. The default is 'FLIGHT'.
+    lines : String Array, optional
+        The array of line numbers, each formatted as a string, to report. The default is [] and all lines.
+    detailed : Bool, optional
+        If true, report the line numbers flown in each flight. The default is False.
+
+    Returns
+    -------
+    None.
+
+    '''
+    filename = str(whizzFile)
+        
+    with h5py.File(filename, 'r') as f:
+        
+        whizzHeader = list(f.keys())[0]
+        g = f[whizzHeader]
+        gAttributeNames = list(g.attrs)
+        gLines = g['Lines']
+
+        # The data are stored with flights belonging to lines; we invert this relationship
+        flight_dict = {}
+        if lines == []:
+            lines = list(gLines.keys())
+        numLines = len(lines)
+        for line in lines:
+            this_flight = gLines[line][flightChannel][0]
+            if this_flight in flight_dict:
+                flight_dict[this_flight].append(line)
+            else:
+                flight_dict[this_flight] = [line]
+        sorted_keys = sorted(flight_dict.keys())
+        sorted_flights = {key:flight_dict[key] for key in sorted_keys}
+
+        print(whizzHeader)
+        for attribute in gAttributeNames:
+            print(f'    {attribute:.20}: {g.attrs[attribute]}')
+
+        print(f'\n{len(sorted_flights.keys())} flights over {numLines} lines.')
+
+        print("\nFlights")
+        for flight in sorted_flights:
+            print(f'    {flight:.0f}')
+            if detailed:
+                print(f'        ', end = '')
+                for line in sorted(sorted_flights[flight]):
+                    print(f'L{line}', end = ' ')
+                print('')
+
+
+def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
+    filename = str(whizzFile)
+        
+    with h5py.File(filename, 'r') as f:
+        
+        whizzHeader = list(f.keys())[0]
+        g = f[whizzHeader]
+        gAttributeNames = list(g.attrs)
+        gLines = g['Lines']
+        if xChannel == '':
+            xChannel = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if yChannel == '':
+            yChannel = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        if timeChannel == '':
+            timeChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
+
+
+        time_deltas = []
+        x_deltas = []
+        y_deltas = []
+        lines = list(gLines.keys())
+        numLines = len(lines)
+        for line in lines:
+            time_deltas = np.append(time_deltas, np.diff(np.array(gLines[line][timeChannel])))
+            x_deltas = np.append(x_deltas, np.diff(np.array(gLines[line][xChannel])))
+            y_deltas = np.append(y_deltas, np.diff(np.array(gLines[line][yChannel])))
+        mean_dt = np.mean(time_deltas)
+        min_dt = np.min(time_deltas)
+        max_dt = np.max(time_deltas)
+        dd = qa._distance(x_deltas, y_deltas)
+        mean_dd = np.mean(dd)
+        min_dd = np.min(dd)
+        max_dd = np.max(dd)
+
+        print(whizzHeader)
+        for attribute in gAttributeNames:
+            print(f'    {attribute:.20}: {g.attrs[attribute]}')
+
+        print(f'\nSample time and distance statistics')
+        print(f'  Min  = {min_dt:.3f} s, {min_dd:.1f} m')
+        print(f'  Max  = {max_dt:.3f} s, {max_dd:.1f} m')
+        print(f'  Mean = {mean_dt:.3f} s, {mean_dd:.1f} m')
+
+
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):
     '''
     Change any of the project attributes in the HDF5 Whizz file. Typically most of this information
@@ -729,14 +852,19 @@ def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerPr
         g = f[groupName]
         if projectName != '':
             g.attrs['ProjectName'] = projectName
+            print(f'Setting ProjectName = {projectName} for {whizzFile.name}.')
         if blockID != '':
             g.attrs['BlockID'] = blockID
+            print(f'Setting BlockID = {blockID} for {whizzFile.name}.')
         if acquirer != '':
             g.attrs['Acquirer'] = acquirer
+            print(f'Setting Acquirer = {acquirer} for {whizzFile.name}.')
         if acquirerProjectID != '':
             g.attrs['AcquirerProjectID'] = acquirerProjectID
+            print(f'Setting AcquirerProjectID = {acquirerProjectID} for {whizzFile.name}.')
         if reportName != '':
             g.attrs['ReportName'] = reportName
+            print(f'Setting ReportName = {reportName} for {whizzFile.name}.')
          
     
 def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='', x='', y='', projection='', utmz='', time='', timeDatum='', fid=''):
@@ -785,30 +913,45 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
         # create all the data structure ready for the datasets
         g = f[groupName]
         cf = g['CoordinateFrame']
+        changed = False
         if lat != '':
             cf.attrs['LatitudeChannel'] = lat
+            changed = True
         if lon != '':
             cf.attrs['LongitudeChannel'] = lon
+            changed = True
         if geoDatum != '':
             cf.attrs['GeoDatum'] = geoDatum
+            changed = True
         if alt != '':
             cf.attrs['AltitudeChannel'] = alt
+            changed = True
         if htDatum != '':
             cf.attrs['HeightDatum'] = htDatum
+            changed = True
         if x != '':
             cf.attrs['XChannel'] = x
+            changed = True
         if y != '':
             cf.attrs['YChannel'] = y
+            changed = True
         if projection != '':
             cf.attrs['Projection'] = projection
+            changed = True
         if utmz != '':
             cf.attrs['UTMZone'] = utmz
+            changed = True
         if time != '':
             cf.attrs['TimeChannel'] = time
+            changed = True
         if timeDatum != '':
             cf.attrs['TimeDatum'] = timeDatum
+            changed = True
         if fid != '':
             cf.attrs['FidChannel'] = fid
+            changed = True
+        if changed:
+            print(f'Changed CoordFrame attribute(s) for {whizzFile.name}.')
 
 
 def asegReportChannels(datFilePath):
@@ -1328,7 +1471,7 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
     for count in range(0, num_lines):
         lines[count] = geosoftXYZ[count]['line_number']
         
-    print(str(hdfFileName))
+    print('Creating: ', str(hdfFileName))
         
     with h5py.File(hdfFileName, 'w') as f: # better data file
         # copy over survey metadata
@@ -1343,7 +1486,7 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
 
         # put this lines data in dataset; create the next line group and metadata
         for lineCount in range(0, len(lines)-1): #for aLine in lines:
-            print('About to add data for line ', lines[lineCount], ' Lcount ', lineCount, '/', len(lines))
+            print('  About to add data for line ', lines[lineCount], ' Lcount ', lineCount+1, '/', len(lines))
             # put all the data from last block into data set in current group
             # assume first field is line number
             for count in range(1, len(desiredFieldNames)):
@@ -1362,6 +1505,7 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
             gg.attrs['LineNumber'] = lines[lineCount + 1]
         
         # put data in last line subgroup's dataset
+        print('  About to add data for line ', lines[len(lines)-1], ' Lcount ', len(lines), '/', len(lines), '\n')
         for count in range(1, len(desiredFieldNames)):
            dataArray = geosoftXYZ[len(lines)-1][desiredFieldNames[count]]
            #print(dataArray.shape)
@@ -1371,7 +1515,6 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
            dd.attrs['Name'] = desiredFieldNames[count]
            # dd.attrs['Units'] = ... , eg metres, eotvos, etc would be nice TODO
         
-        print(gg, len(lines))
     return hdfFileName
 
 
@@ -1462,10 +1605,11 @@ def readXYZ(filename):
 
     # count number of header records, number of flight lines in file and number of channels
     with open(filename, 'r') as fid:
+        print(f'Accessing XYZ data in {filename}.\nFirst few records are:')
         for file_line in fid:
             if num_lines == 0:
                 # Always useful to see the first few records in the file.
-                print(file_line)
+                print('  ', file_line)
             if file_line[0] == '/':
                 num_head_recs += 1
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
@@ -1483,9 +1627,9 @@ def readXYZ(filename):
             else:
                 continue
     fid.close()
-    print(f'Found {num_head_recs} header records')
-    print(f'Found {num_lines} lines')
-    print(f'Found {num_channels} fields')
+    print(f'\n  Found {num_head_recs} header records')
+    print(f'  Found {num_lines} lines')
+    print(f'  Found {num_channels} fields\n')
     
     # get channel names
     header_rec = 0
@@ -1495,8 +1639,9 @@ def readXYZ(filename):
             header_rec += 1
             if len(temp_names) == num_channels:
                 channelnames = temp_names
+                print('  Found fields (channels):')
                 for ii in range(0, len(channelnames)):
-                    print(f'{channelnames[ii]} - precision {field_precisions[ii]}')
+                    print(f'    {channelnames[ii]} - precision {field_precisions[ii]}')
                 break
             if header_rec > num_head_recs:
                 print(f"Error - can't find header record with {num_channels} channel names.")
@@ -1596,77 +1741,6 @@ def readXYZ(filename):
     fid.close()
 
     return geosoftXYZ
-
-
-def gdb2xyz(filename):
-    import subprocess as sbp
-
-
-    inputGdb = "E:/2020_salamander_bell/deliverables/lawin/processed/databases/databases/lawin_airftg_deliverable.gdb"
-    outputGdb = "E:/2020_Salamander_Bell/Deliverables/Lawin/Processed/Databases/Databases/test.adb"
-    maxChannels = 250
-    maxLines = 1000
-    maxBlobs = 1900                 
-    crdict = dict(program = "ExportGDB",
-                  version = "1.0.0",
-                  inputgdb = inputGdb,
-                  outputgdb = outputGdb,
-                  outputmode = "Append",
-                  gdbcompression = "1",
-                  gdbMaxChannels = maxChannels,
-                  gdbMaxLines = maxLines,
-                  gdbMaxBlobs = maxBlobs,
-                  channelIoCsv = "",
-                  outputChannelPrefix = "",
-                  outputChannelSuffix = "",
-                  outputFidRangeOption = "0",
-                  maskChannel = "",
-                  lffFile = "",
-                  dataResample = "No",
-                  resampledBy = "Fid",
-                  newFidIncr = "1",
-                  distChannel = "",                                                                                                       
-                  newDistIncr = 50)                                                                                                    
-    
-    crString = 'CONTROL_BEGIN\n'
-    crString += f'Program              = {crdict["program"]}\n'
-    crString += f'Version              = {crdict["version"]}\n'
-    crString += f'InputGDB             = {crdict["inputgdb"]}\n'
-    crString += f'OutputGDB            = {crdict["outputgdb"]}\n'
-    crString += f'OutputMode           = {crdict["outputmode"]}\n'
-    crString += f'GDBCompression       = {crdict["gdbcompression"]}\n'
-    crString += f'GDBMaxChannels       = {crdict["gdbMaxChannels"]}\n'
-    crString += f'GDBMaxLines          = {crdict["gdbMaxChannels"]}\n'
-    crString += f'GDBMaxBlobs          = {crdict["gdbMaxBlobs"]}\n'
-    crString += f'ChannelIO_CSV        = {crdict["channelIoCsv"]}\n'
-    crString += f'OutChanPrefix        = {crdict["outputChannelPrefix"]}\n'
-    crString += f'OutChanSuffix        = {crdict["outputChannelSuffix"]}\n'
-    crString += f'OutputFidRangeOption = {crdict["outputFidRangeOption"]}\n'
-    crString += f'MaskChannel          = {crdict["maskChannel"]}\n'
-    crString += f'LFFFile              = {crdict["lffFile"]}\n'
-    crString += f'DataResample         = {crdict["dataResample"]}\n'
-    crString += f'ResampledBy          = {crdict["resampledBy"]}\n'
-    crString += f'NewFidIncr           = {crdict["newFidIncr"]}\n'
-    crString += f'DistChannel          = {crdict["distChannel"]}\n'
-    crString += f'NewDistIncr          = {crdict["distChannel"]}\n'
-    crString += 'CONTROL_END\n'
-    
-    # test run:
-    myPath = "E:/2020_Salamander_Bell/Deliverables/Lawin/Processed/Databases/Databases"
-    crFile = myPath + "/gdb2adb.cr"
-    
-    with open(crFile, 'wt') as fid:
-         #  if fid == -1
-         #      fprintf('Error opening control file (%s)\n', crFile)
-         #      error(message)
-         #  end
-         # now print out control file 
-         fid.write(crString)
-         
-    fid.close()
-    
-    myCmd = "C:/Atlas/Atlas.exe " + crFile
-    sbp.check_output(myCmd, shell=True).decode()
 
 
 def renameChannels(nchannels, chanNames):
