@@ -9,12 +9,12 @@ Using the instructions in this [link](https://opus.nci.org.au/display/Help/3.3+U
 
 For the QAQC python scripts, we need to install these extra python3 packages within our new python environment:
 - &nbsp; Xarray (version 2022.12.0 or higher)
-	-Rioxarray
-	-netCDF4
-	-Ipympl
-	-Colorcet
-	-Filebrowser
-	-Matplotlib(version 3.6.2) 
+- &nbsp; Rioxarray
+- &nbsp; netCDF4
+- &nbsp; Ipympl
+- &nbsp; Colorcet
+- &nbsp; Filebrowser
+- &nbsp; Matplotlib(version 3.6.2) 
 
 In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages shoud be placed both in the subfolder whizz as well as site_packages available in your python environment:
 
@@ -22,21 +22,21 @@ In addition to the above packages, two customised scripts called `graphics.py` a
 
 After these steps make sure that you have all the following packages as well- if anything missing:
 
-	-Xarray
-	-H5py
-	-Verde
-	-Pooch
+- &nbsp; Xarray
+- &nbsp; H5py
+- &nbsp; Verde
+- &nbsp; Pooch
 
 In order to run the current QAQC python scripts developed by Dr. Mark Dransfield on NCI, the following steps need to be taken:
 
-	- Analyst need to have an NCI account
-	- Login to https://ood.nci.org.au/pun/sys/dashboard
-	- Choose Virtual Desktop 
-	- Except project that needs to be changed to your active project the rest of settings should be accepted as default 
-	- Launch the VDI app
-	- From the menu choose the Terminal 
-	- Navigate to your working directory 
-	- Load `python3` package available in NCI 
+- &nbsp; Analyst need to have an NCI account
+- &nbsp; Login to https://ood.nci.org.au/pun/sys/dashboard
+- &nbsp; Choose Virtual Desktop 
+- &nbsp; Except project that needs to be changed to your active project the rest of settings should be accepted as default 
+- &nbsp; Launch the VDI app
+- &nbsp; From the menu choose the Terminal 
+- &nbsp; Navigate to your working directory 
+- &nbsp; Load `python3` package available in NCI 
 
 		[user@ood-vn30 user]$ module load python3/3.9.2
 		  Loading python3/3.9.2
