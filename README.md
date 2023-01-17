@@ -5,7 +5,7 @@ AirGravQC is a python package to check the quality of the airborne gravity datas
 
 	a. Setting up the python environment in NCI
 
-Using the instructions in this [link](https://opus.nci.org.au/display/Help/3.3+Using+a+custom+Python+virtual+environment+in+JupyterLab), set up a `python3` environment in your specific location. For memory/space limitations for each user, it is suggested that you make this custom python environment in your project directory in NCI. The environment will have a folder with the same name in your working directory after it is built:
+Using the instructions in this [link](https://opus.nci.org.au/display/Help/3.3+Using+a+custom+Python+virtual+environment+in+JupyterLab), set up a `python3` environment in your specific location. Due to memory/space limitations for each user, it is suggested that you make this custom python environment in your project directory in NCI. The environment will have a folder with the same name in your working directory after it is built:
 
 For the QAQC python scripts, we need to install these extra `python3` packages within our new python environment:
 - &nbsp; Xarray (version 2022.12.0 or higher)
@@ -20,7 +20,6 @@ In addition to the above packages, two customised scripts called `graphics.py` a
 
 Also make sure that you have all the following packages as well - if anything missing:
 
-- &nbsp; Xarray
 - &nbsp; H5py
 - &nbsp; Verde
 - &nbsp; Pooch
