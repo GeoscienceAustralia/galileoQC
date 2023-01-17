@@ -16,7 +16,7 @@ For the QAQC python scripts, we need to install these extra `python3` packages w
 - &nbsp; Filebrowser
 - &nbsp; Matplotlib(version 3.6.2) 
 
-In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages shoud be placed in site_packages available in your python environment.
+In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages shoud be placed in `site_packages` available in your python environment.
 
 Also make sure that you have all the following packages as well - if anything missing:
 
@@ -43,7 +43,7 @@ Finally, in order to run the current QAQC python scripts on NCI, the following s
 In your working directory you will have two active subfolders:
 - &nbsp; Directory that contains your code and notebooks
 - &nbsp; Directory that contains your specific python environment
-Load your specific python3 environment for instance loading environment called QA 	
+Load your specific `python3` environment for instance loading environment called QA 	
 ```
 [user@ood-vn30 user]$ . QA/bin/activate
      (QA) [user@ood-vn30 user]$
