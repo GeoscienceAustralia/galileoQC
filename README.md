@@ -16,7 +16,7 @@ For the QAQC python scripts, we need to install these extra `python3` packages w
 - &nbsp; Filebrowser
 - &nbsp; Matplotlib(version 3.6.2) 
 
-In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages shoud be placed both in site_packages available in your python environment.
+In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages shoud be placed in site_packages available in your python environment.
 
 Also make sure that you have all the following packages as well - if anything missing:
 
