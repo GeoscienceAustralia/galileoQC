@@ -3513,11 +3513,12 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
             minBigX = min(max(xs), minBigX)
             maxSmallX = max(min(xs), maxSmallX)
             deltaX = np.abs(xs[1] - xs[0])
+            # print(f'line {line}, minBigX {minBigX}, maxSmallX {maxSmallX}, deltaX {deltaX}, size {xs.size}')
             
         if minBigX < maxSmallX:
             return 0.0
-        xBase = np.arange(maxSmallX, minBigX, deltaX, 'float')
-        print(f'{nLines} lines analsyed, each with {nSamples} samples.')
+        xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)#np.arange(maxSmallX, minBigX, deltaX, 'float')
+        print(f'{nLines} lines analysed, each with {nSamples} samples.')
         xData = np.empty((nLines, nSamples))
         xData[:] = np.nan
         yData = np.empty((nLines, nSamples))
@@ -3557,6 +3558,7 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
             (zOut, _) = mhd.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
 
             vec_len = len(xBase)-1 # interpolateLine has lost a datapoint in outputs
+            # print(f'line {line}, shapes: xBase {xBase.shape}, xData {xData.shape}')
             xData[lineCount, 0:vec_len] = xBase[1:]
             yData[lineCount, 0:vec_len] = yOut
             zData[lineCount, 0:vec_len] = zOut

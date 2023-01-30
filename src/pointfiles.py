@@ -1768,6 +1768,34 @@ def renameChannels(nchannels, chanNames):
     return chanNames
 
     
+def addWhizzToWhizz(inputWhizzFile, outputWhizzFile):
+    '''
+    Adds all the ['Lines'] sub-groups (with all they contain) in `inputWhizzFile` to the
+    ['Lines'] group in `outputWhizzFile`
+    '''
+    infile = str(inputWhizzFile)
+    outFile = str(outputWhizzFile)
+    
+    with h5py.File(outFile, 'r+') as outf:
+        outLines = outf[groupName]['Lines']
+
+        with h5py.File(infile, 'r+') as inf:
+            inLines = inf[groupName]['Lines']
+            numLines = len(inLines.items())
+
+            message = ''
+            num_lines_exceeded = 0
+            num_lines_unplanned = 0
+
+            lines = inLines.values()
+            for line in lines:
+                lineNumber = line.attrs['LineNumber']
+                print(line, lineNumber)
+                print(outLines['1001.0'])
+                inf.copy(line, outLines)
+
+
+
 def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], plannedY = [], plannedZ = [], distanceUnits = ''):
     '''
     Adds a line sub-group to a database sub-group of the project.
