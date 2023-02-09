@@ -1020,7 +1020,7 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, ver
         wpl.plotxy(y, x, plotTitle = 'In-line Sum Noise versus Turbulence', xOffset=False, plot_symbol='+')
 
 
-def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001):
+def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, measX='', measY=''):
     '''
     For a Falcon AGG. For each line, reports the gD difference noise,
     stdev(aD-bD)/2, and plots this as a scatter plot against the mean turbulence.
@@ -1050,6 +1050,7 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001):
     '''
     filename = str(whizzFile)
 
+    num_lines_failed = 0
     report = 'diffGravVturb() estimates the noise in (A+B)/2 as the stdev(A-B)/2.\n'
     period = 1.0 / low_cut
     wavelength = 60.0 * period / 1000.0 # km
@@ -1068,8 +1069,18 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001):
         turb_units = g[flightLine][turbulence].attrs['Units']
         err_units = g[flightLine][aD].attrs['Units']
 
+        if measX == '':
+            measX = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if measY == '':
+            measY = f[groupName]['CoordinateFrame'].attrs['YChannel']
+
+
         failed_lines = 0
         for line in g.keys():
+            xM = np.array(g[line][measX])
+            yM = np.array(g[line][measY])
+            line_length = _displacement2(xM[0], xM[-1], yM[0], yM[-1]) / 1000.0
+
             turb = np.array(g[line][turbulence])
             A_d = np.array(g[line][aD])
             B_d = np.array(g[line][bD])
@@ -1078,12 +1089,15 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001):
             Bd = butter_bandpass_filter(B_d[idx], low_cut, 1.0, 8.0, order=3)
             turb_clean = turb[idx]
             err_data = (Ad - Bd)/2.0
+            err_data = err_data - np.mean(err_data)
 
             turbMean[count] = np.mean(turb_clean)
             errmean[count] = np.std(err_data)
             
             if errmean[count] > error_spec:
-                report += f'{line} fails with noise > {error_spec}.\n'
+                report += f'{line} (length {line_length:6.1f} km) fails with noise {errmean[count]:.1f} > {error_spec}.\n'
+                num_lines_failed += 1
+
             count += 1
 
         fig = plt.figure()
@@ -1100,6 +1114,7 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001):
         for label in ax.get_yticklabels(): label.set_fontsize(8)
         fig.tight_layout()
         plt.show()
+        report = f'{num_lines_failed} failed of {count} lines total.' + report
     print(report)
         
 
@@ -1715,7 +1730,7 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
         print(f'Number failed lines = {num_failed_lines}')
             
 
-def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], plot_flag=False):
+def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_flag=False):
     '''
     For every line in the file whizzFile, calculate the overlap with each other
     line that has the same prefix. Plot a map. Report overlaps.
@@ -1728,6 +1743,8 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], plot_flag=False):
         The minimum overlap distance in km, default 7.6 km.
     lines : String list, optional.
         The line numbers to be checked. Default is all lines in the whizzFile.
+    verbose : Bool, optional
+        If True, report status of all overlaps, else only report errors. Default False.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
 
@@ -1799,15 +1816,18 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], plot_flag=False):
                         plotline1, = ax.plot(e1, n1, color='blue', lw=0.2)
                     
                     if whole_line == 1:
-                        report += f'  OK: All of line {line1} in {line2}: length {overlap:.0f} m.\n'
+                        if verbose:
+                            report += f'  OK: All of line {line1} in {line2}: length {overlap:.0f} m.\n'
                         if plot_flag:
                             plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
                     elif whole_line == 2:
-                        report += f'  OK: All of line {line2} in {line1}: length {overlap:.0f} m.\n'
+                        if verbose:
+                            report += f'  OK: All of line {line2} in {line1}: length {overlap:.0f} m.\n'
                         if plot_flag:
                             plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
                     elif overlap < 1:
-                        report += f'  OK: Non-overlapping lines {line1}, {line2}: overlap {overlap:.0f} m < {min_overlap * 1000}.\n'
+                        if verbose:
+                            report += f'  OK: Non-overlapping lines {line1}, {line2}: overlap {overlap:.0f} m < {min_overlap * 1000}.\n'
                         if plot_flag:
                             plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
                     elif overlap < min_overlap * 1000.0:
@@ -1815,7 +1835,8 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], plot_flag=False):
                         if plot_flag:
                             plotline2, = ax.plot(e2, n2, color='red', lw=0.2)
                     else:
-                        report += f'  OK: Repeat line {line1}, {line2}: overlap by {overlap:.0f} m.\n'
+                        if verbose:
+                            report += f'  OK: Repeat line {line1}, {line2}: overlap by {overlap:.0f} m.\n'
                         if plot_flag:
                             plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
 
@@ -1835,7 +1856,7 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], plot_flag=False):
         plt.show()
 
 
-def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, plot_flag=False):
+def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, known='', plot_flag=False):
     '''
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
@@ -1867,7 +1888,7 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
         The name of the geoWhizz field or channel containing the measured y position. The
         default is to read the yChannel field name from the Coordinate Frame.
     allowance : Float, optional
-        The allowed perpendicular distance for the measured line from the planned
+        The allowed horizontal distance for the measured line from the planned
         line. If any portion of a measured line is further than this from the
         planned position for more than the maximum allowed number of fids or the
         maximum allowed distance, then the line fails. The default is 200.0.
@@ -1892,6 +1913,10 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
     start_y = 0.0
     end_y = 0.0
 
+    exceedances_known = False
+    this_exc_known = False
+    number_known = 0
+
     planfile = str(planPath)
     measFile = str(measPath)
     
@@ -1912,6 +1937,7 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
 
             message = ''
             num_lines_exceeded = 0
+            total_num_excs = 0
             num_lines_unplanned = 0
 
             lines = list(gMeas.keys())
@@ -1923,9 +1949,17 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
                     xM = np.array(gMeas[line][measX])
                     yM = np.array(gMeas[line][measY])
                     max_deviation = 0.0
-                    
+
+                    if known != '':
+                        exceedances_known = True
+                        exc_known = np.array(gMeas[line][known])
+
                     # rotate to line of x ~ 0 using line direction in radians
-                    dirn = np.arctan((xP[-1] - xP[0])/(yP[-1] - yP[0]))
+                    # if abs(yP[-1] - yP[0]) > epsilon:
+                    dirn = np.arctan2((xP[-1] - xP[0]), (yP[-1] - yP[0]))
+                    # else:
+                    #     dirn = np.pi / 2.0    
+
                     [x, y] = _rotateCoords(xM - xP[0], yM - yP[0], -dirn)
 
                     num_fids_in_exceedance = 0
@@ -1940,10 +1974,16 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
                                 start_y = yM[fid]
                                 num_fids_in_exceedance = 1
                                 max_deviation = abs(x[fid]) - allowance
+                                this_exc_known = False
+
                             # Else increment and update on the current exceedance.
                             else:
                                 num_fids_in_exceedance += 1
                                 max_deviation = max(np.abs(x[fid]) - allowance, max_deviation)
+                                if exceedances_known:
+                                    if exc_known[fid] > 0:
+                                        this_exc_known = True
+
                         else:
                             if num_fids_in_exceedance > 0: # the current exceedance has ended
                                 end_x = xM[fid]
@@ -1953,6 +1993,11 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
                                     message += f'\nL {line} deviates more than {allowance} m for '
                                     message += f'{num_fids_in_exceedance} fids ({len_exceedance:.0f} m), max exceedance = {max_deviation:.0f} m.'
                                     message += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
+                                    total_num_excs += 1
+                                    if this_exc_known:
+                                        number_known += 1
+                                        message += ' Known exceedance.'
+                                        this_exc_known = False
                                     exceedance_in_line = True
                                 num_fids_in_exceedance = 0
                 else:
@@ -1964,7 +2009,9 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
                         _plot_exceeding_line(x, y, allowance, line, planLine, dirn)
 
             message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
+            message = f'\n{total_num_excs} horizontal exceedances.\n' + message # 5 DEC
             message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message # 5 DEC
+            message = f'\n{number_known} exceedances known in the database.\n' + message # 5 DEC
             print(message)
             if plot_flag:
                 plt.show()
@@ -2042,7 +2089,7 @@ def _plot_exceeding_line(x, y, allowance, line, planLine, dirn):
    
 def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                   measY='', measZ='', allowance=30.0, maxCounter=13,
-                  maxDistance=0.0, plot_flag=False):
+                  maxDistance=0.0, known='', plot_flag=False):
     '''
     Reports exceedances of actual vertical position from planned vertical positions
     for an airborne survey Whizz database.
@@ -2102,6 +2149,11 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
         print(f'ERROR. Require maxDistance > 1.0 m or maxCounter > 0')
         print(f'  maxDistance = {maxDistance}, maxCounter = {maxCounter}.')
     
+
+    exceedances_known = False
+    this_exc_known = False
+    number_exc_known = 0
+
     with h5py.File(planfile, 'r') as fp:
         gPlan = fp[groupName]['Lines']
         if planX == '':
@@ -2134,6 +2186,10 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                     xM = np.array(gMeas[line][measX])
                     yM = np.array(gMeas[line][measY])
                     zM = np.array(gMeas[line][measZ])
+
+                    if known != '':
+                        exceedances_known = True
+                        exc_known = np.array(gMeas[line][known])
                     
                     # make life easier by transforming to a 2D problem
                     dirn = np.arctan((xP[-1] - xP[0])/(yP[-1] - yP[0]))
@@ -2189,8 +2245,12 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                             start_fid = fid
                             exceeding = True
                             exc_fids = 0
+                            this_exc_known = False
                         elif exceeding and not in_spec:
                             exc_fids += 1
+                            if exceedances_known:
+                                if exc_known[fid] > 0:
+                                    this_exc_known = True
                         elif exceeding and in_spec:
                             num_fids = exc_fids
                             exceeding = False
@@ -2209,6 +2269,10 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                                 report += f' {num_fids} fids ({exc_dist:.0f} m),'
                                 report += f' max exceedance = {max_dev - allowance:.1f} m.'
                                 report += f'\n  From ({ex0:.0f} E, {ey0:.0f} N) to ({ex1:.0f} E, {ey1:.0f} N).'
+                                if this_exc_known:
+                                    number_exc_known += 1
+                                    report += ' Known exceedance.'
+                                    this_exc_known = False
                     if plot_flag and line_flagged:
                         fig = plt.figure()
                         ax = fig.add_subplot(1,1,1)
@@ -2225,6 +2289,7 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
 
         print(f'\n{num_lines_unplanned} lines not in plan and not checked.\n')
         print(f'Total number of exceedances = {numErrors} over {numErrLines} erroneous lines.')
+        print(f'\n{number_exc_known} exceedances known in the database.\n')
         print(report)
         if plot_flag:
             plt.show()

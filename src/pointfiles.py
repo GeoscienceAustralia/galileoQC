@@ -21,6 +21,10 @@ References:
 """
 Simplistic XYZ_TO_HDF5 converter for airborne gravity data
 
+TODO:
+1. If the XYZ file contains a date in the format YYY/MM/DD, then convert it
+to a decimal date string. See line 1737 below.
+
 (c) Mark Dransfield 19 Jul 2020
 
 """
@@ -1733,6 +1737,8 @@ def readXYZ(filename):
                 for ii in range(num_channels):
                     if line_str[ii] == '*':
                         line_str[ii] = 'nan'
+                    # if line_str[ii] contains "/" then it is a date
+                    #     decode date to decimal year string.
                     geosoftXYZ[line_ctr-1][channelnames[ii]][fid_ctr] = \
                         float(line_str[ii])
 
@@ -1770,7 +1776,7 @@ def renameChannels(nchannels, chanNames):
     
 def addWhizzToWhizz(inputWhizzFile, outputWhizzFile):
     '''
-    Adds all the ['Lines'] sub-groups (with all they contain) in `inputWhizzFile` to the
+    Adds all the ['Lines'] sub-groups (with all they contain) from `inputWhizzFile` to the
     ['Lines'] group in `outputWhizzFile`
     '''
     infile = str(inputWhizzFile)

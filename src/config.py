@@ -13,5 +13,5 @@ missingDate = ""
 
 # Get Project Name, reference [default: ""], and rest of header info. #TODO: get this info from user or file.
 groupName = 'Whizz Version 1.0'
-projectName = 'Unknown Project'#'Salamander Project'#'Lawin_Plan' #'Lawin_Day9_10'#
+projectName = 'Unknown Project'
 # Get Project Name, reference [default: ""], and rest of header info. #TODO: get this info from user or file.

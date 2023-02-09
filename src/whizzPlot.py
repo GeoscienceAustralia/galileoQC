@@ -460,7 +460,7 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
     return
 
 
-def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True):
+def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True, mean_remove=False):
     '''
     For the given flightLine in the whizzFile, plot both channel1 and channel2
     against x.
@@ -477,8 +477,10 @@ def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True
         The name of the first channel or field to plot.
     channel : String
         The name of the second channel or field to plot.
-    xOffset : TYPE, optional
+    xOffset : Bool, optional
         If True, the x data will be offset to start at zero. The default is True.
+    mean_remove : Bool, optional
+        If True, the y data will have their means subtracted before plotting. The default is False.
 
     Returns
     -------
@@ -500,6 +502,9 @@ def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True
     
     if xOffset:
         xData = xData - xData[0]
+    if mean_remove:
+        y1Data = y1Data - np.mean(y1Data)
+        y2Data = y2Data - np.mean(y2Data)
     ax.plot(xData, y1Data, xData, y2Data, lw=0.5)
     plt.xlabel(x, fontsize = 6)
     plt.ylabel(channel1, fontsize = 6)
