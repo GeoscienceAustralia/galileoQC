@@ -21,14 +21,295 @@ import xarray as xr
 import netCDF4 as nc4
 import filebrowser as fb
 import rioxarray
+import h5py
+from src import config
+import pygmt
+
+groupName = 'Whizz Version 1.0'
 
 
-def zero_nodata(whizzFile):
-    n, e, g0, d, p = read_ers_image(whizzFile)
-    g0[g0 < -100.0] = -100.0
-    imagefile = whizzFile.with_suffix('.ers1')
-    write_ers_image(imagefile, g0)
+def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False, diff_one=False):
+    '''
+    Return a point-located xArray Dataset of (northing, easting, z), over the `fiducials` dimension,
+    from a whizz_file.
 
+    Parameters
+    ----------
+    whizzFile : Path or String
+        The Path to, or String name of, the whizz file in HDF5 format.
+    z_chan : String
+        The name of the channel in `whizz_file` to be imaged.
+    n_chan : String, optional
+        The name of the channel in `whizz_file` containing the northings (y).
+        Default "" causes the name of the "YChannel" in `whizz_file` to be used.
+    e_chan : String, optional
+        The name of the channel in `whizz_file` containing the eastings (x).
+        Default "" causes the name of the "XChannel" in `whizz_file` to be used.
+    remove_mean : Bool, optional
+        If true, the mean is subtracted from each survey line of data before
+        writing to `my_dataset`. Default False.
+    diff_one : Bool, optional
+        If true, the first difference along each survey line of data is
+        written to `my_dataset`. Default False.
+
+    Returns
+    -------
+    my_dataset : (xArray Dataset)
+        Contains the data. If `whizz_to_xarray()` is unable to return data,
+        it returns an empty xArray Dataset (test with `len(aa.attrs) == 0`).
+
+    '''
+    filename = str(whizz_file)
+    
+    with h5py.File(filename, 'r') as f:
+        lines_group = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        if e_chan == '':
+            e_chan = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if n_chan == '':
+            n_chan = f[groupName]['CoordinateFrame'].attrs['YChannel']
+
+        if z_chan == e_chan or z_chan == n_chan:
+            print(f'Cannot process {z_chan}, same as {e_chan} or {n_chan}.')
+            return xr.Dataset()
+        totalNumFids = 0
+        
+        for line in lines_group.keys():
+            xData = np.array(lines_group[line][e_chan])
+            totalNumFids += len(xData)
+        print(f'Total number of fids in whizz file = {totalNumFids}.')
+
+        # initialise an xarray to take the data, with name and units
+        fiducials = np.arange(0, totalNumFids)
+        data = np.zeros((totalNumFids,))
+        eastings = np.zeros((totalNumFids,))
+        northings = np.zeros((totalNumFids,))
+
+        my_dataset = xr.Dataset({
+            e_chan: xr.DataArray(
+                data = eastings,
+                coords={'fiducials': fiducials}, 
+                dims = ['fiducials'],
+                attrs = {
+                    'units': 'm'
+                }
+            ),
+            n_chan: xr.DataArray(
+                data = northings,
+                coords={'fiducials': fiducials}, 
+                dims = ['fiducials'],
+                attrs = {
+                    'units': 'm'
+                }
+            ),
+            z_chan: xr.DataArray(
+                data = np.zeros((totalNumFids,)),
+                coords={'fiducials': fiducials}, 
+                dims = ['fiducials'],
+                attrs = {
+                    'units': '-'
+                }
+            )},
+            attrs = {
+            'author': 'Mark Dransfield',
+            'x_channel': e_chan,
+            'y_channel': n_chan,
+            'z_channel': z_chan
+            }
+        )
+
+        sfid = 0
+        efid = 0
+        for line in lines_group.keys():
+            sfid = efid
+            xData = np.array(lines_group[line][e_chan])
+            yData = np.array(lines_group[line][n_chan])
+            zData = np.array(lines_group[line][z_chan])
+            efid += len(yData)
+            if remove_mean:
+                zData = zData - np.mean(zData)
+            if diff_one:
+                zData = np.append(np.diff(zData), zData[-1]-zData[-2])
+
+            my_dataset[e_chan][sfid:efid] = xData
+            my_dataset[n_chan][sfid:efid] = yData
+            my_dataset[z_chan][sfid:efid] = zData
+
+            if 'Units' in lines_group[line][e_chan].attrs:
+                my_dataset[e_chan].attrs['units'] = lines_group[line][e_chan].attrs["Units"]
+            if 'Units' in lines_group[line][n_chan].attrs:
+                my_dataset[n_chan].attrs['units'] = lines_group[line][n_chan].attrs["Units"]
+            if 'Units' in lines_group[line][z_chan].attrs:
+                my_dataset[z_chan].attrs['units'] = lines_group[line][z_chan].attrs["Units"]
+            if remove_mean and diff_one:
+                my_dataset.attrs['title'] = f'{z_chan} (mr) (d1)'
+            elif remove_mean:
+                my_dataset.attrs['title'] = f'{z_chan} (mr)'
+            elif diff_one:
+                my_dataset.attrs['title'] = f'{z_chan} (d1)'
+            else:
+                my_dataset.attrs['title'] = z_chan
+            
+    return my_dataset
+
+
+def xarray_to_grid(my_data, grid_space):
+    '''
+    Uses `PyGMT` to interpolate the `my_data` onto a regular grid. Method
+    uses data to 5 x the grid spacing to focus on QC issues.
+    TODO:
+    1. allow change in size of grid spacing.
+
+    Parameters
+    ----------
+    my_data : xArray Dataset
+        Contains x, y, and z data dimensioned by fiducial.
+
+    Returns
+    -------
+    grid : 
+        Contains the gridded data.
+    region : tuple
+        Four floating point values for xmin, xmax, ymin, ymax.
+    grid_space : Float
+        The distance between grid cell centres in grid distance units.
+
+    '''
+
+    # grid_space = 500.0
+
+    x_chan = my_data.attrs['x_channel']
+    y_chan = my_data.attrs['y_channel']
+    z_chan = my_data.attrs['z_channel']
+    myunits = my_data[z_chan].attrs['units']
+    print(f'Processing (x, y, z) = ({x_chan}, {y_chan}, {z_chan}). {z_chan} in {myunits}.')
+
+    # grid spacing and search radius
+    inspc = f'{grid_space:.0f}+e'
+    maxradius = 5.0 * grid_space
+
+    region = pygmt.info(data=my_data[[x_chan, y_chan]], spacing=1)  # West, East, South, North
+    print(f"Data points cover region: {region}")
+
+    # Preprocess z_chan data using blockmedian
+    data_trm = pygmt.blockmedian(
+        data=my_data[[x_chan, y_chan, z_chan]],
+        spacing=inspc,
+        region=region,
+    )
+
+    # make grid
+    grid = pygmt.surface(
+        x=data_trm[0],
+        y=data_trm[1],
+        z=data_trm[2],
+        spacing=inspc,
+        M=maxradius,
+        region=region,  # xmin, xmax, ymin, ymax
+        T=0.35,  # tension factor
+    )
+
+    grid.attrs['units'] = myunits
+    grid.attrs['long_name'] = z_chan
+    grid.attrs['title'] = my_data.attrs['title']
+    grid['x'].attrs['orig_name'] = x_chan
+    grid['y'].attrs['orig_name'] = y_chan
+
+    return grid, region
+
+
+def image_pygmt(grid, region):
+    '''
+    Shows a figure of an image of `grid` over a `region, using
+    `PyGMT`'s 'grdimage()`'. The inputs are generated by `xarray_to_grid()`.
+
+    Parameters
+    ----------
+    grid : 
+        Contains the gridded data.
+    region : tuple
+        Four floating point values for xmin, xmax, ymin, ymax.
+
+    Returns
+    -------
+    Nothing.
+
+    '''
+
+    plot_width = 0.12 # ie 12 cm
+
+    # colour bar labeling
+    yc_label = f'af+l{grid.attrs["long_name"]}'
+    uc_label = f'y+l{grid.attrs["units"]}'
+
+    # axis labeling and control
+    xa_label = f"xag+l{grid['x'].attrs['orig_name']}"
+    ya_label = f"yag+l{grid['y'].attrs['orig_name']}"
+    my_title = f'+t{grid.attrs["title"]}'
+
+    # Colour scaling
+    cmin = np.nanpercentile(grid.data, 1)
+    cmax = np.nanpercentile(grid.data, 99)
+    print(f'z range (1st to 99th percentile) ({cmin}, {cmax})')
+    if abs(cmax - cmin) < 1.0E-10:
+        cmin = -1.0E-10
+        cmax = 1.0E-10
+
+    # fit the plot to a width of 12 cm
+    hscale = (grid['x'].attrs['actual_range'][1] - grid['x'].attrs['actual_range'][0]) / plot_width
+    myproj = f'x1:{hscale:.0f}'
+
+    fig = pygmt.Figure()
+    fig.basemap(
+        frame=[xa_label, ya_label, my_title],
+        region=region,
+        projection=myproj,
+    )
+    pygmt.makecpt(cmap="viridis", series=(cmin, cmax))
+    fig.grdimage(grid=grid, nan_transparent=True, cmap=True)
+    fig.colorbar(position="JMR", frame=[yc_label, uc_label])
+    fig.show()
+
+
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space):
+    '''
+    Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
+    Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
+    Channels listed in `d1_chans` are first differenced along each survey line first.
+
+    Parameters
+    ----------
+    whizzFile : Path or String
+        The Path to, or String name of, the whizz file in HDF5 format.
+    z_chans : [String]
+        An array of names of channels in `whizz_file` to be imaged.
+    mr_chans : [String]
+        An array of names of channels in `whizz_file` to be imaged.
+    d1_chans : [String]
+        An array of names of channels in `whizz_file` to be imaged.
+    grid_space : Float
+        The distance between grid cell centres in grid distance units.
+
+    Returns
+    -------
+    Nothing.
+
+    '''
+
+    for z_chan in z_chans:
+        remove_mean = False
+        diff_one = False
+        if z_chan in mr_chans:
+            remove_mean = True
+        if z_chan in d1_chans:
+            diff_one = True
+
+        print(f'Gridding and imaging {z_chan}')
+        my_data = whizz_to_xarray(whizz_file, z_chan, remove_mean=remove_mean, diff_one=diff_one)
+        if len(my_data.attrs) == 0:
+            continue
+        my_grid, my_region = xarray_to_grid(my_data, grid_space)
+        image_pygmt(my_grid, my_region)
 
 
 def imageStats(whizzFile=''):
