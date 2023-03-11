@@ -651,14 +651,68 @@ def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
     ax = fig.add_subplot(1,1,1)
     freq, Pxx = sig.welch(data, nfft=2048, fs = f_sample)
     period = 1.0 / freq[1:]
-    plt.semilogx(period, np.sqrt(Pxx[1:]), color='blue', lw=0.3)
+    plt.plot(period, np.sqrt(Pxx[1:]), color='blue', lw=0.3)
     # plt.semilogx(freq, np.sqrt(Pxx), color='blue', lw=0.3)
 
+    plt.xlim([0, 200])
     plt.xlabel('Period [s]', fontsize = 6)
     # plt.xlabel('Frequency [Hz]', fontsize = 6)
     plt.ylabel(channel, fontsize = 6)
     if plotTitle == '':
         plotTitle = f'{projName} : {channel} L{flightLine}'
+    plt.title(plotTitle, fontsize = 8)
+    plt.grid(True)
+    for label in ax.get_xticklabels(): label.set_fontsize(6)
+    for label in ax.get_yticklabels(): label.set_fontsize(6)
+    plt.show()
+
+
+def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitle = ''):
+    '''
+    Plot the PSD (log-log Sqrt(Power) from welch method) of channel in flightLine. 
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    flightLine : String
+        A flightline, e.g. '1000110.0'.
+    channel : String
+        The name of the channel or field to plot.
+    plotTitle : String, optional
+        A title for the plot. The default is '' in which case the title will be Project Line Channel.
+
+    Returns
+    -------
+    None.
+
+    '''
+    import scipy.signal as sig
+    
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        if time == '':
+            time = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
+        data1 = np.array(g[flightLine][channel1])
+        data2 = np.array(g[flightLine][channel2])
+        t = np.array(g[flightLine][time])
+        f_sample = 1.0 / (t[1] - t[0])
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    freq, Pxx1 = sig.welch(data1, nfft=2048, fs = f_sample)
+    freq, Pxx2 = sig.welch(data2, nfft=2048, fs = f_sample)
+    # plt.plot(freq, np.sqrt(Pxx2[0:]) / np.sqrt(Pxx1[0:]), 'g', lw=0.6)
+    plt.semilogx(freq, np.sqrt(Pxx2[0:]) / np.sqrt(Pxx1[0:]), 'g', lw=0.6)
+    
+    # plt.xlim([0, 0.06])
+    plt.ylim([0, 5.0])
+    plt.xlabel('Frequency [Hz]', fontsize = 6)
+    plt.ylabel(f'{channel2} / {channel1}', fontsize = 6)
+    if plotTitle == '':
+        plotTitle = f'Ratio of sqrt(Pwr)s {projName} : {channel2} / {channel2} L{flightLine}'
     plt.title(plotTitle, fontsize = 8)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
@@ -732,6 +786,66 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(10)
     for label in ax.get_yticklabels(): label.set_fontsize(10)
+    plt.show()
+
+
+def specificLinesMap(whizzFile, lines, easting='', northing=''):
+    '''
+    Plots a line map of the survey contained in the HDF5 Whizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        The name of a HDF5 Whizz file, including path and extension.
+    lines : Array of String
+        The lines to plot to the map
+    easting : String, optional
+        The name of the field containing eastings. The default is the name
+        stored in the Coordinates attribute XChannel.
+    northing : String, optional
+        The name of the field containing eastings. The default is the name
+        stored in the Coordinates attribute YChannel.
+
+    Returns
+    -------
+    None.
+
+    '''
+    from matplotlib.ticker import StrMethodFormatter
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    
+    filename = str(whizzFile)
+
+    with h5py.File(filename, 'r') as f:
+        if easting == '':
+            easting = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if northing == '':
+            northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        g = f[groupName]['Lines']
+        plotTitle = f[groupName].attrs['ProjectName'] + ': Line Map'
+        
+        mycolours = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red',
+        'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
+        myc = 0
+        for line in lines:
+            lX = g[line][easting][0:]
+            lY = g[line][northing][0:]
+            flownline, = ax.plot(lX, lY, color=mycolours[myc], label=line, lw=3, alpha=0.7)
+            myc += 1
+            
+    ax.set_aspect('equal')
+    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    plt.xlabel('X [m]', fontsize = 10)
+    plt.ylabel('Y [m]', fontsize = 10)
+    plt.suptitle(plotTitle, fontsize = 12)
+    # plt.title('[planned (red); flown (blue)]', fontsize = 10)
+    plt.grid(True)
+    for label in ax.get_xticklabels(): label.set_fontsize(10)
+    for label in ax.get_yticklabels(): label.set_fontsize(10)
+    plt.legend(fontsize=8)
     plt.show()
 
 
@@ -910,3 +1024,80 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     ax.axis('equal')
     plt.grid()
     plt.tight_layout()
+
+
+def plotVertPlan(planPath, measPath, line, planX='', planZ='', measX='', measZ=''):
+    '''
+    Reports exceedances of actual vertical position from planned vertical positions
+    for an airborne survey Whizz database.
+    The positions (`planX`, `planY`, `planY`) of each planned survey line
+    are read from `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read from
+    `measPath` and the vertical distance of each from the planned line is
+    calculated. If this distance exceeds `allowance` for a distance greater than
+    `maxDistance` m, then an out-of-specification exceedance is reported for that line.
+    If `maxDistance` is less than 1.0, then the test is instead against `maxCounter`
+    consecutive positions. The default for `maxCounter` is 13.
+
+    Parameters
+    ----------
+    planPath : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension, of survey plan.
+    planX : String, optional
+        The name of the geoWhizz field or channel containing the planned x positions. The
+        default is to read the xChannel field name from the Coordinate Frame.
+    measPath : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension, of measured data.
+    measX : String, optional
+        The name of the geoWhizz field or channel containing the measured x positions. The
+        default is to read the xChannel field name from the Coordinate Frame.
+
+    Returns
+    -------
+    None.
+
+    '''
+    planfile = str(planPath)
+    measFile = str(measPath)
+
+    with h5py.File(planfile, 'r') as fp:
+        gPlan = fp[groupName]['Lines']
+        if planX == '':
+            planX = fp[groupName]['CoordinateFrame'].attrs['XChannel']
+        if planZ == '':
+            planZ = fp[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+
+        with h5py.File(measFile, 'r') as fm:
+            gMeas = fm[groupName]['Lines']
+            if measX == '':
+                measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
+            if measZ == '':
+                measZ = fm[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+
+            line_flagged = False
+            # my_line = gMeas[line]
+            # print(my_line)
+            # for myat in my_line.attrs:
+            #     print(myat)
+            # planLine = my_line.attrs['PlannedLine']
+            planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
+            if planLine in gPlan: # 5 DEC
+                xP = np.array(gPlan[planLine][planX])
+                zP = np.array(gPlan[planLine][planZ])
+                xM = np.array(gMeas[line][measX])
+                zM = np.array(gMeas[line][measZ])
+
+                fig = plt.figure()
+                ax = fig.add_subplot(1,1,1)
+                ax.plot(xP, zP, 'b', label='Plan')
+                ax.plot(xM, zM, 'g', label='Measured')
+                plt.ylabel(f'{measZ} [m]')
+                plt.xlabel(f'{measX}')
+                plt.title(f'Line {line}')
+                plt.legend()
+                plt.grid()
+            else:
+                print(f'Line {line} not in plan.')
+
+    plt.show()
+                                       
+   

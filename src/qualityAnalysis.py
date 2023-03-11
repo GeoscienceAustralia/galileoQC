@@ -2087,7 +2087,7 @@ def _plot_exceeding_line(x, y, allowance, line, planLine, dirn):
     return
 
    
-def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
+def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', measX='',
                   measY='', measZ='', allowance=30.0, maxCounter=13,
                   maxDistance=0.0, known='', plot_flag=False):
     '''
@@ -2105,14 +2105,16 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
     ----------
     planPath : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension, of survey plan.
+    measPath : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension, of measured data.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     planX : String, optional
         The name of the geoWhizz field or channel containing the planned x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
     planY : String, optional
         The name of the geoWhizz field or channel containing the planned y positions. The
         default is to read the xChannel field name from the Coordinate Frame.
-    measPath : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension, of measured data.
     measX : String, optional
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
@@ -2176,7 +2178,10 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
             num_lines_unplanned = 0
             report = ''
 
-            for line in gMeas.keys():
+            if lines == []:
+                lines = gMeas.keys()
+
+            for line in lines:
                 line_flagged = False
                 planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
                 if planLine in gPlan: # 5 DEC
@@ -2192,43 +2197,17 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                         exc_known = np.array(gMeas[line][known])
                     
                     # make life easier by transforming to a 2D problem
-                    dirn = np.arctan((xP[-1] - xP[0])/(yP[-1] - yP[0]))
-                    (xm, ym) = _rotateCoords(xM - xP[0], yM - yP[0], -dirn)
-                    (xp0, yp0) = _rotateCoords(xP - xP[0], yP - yP[0], -dirn)
+                    dirn = np.arctan2((yM[-1] - yM[0]), (xM[-1] - xM[0]))
+                    (xm, ym) = _rotateCoords(xM - xP[0], yM - yP[0], dirn)
+                    (xp0, yp0) = _rotateCoords(xP - xP[0], yP - yP[0], dirn)
                     xp = xp0
                     yp = yp0
                     zp = zP
                     
-                    # interpolate (ym, zM) onto (yp, zmp)
-                    # This section dodgy - TODO : work out what the signs should be and use them
-                    # TODO : better code to clean out the input data
-                    if line == '9100002.0' or line == '9100003.0' or line == '9100100.0':
-                        decreasing = yp0[-1] < yp0[0]
-                        if decreasing:
-                            jj = 0
-                            for ii in range(len(yp0), 1, -1):
-                                if yp0[ii] < yp0[ii-1]:
-                                    xp[jj] = xp0[ii]
-                                    yp[jj] = yp0[ii]
-                                    zp[jj] = zP[ii]
-                                    jj += 1
-                            xp = xp[0:jj]
-                            yp = yp[0:jj]
-                            zp = zp[0:jj]
-                        else:
-                            jj = 0
-                            for ii in range(1, len(yp0), 1):
-                                if yp0[ii] > yp0[ii-1]:
-                                    xp[jj] = xp0[ii]
-                                    yp[jj] = yp0[ii]
-                                    zp[jj] = zP[ii]
-                                    jj += 1
-                            xp = xp[0:jj]
-                            yp = yp[0:jj]
-                            zp = zp[0:jj]
-                        (zmp, zM_trim) = mhd.interpolateLine(yp, zp, -ym, zM)
-                    else:
-                        (zmp, zM_trim) = mhd.interpolateLine(-yp, zp, -ym, zM, plot_flag=False)
+                    # interpolate (xm, zM) onto (xp, zmp)
+                    if abs(xm[-1] - xm[1]) < abs(ym[-1] - ym[0]):
+                        print('ERROR - expect xms > yms but this is not so.')
+                    (zmp, zM_trim) = mhd.interpolateLine(xp, zp, xm, zM, plot_flag=False)
                     # calculate the deviation vector
                     z_dev = zM_trim - zmp
                 
@@ -2275,14 +2254,27 @@ def checkVertPlan(planPath, measPath, planX='', planY='', planZ='', measX='',
                                     this_exc_known = False
                     if plot_flag and line_flagged:
                         fig = plt.figure()
-                        ax = fig.add_subplot(1,1,1)
-                        ax.plot(z_dev, ym[1:], 'b')
-                        ax.plot(-allowance * np.ones(z_dev.shape), ym[1:], 'r')
-                        ax.plot(allowance * np.ones(z_dev.shape), ym[1:], 'r')
-                        plt.xlabel('deviation from planned drape [m]')
-                        plt.ylabel('distance along line')
-                        plt.title(f'Line {line}')
-                        plt.grid()
+                        ax = fig.add_subplot(2,1,1)
+                        ax.plot(xm[1:], z_dev, 'b', lw=0.6)
+                        ax.plot(xm[1:], -allowance * np.ones(z_dev.shape), 'r')
+                        ax.plot(xm[1:], allowance * np.ones(z_dev.shape), 'r')
+                        ax.set_xlim(xm[0], xm[-1])
+                        ax.set_ylabel('deviation from planned drape [m]', fontsize=8)
+                        ax.set_xlabel('distance along line', fontsize=8)
+                        for label in ax.get_xticklabels(): label.set_fontsize(6)
+                        for label in ax.get_yticklabels(): label.set_fontsize(6)
+                        ax.set_title(f'Line {line}', fontsize=8)
+                        ax.grid()
+                        ax2 = fig.add_subplot(2,1,2)
+                        ax2.plot(xP, zP, 'b', label='Plan', lw=0.9, alpha=0.7)
+                        ax2.plot(xM, zM, 'g', label='Measured', lw=0.9, alpha=0.7)
+                        ax2.set_xlim(xM[0], xM[-1])
+                        ax2.set_ylabel(f'{measZ} [m]', fontsize=8)
+                        ax2.set_xlabel(f'{measX}', fontsize=8)
+                        for label in ax2.get_xticklabels(): label.set_fontsize(6)
+                        for label in ax2.get_yticklabels(): label.set_fontsize(6)
+                        ax2.legend(fontsize=8)
+                        ax2.grid()
                 else:
                     print(f'Line {line} not in plan.')
                     num_lines_unplanned += 1
@@ -3277,6 +3269,7 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
     print(settings)
     
     num_failed_lines = 0
+    num_failures = 0
     num_exceed_lines = 0
     total_num_lines = 0
     report = ''
@@ -3294,7 +3287,7 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
 
         if speed[speed < minSafeSpeed].size > 0:
             lineUnsafeSlow = True
-            print(f'\n For at least one reading, the ground speed was < {minSafeSpeed} (might be unsafe).')
+            print(f' For at least one reading in L{line}, the ground speed was < {minSafeSpeed} (might be unsafe).')
         
         rel_speed = (speed - nominalSpeed) / nominalSpeed
 
@@ -3345,6 +3338,7 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
                         report += f'({dist_exceedance:.0f} m), peak exceedance = {speed_extreme:.0f} m/s.'
                         report += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
                         exceedance_in_line = True
+                        num_failures += 1
                     num_fids_in_exceedance = 0
                     too_slow = False
         if exceedance_in_line:
@@ -3353,8 +3347,9 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
                 _plot_speed(t, speed, nominalSpeed * (1.0 - allowance), 
                    nominalSpeed * (1.0 + allowance), plot_title=plot_title)
 
-    print(f'Checked {total_num_lines} lines and {num_exceed_lines} had some short exceedance(s).')
-    print(f'{num_failed_lines} lines failed for exceedance > allowed.')
+    print(f' Checked {total_num_lines} lines and {num_exceed_lines} had some short exceedance(s).')
+    print(f' {num_failed_lines} lines failed for exceedance > allowed.')
+    print(f' Total number of full exceedances = {num_failures}.')
     print(report)
     if plot_flag:
         plt.show()
@@ -3555,6 +3550,8 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
         g = f[groupName]['Lines']
         if x == '':
             x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        # if x == '':
+            north = f[groupName]['CoordinateFrame'].attrs['YChannel']
         if z == '':
             z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
         if flightLines == []:
@@ -3597,6 +3594,14 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
             xd = np.array(g[line][x])
             yd = np.array(g[line][channel])
             zd = np.array(g[line][z])
+
+            # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
+            dx = np.diff(xd)
+            dy = np.diff(np.array(g[line][north]))
+            heading = np.arctan2(dx, dy) * 180.0 / np.pi
+            mean_heading = np.mean(heading)
+            print(f'Line {line} heading = {mean_heading:.1f} deg.')
+
             # ensure ordered in increasing x
             if xd[1] < xd[0]:
                 xd = xd[::-1]

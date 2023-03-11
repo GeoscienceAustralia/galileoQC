@@ -55,11 +55,15 @@ def getWhizzData(whizzFile, line, channel):
     ----------
     whizzFile : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension.
+    line : String
+        A flightline, e.g. '1000110.0'.
+    channel : String
+        The (case-sensitive) name of a channel in the database, e.g. 'EASTING'.
 
     Returns
     -------
     my_data : numpy array
-        DESCRIPTION.
+        The requested data.
 
     '''
     filename = str(whizzFile)
@@ -78,10 +82,16 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
 
     Parameters
     ----------
-    whizzFile : TYPE
-        DESCRIPTION.
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
     line_type : TYPE, optional
-        DESCRIPTION. The default is ''.
+        Either 'Xcal_nsw' or 'SGL_GA' or ''. The default is '' which causes
+        the `line`s 'PlannedLine' attridbute to be set to `planned_line`.
+    line : String
+        A flightline, e.g. '1000110.0'.
+    planned_line : String
+        A flightline, e.g. '1000110.0' in a separate whizzFile containing the
+        planned x,y,z locations of the survey flightlines.
 
     Returns
     -------
@@ -208,9 +218,13 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
     whizzFile : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension.
     x : String, optional
-        The name of the channel of X positions (in metres). The default is 'X'.
+        The name of the channel of X positions (in metres). The default is '' which
+        causes the channel stored in the CoordinateFram groups XChannel attribute 
+        to be used.
     y : String, optional
-        The name of the channel of Y positions (in metres). The default is 'Y'.
+        The name of the channel of Y positions (in metres). The default is '' which
+        causes the channel stored in the CoordinateFram groups YChannel attribute 
+        to be used.
     lines : array of strings, optional
         An array of line identifiers whose total distance will be returned.
         Default all lines in whizzFile.
@@ -581,8 +595,6 @@ def getLineXChannel(whizzFile, line, x, channel):
         Name of a HDF5 Whizz file, including path and extension.
     line : String
         A flightline, e.g. '1000110.0'.
-    line : TYPE
-        DESCRIPTION.
     x : String
         The name of the x variable.
     channel : String
@@ -780,6 +792,32 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
 
 
 def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
+    '''
+    Prints a summary of the sample rate of the data in a HDF5 Whizz file.
+    The sample rate in time are usually constant but the minimum, maximum and
+    mean sample rates are reported for time and horizontal distance.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    timeChannel : String, optional
+        The name of the channel containing the time data.  The default is '' which
+        causes the channel stored in the CoordinateFram groups TimeChannel attribute 
+        to be used.
+    xChannel : String, optional
+        The name of the channel containing the x data.  The default is '' which
+        causes the channel stored in the CoordinateFram groups XChannel attribute 
+        to be used.
+    yChannel : String, optional
+        The name of the channel containing the y data.  The default is '' which
+        causes the channel stored in the CoordinateFram groups YChannel attribute 
+        to be used.
+
+    Returns
+    -------
+    None.
+    '''
     filename = str(whizzFile)
         
     with h5py.File(filename, 'r') as f:
@@ -1721,7 +1759,7 @@ def readXYZ(filename):
                 continue
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 current_line = float(file_line.split()[1])
-                geosoftXYZ[line_ctr]['line_number'] = f'{current_line:.2f}'#file_line.split()[1]
+                geosoftXYZ[line_ctr]['line_number'] = f'{current_line:.3f}'#file_line.split()[1]
                 fid_ctr = 0
                 line_ctr += 1
             #elif file_line.count('*') != 0:
@@ -1774,26 +1812,32 @@ def renameChannels(nchannels, chanNames):
     return chanNames
 
     
-def addWhizzToWhizz(inputWhizzFile, outputWhizzFile):
+def addWhizzToWhizz(inputWhizzFile, outputWhizzFile, lines=[]):
     '''
     Adds all the ['Lines'] sub-groups (with all they contain) from `inputWhizzFile` to the
     ['Lines'] group in `outputWhizzFile`
+
+    TODO - Need to translate channel names
     '''
     infile = str(inputWhizzFile)
     outFile = str(outputWhizzFile)
+    if True:
+        print("Can't be used until channel name translation is in place.")
+        return
     
     with h5py.File(outFile, 'r+') as outf:
         outLines = outf[groupName]['Lines']
 
         with h5py.File(infile, 'r+') as inf:
-            inLines = inf[groupName]['Lines']
-            numLines = len(inLines.items())
+            if lines == []:
+                inLines = inf[groupName]['Lines']
+                numLines = len(inLines.items())
+                lines = inLines.values()
 
-            message = ''
-            num_lines_exceeded = 0
-            num_lines_unplanned = 0
+            # message = ''
+            # num_lines_exceeded = 0
+            # num_lines_unplanned = 0
 
-            lines = inLines.values()
             for line in lines:
                 lineNumber = line.attrs['LineNumber']
                 print(line, lineNumber)
@@ -1801,9 +1845,9 @@ def addWhizzToWhizz(inputWhizzFile, outputWhizzFile):
                 inf.copy(line, outLines)
 
 
-
 def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], plannedY = [], plannedZ = [], distanceUnits = ''):
     '''
+    WARNING - A ONE-OFF
     Adds a line sub-group to a database sub-group of the project.
 
     Parameters
@@ -1842,5 +1886,6 @@ def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], pl
             zData.attrs['Precision'] = 0.01
             zData.attrs['Description'] = 'zPlan'
     return        
+
 
 
