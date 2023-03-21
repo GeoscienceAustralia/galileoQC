@@ -1856,7 +1856,7 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
         plt.show()
 
 
-def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, known='', plot_flag=False):
+def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, known='', plot_flag=False):
     '''
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
@@ -1940,9 +1940,13 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
             total_num_excs = 0
             num_lines_unplanned = 0
 
-            lines = list(gMeas.keys())
+
+            if lines == []:
+                lines = gMeas.keys()
+
             for line in lines:
                 planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
+                exceedance_in_line = False
                 if planLine in gPlan:
                     xP = np.array(gPlan[planLine][planX])
                     yP = np.array(gPlan[planLine][planY])
@@ -1956,30 +1960,30 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
 
                     # rotate to line of x ~ 0 using line direction in radians
                     # if abs(yP[-1] - yP[0]) > epsilon:
-                    dirn = np.arctan2((xP[-1] - xP[0]), (yP[-1] - yP[0]))
+                    dirn = np.arctan2((yM[-1] - yM[0]), (xM[-1] - xM[0]))
                     # else:
                     #     dirn = np.pi / 2.0    
 
-                    [x, y] = _rotateCoords(xM - xP[0], yM - yP[0], -dirn)
+                    [x, y] = _rotateCoords(xM - xP[0], yM - yP[0], dirn)
 
                     num_fids_in_exceedance = 0
                     exceedance_in_line = False
 
                     for fid in range(0, len(x)):
                         # There is an exceedance ...
-                        if np.abs(x[fid]) > allowance:
+                        if np.abs(y[fid]) > allowance: #x
                             # If a new exceedance, then initialise variables;
                             if num_fids_in_exceedance == 0:
                                 start_x = xM[fid]
                                 start_y = yM[fid]
                                 num_fids_in_exceedance = 1
-                                max_deviation = abs(x[fid]) - allowance
+                                max_deviation = abs(y[fid]) - allowance #x
                                 this_exc_known = False
 
                             # Else increment and update on the current exceedance.
                             else:
                                 num_fids_in_exceedance += 1
-                                max_deviation = max(np.abs(x[fid]) - allowance, max_deviation)
+                                max_deviation = max(np.abs(y[fid]) - allowance, max_deviation) #x
                                 if exceedances_known:
                                     if exc_known[fid] > 0:
                                         this_exc_known = True
@@ -2006,7 +2010,7 @@ def checkXYPlan(planPath, measPath, planX='', planY='', measX='', measY='', allo
                 if exceedance_in_line:
                     num_lines_exceeded += 1
                     if plot_flag:
-                        _plot_exceeding_line(x, y, allowance, line, planLine, dirn)
+                        _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn)
 
             message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
             message = f'\n{total_num_excs} horizontal exceedances.\n' + message # 5 DEC
@@ -2050,7 +2054,7 @@ def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDist
     return False
 
 
-def _plot_exceeding_line(x, y, allowance, line, planLine, dirn):
+def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn):
     '''
     Plots a standard exceedance figure for checkXYPlan().
 
@@ -2075,21 +2079,34 @@ def _plot_exceeding_line(x, y, allowance, line, planLine, dirn):
 
     '''
     fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
+    plot_title = f'Line {line} (plan: {planLine}); Bearing {dirn * 180 / np.pi:.1f} deg E'
+    fig.suptitle(plot_title, fontsize=10)
+
+    ax = fig.add_subplot(2,1,1)
     ax.plot(x, y, 'b')
-    ax.plot(-allowance * np.ones(x.shape), y, 'r')
-    ax.plot(allowance * np.ones(x.shape), y, 'r')
-    plt.xlabel('deviation from planned line [m]', fontsize = 9)
-    plt.ylabel('distance along line', fontsize = 9)
-    plt.title(f'Line {line} (plan: {planLine}); Bearing {dirn * 180 / np.pi:.1f} deg'\
-        , fontsize = 10)
-    plt.grid()
+    ax.plot(x, -allowance * np.ones(y.shape), 'r')
+    ax.plot(x, allowance * np.ones(y.shape), 'r')
+    ax.set_xlim(x[0], x[-1])
+    ax.set_xlabel('deviation from planned line [m]', fontsize = 8)
+    ax.set_ylabel('distance along line', fontsize = 8)
+    for label in ax.get_xticklabels(): label.set_fontsize(6)
+    for label in ax.get_yticklabels(): label.set_fontsize(6)
+    ax.grid()
+
+    ax2 = fig.add_subplot(2,1,2)
+    ax2.plot(xP, yP, color='magenta', label='Plan', lw=1.5, alpha=0.7)
+    ax2.plot(xM, yM, color='cyan', label='Measured', lw=1.5, alpha=0.7)
+    ax2.set_xlim(xM[0], xM[-1])
+    ax2.set_ylabel(f'{measY} [m]', fontsize=8)
+    ax2.set_xlabel(f'{measX} [m]', fontsize=8)
+    for label in ax2.get_xticklabels(): label.set_fontsize(6)
+    for label in ax2.get_yticklabels(): label.set_fontsize(6)
+    ax2.legend(fontsize=8)
+    ax2.grid()
     return
 
    
-def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', measX='',
-                  measY='', measZ='', allowance=30.0, maxCounter=13,
-                  maxDistance=0.0, known='', plot_flag=False):
+def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False):
     '''
     Reports exceedances of actual vertical position from planned vertical positions
     for an airborne survey Whizz database.
@@ -2097,7 +2114,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
     are read from `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read from
     `measPath` and the vertical distance of each from the planned line is
     calculated. If this distance exceeds `allowance` for a distance greater than
-    `maxDistance` m, then an out-of-specification exceedance is reported for that line.
+    `maxDistance`, then an out-of-specification exceedance is reported for that line.
     If `maxDistance` is less than 1.0, then the test is instead against `maxCounter`
     consecutive positions. The default for `maxCounter` is 13.
 
@@ -2253,28 +2270,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                                     report += ' Known exceedance.'
                                     this_exc_known = False
                     if plot_flag and line_flagged:
-                        fig = plt.figure()
-                        ax = fig.add_subplot(2,1,1)
-                        ax.plot(xm[1:], z_dev, 'b', lw=0.6)
-                        ax.plot(xm[1:], -allowance * np.ones(z_dev.shape), 'r')
-                        ax.plot(xm[1:], allowance * np.ones(z_dev.shape), 'r')
-                        ax.set_xlim(xm[0], xm[-1])
-                        ax.set_ylabel('deviation from planned drape [m]', fontsize=8)
-                        ax.set_xlabel('distance along line', fontsize=8)
-                        for label in ax.get_xticklabels(): label.set_fontsize(6)
-                        for label in ax.get_yticklabels(): label.set_fontsize(6)
-                        ax.set_title(f'Line {line}', fontsize=8)
-                        ax.grid()
-                        ax2 = fig.add_subplot(2,1,2)
-                        ax2.plot(xP, zP, 'b', label='Plan', lw=0.9, alpha=0.7)
-                        ax2.plot(xM, zM, 'g', label='Measured', lw=0.9, alpha=0.7)
-                        ax2.set_xlim(xM[0], xM[-1])
-                        ax2.set_ylabel(f'{measZ} [m]', fontsize=8)
-                        ax2.set_xlabel(f'{measX}', fontsize=8)
-                        for label in ax2.get_xticklabels(): label.set_fontsize(6)
-                        for label in ax2.get_yticklabels(): label.set_fontsize(6)
-                        ax2.legend(fontsize=8)
-                        ax2.grid()
+                        _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn)
                 else:
                     print(f'Line {line} not in plan.')
                     num_lines_unplanned += 1
@@ -2312,7 +2308,36 @@ def _rotateCoords(x, y, angle):
     yr = np.sin(angle) * x - np.cos(angle) * y
     return xr, yr
  
+
+def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn):
+    fig = plt.figure()
+    plot_title = f'Line {line} (plan: {planLine}); Bearing {dirn * 180 / np.pi:.1f} deg E'
+    fig.suptitle(plot_title, fontsize=10)
     
+    ax = fig.add_subplot(2,1,1)
+    ax.plot(xm[1:], z_dev, 'b', lw=0.6)
+    ax.plot(xm[1:], -allowance * np.ones(z_dev.shape), 'r')
+    ax.plot(xm[1:], allowance * np.ones(z_dev.shape), 'r')
+    ax.set_xlim(xm[0], xm[-1])
+    ax.set_ylabel('deviation from planned drape [m]', fontsize=8)
+    ax.set_xlabel('distance along line [m]', fontsize=8)
+    for label in ax.get_xticklabels(): label.set_fontsize(6)
+    for label in ax.get_yticklabels(): label.set_fontsize(6)
+    ax.grid()
+
+    ax2 = fig.add_subplot(2,1,2)
+    ax2.plot(xP, zP, color='magenta', label='Plan', lw=1.5, alpha=0.7)
+    ax2.plot(xM, zM, color='cyan', label='Measured', lw=1.5, alpha=0.7)
+    ax2.set_xlim(xM[0], xM[-1])
+    ax2.set_ylabel(f'{measZ} [m]', fontsize=8)
+    ax2.set_xlabel(f'{measX} [m]', fontsize=8)
+    for label in ax2.get_xticklabels(): label.set_fontsize(6)
+    for label in ax2.get_yticklabels(): label.set_fontsize(6)
+    ax2.legend(fontsize=8)
+    ax2.grid()
+    return
+
+
 def checkClearance(whizzFile, altitude, terrain, nominalClearance, allowance=20.0, maxDistance=1000.0, xChannel='', yChannel='', only_low=False):
     '''
     Checks the data from Whizz HDF5 file for height exceedances against a specification
@@ -4091,8 +4116,7 @@ def checkErsHeaders(folderPath='\.'):
     return
 
 
-def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes, originalnullcell,
-    byteorder, datum, projection):
+def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes, originalnullcell, byteorder, datum, projection):
     '''
     Checks a set of ERS header fields for various common errors.
     TODO Check that there is a Units field.

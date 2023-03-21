@@ -24,6 +24,8 @@ Simplistic XYZ_TO_HDF5 converter for airborne gravity data
 TODO:
 1. If the XYZ file contains a date in the format YYY/MM/DD, then convert it
 to a decimal date string. See line 1737 below.
+2. Write function to compare two whizz datafiles and report which lines have differences.
+Include a `detail` flag, when true, print the first exemplar difference on the line.
 
 (c) Mark Dransfield 19 Jul 2020
 
