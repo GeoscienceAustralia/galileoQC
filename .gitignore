@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+*.pyc
+examples/.DS_Store
+examples/AG/.DS_Store
+*.hdf5
+*.nc
+*.xyz
+examples/Canobie/902212  GA Canobie  VHZKG  Feynman  Falcon Survey  Daily Report 2411 Wed.pdf
+examples/Canobie/Canobie Airborne Gravity Gradiometry Survey Contract - Attachment 10_2308.pdf
+examples/Canobie/Channel Descriptions.txt
+examples/Canobie/ChannelDescriptions.txt
+examples/Canobie/QC_report.pdf
+*.pyc

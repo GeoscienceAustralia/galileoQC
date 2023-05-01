@@ -10,15 +10,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 import xarray as xr
-from src import config
-from src import pointfiles as mhd
 import verde as vd
 import pooch
+
+from . import config
+from . import pointfiles as mhd
+
 groupName = config.groupName
 
 
 def plot_grid(whizzFile, channel, cellsize, x='', y=''):
-    '''
+    """
     WARNING - FAILS ON LARGE DATASETS
     Grids a channel in the whizzFile, and displays it as an image.
     The grid interpolation is performed by Verde's spline function.
@@ -44,7 +46,7 @@ def plot_grid(whizzFile, channel, cellsize, x='', y=''):
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
@@ -84,7 +86,7 @@ def plot_grid(whizzFile, channel, cellsize, x='', y=''):
         
 
 def plotxy(y, x='', plotTitle = '', xOffset=True, plot_symbol=''):
-    '''
+    """
     
 
     Parameters
@@ -104,7 +106,7 @@ def plotxy(y, x='', plotTitle = '', xOffset=True, plot_symbol=''):
     -------
     None.
 
-    '''
+    """
     
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
@@ -142,7 +144,7 @@ def plotWsLineChannel(whizzFile1, flightLine1, channel1,
                       whizzFile2, flightLine2, channel2, 
                       x1='', x2='', y1='', y2='', h1='', h2='',
                       plotTitle = '', xOffset=False):
-    '''
+    """
     This is a one-off for the Vic/SA project(5371). Given flightLines from the Otway
     project and this project that are close to each spatially, compare them in plots.
 
@@ -165,7 +167,7 @@ def plotWsLineChannel(whizzFile1, flightLine1, channel1,
     -------
     None.
 
-    '''
+    """
     
     x1Data, x1Units, y1Data, y1Units, h1Data, h1Units, z1Data, z1Units, proj1Name = _get_data(
         whizzFile1, flightLine1, channel1, x=x1, y=y1, h=h1)
@@ -262,7 +264,7 @@ def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
 
 
 def plotLineChannel(whizzFile, flightLine, channel, x='', plotTitle = '', xOffset=True):
-    '''
+    """
     For the given flightLine in the whizzFile, plot channel against x.
 
     Parameters
@@ -284,7 +286,7 @@ def plotLineChannel(whizzFile, flightLine, channel, x='', plotTitle = '', xOffse
     -------
     None.
 
-    '''
+    """
     
     filename = str(whizzFile)
     fig = plt.figure()
@@ -329,7 +331,7 @@ def plotLineChannel(whizzFile, flightLine, channel, x='', plotTitle = '', xOffse
 
 
 def plotInlineSum(whizzFile, line):
-    '''
+    """
     Plots the raw, and filtered, inline sum for a line in the whizzFile.
     The routine relies on too many hard-coded values, and should be
     improved or removed.
@@ -345,7 +347,7 @@ def plotInlineSum(whizzFile, line):
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -386,7 +388,7 @@ def plotInlineSum(whizzFile, line):
         
     
 def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
-    '''
+    """
     For all lines in flightLines (assumed to be repeats), plot (x, channel) and
     report stats of differences to mean.
     This will require trimming to [minX, maxX] and interpolating to common x.
@@ -408,7 +410,7 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
     -------
     None.
 
-    '''
+    """
 
     # nSamples = 0
     # nLines = len(flightLines)
@@ -461,7 +463,7 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
 
 
 def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True, mean_remove=False):
-    '''
+    """
     For the given flightLine in the whizzFile, plot both channel1 and channel2
     against x.
 
@@ -486,7 +488,7 @@ def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True
     -------
     None.
 
-    '''
+    """
     
     filename = str(whizzFile)
     fig = plt.figure()
@@ -517,7 +519,7 @@ def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True
 
 
 def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=True):
-    '''
+    """
     For the given flightLine in the whizzFile, plot the 4th difference of both
     channel1 and channel2 against x.
     
@@ -541,7 +543,7 @@ def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=Tr
     -------
     None.
 
-    '''
+    """
     
     filename = str(whizzFile)
     fig = plt.figure()
@@ -569,7 +571,7 @@ def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=Tr
 
 
 def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
-    '''
+    """
     Plot coherence between `xchannel` and `ychannel`.
 
 
@@ -588,7 +590,7 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     -------
     None.
 
-    '''
+    """
     import scipy.signal as sig
 
     filename = str(whizzFile)
@@ -616,7 +618,7 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     
     
 def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
-    '''
+    """
     Plot the PSD (log-log Sqrt(Power) from welch method) of channel in flightLine. 
 
     Parameters
@@ -634,7 +636,7 @@ def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
     -------
     None.
 
-    '''
+    """
     import scipy.signal as sig
     
     filename = str(whizzFile)
@@ -668,7 +670,7 @@ def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
 
 
 def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitle = ''):
-    '''
+    """
     Plot the PSD (log-log Sqrt(Power) from welch method) of channel in flightLine. 
 
     Parameters
@@ -686,7 +688,7 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
     -------
     None.
 
-    '''
+    """
     import scipy.signal as sig
     
     filename = str(whizzFile)
@@ -721,7 +723,7 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
 
 
 def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='', planNorth=''):
-    '''
+    """
     Plots a line map of the survey contained in the HDF5 Whizz file.
 
     Parameters
@@ -739,10 +741,10 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
     -------
     None.
 
-    '''
+    """
     from matplotlib.ticker import StrMethodFormatter
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1,1,1)
     
     if whizzPlanFile != '':
@@ -779,18 +781,18 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    plt.xlabel('X [m]', fontsize = 10)
-    plt.ylabel('Y [m]', fontsize = 10)
+    plt.xlabel(f'{easting} [m]', fontsize = 10)
+    plt.ylabel(f'{northing} [m]', fontsize = 10)
     plt.suptitle(plotTitle, fontsize = 12)
     plt.title('[planned (red); flown (blue)]', fontsize = 10)
     plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(10)
-    for label in ax.get_yticklabels(): label.set_fontsize(10)
+    for label in ax.get_xticklabels(): label.set_fontsize(8)
+    for label in ax.get_yticklabels(): label.set_fontsize(8)
     plt.show()
 
 
 def specificLinesMap(whizzFile, lines, easting='', northing=''):
-    '''
+    """
     Plots a line map of the survey contained in the HDF5 Whizz file.
 
     Parameters
@@ -810,7 +812,7 @@ def specificLinesMap(whizzFile, lines, easting='', northing=''):
     -------
     None.
 
-    '''
+    """
     from matplotlib.ticker import StrMethodFormatter
 
     fig = plt.figure()
@@ -850,7 +852,7 @@ def specificLinesMap(whizzFile, lines, easting='', northing=''):
 
 
 def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
-    '''
+    """
     Plots a line map of the accepted segments of the survey as updated in
     the HDF5 Whizz plan file.
 
@@ -869,7 +871,7 @@ def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
     -------
     None.
 
-    '''
+    """
     from matplotlib.ticker import StrMethodFormatter
 
     # set up the figure for plotting
@@ -911,7 +913,7 @@ def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
 
 
 def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, maxlat=90, min_reliability=0, fig_title=''):
-    '''
+    """
     Plots the location of the line (in latitude, longitude) overlain on
     scatter plots of the ground gravity station information.
 
@@ -938,7 +940,7 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     -------
     None.
 
-    '''
+    """
     # ensure coords are in Australia
     if (minlat > -11.0) | (minlat < -44.0):
         print(f'Min lat is {minlat} but must be in range [-11, -44]')
@@ -1027,7 +1029,7 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
 
 
 def plotVertPlan(planPath, measPath, line, planX='', planZ='', measX='', measZ=''):
-    '''
+    """
     Reports exceedances of actual vertical position from planned vertical positions
     for an airborne survey Whizz database.
     The positions (`planX`, `planY`, `planY`) of each planned survey line
@@ -1055,7 +1057,7 @@ def plotVertPlan(planPath, measPath, line, planX='', planZ='', measX='', measZ='
     -------
     None.
 
-    '''
+    """
     planfile = str(planPath)
     measFile = str(measPath)
 

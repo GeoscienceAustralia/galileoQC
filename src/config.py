@@ -4,6 +4,8 @@
 Created on Sat Aug 14 19:08:29 2021
 
 @author: markdransfield
+
+Sets the global constants for AirGravQC.
 """
 
 

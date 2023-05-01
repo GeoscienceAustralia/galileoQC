@@ -26,6 +26,7 @@ TODO:
 to a decimal date string. See line 1737 below.
 2. Write function to compare two whizz datafiles and report which lines have differences.
 Include a `detail` flag, when true, print the first exemplar difference on the line.
+3. Store the flight number and date flown as line attributes when known. Allow update of values in `updateLineAttributes`.
 
 (c) Mark Dransfield 19 Jul 2020
 
@@ -37,19 +38,20 @@ import matplotlib.pyplot as plt
 #from scipy.signal import butter, lfilter
 from pathlib import Path
 import pathlib
-import aseg_gdf2 as aseg
+# import aseg_gdf2 as aseg
 from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
-from src import gridfiles as erm
-from src import qualityAnalysis as qa
-from src import config
 import filebrowser as fb
+
+from . import gridfiles as erm
+from . import qualityAnalysis as qa
+from . import config
 
 groupName = config.groupName
 projectName = config.projectName
 
 def getWhizzData(whizzFile, line, channel):
-    '''
+    """
     Returns a numpy array containg the specified channel of
     data for the given line.
 
@@ -67,7 +69,7 @@ def getWhizzData(whizzFile, line, channel):
     my_data : numpy array
         The requested data.
 
-    '''
+    """
     filename = str(whizzFile)
 
     with h5py.File(filename, 'r') as f:
@@ -77,8 +79,8 @@ def getWhizzData(whizzFile, line, channel):
     return my_data
 
 
-def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
-    '''
+def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, flight_chan='', date_chan=''):
+    """
     For each line group, use the line_type field to set the associated planned
     line number, the segment number, and the reflight number for the line.
 
@@ -99,7 +101,7 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
 
     with h5py.File(filename, 'r+') as f:
@@ -143,16 +145,48 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0):
                         gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
                 print('  {:<14} {:<14} {:<14} {:<14} '.\
                     format(current_line, gg.attrs['PlannedLine'], gg.attrs['Segment'], gg.attrs['ReflightNumber']))
-        elif line != '' and planned_line != '':
+        elif line != '' and planned_line != 0:
             gg = g[line]
             gg.attrs['PlannedLine'] = planned_line
         else:
-            print('NO ACTION TAKEN - line_type was neither "Xcal_nsw" or "SGL_GA" and planned_line = 0.')
+            print('NO ACTION TAKEN ON LINE_TYPE - line_type was neither "Xcal_nsw" or "SGL_GA" and planned_line = 0.')
+
+        if flight_chan != '':
+            print(f'\nSetting Line attributes for {whizzFile.name} to include flight numbers from {flight_chan}.')
+            for line in g:
+                gg = g[line]
+                this_flight = gg[flight_chan][0]
+                gg.attrs['Flight'] = this_flight
+
+        if date_chan != '':
+            print(f'\nSetting Line attributes for {whizzFile.name} to include dates from {date_chan}.')
+            for line in g:
+                gg = g[line]
+                this_date = gg[date_chan][0]
+                gg.attrs['Date'] = translate_date(this_date)
+
     return
 
 
+def translate_date(decimal_year):
+    """
+    Translate decimal year into some useful format TBD. STUB does nothing.
+
+    Parameters
+    ----------
+    decimal_year : Float
+        The year.
+
+    Returns
+    -------
+    decimal_year.
+
+    """
+    return decimal_year
+
+
 def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', description='', chan_precision=-1):
-    '''
+    """
     Updates the channel attributes for all lines in the geoWhizz HDF5 file. For any
     attribute, the default is to not change its value.
 
@@ -177,7 +211,7 @@ def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', des
     -------
     None.
 
-    '''
+    """
     
     # In the hdfFile, for all lines, update the attributes of the named channel if,
     # and only if, the passed attribute is not empty.
@@ -212,7 +246,7 @@ def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', des
 
 
 def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
-    '''
+    """
     The total distance flown on the survey.
 
     Parameters
@@ -238,7 +272,7 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
     Float
         The total distance in km flown over all lines in the survey.
 
-    '''
+    """
     filename = str(whizzFile)
 
     with h5py.File(filename, 'r') as f:
@@ -330,7 +364,7 @@ def displayGridded(filename, x, y, channel):
 
 
 def InterpolateGridOntoLine(gridPath, hdfPath, lines=[]):
-    '''
+    """
     Interpolates the data in a grid file onto a new channel, with the same name
     as the gridPath stem, in the geoWhizz HDF5 file. Fills empty channel samples
     with nans.
@@ -346,7 +380,7 @@ def InterpolateGridOntoLine(gridPath, hdfPath, lines=[]):
     -------
     None.
 
-    '''
+    """
     gridFile = str(gridPath)
     hdfFile = str(hdfPath)
 
@@ -476,7 +510,7 @@ def InterpolateGridOntoLine(gridPath, hdfPath, lines=[]):
 
     
 def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
-    '''
+    """
     Interpolates dataIn, sampled at timeIn, onto the samples timeOut.
     These three input arrays are pre-processed to ensure that timeIn
     and timeOut are monotonically increasing, whilst keeping dataIn
@@ -503,7 +537,7 @@ def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
     spareOut : 1D numpy float array
         To be kept synchronised with timeOut and returned.
 
-    '''
+    """
     
     timeIn = timeIn[np.logical_not(np.isnan(dataIn))]
     dataIn = dataIn[np.logical_not(np.isnan(dataIn))]
@@ -537,12 +571,12 @@ def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
 
 
 def _trim_monotonic(data_in, sync=[]):
-    '''
+    """
     Force input to be monotonic by removing samples; keep
     sync aligned by removing corresponding samples there 
     as well.
 
-    '''
+    """
     b = np.diff(data_in)
     # print(len(b[b > 0]), len(b[b < 0]))
     if len(b[b > 0]) < len(b[b < 0]):
@@ -586,7 +620,7 @@ def weightedAverage(x, y, z, xo, yo):
 
 
 def getLineXChannel(whizzFile, line, x, channel):
-    '''
+    """
     Returns 1D numpy arrays of x and channel in line from geoWhizz filename. The
     inputs are just two channels in the data and the names 'x' and 'channel' do
     not carry intrinsic meaning.
@@ -609,7 +643,7 @@ def getLineXChannel(whizzFile, line, x, channel):
     yData : numpy 1D array
         A numpy array of data, float32 or float64.
 
-    '''
+    """
     filename = str(whizzFile)
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -619,7 +653,7 @@ def getLineXChannel(whizzFile, line, x, channel):
 
     
 def plotChannelLines(whizzFile, channel, flightLines, x, xOffset=True):
-    '''
+    """
     For the given channel in the geoWhizz file filename, plot the values for all
     specified flightlines versus x.
 
@@ -640,7 +674,7 @@ def plotChannelLines(whizzFile, channel, flightLines, x, xOffset=True):
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
@@ -670,7 +704,7 @@ def plotChannelLines(whizzFile, channel, flightLines, x, xOffset=True):
 
 
 def reportWhizz(whizzFile, line='', channel=''):
-    '''
+    """
     Prints a short summary of the data in a HDF5 Whizz file.
 
     Parameters
@@ -686,7 +720,7 @@ def reportWhizz(whizzFile, line='', channel=''):
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
         
     with h5py.File(filename, 'r') as f:
@@ -735,7 +769,7 @@ def reportWhizz(whizzFile, line='', channel=''):
 
 
 def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
-    '''
+    """
     Prints a summary of the flight numbers in a HDF5 Whizz file.
 
     Parameters
@@ -753,7 +787,7 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
         
     with h5py.File(filename, 'r') as f:
@@ -794,7 +828,7 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
 
 
 def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
-    '''
+    """
     Prints a summary of the sample rate of the data in a HDF5 Whizz file.
     The sample rate in time are usually constant but the minimum, maximum and
     mean sample rates are reported for time and horizontal distance.
@@ -819,7 +853,7 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
     Returns
     -------
     None.
-    '''
+    """
     filename = str(whizzFile)
         
     with h5py.File(filename, 'r') as f:
@@ -864,7 +898,7 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
 
 
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):
-    '''
+    """
     Change any of the project attributes in the HDF5 Whizz file. Typically most of this information
     is not available when the Whizz file is created and this routine is used to add it when it is
     available.
@@ -888,7 +922,7 @@ def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerPr
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
 
     with h5py.File(filename, 'r+') as f:
@@ -912,7 +946,7 @@ def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerPr
          
     
 def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='', x='', y='', projection='', utmz='', time='', timeDatum='', fid=''):
-    '''
+    """
     Change any of the attributes of the coordinate frame for the survey. This includes the names of the x,y,z,t coordinate fields
     and their respective datums. Typically these attributes are not entered to the Whizz file at creation and must be added later,
     by this routine.
@@ -950,7 +984,7 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
     -------
     None.
 
-    '''
+    """
     filename = str(whizzFile)
 
     with h5py.File(filename, 'r+') as f:
@@ -999,7 +1033,7 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
 
 
 def asegReportChannels(datFilePath):
-    '''
+    """
     Prints out the indices to the first channel name containg each of ['line',
     'flight', 'date', 'zone'] and then a list of all channel or field names in
     the given ASEG-GDF2 data. Useful when you want to know which channels to
@@ -1016,7 +1050,7 @@ def asegReportChannels(datFilePath):
     -------
     None.
 
-    '''
+    """
     # open GDF, pull out channel names, the units, and the description
     gdf = aseg.read(str(datFilePath))
     channelNames = gdf.field_names()
@@ -1038,7 +1072,7 @@ def asegReportChannels(datFilePath):
 
 
 def asegReportFirst(datFilePath, channels):
-    '''
+    """
     When converting an ASEG-GDF2 file to geoWhizz HDF5, it is useful to know the
     values of certain key parameters, stored as fields in the ASEG-GDF2 flat
     ASCII data table. This routine prints out the value for the first record
@@ -1056,7 +1090,7 @@ def asegReportFirst(datFilePath, channels):
     -------
     None.
 
-    '''
+    """
     # open GDF, pull out channel names, the units, and the description
     gdf = aseg.read(str(datFilePath))
     channelNames = gdf.field_names()
@@ -1072,7 +1106,7 @@ def asegReportFirst(datFilePath, channels):
 
 
 def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
-    '''
+    """
     Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
     HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
         https://github.com/kinverarity1/aseg_gdf2
@@ -1094,7 +1128,7 @@ def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
     -------
     None.
 
-    '''
+    """
 
     if outputHdf == '':
         outputHdf = datFilePath.with_suffix('.hdf5')
@@ -1282,7 +1316,7 @@ def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
 
 
 def cleanUnits(fieldDef):
-    '''
+    """
     ASEG-GDF2 files generated by Atlas (proprietary geophysical processing software
     from Fugro Airborne, CGG Airborne and XCalibur) does not obey the ASEG-GDF2
     standard. One issue is the use of an extra colon where the standard requires
@@ -1299,12 +1333,12 @@ def cleanUnits(fieldDef):
     String
         The field units after correction.
 
-    '''
+    """
     return fieldDef.split(':')[0]
 
 
 def transferBlock(line, channelsOut, length, iS, chunk, jS, gLines):
-    '''
+    """
     A 'block' of data is all the data in the chunk that is part of the line. This
     routine copies that data from chunk to its correct position in gLines.
 
@@ -1330,7 +1364,7 @@ def transferBlock(line, channelsOut, length, iS, chunk, jS, gLines):
     -------
     None.
 
-    '''
+    """
     lineStr = f'{line}'
     # float_formatter = lambda x: "%.2f" % x
     for channelName in channelsOut:
@@ -1349,7 +1383,7 @@ def transferBlock(line, channelsOut, length, iS, chunk, jS, gLines):
     
     
 def index_containing_substring(the_list, substring):
-    '''
+    """
     Returns the index to the substring in the_list; -1 if not found.
 
     Parameters
@@ -1364,13 +1398,13 @@ def index_containing_substring(the_list, substring):
     Integer
         The index to the start of the substring, -1 if not found.
 
-    '''
+    """
     lowlist = [name.lower() for name in the_list]
     for i, s in enumerate(lowlist):
         if substring in s:
               return i
     return -1
-    '''
+    """
     Reads the data from the ASEG-GDF2 survey file and returns an xarray.
     Uses the aseg_gdf2 package by Kent Inverarity at:
         https://github.com/kinverarity1/aseg_gdf2
@@ -1386,7 +1420,7 @@ def index_containing_substring(the_list, substring):
     -------
     None.
 
-    '''
+    """
 
     # open GDF, pull out channel names, the units, and the description
     gdf = aseg.read(str(datFilePath))
@@ -1473,8 +1507,8 @@ def index_containing_substring(the_list, substring):
     return
 
 
-def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
-    '''
+def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False):
+    """
     Read in a Geosoft XYZ file and write the contents to a Whizz HDF5 file.
 
     Parameters
@@ -1490,12 +1524,14 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
     line_scale : float, optional
         All line numbers in the XYZ file are multiplied by line_scale before
         writing to the HDF5 file.
+    verbose : Bool, optional
+        If False (the default) the output is reduced.
 
     Returns
     -------
     None.
 
-    '''
+    """
         
     if xyzFilePath == '':
         xyzFilePath = fb.get_grid_filename()
@@ -1530,7 +1566,8 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
 
         # put this lines data in dataset; create the next line group and metadata
         for lineCount in range(0, len(lines)-1): #for aLine in lines:
-            print('  About to add data for line ', lines[lineCount], ' Lcount ', lineCount+1, '/', len(lines))
+            if verbose:
+                print('  About to add data for line ', lines[lineCount], ' Lcount ', lineCount+1, '/', len(lines))
             # put all the data from last block into data set in current group
             # assume first field is line number
             for count in range(1, len(desiredFieldNames)):
@@ -1549,7 +1586,8 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = ''):
             gg.attrs['LineNumber'] = lines[lineCount + 1]
         
         # put data in last line subgroup's dataset
-        print('  About to add data for line ', lines[len(lines)-1], ' Lcount ', len(lines), '/', len(lines), '\n')
+        if verbose:
+            print('  About to add data for line ', lines[len(lines)-1], ' Lcount ', len(lines), '/', len(lines), '\n')
         for count in range(1, len(desiredFieldNames)):
            dataArray = geosoftXYZ[len(lines)-1][desiredFieldNames[count]]
            #print(dataArray.shape)
@@ -1629,7 +1667,7 @@ def read_xyz_header(filename):
     return first_dict
 
     
-def readXYZ(filename):
+def readXYZ(filename, verbose=False):
     """ Open a Geosoft XYZ file, read in the contents and return a dictionary
     array where each element corresponds to one flight line and contains the
     line number, flight number, date, and data for each channel.
@@ -1683,9 +1721,10 @@ def readXYZ(filename):
             header_rec += 1
             if len(temp_names) == num_channels:
                 channelnames = temp_names
-                print('  Found fields (channels):')
-                for ii in range(0, len(channelnames)):
-                    print(f'    {channelnames[ii]} - precision {field_precisions[ii]}')
+                if verbose:
+                    print('  Found fields (channels):')
+                    for ii in range(0, len(channelnames)):
+                        print(f'    {channelnames[ii]} - precision {field_precisions[ii]}')
                 break
             if header_rec > num_head_recs:
                 print(f"Error - can't find header record with {num_channels} channel names.")
@@ -1790,7 +1829,7 @@ def readXYZ(filename):
 
 
 def renameChannels(nchannels, chanNames):
-    '''
+    """
     
 
     Parameters
@@ -1805,7 +1844,7 @@ def renameChannels(nchannels, chanNames):
     chanNames : TYPE
         DESCRIPTION.
 
-    '''
+    """
     
     for ii in range(0, nchannels): # TODO: expand this to cover a large range of possibilities
         if chanNames[ii] == 'x':
@@ -1815,12 +1854,12 @@ def renameChannels(nchannels, chanNames):
 
     
 def addWhizzToWhizz(inputWhizzFile, outputWhizzFile, lines=[]):
-    '''
+    """
     Adds all the ['Lines'] sub-groups (with all they contain) from `inputWhizzFile` to the
     ['Lines'] group in `outputWhizzFile`
 
     TODO - Need to translate channel names
-    '''
+    """
     infile = str(inputWhizzFile)
     outFile = str(outputWhizzFile)
     if True:
@@ -1848,7 +1887,7 @@ def addWhizzToWhizz(inputWhizzFile, outputWhizzFile, lines=[]):
 
 
 def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], plannedY = [], plannedZ = [], distanceUnits = ''):
-    '''
+    """
     WARNING - A ONE-OFF
     Adds a line sub-group to a database sub-group of the project.
 
@@ -1863,7 +1902,7 @@ def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], pl
     -------
     None.
 
-    '''
+    """
     project = hdf5FileId["project"]
     database = project[databaseName]
     lineName = f'{lineType}{lineNo}'
