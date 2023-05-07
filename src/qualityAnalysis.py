@@ -957,8 +957,6 @@ def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes,
 #
 #=========================
 
-import h5py
-
 
 def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, max_vdop=4, max_hdop=4):
     """
@@ -1567,7 +1565,6 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
         print(f'ERROR. Require maxDistance > 1.0 m or maxCounter > 0')
         print(f'  maxDistance = {maxDistance}, maxCounter = {maxCounter}.')
     
-
     exceedances_known = False
     this_exc_known = False
     number_exc_known = 0
@@ -1804,7 +1801,7 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
         report = ''
 
         for line in g.keys():
-            lineName = _get_lineName(gMeas[line])
+            lineName = _get_lineName(g[line])
             if clearance_chan == '':
                 alt = np.array(g[line][altitude_chan])
                 dtm = np.array(g[line][terrain_chan])
@@ -2056,7 +2053,7 @@ def _calc_bearing(x, y):
 
 
 def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', vel_east='', nominalSpeed=60.0, 
-    maxDuration=0.0, maxDistance=0.0, allowance=0.1, minSafeSpeed=42.0, plot_flag=False):
+    maxDuration=0.0, maxDistance=0.0, allowance=0.1, minSafeSpeed=42.0, known='', plot_flag=False):
     """
     Checks the data from Whizz HDF5 file for speed exceedances against a specification
     requiring ground speeds to be within a relative range (allowance) about a nominal
@@ -2137,13 +2134,13 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
             title_str += f' {block}'
         _reportSpeeds(g, maxDuration=maxDuration, maxDistance=maxDistance, xChannel=xChannel, yChannel=yChannel,
                 tChannel=tChannel, vel_north=vel_north, vel_east=vel_east, nominalSpeed=nominalSpeed, 
-                     allowance=allowance, minSafeSpeed=minSafeSpeed, title_str=title_str,
+                     allowance=allowance, minSafeSpeed=minSafeSpeed, title_str=title_str, known=known,
                      plot_flag=plot_flag)
         
 
 def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChannel='Y',
                 tChannel='time', vel_north='', vel_east='', nominalSpeed=60.0,
-                allowance=0.1, minSafeSpeed=42.0, title_str='', plot_flag=False):
+                allowance=0.1, minSafeSpeed=42.0, title_str='', known='', plot_flag=False):
     """
     Checks the data from Whizz Line group for speed exceedances against a specification
     requiring ground speeds to be within a relative range (`allowance`) about a nominal
@@ -2228,8 +2225,12 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
     lines = list(group.keys())
     total_num_lines = len(lines)
 
+    exceedances_known = False
+    this_exc_known = False
+    number_exc_known = 0
+
     for line in lines:
-        lineName = _get_lineName(g[line])
+        lineName = _get_lineName(group[line])
         if title_str == '':
             plot_title = lineName
         else:
@@ -2249,6 +2250,11 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
         too_slow = False
         line_fails = False
 
+        if known != '':
+            exceedances_known = True
+            exc_known = np.array(group[line][known])
+            report_known = -1
+        
         for fid in range(0, len(x)):
             # There is a speed exceedance ...
             if rel_speed[fid] > allowance or rel_speed[fid] < -allowance:
@@ -2264,12 +2270,17 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
                     start_t = t[fid]
                     num_fids_in_exceedance = 1
                     speed_extreme = speed[fid]
+                    this_exc_known = False
                 # Else increment and update on the current exceedance.
                 else:
                     # check we haven't swapped from too slow to too fast or vice versa
                     if (too_slow and rel_speed[fid] > allowance) or ((not too_slow) and rel_speed[fid] < allowance):
                         print(f'WARNING: Exceedance reversed speed in one fid. NOT BELIEVABLE. At time={t[fid]:.3f}')
                     num_fids_in_exceedance += 1
+                    if exceedances_known:
+                        if exc_known[fid] > 0:
+                            report_known = exc_known[fid]
+                            this_exc_known = True
                     if too_slow:
                         speed_extreme = min(speed[fid], speed_extreme)
                     else:
@@ -2291,6 +2302,10 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
                         report += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
                         exceedance_in_line = True
                         num_failures += 1
+                        if this_exc_known:
+                            number_exc_known += 1
+                            report += f' Known exceedance {report_known}.'
+                            this_exc_known = False
                     num_fids_in_exceedance = 0
                     too_slow = False
         if exceedance_in_line:
@@ -2302,6 +2317,7 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
     print(f' Checked {total_num_lines} lines and {num_exceed_lines} had some short exceedance(s).')
     print(f' {num_failed_lines} lines failed for exceedance > allowed.')
     print(f' Total number of full exceedances = {num_failures}.')
+    print(f'\n{number_exc_known} exceedances known in the database.\n')
     print(report)
     if plot_flag:
         plt.show()
