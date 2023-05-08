@@ -1,7 +1,7 @@
 qualityAnalysis module
 ======================
 
-.. automodule:: qualityAnalysis
+.. automodule:: AirGravQC.qualityAnalysis
    :members:
    :undoc-members:
    :show-inheritance:

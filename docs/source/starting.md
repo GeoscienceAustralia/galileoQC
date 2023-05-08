@@ -20,28 +20,22 @@ Installation not yet working!
 
 ## Session Setup
 
-In a Jupyter-lab notebook, set up your session with the following commands. These should be interspersed with useful commentary.
+In a Jupyter-lab notebook, set up your session with the following commands.
 
-Firstly import the necessary Python packages (actually not all of these are necessary). TODO - CLEAN UP!!
+Firstly import the necessary Python packages ...
 
 ```python
 # to set the path to your copy of `AirGravQC` - might not be needed.
 import sys
-# In case you change the s/w. If you do, let us know! Maybe not needed
-import importlib as im 
-
-import numpy as np # perhaps not needed
-import xarray as xr # perhaps not needed
-import matplotlib.pyplot as plt # needed for plots
-%matplotlib widget # needed to interact, eg zoom, with plots
-
 from pathlib import Path # useful for file names
 ```
+
+... then set up the path to AirGravQC (this should not be needed when the package is released), and import the needed modules ... 
 
 ```python
 # replace the text in "" with the path to your copy of `AirGravQC`
 local_docs = "/Users/markdransfield/"
-src_path = local_docs + "Documents/GitHub/AirGravQC/src"
+src_path = local_docs + "Documents/GitHub/AirGravQC/AirGravQC"
 sys.path.insert(0, src_path)
 
 # Now import the `AirGravQC` modules
@@ -49,7 +43,10 @@ import pointfiles as mhd
 import qualityAnalysis as qc
 import whizzPlot as wp
 import gridfiles as erm
+%matplotlib widget # needed to interact, eg zoom, with plots
 ```
+
+... and finally set the path to your field and plan data:
 
 ```python
 # Setup the path to the acquired data, ...
@@ -62,6 +59,8 @@ plan_root = data_root
 px = Path(plan_root + r'AGG/Canobie/902212_1.xyz')
 ph = px.with_suffix('.hdf5')
 ```
+
+The variables `dx`, `dh`, `px` and `ph` are used throughout the documentation to represent the four key data filenames. Of course, you can use any variable names for your projects but it is worth noting these because you will see them often in the documentation.
 
 Now you are ready to QC the data!
 

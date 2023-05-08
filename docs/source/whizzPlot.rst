@@ -1,7 +1,7 @@
-whizzPlot module
-================
+whizzPlot plotting module
+=========================
 
-.. automodule:: whizzPlot
+.. automodule:: AirGravQC.whizzPlot
    :members:
    :undoc-members:
    :show-inheritance:

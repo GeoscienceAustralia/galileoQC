@@ -5,11 +5,15 @@
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here.
-# import pathlib
-import os
+
+import pathlib
+# import os
+
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
-# sys.path.insert(0, pathlib.Path("/Users/markdransfield/Documents/GitHub/AirGravQC/src/qualityAnalysys.py").as_posix())
+# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'AirGravQC')))
+# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'AirGravQC')))
+sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
+# sys.path.insert(0, pathlib.Path("/Users/markdransfield/Documents/GitHub/AirGravQC/AirGravQC/qualityAnalysys.py").as_posix())
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

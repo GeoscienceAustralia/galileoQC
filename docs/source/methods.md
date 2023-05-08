@@ -184,26 +184,6 @@ qc.checkSpeeds(dh, nominalSpeed=60., allowance=0.15,
 	maxDistance=1000.0)
 ```
 
-### 
-
-```python
-	
-```
-
-### 
-
-```python
-	
-```
-
-### 
-
-```python
-	
-```
-
-
-
 ## Gravimetry
 
 Four functions provide explicit checks of the corrections applied to the gravimeter data which are all required to meet the standards in the referenced publications.

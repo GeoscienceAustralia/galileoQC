@@ -1,7 +1,7 @@
 pointfiles module
 =================
 
-.. automodule:: pointfiles
+.. automodule:: AirGravQC.pointfiles
    :members:
    :undoc-members:
    :show-inheritance:
