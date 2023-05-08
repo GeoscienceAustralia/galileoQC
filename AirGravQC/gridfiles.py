@@ -472,8 +472,8 @@ def gridfile_to_xr(whizzFile='', bandout=0):
         xa = xr.DataArray(data=z,#np.flip(z, 0), # DANGER!!!
                           dims=["N", "E"],
                           coords={"N": n, "E": e})
-        # x2 = xa.dropna('N',how='all')
-        # xa = x2.dropna('E',how='all')
+        xa.dropna(dim='N',how='all')
+        xa.dropna(dim='E',how='all')
         fname = whizzFile.with_suffix('').name
         xd = xr.Dataset(data_vars={fname: xa})
         xd.attrs["long_name"] = fname
