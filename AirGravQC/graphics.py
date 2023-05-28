@@ -218,10 +218,12 @@ def alpha_blend(rgb, intensity, alpha = 0.7):
     alpha : float
         This controls the transparency of the rgb image. 1.0 is fully opaque 
         while 0.0 is fully transparent.
+        
     Returns
     -------
     rgb : ndarray
         An MxNx3 RGB array representing the combined images.
+
     """
     
     return alpha*rgb + (1 - alpha)*intensity

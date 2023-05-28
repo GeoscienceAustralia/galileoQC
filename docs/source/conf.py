@@ -31,7 +31,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
     'myst_parser',
-    'sphinx.ext.napoleon'
+    # 'sphinx.ext.napoleon'
 ]
 templates_path = ['_templates']
 exclude_patterns = []
@@ -42,11 +42,18 @@ myst_enable_extensions = [
     'attrs_block'
 ]
 
+# source_suffix = {
+#     '.rst': 'restructuredtext',
+#     '.md': 'markdown',
+# }
+
 html_theme_options = {
     'show_powered_by': 'false',
     'body_text': 'Black',
-    'font_family': 'Helvetica',
+    'font_family': 'Palatino',
 }
+
+# html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

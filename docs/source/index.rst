@@ -13,13 +13,14 @@ Airborne Gravity Quality Control
    This project is under active development.
 
 Contents (see also :ref:`api_label`)
---------
+------------------------------------
 
 .. toctree::
    :maxdepth: 3
 
    about
    starting
+   geowhizz
    cookbooks
    methods
    deed

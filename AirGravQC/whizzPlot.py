@@ -19,6 +19,57 @@ import AirGravQC.pointfiles as mhd
 groupName = config.groupName
 
 
+def plotChannelLines(whizzFile, channel, flightLines, x, xOffset=True):
+    """
+    For the given channel in the geoWhizz file filename, plot the values for all
+    specified flightlines versus x.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    channel : String
+        The name of the channel or field to plot.
+    flightLines : [String]
+        A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0'] .
+    x : String
+        The name of the independent variable for the plot.
+    xOffset : Bool, optional
+        If True, map x to x - x[0] before plotting. The default is True.
+
+    Returns
+    -------
+    None.
+
+    """
+    filename = str(whizzFile)
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        plotTitle = f'{projName} : {channel}'
+        xDel = 0.0
+        
+        for line in flightLines:
+            yData = np.array(g[line][channel])
+            xData = np.array(g[line][x])
+            if xOffset and line == flightLines[0]:
+                xDel = xData[0]
+            xData = xData - xDel
+            myPlot, = ax.plot(xData, yData, color='blue', lw=0.3)
+            plotTitle += f', L{line}'
+            
+    plt.xlabel(x, fontsize = 6)
+    plt.ylabel(channel, fontsize = 6)
+    plt.title(plotTitle, fontsize = 8)
+    plt.grid(True)
+    for label in ax.get_xticklabels(): label.set_fontsize(6)
+    for label in ax.get_yticklabels(): label.set_fontsize(6)
+    plt.show()
+
+
 def plot_grid(whizzFile, channel, cellsize, x='', y=''):
     """
     WARNING - FAILS ON LARGE DATASETS
@@ -161,7 +212,7 @@ def plotWsLineChannel(whizzFile1, flightLine1, channel1,
     plotTitle : String, optional
         A title for the plot. The default is '' in which case the title will be Project Line Channel.
     xOffset : Bool, optional
-        If True, the x data will be offset to start at zero. The default is False.
+        If True, map x to x - x[0] before plotting. The default is True.
 
     Returns
     -------
@@ -280,7 +331,7 @@ def plotLineChannel(whizzFile, flightLine, channel, x='', plotTitle = '', xOffse
     plotTitle : String, optional
         A title for the plot. The default is '' in which case the title will be Project Line Channel.
     xOffset : Bool, optional
-        If True, the x data will be offset to start at zero. The default is True.
+        If True, map x to x - x[0] before plotting. The default is True.
 
     Returns
     -------
@@ -395,16 +446,17 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
 
     Parameters
     ----------
-    filename : TYPE
-        DESCRIPTION.
-    flightLines : TYPE
-        DESCRIPTION.
-    x : TYPE
-        DESCRIPTION.
-    channel : TYPE
-        DESCRIPTION.
-    xOffset : TYPE, optional
-        DESCRIPTION. The default is True.
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    flightLines : [String]
+        An array of flightline, e.g. ['1000110.0'].
+    x : String, optional
+        The name of the independent variable for the plot. Default is the `whizzFile`
+        `XChannel`.
+    channels : [String]
+        The names of the channels to analyse and plot.
+    xOffset : Bool, optional
+        If True, map x to x - x[0] before plotting. The default is True.
 
     Returns
     -------
@@ -480,7 +532,7 @@ def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True
     channel : String
         The name of the second channel or field to plot.
     xOffset : Bool, optional
-        If True, the x data will be offset to start at zero. The default is True.
+        If True, map x to x - x[0] before plotting. The default is True.
     mean_remove : Bool, optional
         If True, the y data will have their means subtracted before plotting. The default is False.
 
@@ -536,8 +588,8 @@ def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=Tr
         The name of the first channel or field to analyse.
     channel : String
         The name of the second channel or field to analyse.
-    xOffset : TYPE, optional
-        If True, the x data will be offset to start at zero. The default is True.
+    xOffset : Bool, optional
+        If True, map x to x - x[0] before plotting. The default is True.
 
     Returns
     -------
@@ -574,17 +626,16 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     """
     Plot coherence between `xchannel` and `ychannel`.
 
-
     Parameters
     ----------
-    whizzFile : TYPE
-        DESCRIPTION.
-    flightLine : TYPE
-        DESCRIPTION.
-    xchannel : TYPE
-        DESCRIPTION.
-    ychannel : TYPE
-        DESCRIPTION.
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    flightLine : String
+        A flightline, e.g. '1000110.0'.
+    xchannel : String
+        The name of the first channel or field to analyse.
+    ychannel : String
+        The name of the second channel or field to analyse.
 
     Returns
     -------
@@ -722,7 +773,7 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
     plt.show()
 
 
-def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='', planNorth=''):
+def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast='', planNorth=''):
     """
     Plots a line map of the survey contained in the HDF5 Whizz file.
 
@@ -744,9 +795,14 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
     """
     from matplotlib.ticker import StrMethodFormatter
 
+    if whizzPlanFile == '' and whizzFiles == []:
+        print("No files provided so no Line Map can be made.")
+        return
+
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1,1,1)
-    
+    plotTitle = ''
+
     if whizzPlanFile != '':
         planname = str(whizzPlanFile)
 
@@ -756,27 +812,29 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
             if planNorth == '':
                 planNorth = f[groupName]['CoordinateFrame'].attrs['YChannel']
             g = f[groupName]['Lines']
+            plotTitle = make_plot_title(f[groupName]) + ': Line Map'
                     
             for line in list(g.keys()):
                 lX = g[line][planEast][0:]
                 lY = g[line][planNorth][0:]
                 planline, = ax.plot(lX, lY, color='red', lw=0.2)
 
-    for file in whizzFiles:
-        filename = str(file)
+    if whizzFiles != []:
+        for file in whizzFiles:
+            filename = str(file)
 
-        with h5py.File(filename, 'r') as f:
-            if easting == '':
-                easting = f[groupName]['CoordinateFrame'].attrs['XChannel']
-            if northing == '':
-                northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
-            g = f[groupName]['Lines']
-            plotTitle = f[groupName].attrs['ProjectName'] + ': Line Map'
-                    
-            for line in list(g.keys()):
-                lX = g[line][easting][0:]
-                lY = g[line][northing][0:]
-                flownline, = ax.plot(lX, lY, color='blue', lw=0.4)
+            with h5py.File(filename, 'r') as f:
+                if easting == '':
+                    easting = f[groupName]['CoordinateFrame'].attrs['XChannel']
+                if northing == '':
+                    northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
+                g = f[groupName]['Lines']
+                plotTitle = make_plot_title(f[groupName]) + ': Line Map'
+                        
+                for line in list(g.keys()):
+                    lX = g[line][easting][0:]
+                    lY = g[line][northing][0:]
+                    flownline, = ax.plot(lX, lY, color='blue', lw=0.4)
             
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
@@ -789,6 +847,15 @@ def linesMap(whizzFiles, easting='', northing='', whizzPlanFile='', planEast='',
     for label in ax.get_xticklabels(): label.set_fontsize(8)
     for label in ax.get_yticklabels(): label.set_fontsize(8)
     plt.show()
+
+
+def make_plot_title(group):
+    plotTitle = ''
+    if 'ProjectName' in group.attrs:
+        plotTitle += group.attrs['ProjectName']
+    if 'BlockID' in group.attrs:
+        plotTitle += ' ' + group.attrs['BlockID']
+    return plotTitle
 
 
 def specificLinesMap(whizzFile, lines, easting='', northing=''):
@@ -932,7 +999,7 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     maxlat : Float, optional
         Maximum latitude of data to be extracted.
     min_reliability : Float, optional
-        .
+        Only stations with reliability > `min_reliability` will be plotted. Default 0.
     fig_title : String, optional
         The figure title.
 

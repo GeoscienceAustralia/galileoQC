@@ -10,21 +10,11 @@ There are a number of types of different gravity sensor flying airborne gravity 
 - Gravimeters - Sander AirGrav
 - Gravity Gradiometers - Falcon AGG (both analog and digital), Bell Geo FTG
 
-The acquired data referred to in the following Python function calls are stored in a geoWhizz file, `dh`. The planned survey line positions are stored in a different geoWhizz file, `ph`.
-
-## geoWhizz Files
-
-The `AirGravQC` package includes a non-proprietary binary data file format, called `geoWhizz`. The `geoWhizz` format uses HDF5 [^HDF5] which is a fast hierarchical format that is well established and supported by good open-source packages in a wide variety of languages.
-
-There is no intent to widely disburse the `geoWhizz` format or files in this format. It is provided only to allow very fast data access of large data files during QC.
-
-More information on the `geoWhizz` format is TODO!
-
-A user of `AirGravQC` will typically receive located line data in one of a variety of industry format files, either proprietary or open. If proprietary, then it is up to the user to transform the data into an open format. `AirGravQC` supports `XYZ` line format and, very poorly at this time, `ASEG-GDF2` [^GDF2] format.
-
-It is strongly recommended that the user have their data delivered in `XYZ` format at this time. They can then follow the work-flow demonstrated in the tutorial or any of the notebooks to write the data, and associated meta-data, to `geoWhizz` format.
+The acquired data referred to in the following Python function calls are stored in a geoWhizz file (*REF*), `dh`. The planned survey line positions are stored in a different geoWhizz file, `ph`.
 
 A typical work-flow to prepare the data for QC would use the following main steps (using the Canobie project data as an example). More information is provided in the tutorial and notebooks. TODO LINK to these!!
+
+## Prepare data
 
 ### Convert `XYZ` to `geoWhizz`
 
@@ -94,7 +84,7 @@ mhd.reportSampling(dh)
 
 ### The Plan
 
-There should be an `XYZ` file, `px`, that provides the easting, northing, and altitude (or drape) for each planned survey line. We perform a similar process to that used on the acquired data to make a `geoWhizz` plan file, `ph`. This file is used in navigation checking. TODO LINK TO NAV !!
+There should be an `XYZ` file, `px`, that provides the easting, northing, and altitude (or drape) for each planned survey line. We perform a similar process to that used on the acquired data to make a `geoWhizz` plan file, `ph`. This file is used in navigation checking. *TODO LINK TO NAV !!*
 
 ```python
 mhd.xyzToHDF(Path(px), projectName='Canobie')
@@ -280,7 +270,7 @@ The FTG is a single-complement, three-axis gradiometer. On each axis, it measure
 
 The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. The FTG data used in testing did not include a turbulence channel but it did have a vertical velocity channel. This is supplied to `ilsNoiseVturb()` and differenced to form an acceleration channel.
 
-The Deed specificationallows for the in-line sum to be filtered and, currently, this happens behind the scenes in the code.
+The Deed specification allows for the in-line sum to be filtered and, currently, this happens behind the scenes in the code.
 
 ```python
 qc.ilsNoiseVturb(dh, diagComponent1, diagComponent2, 
@@ -402,7 +392,7 @@ Removing the mean bearing for each survey line leaves just the variations in air
 
 ### Display Grid
 
-When grids are provided by the acquirer, there is no need to use `grid_n_image()`. Instead, the grids can be simplay imaged to the Jupyter-lab notebook by `display_grid()`.
+When grids are provided by the acquirer, there is no need to use `grid_n_image()`. Instead, the grids can be simply imaged to the Jupyter-lab notebook by `display_grid()`.
 
 ```python
 erm.display_grid(boug_grid_path, 'Bouguer Gravity')

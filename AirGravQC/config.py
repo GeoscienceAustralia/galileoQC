@@ -8,12 +8,15 @@ Created on Sat Aug 14 19:08:29 2021
 Set the global constants for AirGravQC:
 
 missingReal = -99999.99
+
 missingInt = -999
+
 missingDate = ""
 
 Set the Whizz version number and default project name:
 
 groupName = 'Whizz Version 1.0'
+
 projectName = 'Unknown Project'
 """
 

@@ -13,7 +13,7 @@ AirGravQC provides functions to:
 - interpolate data to regular grids, and image and display those grids;
 - check consistency of supplied data in various forms.
 
-These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. AirGravQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the AC.
+These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. AirGravQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
 
 The tested, and preferred, method of using AirGravQC is via a Jupyter-lab notebook. Some examples are available in ###. The notebooks can be used as a template for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
 
