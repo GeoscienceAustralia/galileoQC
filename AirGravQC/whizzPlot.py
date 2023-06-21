@@ -14,7 +14,11 @@ import verde as vd
 import pooch
 
 import AirGravQC.config as config
+import AirGravQC.qualityAnalysis as qc
 import AirGravQC.pointfiles as mhd
+import matplotlib.ticker as tkr
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
 groupName = config.groupName
 
@@ -793,13 +797,12 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
     None.
 
     """
-    from matplotlib.ticker import StrMethodFormatter
-
     if whizzPlanFile == '' and whizzFiles == []:
         print("No files provided so no Line Map can be made.")
         return
 
     fig = plt.figure(figsize=(8, 6))
+    thou_format = tkr.FuncFormatter(qc.space_thou)
     ax = fig.add_subplot(1,1,1)
     plotTitle = ''
 
@@ -837,8 +840,8 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
                     flownline, = ax.plot(lX, lY, color='blue', lw=0.4)
             
     ax.set_aspect('equal')
-    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax.xaxis.set_major_formatter(thou_format)
+    ax.yaxis.set_major_formatter(thou_format)
     plt.xlabel(f'{easting} [m]', fontsize = 10)
     plt.ylabel(f'{northing} [m]', fontsize = 10)
     plt.suptitle(plotTitle, fontsize = 12)
@@ -854,7 +857,7 @@ def make_plot_title(group):
     if 'ProjectName' in group.attrs:
         plotTitle += group.attrs['ProjectName']
     if 'BlockID' in group.attrs:
-        plotTitle += ' ' + group.attrs['BlockID']
+        plotTitle += ' (' + group.attrs['BlockID'] + ')'
     return plotTitle
 
 

@@ -6,26 +6,10 @@ Created on Sat Aug 14 20:28:20 2021
 
 @author: markdransfield
 
-Each 'public' function is a "check" function which checks the data against
-some QC requirement. Each `check` function should:
-
-    1.  Report what it is doing.
-    2.  Report each found error in the data against line number, specifying
-        the fiducial, time or position where it occurred.
-    3.  Report the number of lines that failed.
-
-    Example:
-
-Velocities not known - will calculate from positions
-Nominal speed 67.5; allowed 54.0 : 81.0 for < 13.0 seconds.
-
-25 lines had some short exceedance(s).
-0 lines failed for exceedance > allowed distance.
-
 TODO
 
     1. Trap instances where a channel or line name is not found as a dataset or group and suggest a check on spelling and case.
-    2. Re-factor code into:
+    2. Re-factor code to NAV, GRAV, AGG, FTG, MISC.
 
 # GENERAL
 checkSpikes()
@@ -50,11 +34,13 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
+from matplotlib.ticker import StrMethodFormatter
+import matplotlib.ticker as tkr
 #import pathlib as Path
 
 import AirGravQC.config as config
 import AirGravQC.pointfiles as mhd
-import AirGravQC.gridfiles as erm
+import AirGravQC.gridfiles as grd
 import AirGravQC.whizzPlot as wpl
 
 groupName = config.groupName
@@ -422,7 +408,7 @@ def checkSpikes(whizzFile, fields = [], numStd = 8.0):
                     myStd = np.std(deriv)
                     extremum = np.max(deriv) if np.max(deriv) > -np.min(deriv) else -np.min(deriv)
                     if extremum > numStd * myStd:
-                        report += f'\n  {line}; {field} Extremum: {extremum:.2f} > {(numStd * myStd):.2f} = {numStd:.2f} x STD of {myStd:.2f}'
+                        report += f'\n  {line}; {field} Extremum: {extremum:.3g} > {(numStd * myStd):.3g} = {numStd:.3g} x STD of {myStd:.3g}'
                         noSpikes = False
                 else:
                     report += f'\n  {line}; {field} data length {len(deriv)+1} is too short for analysis.'
@@ -514,8 +500,8 @@ def checkConstantSlope(whizzFile, fields=[]):
                 deriv = deriv - mean_deriv
                 if len(deriv) > 10:
                     extremum = np.max(deriv) if np.max(deriv) > -np.min(deriv) else -np.min(deriv)
-                    if extremum > mean_deriv / 100.0:
-                        report += f'\n  {line}; {field} Largest difference (= {extremum:.2f}) > 1% of mean difference (= {(mean_deriv / 100.0):.2f})'
+                    if extremum > mean_deriv / 1000.0:
+                        report += f'\n  {line}; {field} Largest difference (= {extremum:.3g}) > 0.1% of mean difference (= {(mean_deriv / 100.0):.3g})'
                         data_is_good = False
                 else:
                     report += f'\n  {line}; {field} data length {len(deriv)+1} is too short for analysis.'
@@ -590,17 +576,31 @@ def _reportGaps(group):
     print(f'{num_lines_failed} lines failed.')
 
 
-def allChanStats(whizzFile, allChannels=[]):
+def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], sin_chans=[]):
     """
     Generate statistical plots for the channels across all lines. The plots show
     the min, mean, max and stdev for each channel as a function of line number.
 
+    The statistics can be optionally calculated on the data after first differencing,
+    or mean removal, or both. In the latter case, first differencing is done first.
+
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib.PosixPath.
         Name of a HDF5 Whizz file, including path and extension.
-    allChannels : String List, optional
+    allChannels : [String], optional.
         A list of the channels or fields to plot. Default is all in whizzFile.
+    lines : String list, optional.
+        The line numbers to be checked. Default is all lines in the whizzFile.
+    d1_chans : [String], optional.
+        An array of names of channels from `allChannels` whose first difference
+        along each survey line should be calculated before the statistics.
+    mr_chans : [String], optional.
+        An array of names of channels from `allChannels` whose mean along each
+        survey line should be subtracted before calculating statistics.
+    sin_chans : [String], optional.
+        An array of names of channels from `allChannels` whose sine
+        along each survey line should be calculated before the statistics.
 
     Returns
     -------
@@ -611,33 +611,56 @@ def allChanStats(whizzFile, allChannels=[]):
     with h5py.File(filename, 'r') as f:
         gProject = f[groupName]
         g = gProject['Lines']
-        lines = list(g.keys())
+        if lines == []:
+            lines = list(g.keys())
         if allChannels == []:
             lineGroups = list(g.values())
             allChannels = list(lineGroups[0].keys())
-        numLines = len(g.items())
+        numLines = len(lines)
         
         for channel in allChannels:
+            remove_mean = False
+            diff_one = False
+            remove_sine = False
+            if channel in mr_chans:
+                remove_mean = True
+            if channel in d1_chans:
+                diff_one = True
+            if channel in sin_chans:
+                remove_sine = True
+
+            # initialise variables
             chMin = np.zeros((numLines,))
             chMax = np.zeros((numLines,))
             chMean = np.zeros((numLines,))
             chStd = np.zeros((numLines,))
             lineNo = np.zeros((numLines,))
             count = 0
+
+            # get the units for the y axis label
             dd = g[lines[0]][channel]
+            xlabelstr = 'Line number'
             #if the channel has an attribute 'Units'
-            chan_y_label = channel
+            ylabelstr = channel
             if 'Units' in dd.attrs.keys():
-                chan_y_label += ' ' + dd.attrs['Units']
+                ylabelstr += ' ' + dd.attrs['Units']
         
-            for line in g.keys():
+            for line in lines:
                 if line != 'CoordinateFrame':
                     lineNo[count] = line
+                    dd = np.array(g[line][channel])
+                    if remove_sine:
+                        dd = np.sin(dd * (np.pi / 180.0))
+                    if diff_one:
+                        dd = np.append(np.diff(dd), dd[-1]-dd[-2])
+                    if remove_mean:
+                        dd = dd - np.mean(dd)
+
                     if np.sum(~np.isnan(g[line][channel])) > 3:
-                        chMin[count] = np.nanmin(g[line][channel])
-                        chMax[count] = np.nanmax(g[line][channel])
-                        chMean[count] = np.nanmean(g[line][channel])
-                        chStd[count] = np.nanstd(g[line][channel])
+                        chMin[count] = np.nanmin(dd)
+                        chMax[count] = np.nanmax(dd)
+                        chMean[count] = np.nanmean(dd)
+                        chStd[count] = np.nanstd(dd)
                     else:
                         chMin[count] = 0.0
                         chMax[count] = 0.0
@@ -646,19 +669,61 @@ def allChanStats(whizzFile, allChannels=[]):
                         print(f'Less than three real values in {lineNo[count]:.2f} for {channel}, no statistics.')
                     count += 1
 
-            fig = plt.figure()
-            ax = fig.add_subplot(1,1,1)
-            ax.plot(lineNo, chMin, 'bo', mfc='w')
-            ax.plot(lineNo, chMax, 'bo', mfc='w')
-            ax.errorbar(lineNo, chMean, chStd, capsize=3, marker='s', c='blue', linestyle='')
-            plt.ylabel(chan_y_label, fontsize = 6)
-            plotTitle = groupName + ': ' + channel + ' Stats'
-            plt.title(plotTitle, fontsize = 8)
-            plt.grid(True)
-            for label in ax.get_xticklabels(): label.set_fontsize(6)
-            for label in ax.get_yticklabels(): label.set_fontsize(6)
-            plt.show()
+            figtitle = wpl.make_plot_title(gProject)
+            titlestr = ''
+            if remove_mean:
+                titlestr += 'mr('
+            if diff_one:
+                titlestr += ' d1('
+            if remove_sine:
+                titlestr += 'sin('
+
+            titlestr += channel
+
+            if remove_mean:
+                titlestr += ')'
+            if diff_one:
+                titlestr += ')'
+            if remove_sine:
+                titlestr += ')'
+            titlestr += ' Stats'
+            plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
+
+
+def space_thou(x, pos):  # formatter function takes tick label and tick position
+    s = '%d' % x
+    groups = []
+    while s and s[-1].isdigit():
+        groups.append(s[-3:])
+        s = s[:-3]
+    return s + ' '.join(reversed(groups)) #u'\2009'
+
+
+def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr):
+    """
+
+    """
+    fig = plt.figure()
+    fig.suptitle(figtitle, fontsize=10)
+    fig.subplots_adjust(top=0.85)
+    thou_format = tkr.FuncFormatter(space_thou)
+
+    ax = fig.add_subplot(1,1,1)
+    ax.plot(lineNo, chMin, 'bo', mfc='w')
+    ax.plot(lineNo, chMax, 'bo', mfc='w')
+    ax.errorbar(lineNo, chMean, chStd, capsize=3, marker='s', c='blue', linestyle='')
+    ax.xaxis.set_major_formatter(thou_format)
+    plt.title(titlestr)
+    plt.xlabel(xlabelstr, fontsize = 6)
+    plt.ylabel(ylabelstr, fontsize = 6)
+    plt.grid(True)
+    for label in ax.get_xticklabels(): label.set_fontsize(6)
+    for label in ax.get_yticklabels(): label.set_fontsize(6)
+    plt.show()
+    return
+
+        
     
     
 def diffChanStats(whizzFile, channel1, channel2):
@@ -697,9 +762,9 @@ def diffChanStats(whizzFile, channel1, channel2):
         count = 0
         # build a y label
         dd = g[lines[0]][channel1]
-        chan_y_label = channel1 + ' - ' + channel2
+        ylabelstr = channel1 + ' - ' + channel2
         if 'Units' in dd.attrs.keys():
-            chan_y_label += ' ' + dd.attrs['Units']
+            ylabelstr += ' ' + dd.attrs['Units']
     
         for line in g.keys():
             # if line != 'CoordinateFrame':
@@ -721,18 +786,21 @@ def diffChanStats(whizzFile, channel1, channel2):
             count += 1
 
         print(f'Overall mean difference is {allmean / numsamp :.2f}.')
-        fig = plt.figure()
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(lineNo, chMin, 'bo', mfc='w')
-        ax.plot(lineNo, chMax, 'bo', mfc='w')
-        ax.errorbar(lineNo, chMean, chStd, capsize=3, marker='s', c='blue', linestyle='')
-        plt.ylabel(chan_y_label, fontsize = 6)
-        plotTitle = groupName + ': ' + channel1 + ' - ' + channel2 + ' Stats'
-        plt.title(plotTitle, fontsize = 8)
-        plt.grid(True)
-        for label in ax.get_xticklabels(): label.set_fontsize(6)
-        for label in ax.get_yticklabels(): label.set_fontsize(6)
-        plt.show()
+        figtitle = wpl.make_plot_title(gProject)
+        titlestr = channel1 + ' - ' + channel2 + ' Stats'
+        plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+
+        # fig = plt.figure()
+        # ax = fig.add_subplot(1,1,1)
+        # ax.plot(lineNo, chMin, 'bo', mfc='w')
+        # ax.plot(lineNo, chMax, 'bo', mfc='w')
+        # ax.errorbar(lineNo, chMean, chStd, capsize=3, marker='s', c='blue', linestyle='')
+        # plt.ylabel(chan_y_label, fontsize = 6)
+        # plt.title(plotTitle, fontsize = 8)
+        # plt.grid(True)
+        # for label in ax.get_xticklabels(): label.set_fontsize(6)
+        # for label in ax.get_yticklabels(): label.set_fontsize(6)
+        # plt.show()
     return
     
     
@@ -782,23 +850,27 @@ def lineStats(whizzFile, channel):
             if minDevRatio > outlierRatio:
                 print(lineNo[count], ': min outlier ratio', minDevRatio)
             count += 1
+    figtitle = wpl.make_plot_title(f[groupName])
+    titlestr = channel + ' Stats'
+    plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
 
-    fig = plt.figure()
-    fig.suptitle(f'{projName}', fontsize=10)
-    #fig.text(0.8, 0.95, f'approxacq: {acqDate:.0f}', fontsize=7)
-    fig.subplots_adjust(top=0.85)
+
+    # fig = plt.figure()
+    # fig.suptitle(f'{projName}', fontsize=10)
+    # #fig.text(0.8, 0.95, f'approxacq: {acqDate:.0f}', fontsize=7)
+    # fig.subplots_adjust(top=0.85)
     
-    ax = fig.add_subplot(1,1,1)
-    ax.plot(lineNo, chMin, 'bo', mfc='w')
-    ax.plot(lineNo, chMax, 'bo', mfc='w')
-    ax.errorbar(lineNo, chMean, chStd, capsize=3, marker='s', c='blue')
-    plt.ylabel(channel, fontsize = 6)
-    plotTitle = channel + ' Stats'
-    plt.title(plotTitle, fontsize = 8)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
+    # ax = fig.add_subplot(1,1,1)
+    # ax.plot(lineNo, chMin, 'bo', mfc='w')
+    # ax.plot(lineNo, chMax, 'bo', mfc='w')
+    # ax.errorbar(lineNo, chMean, chStd, capsize=3, marker='s', c='blue')
+    # plt.ylabel(channel, fontsize = 6)
+    # plotTitle = channel + ' Stats'
+    # plt.title(plotTitle, fontsize = 8)
+    # plt.grid(True)
+    # for label in ax.get_xticklabels(): label.set_fontsize(6)
+    # for label in ax.get_yticklabels(): label.set_fontsize(6)
+    # plt.show()
     
 
 def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
@@ -999,7 +1071,7 @@ def checkErsHeaders(folderPath='\.'):
     for aFile in ersFiles:
             [ncells, nrows, nbands, eastings, northings, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection] = erm.read_ers_header(str(aFile))
+                    projection] = grd.read_ers_header(str(aFile))
             commonOK, reportStr = _commonErsHdrErrors(ncells, nrows, nbands, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
                     projection)
@@ -1080,7 +1152,7 @@ def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes,
 #=========================
 
 
-def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, max_vdop=4, max_hdop=4):
+def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, max_vdop=4, max_hdop=4, lines=[]):
     """
     Checks that the data in a whizzFile meets the requirements for the minimum
     number of satellites, and maximum PDOP, VDOP and HDOP.
@@ -1113,30 +1185,82 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
 
     """
     filename = str(whizzFile)
+    report = ''
+    num_failed_lines = 0
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         projName = f[groupName].attrs['ProjectName']
+        xchan = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        ychan = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        if lines == []:
+            lines = g.keys()
 
         error_count = 0
-        for line in g.keys():
-            min_nsats_data = np.nanmin(np.array(g[line][num_sats]))
-            max_pdop_data = np.nanmin(np.array(g[line][pdop]))
-            max_vdop_data = np.nanmin(np.array(g[line][vdop]))
-            max_hdop_data = np.nanmin(np.array(g[line][hdop]))
+        for line in lines:
+            x = np.array(g[line][xchan])
+            y = np.array(g[line][ychan])
+
+            nsats_data = np.array(g[line][num_sats])
+            min_nsats_data = np.nanmin(nsats_data)
             if min_nsats_data < nsats_min:
-                print(f'Line {line} fail: min sats = {min_nsats_data:.0f} < {nsats_min}')
+                xmin_fail = np.nanmin(x[nsats_data < nsats_min])
+                ymin_fail = np.nanmin(y[nsats_data < nsats_min])
+                xmax_fail = np.nanmax(x[nsats_data < nsats_min])
+                ymax_fail = np.nanmax(y[nsats_data < nsats_min])
+                numfail = np.count_nonzero(nsats_data < nsats_min)
+                report += f'Line {line} failed for {numfail} fids: min sats = {min_nsats_data:.0f} < {nsats_min}.'
+                report += f' Easting [{xmin_fail:.0f}, {xmax_fail:.0f}],'
+                report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
+
+            pdop_data = np.array(g[line][pdop])
+            max_pdop_data = np.nanmax(pdop_data)
             if max_pdop_data > max_pdop:
-                print(f'Line {line} fail: max pdop = {max_pdop_data:.0f} > {max_pdop}')
+                xmin_fail = np.nanmin(x[pdop_data > max_pdop])
+                ymin_fail = np.nanmin(y[pdop_data > max_pdop])
+                xmax_fail = np.nanmax(x[pdop_data > max_pdop])
+                ymax_fail = np.nanmax(y[pdop_data > max_pdop])
+                numfail = np.count_nonzero(pdop_data > max_pdop)
+                report += f'Line {line} failed for {numfail} fids: max pdop = {max_pdop_data:.1f} > {max_pdop}.'
+                report += f' Easting [{xmin_fail:.0f}, {xmax_fail:.0f}],'
+                report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
+
+            vdop_data = np.array(g[line][vdop])
+            max_vdop_data = np.nanmax(vdop_data)
             if max_vdop_data > max_vdop:
-                print(f'Line {line} fail: max vdop = {max_vdop_data:.0f} > {max_vdop}')
+                xmin_fail = np.nanmin(x[vdop_data > max_vdop])
+                ymin_fail = np.nanmin(y[vdop_data > max_vdop])
+                xmax_fail = np.nanmax(x[vdop_data > max_vdop])
+                ymax_fail = np.nanmax(y[vdop_data > max_vdop])
+                numfail = np.count_nonzero(vdop_data > max_vdop)
+                report += f'Line {line} failed for {numfail} fids: max vdop = {max_vdop_data:.1f} > {max_vdop}.'
+                report += f' Easting [{xmin_fail:.0f}, {xmax_fail:.0f}],'
+                report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
+
+            hdop_data = np.array(g[line][hdop])
+            max_hdop_data = np.nanmax(hdop_data)
             if max_hdop_data > max_hdop:
-                print(f'Line {line} fail: max hdop = {max_hdop_data:.0f} > {max_hdop}')
+                xmin_fail = np.nanmin(x[hdop_data > max_hdop])
+                ymin_fail = np.nanmin(y[hdop_data > max_hdop])
+                xmax_fail = np.nanmax(x[hdop_data > max_hdop])
+                ymax_fail = np.nanmax(y[hdop_data > max_hdop])
+                numfail = np.count_nonzero(hdop_data > max_hdop)
+                report += f'Line {line} failed for {numfail} fids: max hdop = {max_hdop_data:.1f} > {max_hdop}.'
+                report += f' Easting [{xmin_fail:.0f}, {xmax_fail:.0f}],'
+                report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
-        print(f'In {projName}, checked num sats, PDOP, VDOP and HDOP. Found {error_count} errors.')
+
+        if error_count == 1:
+            errstr = f'Found 1 error.'
+        elif error_count > 1:
+            errstr = f'Found {error_count} errors.'
+        else:
+            errstr = f'Found 0 errors.'
+        report = f'In {projName}, checked num sats, PDOP, VDOP and HDOP. {errstr}\n' + report
+        print(report)
         
 
 def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=10.0, plot_flag=False):
@@ -1636,6 +1760,7 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
     ax.plot(x, -allowance * np.ones(y.shape), 'r')
     ax.plot(x, allowance * np.ones(y.shape), 'r')
     ax.set_xlim(x[0], x[-1])
+    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax.set_xlabel('deviation from planned line [m]', fontsize = 8)
     ax.set_ylabel('distance along line', fontsize = 8)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
@@ -1644,7 +1769,9 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
 
     ax2 = fig.add_subplot(2,1,2)
     ax2.plot(xP, yP, color='magenta', label='Plan', lw=1.5, alpha=0.7)
-    ax2.plot(xM, yM, color='cyan', label='Measured', lw=1.5, alpha=0.7)
+    ax2.plot(xM, yM, color='blue', label='Measured', lw=1.5, alpha=0.7)
+    ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax2.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax2.set_xlim(xM[0], xM[-1])
     ax2.set_ylabel(f'{measY} [m]', fontsize=8)
     ax2.set_xlabel(f'{measX} [m]', fontsize=8)
@@ -1658,14 +1785,17 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
 def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False):
     """
     Reports exceedances of actual vertical position from planned vertical positions
-    for an airborne survey Whizz database.
+    (stored in a plan file) for an airborne survey Whizz database.
+
     The positions (`planX`, `planY`, `planY`) of each planned survey line
-    are read from `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read from
-    `measPath` and the vertical distance of each from the planned line is
+    are read from `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read
+    from `measPath` and the vertical distance of each from the planned line is
     calculated. If this distance exceeds `allowance` for a distance greater than
     `maxDistance`, then an out-of-specification exceedance is reported for that line.
     If `maxDistance` is less than 1.0, then the test is instead against `maxCounter`
     consecutive positions. The default for `maxCounter` is 13.
+
+    See also `checkClearance`, `checkSafeClearance`, `checkDrape`.
 
     Parameters
     ----------
@@ -1872,6 +2002,7 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
     ax.plot(xm[1:], z_dev, 'b', lw=0.6)
     ax.plot(xm[1:], -allowance * np.ones(z_dev.shape), 'r')
     ax.plot(xm[1:], allowance * np.ones(z_dev.shape), 'r')
+    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax.set_xlim(xm[0], xm[-1])
     ax.set_ylabel('deviation from planned drape [m]', fontsize=8)
     ax.set_xlabel('distance along line [m]', fontsize=8)
@@ -1881,7 +2012,8 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
 
     ax2 = fig.add_subplot(2,1,2)
     ax2.plot(xP, zP, color='magenta', label='Plan', lw=1.5, alpha=0.7)
-    ax2.plot(xM, zM, color='cyan', label='Measured', lw=1.5, alpha=0.7)
+    ax2.plot(xM, zM, color='blue', label='Measured', lw=1.5, alpha=0.7)
+    ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax2.set_xlim(xM[0], xM[-1])
     ax2.set_ylabel(f'{measZ} [m]', fontsize=8)
     ax2.set_xlabel(f'{measX} [m]', fontsize=8)
@@ -1892,10 +2024,106 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
     return
 
 
-def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan='', terrain_chan='', allowance=20.0, maxDistance=1000.0, xChannel='', yChannel='', only_low=False):
+def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', altitude_chan='', terrain_chan='', xChannel='', yChannel=''):
     """
-    Checks the data from Whizz HDF5 file for height exceedances against a specification
-    requiring heights to be within a relative range (allowance) about a nominal
+    Checks the data from Whizz HDF5 file for low clearance above the terrain (as a safety check).
+    
+    The clearance (calculated as altitude - terrain if clearance_chan=''), must be
+    greater than minimumAllowedClearance or a warning is reported.
+    If any samples along the line fail the test, then profiles are plotted
+    for visual analysis.
+    The positions (xChannel and yChannel) are only used for plotting.
+
+    See also `checkClearance`, `checkDrape`, `checkVertPlan`.    
+
+    Parameters
+    ----------
+    whizzFile : HDF5 Whizz file pathlib Path
+        The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    minimumAllowedClearance : Float
+        The planned clearance between above the terrain in metres.
+    clearance_chan : String, optional
+        The name of the terrain clearance field in the Lines group
+        of the Whizz HDF5 file.
+    altitude_chan : String, optional
+        The name of the absolute altitude or height field in the Lines group
+        of the Whizz HDF5 file.
+    terrain_chan : String, optional
+        The name of the absolute terrain or DTM height field in the Lines group
+        of the Whizz HDF5 file.
+    xChannel : String, optional
+        The name of the geoWhizz field or channel containing the measured x positions. The
+        default is to read the xChannel field name from the Coordinate Frame.
+    yChannel : String, optional
+        The name of the geoWhizz field or channel containing the measured y positions. The
+        default is to read the yChannel field name from the Coordinate Frame.
+
+    Returns
+    -------
+    None.
+
+    """
+    filename = str(whizzFile)
+    if clearance_chan == '':
+        if altitude_chan == '' or terrain_chan == '':
+            print('ERROR - either clearance_chan, or both altitude_chan and terrain_chan must be specified.')
+
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        if xChannel == '':
+            xChannel = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if yChannel == '':
+            yChannel = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        num_failed_lines = 0
+        report = ''
+
+        for line in g.keys():
+            lineName = _get_lineName(g[line])
+            if clearance_chan == '':
+                alt = np.array(g[line][altitude_chan])
+                dtm = np.array(g[line][terrain_chan])
+                clearance = alt - dtm
+            else:
+                clearance = np.array(g[line][clearance_chan])
+            minActualClearance = np.min(clearance)
+            # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
+
+            if minActualClearance < minimumAllowedClearance:
+                num_failed_lines += 1
+                report += f'\nClearance too low at {minActualClearance:.0f} m on line {lineName}'
+                x = np.array(g[line][xChannel])
+                y = np.array(g[line][yChannel])
+                distance = _dist(x, y)
+                fig = plt.figure()
+
+                ax = fig.add_subplot(2,1,1)
+                if clearance_chan == '':
+                    ax.plot(distance, alt)
+                    ax.plot(distance, dtm)
+                    plt.legend([altitude_chan, terrain_chan], fontsize=8)
+                else:
+                    ax.plot(distance, clearance)
+                    plt.legend([clearance_chan], fontsize=8)
+                plt.xlabel('distance along line [m]', fontsize = 6)
+                plt.ylabel('height', fontsize = 6)
+                plotTitle = projName + ': Minimum Clearance Check ' + line
+                plt.title(plotTitle, fontsize = 8)
+                plt.grid(True)
+                for label in ax.get_xticklabels(): label.set_fontsize(6)
+                for label in ax.get_yticklabels(): label.set_fontsize(6)
+        print(f'Number of failed lines = {num_failed_lines}.')
+        print(report)
+        if num_failed_lines > 0:
+            plt.show()
+
+
+def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan='', terrain_chan='', allowance=20.0, maxDistance=1000.0, xChannel='', yChannel=''):
+    """
+    Reports exceedances from contract specifications of the height above terrain 
+    for an airborne survey Whizz database.
+
+    The specification requires heights to be within a relative range (allowance) about a nominal
     value (nominalClearance) over a particular distance (maxDistance).
     
     The clearance (calculated as altitude - terrain if clearance_chan=''), must be
@@ -1905,6 +2133,8 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
     If any samples along the line exceed the allowance, then profiles are plotted
     for visual analysis. No use is made of maxDistance (yet).
     The positions (xChannel and yChannel) are only used for plotting.
+
+    See also `checkSafeClearance`, `checkDrape`, `checkVertPlan`.
 
     Parameters
     ----------
@@ -1930,9 +2160,6 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
     yChannel : String, optional
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
-    only_low : String, optional
-        If True, then only check for exceedances too close to the ground ("safety
-        check"). The default is False.
 
     Returns
     -------
@@ -1964,10 +2191,7 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
             else:
                 clearance = np.array(g[line][clearance_chan])
             deviation = nominalClearance - clearance
-            if only_low:
-                maxDeviation = np.max(deviation)
-            else:
-                maxDeviation = np.max(abs(deviation))
+            maxDeviation = np.max(abs(deviation))
             # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
             if maxDeviation > allowance:
                 num_failed_lines += 1
@@ -1987,10 +2211,7 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
                     plt.legend([clearance_chan], fontsize=8)
                 plt.xlabel('distance along line [m]', fontsize = 6)
                 plt.ylabel('height', fontsize = 6)
-                if only_low:
-                    plotTitle = projName + ': Minimum Clearance Check ' + line
-                else:
-                    plotTitle = projName + ': Absolute Clearance Check ' + line
+                plotTitle = projName + ': Absolute Clearance Check ' + line
                 plt.title(plotTitle, fontsize = 8)
                 plt.grid(True)
                 for label in ax.get_xticklabels(): label.set_fontsize(6)
@@ -2013,6 +2234,8 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
 def checkDrape(whizzFile, altitude, drape, warningClearance = 20.0, xChannel = '', yChannel = ''):
     """
     Checks actual altitude flown against planned drape in drape channel.
+
+    See also `checkClearance`, `checkSafeClearance`, `checkVertPlan`.
 
     Parameters
     ----------
@@ -2735,7 +2958,7 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
     print(report)
         
 
-def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE='', eUV='', error_spec = 5.0):
+def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV='', eNE='', eUV='', error_spec=5.0, labelLines=False):
     """
     For a Falcon AGG. For each line, reports the mean NE and UV difference noise,
     and plots these as a scatter plot against the mean turbulence.
@@ -2748,6 +2971,8 @@ def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE=''
         Name of a HDF5 Whizz file, including path and extension.
     turbulence : String
         The name of the channel containing the turbulence field.
+    lines : String list, optional
+        The line numbers to be checked. Default is all lines in the whizzFile.
     aNE : String
         The name of the channel containing the A_NE field. If '', then the
         eNE and eUV channels are used, otherwise, the aNE, aUV, bNE
@@ -2770,8 +2995,12 @@ def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE=''
     eUV : String
         The name of the channel containing the UV difference error. If '',
         then the aNE, aUV, bNE and bUV channels are used.
-    error_spec : Float
+    error_spec : Float, optional
         The value above which the difference noise is excessive and is reported.
+        Default 5.0.
+    labelLines : Bool, optional
+        if True, label (with the line number) all points on the plot where the
+        line failed the specification. Defaults to False
 
     Returns
     -------
@@ -2795,10 +3024,9 @@ def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE=''
         turbMean = np.zeros((numLines,))
         errNEmean = np.zeros((numLines,))
         errUVmean = np.zeros((numLines,))
-        lineNo = np.zeros((numLines,))
+        lineNo = np.chararray((numLines,))
         count = 0
         flightLine = list(g.keys())[0]
-
 
         turb_units = g[flightLine][turbulence].attrs['Units']
         if need_calc:
@@ -2806,8 +3034,14 @@ def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE=''
         else:
             err_units = g[flightLine][eNE].attrs['Units']
 
+        labelx = []
+        labely = []
+        labelt = []
         failed_lines = 0
-        for line in g.keys():
+
+        if lines == []:
+            lines = g.keys()
+        for line in lines:
             turb = np.array(g[line][turbulence])
             if need_calc:
                 A_ne = np.array(g[line][aNE])
@@ -2834,9 +3068,15 @@ def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE=''
             turbMean[count] = np.mean(turb_clean)
             errNEmean[count] = np.std(errNE_data)
             errUVmean[count] = np.std(errUV_data)
+            avge_noise = 0.5 * (errNEmean[count] + errUVmean[count])
             
-            if errNEmean[count] > error_spec or errUVmean[count] > error_spec:
-                report += f'{line} fails with noise > {error_spec}.\n'
+            if 0.5 * (errNEmean[count] + errUVmean[count]) > error_spec:
+                report += f'{line} fails with noise {avge_noise:.2f} > {error_spec}, mean turbulence = {turbMean[count]:.2f}.\n'
+                if labelLines:
+                    labelx.append(turbMean[count])
+                    labely.append(max(errNEmean[count], errUVmean[count]))
+                    labelt.append(line)
+                failed_lines += 1
             count += 1
 
         fig = plt.figure()
@@ -2846,6 +3086,9 @@ def diffNoiseVturb(whizzFile, turbulence, aNE='', aUV='', bNE='', bUV='', eNE=''
         ax.vlines(turbMean, errNEmean, errUVmean, 'k', lw=0.3)
         neplot, = ax.plot(turbMean, errNEmean, 'bo', label='$E_{ne}$')
         uvplot, = ax.plot(turbMean, errUVmean, 'go', label='$E_{uv}$')
+        if labelLines:
+            for ii in range(failed_lines):
+                plt.text(labelx[ii], labely[ii], labelt[ii], va='top', ha='right', size=6.0)
         plt.ylabel(f'Difference Noise [{err_units}]', fontsize = 8)
         plt.xlabel(f'Turbulence [{turb_units}]', fontsize = 8)
         plt.grid(True)
@@ -2927,19 +3170,12 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
             lineNo[count] = line
             count += 1
             
-        fig = plt.figure()
-        fig.suptitle(f'check Atmospheric Correction - {projName}', fontsize=10)
-        fig.subplots_adjust(top=0.85)
-        
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(lineNo, diffMin, 'bo', mfc='w')
-        ax.plot(lineNo, diffMax, 'bo', mfc='w')
-        ax.errorbar(lineNo, diffMean, diffStd, capsize=3, marker='s', c='blue', ls='None')
-        plt.ylabel('Atmospheric Correction Error [um/s/s]', fontsize = 6)
-        plt.grid(True)
-        for label in ax.get_xticklabels(): label.set_fontsize(6)
-        for label in ax.get_yticklabels(): label.set_fontsize(6)
-        plt.show()
+        figtitle = wpl.make_plot_title(f[groupName]) + ' Atmospheric Correction Check'
+        titlestr = atmosCorr + ' Stats'
+        xlabelstr = 'Line number'
+        ylabelstr = 'Atmospheric Correction Error [um/s/s]'
+        plotBoxWhisker(diffMin, diffMax, diffMean, diffStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+
     return
 
     
@@ -3016,19 +3252,11 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
             lineNo[count] = line
             count += 1
         
-        fig = plt.figure()
-        fig.suptitle(f'check Latitude Correction - {projName}', fontsize=10)
-        fig.subplots_adjust(top=0.85)
-        
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(lineNo, diffMin, 'bo', mfc='w')
-        ax.plot(lineNo, diffMax, 'bo', mfc='w')
-        ax.errorbar(lineNo, diffMean, diffStd, capsize=3, marker='s', c='blue', ls='None')
-        plt.ylabel('Latitude Correction Error um/s/s', fontsize = 6)
-        plt.grid(True)
-        for label in ax.get_xticklabels(): label.set_fontsize(6)
-        for label in ax.get_yticklabels(): label.set_fontsize(6)
-        plt.show()
+        figtitle = wpl.make_plot_title(f[groupName]) + ' Latitude Correction Check'
+        titlestr = latCorr + ' Stats'
+        xlabelstr = 'Line number'
+        ylabelstr = 'Latitude Correction Error [um/s/s]'
+        plotBoxWhisker(diffMin, diffMax, diffMean, diffStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
     
 
@@ -3139,19 +3367,11 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
                 
             count += 1
         
-        fig = plt.figure()
-        fig.suptitle(f'check Eotvos Correction - {projName}', fontsize=10)
-        fig.subplots_adjust(top=0.85)
-        
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(lineNo, diffMin, 'bo', mfc='w')
-        ax.plot(lineNo, diffMax, 'bo', mfc='w')
-        ax.errorbar(lineNo, diffMean, diffStd, capsize=3, marker='s', c='blue', ls='None')
-        plt.ylabel('Eotvos Correction Error [um/s/s]', fontsize = 6)
-        plt.grid(True)
-        for label in ax.get_xticklabels(): label.set_fontsize(6)
-        for label in ax.get_yticklabels(): label.set_fontsize(6)
-        plt.show()
+        figtitle = wpl.make_plot_title(f[groupName]) + ' Eotvos Correction Check'
+        titlestr = eotCorr + ' Stats'
+        xlabelstr = 'Line number'
+        ylabelstr = 'Eotvos Correction Error [um/s/s]'
+        plotBoxWhisker(diffMin, diffMax, diffMean, diffStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
 
 
@@ -3265,19 +3485,11 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
                 ax = fig.add_subplot(3,1,3)
                 ax.plot(err_data)
         
-        fig = plt.figure()
-        fig.suptitle(f'check Free Air Correction - {projName}', fontsize=10)
-        fig.subplots_adjust(top=0.85)
-        
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(lineNo, diffMin, 'bo', mfc='w')
-        ax.plot(lineNo, diffMax, 'bo', mfc='w')
-        ax.errorbar(lineNo, diffMean, diffStd, capsize=3, marker='s', c='blue', ls='None')
-        plt.ylabel('Free-air Correction Error [um/s/s]', fontsize = 6)
-        plt.grid(True)
-        for label in ax.get_xticklabels(): label.set_fontsize(6)
-        for label in ax.get_yticklabels(): label.set_fontsize(6)
-        plt.show()
+        figtitle = wpl.make_plot_title(f[groupName]) + ' Free Air Correction Check'
+        titlestr = faCorr + ' Stats'
+        xlabelstr = 'Line number'
+        ylabelstr = 'Free Air Correction Error [um/s/s]'
+        plotBoxWhisker(diffMin, diffMax, diffMean, diffStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
     
 
@@ -3413,7 +3625,7 @@ def diffGroundGrid(whizzFile, whizzChannel, whizzLine, gridPath, plot_title='Gro
     """
 
     # retrieve the grid information
-    eg, ng, zg, datum, projection = erm.read_ers_image(gridPath)
+    eg, ng, zg, datum, projection = grd.read_ers_image(gridPath)
     ngmin = np.min(ng)
     ngmax = np.max(ng)
     ngd = np.abs(ng[1] - ng[0])
