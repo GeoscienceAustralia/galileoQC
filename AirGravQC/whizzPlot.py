@@ -14,7 +14,11 @@ import verde as vd
 import pooch
 
 import AirGravQC.config as config
+import AirGravQC.qualityAnalysis as qc
 import AirGravQC.pointfiles as mhd
+import matplotlib.ticker as tkr
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
 groupName = config.groupName
 
@@ -757,15 +761,14 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
     ax = fig.add_subplot(1,1,1)
     freq, Pxx1 = sig.welch(data1, nfft=2048, fs = f_sample)
     freq, Pxx2 = sig.welch(data2, nfft=2048, fs = f_sample)
-    # plt.plot(freq, np.sqrt(Pxx2[0:]) / np.sqrt(Pxx1[0:]), 'g', lw=0.6)
-    plt.semilogx(freq, np.sqrt(Pxx2[0:]) / np.sqrt(Pxx1[0:]), 'g', lw=0.6)
+    period = 1.0 / freq[1:]
+    plt.plot(period, np.sqrt(Pxx2[1:]) - np.sqrt(Pxx1[1:]), 'g', lw=0.6)
+    plt.xlim([0, 200])
     
-    # plt.xlim([0, 0.06])
-    plt.ylim([0, 5.0])
-    plt.xlabel('Frequency [Hz]', fontsize = 6)
+    plt.xlabel('Period [s]', fontsize = 6)
     plt.ylabel(f'{channel2} / {channel1}', fontsize = 6)
     if plotTitle == '':
-        plotTitle = f'Ratio of sqrt(Pwr)s {projName} : {channel2} / {channel2} L{flightLine}'
+        plotTitle = f'{projName} L{flightLine}: sqrt(Pwr({channel2})) - sqrt(Pwr({channel2}))'
     plt.title(plotTitle, fontsize = 8)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
@@ -793,13 +796,12 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
     None.
 
     """
-    from matplotlib.ticker import StrMethodFormatter
-
     if whizzPlanFile == '' and whizzFiles == []:
         print("No files provided so no Line Map can be made.")
         return
 
     fig = plt.figure(figsize=(8, 6))
+    thou_format = tkr.FuncFormatter(qc.space_thou)
     ax = fig.add_subplot(1,1,1)
     plotTitle = ''
 
@@ -837,8 +839,8 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
                     flownline, = ax.plot(lX, lY, color='blue', lw=0.4)
             
     ax.set_aspect('equal')
-    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax.xaxis.set_major_formatter(thou_format)
+    ax.yaxis.set_major_formatter(thou_format)
     plt.xlabel(f'{easting} [m]', fontsize = 10)
     plt.ylabel(f'{northing} [m]', fontsize = 10)
     plt.suptitle(plotTitle, fontsize = 12)
@@ -854,7 +856,7 @@ def make_plot_title(group):
     if 'ProjectName' in group.attrs:
         plotTitle += group.attrs['ProjectName']
     if 'BlockID' in group.attrs:
-        plotTitle += ' ' + group.attrs['BlockID']
+        plotTitle += ' (' + group.attrs['BlockID'] + ')'
     return plotTitle
 
 

@@ -18,8 +18,12 @@ import filebrowser as fb
 import rioxarray
 import h5py
 import pygmt
+import matplotlib.ticker as tkr
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
 import AirGravQC.graphics as graphics
+import AirGravQC.qualityAnalysis as qc
 import AirGravQC.config as config
 
 groupName = config.groupName
@@ -67,7 +71,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
         if n_chan == '':
             n_chan = f[groupName]['CoordinateFrame'].attrs['YChannel']
 
-        if z_chan == e_chan or z_chan == n_chan:
+        if not remove_mean and not diff_one and (z_chan == e_chan or z_chan == n_chan):
             print(f'Cannot process {z_chan}, same as {e_chan} or {n_chan}.')
             return xr.Dataset()
         totalNumFids = 0
@@ -82,6 +86,15 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
         data = np.zeros((totalNumFids,))
         eastings = np.zeros((totalNumFids,))
         northings = np.zeros((totalNumFids,))
+
+        if remove_mean and diff_one:
+            xr_zchan = f'D1_MR_{z_chan}'
+        elif remove_mean:
+            xr_zchan = f'MR_{z_chan}'
+        elif diff_one:
+            xr_zchan = f'D1_{z_chan}'
+        else:
+            xr_zchan = f'{z_chan}'
 
         my_dataset = xr.Dataset({
             e_chan: xr.DataArray(
@@ -100,7 +113,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
                     'units': 'm'
                 }
             ),
-            z_chan: xr.DataArray(
+            xr_zchan: xr.DataArray(
                 data = np.zeros((totalNumFids,)),
                 coords={'fiducials': fiducials}, 
                 dims = ['fiducials'],
@@ -112,7 +125,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
             'author': 'Mark Dransfield',
             'x_channel': e_chan,
             'y_channel': n_chan,
-            'z_channel': z_chan
+            'z_channel': xr_zchan
             }
         )
 
@@ -131,14 +144,14 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
 
             my_dataset[e_chan][sfid:efid] = xData
             my_dataset[n_chan][sfid:efid] = yData
-            my_dataset[z_chan][sfid:efid] = zData
+            my_dataset[xr_zchan][sfid:efid] = zData
 
             if 'Units' in lines_group[line][e_chan].attrs:
                 my_dataset[e_chan].attrs['units'] = lines_group[line][e_chan].attrs["Units"]
             if 'Units' in lines_group[line][n_chan].attrs:
                 my_dataset[n_chan].attrs['units'] = lines_group[line][n_chan].attrs["Units"]
             if 'Units' in lines_group[line][z_chan].attrs:
-                my_dataset[z_chan].attrs['units'] = lines_group[line][z_chan].attrs["Units"]
+                my_dataset[xr_zchan].attrs['units'] = lines_group[line][z_chan].attrs["Units"]
             if remove_mean and diff_one:
                 my_dataset.attrs['title'] = f'{z_chan} (mr) (d1)'
             elif remove_mean:
@@ -274,7 +287,7 @@ def image_pygmt(grid, region):
     fig.show()
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space):
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, n_chan='', e_chan=''):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -307,7 +320,7 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space):
             diff_one = True
 
         print(f'Gridding and imaging {z_chan}')
-        my_data = whizz_to_xarray(whizz_file, z_chan, remove_mean=remove_mean, diff_one=diff_one)
+        my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space)
@@ -829,8 +842,8 @@ def imageAllInDir(path_name):
 
 
 def xrImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
-                   minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
-                   hs=True, azdeg=45, ax=None, clipTo3Std = True):
+        minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+        hs=True, azdeg=45, ax=None, clipTo3Std = True):
     """
     Uses `graphicsShaded()` to display the gridded data in data_array. All
     parameters after the name of the whizzFile are just passed through
@@ -927,8 +940,6 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     None.
 
     """
-    from matplotlib.ticker import StrMethodFormatter
-    
     if not np.isnan(minClip) and not np.isnan(maxClip):
         z = np.clip(z, minClip, maxClip)
     elif np.isnan(minClip) and (not np.isnan(maxClip)):
@@ -942,14 +953,19 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     
     if ax == None:
         fig, ax = plt.subplots(figsize=(12,6))
-    ax.set_title(mytitle, fontsize=14)
+    thou_format = tkr.FuncFormatter(qc.space_thou)
+    fig.suptitle(mytitle, fontsize=14)
+    fig.subplots_adjust(top=0.85)
+    
     ax.set_xlabel('Eastings [m]', fontsize=12)
     ax.set_ylabel('Northings [m]', fontsize=12)
     ax.grid(True)
     ax.axes.set_aspect('equal')
     plt.tight_layout()
-    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax.xaxis.set_major_formatter(thou_format)
+    ax.yaxis.set_major_formatter(thou_format)
+    # ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    # ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs, colorbar=True,
                    azdeg=45, altdeg = 45, blend_mode = 'alpha', alpha = 0.7,
                    extent=(e[0], e[-1], n[0], n[-1]),origin='upper')
@@ -990,8 +1006,11 @@ def graphicsTernary(e, n, red, green, blue, mytitle):
     z = np.dstack((red2, green2, blue2))
     
     fig, ax = plt.subplots(figsize=(12,6))
+    thou_format = tkr.FuncFormatter(qc.space_thou)
     ax.imshow(e, n, z)#, cmap = 'Reds')
     ax.set_title(mytitle, fontsize=12)
+    ax.xaxis.set_major_formatter(thou_format)
+    ax.yaxis.set_major_formatter(thou_format)
     ax.set_xlabel('Eastings [m]', fontsize=9)
     ax.set_ylabel('Northings [m]', fontsize=9)
     ax.grid(True)
@@ -1027,6 +1046,8 @@ def _histEqual(img):
     
 def displayShadedImage(e, n, z, mytitle):
     """
+    REDUNDANT
+
     Given a 2D array z located by 1D arrays e and n, plot an image of z.
 
     Any invalid values (NaN, Inf) of z are masked out. The plot has grid lines,

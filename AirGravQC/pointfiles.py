@@ -35,7 +35,7 @@ from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 import filebrowser as fb
 
-import AirGravQC.gridfiles as erm
+import AirGravQC.gridfiles as grd
 import AirGravQC.qualityAnalysis as qa
 import AirGravQC.config as config
 
@@ -126,6 +126,17 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, fligh
                         gg.attrs['Segment'] = 0
                         gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
                 elif line_type == 'SGL_GA':
+                    if current_line < 7000:
+                        gg.attrs['PlannedLine'] = np.floor(current_line * 10.0) / 10.0
+                        current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
+                        gg.attrs['Segment'] = current_segment
+                        gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
+                                                         - 10 * current_segment)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                elif line_type == 'SGL_NSW':
                     if current_line < 7000:
                         gg.attrs['PlannedLine'] = np.floor(current_line * 10.0) / 10.0
                         current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
@@ -337,7 +348,7 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
     hdfFile = str(hdfPath)
 
     # retrieve the grid information
-    eg, ng, zg, datum, projection = erm.read_ers_image(gridPath)
+    eg, ng, zg, datum, projection = grd.read_ers_image(gridPath)
     ng0 = np.min(ng)
     ngd = np.abs(ng[1] - ng[0])
     eg0 = np.min(eg)
@@ -807,19 +818,22 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
         mean_dt = np.mean(time_deltas)
         min_dt = np.min(time_deltas)
         max_dt = np.max(time_deltas)
+        std_dt = np.std(time_deltas)
         dd = qa._distance(x_deltas, y_deltas)
         mean_dd = np.mean(dd)
         min_dd = np.min(dd)
         max_dd = np.max(dd)
+        std_dd = np.std(dd)
 
         print(whizzHeader)
         for attribute in gAttributeNames:
             print(f'    {attribute:.20}: {g.attrs[attribute]}')
 
         print(f'\nSample time and distance statistics')
-        print(f'  Min  = {min_dt:.3f} s, {min_dd:.1f} m')
-        print(f'  Max  = {max_dt:.3f} s, {max_dd:.1f} m')
-        print(f'  Mean = {mean_dt:.3f} s, {mean_dd:.1f} m')
+        print(f'  Min   = {min_dt:.3f} s, {min_dd:.1f} m')
+        print(f'  Max   = {max_dt:.3f} s, {max_dd:.1f} m')
+        print(f'  Mean  = {mean_dt:.3f} s, {mean_dd:.1f} m')
+        print(f'  Stdev = {std_dt:.3g} s, {std_dd:.1g} m')
 
 
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):
@@ -1870,4 +1884,20 @@ def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], pl
     return        
 
 
+def doyToISO8601(doy):
+    """
+    Converts day-of-year in the format yyyymmdd into an ISO 8601 datetime string. No timezone is recorded.
+
+    Parameters
+    ----------
+    doy : Int
+        Day-of-year encoded as yyyymmdd and stored as Int.
+
+    Returns
+    -------
+    Str
+        The date as a naive (to timezone) ISO 8601 string.
+
+    """
+    return datetime.datetime.strptime(str(doy), '%Y%m%d').isoformat()
 
