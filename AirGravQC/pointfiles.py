@@ -136,6 +136,17 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, fligh
                         gg.attrs['PlannedLine'] = np.floor(current_line)
                         gg.attrs['Segment'] = 0
                         gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                elif line_type == 'SGL_NSW':
+                    if current_line < 7000:
+                        gg.attrs['PlannedLine'] = np.floor(current_line * 10.0) / 10.0
+                        current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
+                        gg.attrs['Segment'] = current_segment
+                        gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
+                                                         - 10 * current_segment)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
                 if verbose:
                     print('  {:<14} {:<14} {:<14} {:<14} '.\
                         format(current_line, gg.attrs['PlannedLine'], gg.attrs['Segment'], gg.attrs['ReflightNumber']))

@@ -762,6 +762,7 @@ def diffChanStats(whizzFile, channel1, channel2):
         count = 0
         # build a y label
         dd = g[lines[0]][channel1]
+        xlabelstr = 'Line Number'
         ylabelstr = channel1 + ' - ' + channel2
         if 'Units' in dd.attrs.keys():
             ylabelstr += ' ' + dd.attrs['Units']
@@ -1768,7 +1769,7 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
     ax.grid()
 
     ax2 = fig.add_subplot(2,1,2)
-    ax2.plot(xP, yP, color='magenta', label='Plan', lw=1.5, alpha=0.7)
+    ax2.plot(xP, yP, color='darkorange', label='Plan', lw=1.5, alpha=0.7)
     ax2.plot(xM, yM, color='blue', label='Measured', lw=1.5, alpha=0.7)
     ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax2.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
@@ -2011,7 +2012,7 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
     ax.grid()
 
     ax2 = fig.add_subplot(2,1,2)
-    ax2.plot(xP, zP, color='magenta', label='Plan', lw=1.5, alpha=0.7)
+    ax2.plot(xP, zP, color='darkorange', label='Plan', lw=1.5, alpha=0.7)
     ax2.plot(xM, zM, color='blue', label='Measured', lw=1.5, alpha=0.7)
     ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax2.set_xlim(xM[0], xM[-1])
@@ -2024,7 +2025,8 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
     return
 
 
-def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', altitude_chan='', terrain_chan='', xChannel='', yChannel=''):
+def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', altitude_chan='',
+    terrain_chan='', xChannel='', yChannel='', plot_flag=False):
     """
     Checks the data from Whizz HDF5 file for low clearance above the terrain (as a safety check).
     
@@ -2095,26 +2097,27 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
                 x = np.array(g[line][xChannel])
                 y = np.array(g[line][yChannel])
                 distance = _dist(x, y)
-                fig = plt.figure()
+                if plot_flag:
+                    fig = plt.figure()
 
-                ax = fig.add_subplot(2,1,1)
-                if clearance_chan == '':
-                    ax.plot(distance, alt)
-                    ax.plot(distance, dtm)
-                    plt.legend([altitude_chan, terrain_chan], fontsize=8)
-                else:
-                    ax.plot(distance, clearance)
-                    plt.legend([clearance_chan], fontsize=8)
-                plt.xlabel('distance along line [m]', fontsize = 6)
-                plt.ylabel('height', fontsize = 6)
-                plotTitle = projName + ': Minimum Clearance Check ' + line
-                plt.title(plotTitle, fontsize = 8)
-                plt.grid(True)
-                for label in ax.get_xticklabels(): label.set_fontsize(6)
-                for label in ax.get_yticklabels(): label.set_fontsize(6)
+                    ax = fig.add_subplot(2,1,1)
+                    if clearance_chan == '':
+                        ax.plot(distance, alt)
+                        ax.plot(distance, dtm)
+                        plt.legend([altitude_chan, terrain_chan], fontsize=8)
+                    else:
+                        ax.plot(distance, clearance)
+                        plt.legend([clearance_chan], fontsize=8)
+                    plt.xlabel('distance along line [m]', fontsize = 6)
+                    plt.ylabel('height', fontsize = 6)
+                    plotTitle = projName + ': Minimum Clearance Check ' + line
+                    plt.title(plotTitle, fontsize = 8)
+                    plt.grid(True)
+                    for label in ax.get_xticklabels(): label.set_fontsize(6)
+                    for label in ax.get_yticklabels(): label.set_fontsize(6)
         print(f'Number of failed lines = {num_failed_lines}.')
         print(report)
-        if num_failed_lines > 0:
+        if num_failed_lines > 0 and plot_flag:
             plt.show()
 
 
@@ -2355,11 +2358,17 @@ def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', 
             lines = list(g.keys())
         else:
             lines = travs
+        #if the channel has an attribute 'Units'
+        dd = g[lines[0]][zChannel]
+        z_units = ''
+        if 'Units' in dd.attrs.keys():
+            z_units = dd.attrs['Units']
 
         for linec in controls:
             x_ctrl = np.array(g[linec][xChannel])
             y_ctrl = np.array(g[linec][yChannel])
             z_ctrl = np.array(g[linec][zChannel])
+
             bear_ctrl = _calc_bearing(x_ctrl, y_ctrl)
             (y_ctrl1, x_ctrl1) = _rotateCoords(x_ctrl-x_ctrl[0], y_ctrl-y_ctrl[0], -bear_ctrl)
             for linet in lines:
@@ -2379,7 +2388,10 @@ def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', 
                         num_failed_intersections += 1
                         # print(dh)
                         bc_deg = bear_ctrl * 180.0 / np.pi
-                        report += f'\n  {linet} : {linec} [bearing={bc_deg:.1f}] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}.'
+                        report += f'\n  {linet} : {linec} [bearing={bc_deg:.1f}] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}'
+                        if z_units != '':
+                            report += ' ' + z_units
+                        report += '.'
                         data_is_good = False
                         if plot_flag:
                             fig = plt.figure()
@@ -2403,7 +2415,10 @@ def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', 
                 # else:
                 #     report += f'\n  {linet} : {linec} un-tested since not perpendicular.'
     if data_is_good:
-        report += f'All {num_intersections_checked} intersection {zChannel} differences were less than {max_allowed_deltaZ:.1f}.'
+        report += f'All {num_intersections_checked} intersection {zChannel} differences were less than {max_allowed_deltaZ:.1f}'
+        if z_units != '':
+            report += ' ' + z_units
+        report += '.'
     else:
         tmpstr = f'Of {num_intersections_checked} intersections checked'
         tmpstr += f', {num_failed_intersections} exceeded the '

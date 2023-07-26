@@ -761,15 +761,14 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
     ax = fig.add_subplot(1,1,1)
     freq, Pxx1 = sig.welch(data1, nfft=2048, fs = f_sample)
     freq, Pxx2 = sig.welch(data2, nfft=2048, fs = f_sample)
-    # plt.plot(freq, np.sqrt(Pxx2[0:]) / np.sqrt(Pxx1[0:]), 'g', lw=0.6)
-    plt.semilogx(freq, np.sqrt(Pxx2[0:]) / np.sqrt(Pxx1[0:]), 'g', lw=0.6)
+    period = 1.0 / freq[1:]
+    plt.plot(period, np.sqrt(Pxx2[1:]) - np.sqrt(Pxx1[1:]), 'g', lw=0.6)
+    plt.xlim([0, 200])
     
-    # plt.xlim([0, 0.06])
-    plt.ylim([0, 5.0])
-    plt.xlabel('Frequency [Hz]', fontsize = 6)
+    plt.xlabel('Period [s]', fontsize = 6)
     plt.ylabel(f'{channel2} / {channel1}', fontsize = 6)
     if plotTitle == '':
-        plotTitle = f'Ratio of sqrt(Pwr)s {projName} : {channel2} / {channel2} L{flightLine}'
+        plotTitle = f'{projName} L{flightLine}: sqrt(Pwr({channel2})) - sqrt(Pwr({channel2}))'
     plt.title(plotTitle, fontsize = 8)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(6)

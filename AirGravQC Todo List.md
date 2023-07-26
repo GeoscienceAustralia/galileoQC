@@ -40,3 +40,4 @@
 12. checkSafeClearance needs a plot_flag parameter.
 13. If there are lots of lines, and an error persists over all (or most) lines, then the report can be very long. Provide an `verbose=False` parameter which, if true, limits the report to the summary.
 14. Calculating the statistics of angular variables has problems with 0, 2pi. Find a fix and implement.
+15. `checkRawAGG` references the Lawin QC report. Replace this with an actual description in the Methods documentation.
