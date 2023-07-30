@@ -2442,6 +2442,10 @@ def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearing
     y = np.abs(y_trav - _mean_1std(y_ctrl))
     it_arr = np.where(y == y.min())
     it = it_arr[0]
+    if len(it) > 1:
+        print('\nBug in _intersection_height - this intersection height cant be calculated')
+        print(it, type(it), len(it))
+        return 0.0
 
     x = np.abs(x_ctrl - x_trav[it])
     ic_arr = np.where(x == x.min())
