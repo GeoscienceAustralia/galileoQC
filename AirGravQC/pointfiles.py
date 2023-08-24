@@ -762,7 +762,6 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
         print(flightreport)
 
 
-
 def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
     """
     Prints a summary of the sample rate of the data in a HDF5 Whizz file.

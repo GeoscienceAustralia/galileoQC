@@ -874,6 +874,74 @@ def lineStats(whizzFile, channel):
     # plt.show()
     
 
+def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
+    """
+    Plot the statistics of channel1 - channel2 in each flightLine. 
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    flightLines : String List, optional
+        A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+    channel1 : String
+        The name of a channel.
+    channel2 : String
+        The name of a channel.
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        if flightLines == []:
+            flightLines = list(g.keys())
+        corr_units = g[flightLines[0]][channel1].attrs['Units']
+        if not (g[flightLines[0]][channel1].attrs['Units'] == corr_units):
+            print('Error: {channel1} and {channel2} do not have the same units.')
+            return
+
+        y_label = f'{channel1} - {channel2} [{corr_units}]'
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
+            
+        # initialise variables
+        chMin = np.zeros((numLines,))
+        chMax = np.zeros((numLines,))
+        chMean = np.zeros((numLines,))
+        chStd = np.zeros((numLines,))
+        lineNo = np.zeros((numLines,))
+        count = 0
+
+        for line in flightLines:
+            if line != 'CoordinateFrame':
+                lineNo[count] = line
+                dd = np.array(g[line][channel1]) - np.array(g[line][channel1])
+
+                if np.sum(~np.isnan(g[line][channel])) > 3:
+                    chMin[count] = np.nanmin(dd)
+                    chMax[count] = np.nanmax(dd)
+                    chMean[count] = np.nanmean(dd)
+                    chStd[count] = np.nanstd(dd)
+                else:
+                    chMin[count] = 0.0
+                    chMax[count] = 0.0
+                    chMean[count] = 0.0
+                    chStd[count] = 0.0
+                    print(f'Less than three real values in {lineNo[count]:.2f} for {channel}, no statistics.')
+                count += 1
+
+        figtitle = wpl.make_plot_title(gProject)
+        titlestr = channel1 + ' - ' + channel2 + ' Stats'
+        plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+    return
+
+
 def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
     """
     Plot the PSD (log-log Sqrt(Power) from welch method) of
@@ -3761,24 +3829,20 @@ def diffGroundGrid(whizzFile, whizzChannel, whizzLine, gridPath, plot_title='Gro
     ax.grid()
 
 
-def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=True):
+def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True):
     """
-    For all lines in flightLines (assumed to be repeats), plot (x, channel) and
-    report stats of differences to mean. This will require trimming to
-    [minX, maxX] and interpolating to common x. Repeat the analysis for the `z`
-    channel (height).
-
-    TODO : optionally analyse d(channel)/dx as well as channel.
+    For all repeatLines, plot (x, channel) and report stats of differences to mean.
+    This will require trimming to [minX, maxX] and interpolating to common x.
+    Repeat the analysis for the `z` channel (height).
 
     Parameters
     ----------
-    whizzFile : HDF5 Whizz file pathlib Path
-        The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    whizzFiles : array of HDF5 Whizz file pathlib Paths
+        The pathlib Paths to the Whizz HDF5 files containing the survey repeat line data.
     channel : String
         The name of the channel or field to analyse and plot. Usually a gravity channel.
-    flightLines : [String], optional
-        A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
-        to all flight lines in the `whizzFile`.
+    repeatLines : [String], optional
+        A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. 
     x : String, optional
         The name of the independent variable for the plot. Defaults to the `XChannel`.
     z : String, optional
@@ -3792,102 +3856,90 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
 
     """
 
-    nSamples = 0
-    minBigX = 1.0E12
-    maxSmallX = -1.0E12
-    
-    filename = str(whizzFile)
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        if x == '':
-            x = f[groupName]['CoordinateFrame'].attrs['XChannel']
-        # if x == '':
-            north = f[groupName]['CoordinateFrame'].attrs['YChannel']
-        if z == '':
-            z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
-        if flightLines == []:
-            flightLines = list(g.keys())
-        nLines = len(flightLines)
-        baseLine = g[flightLines[0]].attrs['PlannedLine']
-        #if the channel has an attribute 'Units'
-        dd = g[flightLines[0]][channel]
-        chan_y_label = channel
-        if 'Units' in dd.attrs.keys():
-            chan_y_units = dd.attrs['Units']
-            chan_y_label += ' ' + chan_y_units
-        ddz = g[flightLines[0]][z]
-        if 'Units' in ddz.attrs.keys():
-            chan_z_units = ddz.attrs['Units']
+    # build the arrays to store the data
+    xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, repeatLines, x, z)
 
-        # nSamples is the array width for data storage
-        for line in flightLines:
-            xs = np.array(g[line][x])
-            nSamples = max(nSamples, xs.size)
-            minBigX = min(max(xs), minBigX)
-            maxSmallX = max(min(xs), maxSmallX)
-            deltaX = np.abs(xs[1] - xs[0])
-            # print(f'line {line}, minBigX {minBigX}, maxSmallX {maxSmallX}, deltaX {deltaX}, size {xs.size}')
-            
-        if minBigX < maxSmallX:
-            return 0.0
-        xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)#np.arange(maxSmallX, minBigX, deltaX, 'float')
-        print(f'{nLines} lines analysed, each with {nSamples} samples.')
-        xData = np.empty((nLines, nSamples))
-        xData[:] = np.nan
-        yData = np.empty((nLines, nSamples))
-        yData[:] = np.nan
-        zData = np.empty((nLines, nSamples))
-        zData[:] = np.nan
-        lineCount = 0
-        
-        # read the data into the arrays
-        for line in flightLines:
-            xd = np.array(g[line][x])
-            yd = np.array(g[line][channel])
-            zd = np.array(g[line][z])
+    # Interpolate the data to common x and store in arrays
+    lineCount = 0
+    for whizzFile in whizzFiles:
 
-            # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
-            dx = np.diff(xd)
-            dy = np.diff(np.array(g[line][north]))
-            heading = np.arctan2(dx, dy) * 180.0 / np.pi
-            mean_heading = np.mean(heading)
-            print(f'Line {line} heading = {mean_heading:.1f} deg.')
+        filename = str(whizzFile)
+        with h5py.File(filename, 'r') as f:
+            g = f[groupName]['Lines']
+            if x == '':
+                x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+                north = f[groupName]['CoordinateFrame'].attrs['YChannel']
+            if z == '':
+                z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+            all_flightLines = list(g.keys())
 
-            # ensure ordered in increasing x
-            if xd[1] < xd[0]:
-                xd = xd[::-1]
-                yd = yd[::-1]
-                zd = zd[::-1]
+            baseLine = g[all_flightLines[0]].attrs['PlannedLine']
+            # if the channel has an attribute 'Units'
+            dd = g[all_flightLines[0]][channel]
+            chan_y_label = channel
+            if 'Units' in dd.attrs.keys():
+                chan_y_units = dd.attrs['Units']
+                chan_y_label += ' ' + chan_y_units
+            ddz = g[all_flightLines[0]][z]
+            if 'Units' in ddz.attrs.keys():
+                chan_z_units = ddz.attrs['Units']
 
-            xStart = 0
-            xEnd = xd.size - 1
-            
-            # trim data and store
-            for xSample in range(0, xd.size):
-                if xd[xSample] < (maxSmallX - deltaX / 2.0):
-                    xStart = max(xSample, xStart)
-                else:
-                    break
-            for xSample in range(xd.size-1, 0, -1):
-                if xd[xSample] > (minBigX + deltaX / 2.0):
-                    xEnd = min(xSample, xEnd)
-                else:
-                    break
+            # read the data into the arrays
+            for line in all_flightLines:
+                if line in repeatLines:
+                    xd = np.array(g[line][x])
+                    yd = np.array(g[line][channel])
+                    zd = np.array(g[line][z])
+
+                    # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
+                    dx = np.diff(xd)
+                    dy = np.diff(np.array(g[line][north]))
+                    heading = np.arctan2(dx, dy) * 180.0 / np.pi
+                    mean_heading = np.mean(heading)
+                    print(f'Line {line} heading = {mean_heading:.1f} deg.')
+
+                    # ensure ordered in increasing x
+                    if xd[1] < xd[0]:
+                        xd = xd[::-1]
+                        yd = yd[::-1]
+                        zd = zd[::-1]
+
+                    xStart = 0
+                    xEnd = xd.size - 1
                     
-            # interpolate data
-            (yOut, _) = mhd.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
-            (zOut, _) = mhd.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
+                    # trim data and store
+                    for xSample in range(0, xd.size):
+                        if xd[xSample] < (maxSmallX - deltaX / 2.0):
+                            xStart = max(xSample, xStart)
+                        else:
+                            break
+                    for xSample in range(xd.size-1, 0, -1):
+                        if xd[xSample] > (minBigX + deltaX / 2.0):
+                            xEnd = min(xSample, xEnd)
+                        else:
+                            break
+                            
+                    # interpolate data
+                    (yOut, _) = mhd.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
+                    (zOut, _) = mhd.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
 
-            vec_len = len(xBase)-1 # interpolateLine has lost a datapoint in outputs
-            # print(f'line {line}, shapes: xBase {xBase.shape}, xData {xData.shape}')
-            xData[lineCount, 0:vec_len] = xBase[1:]
-            yData[lineCount, 0:vec_len] = yOut
-            zData[lineCount, 0:vec_len] = zOut
-            lineCount += 1
+                    vec_len = len(xBase)-1 # interpolateLine has lost a datapoint in outputs
+                    # print(f'line {line}, shapes: xBase {xBase.shape}, xData {xData.shape}')
+                    xData[lineCount, 0:vec_len] = xBase[1:]
+                    yData[lineCount, 0:vec_len] = yOut
+                    zData[lineCount, 0:vec_len] = zOut
+                    lineCount += 1
         
-        xPlot = xBase
-        if xOffset:
-                xPlot = xPlot - xPlot[0]
+    # analyse statistics and report with plots
+    _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, yData, zData, channel, repeatLines, baseLine, z, chan_z_units, chan_y_label, chan_y_units)
+            
+    return
+
+
+def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, flightLines, baseLine, z, chan_z_units, chan_y_label, chan_y_units):
+    xPlot = xBase
+    if xOffset:
+            xPlot = xPlot - xPlot[0]
         
     fig = plt.figure(figsize=(12,9))
     
@@ -3969,7 +4021,7 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
         print(f'Line {flightLines[line]}: stdev({z}) = {zStd:.1f} {chan_z_units}')
             
     plt.xlabel('x', fontsize = 10)
-    plt.ylabel(f'z {chan_z_units}', fontsize = 10)
+    # plt.ylabel(f'z {chan_z_units}', fontsize = 10)
     plotTitle = f'Differences to mean and RMS {z}'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
@@ -3981,6 +4033,48 @@ def checkRepeatLines(whizzFile, channel, flightLines=[], x='', z='', xOffset=Tru
             
     return
 
+
+def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
+
+    nSamples = 0
+    minBigX = 1.0E12
+    maxSmallX = -1.0E12
+    nLines = len(repeatLines)
+    linecount = 0
+    
+    for whizzFile in whizzFiles:
+        filename = str(whizzFile)
+        with h5py.File(filename, 'r') as f:
+            g = f[groupName]['Lines']
+            if x == '':
+                x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+                north = f[groupName]['CoordinateFrame'].attrs['YChannel']
+            if z == '':
+                z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+            all_flightLines = list(g.keys())
+
+            # nSamples is the array width for data storage
+            for line in all_flightLines:
+                if line in repeatLines:
+                    linecount += 1
+                    xs = np.array(g[line][x])
+                    nSamples = max(nSamples, xs.size)
+                    minBigX = min(max(xs), minBigX)
+                    maxSmallX = max(min(xs), maxSmallX)
+                    deltaX = np.abs(xs[1] - xs[0])
+                
+    if minBigX < maxSmallX:
+        return 0.0
+    xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)
+    print(f'{linecount} of {nLines} lines analysed, each with {nSamples} samples.')
+    xData = np.empty((nLines, nSamples))
+    xData[:] = np.nan
+    yData = np.empty((nLines, nSamples))
+    yData[:] = np.nan
+    zData = np.empty((nLines, nSamples))
+    zData[:] = np.nan
+
+    return xBase, xData, yData, zData, minBigX, maxSmallX, deltaX
 
 
 
@@ -4237,6 +4331,107 @@ def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', 
                     for label in ax4.get_yticklabels(): label.set_fontsize(6)
                     fig.tight_layout()
                     plt.show()
+            print(reportStr)
+
+    
+def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', verbose=False, plot_flag=False):
+    """
+    Reports the high frequency noise for each line in lines from filename (a whizz file)
+    which exceeds noiseLimit. See Mark Dransfield's documentation for details of method.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension, to be checked.
+    lines : String list, optional
+        The line numbers to be checked. Default is all lines in the whizzFile.
+    noiselimit : Float
+        The maximum allowable high frequency noise on a line.
+    channels : Array[String]
+        An array of channel names containing the gradient component data.
+
+    Returns
+    -------
+    None
+
+    """
+    filename = str(whizzFile)
+    if channels == []:
+        return
+
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        if lines == []:
+            lines = g.keys()
+        
+        num_lines = len(list(lines))
+        num_failed_lines = 0
+        summary = f'Checked {num_lines}; no line had high frequency signal above {noiseLimit}.'
+        reportStr = ''
+        for line in lines:
+            if tChannel == '':
+                tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
+            time = np.array(g[line][tChannel])
+            time = time - time[0]
+
+            for channel in channels:
+                data = np.array(g[line][channel])
+                noSlope = np.zeros((len(data),))
+                filtered = np.zeros((len(data),))
+                myStd = np.zeros((len(data)-50,))
+        
+                stData = np.mean(data[:10])
+                enData = np.mean(data[-10:])
+                slope = (enData - stData) / len(data)
+                for ii in range(0, len(data)):
+                    noSlope[ii] = data[ii] - stData - ii * slope
+                        
+                filtered = butter_bandpass_filter(noSlope, 0.1, 0.48, 1, order = 6)
+                
+                for ii in range(0, len(data)-50):
+                    myStd[ii] = np.std(filtered[ii:ii+50])
+                    
+                if np.max(myStd) > noiseLimit:
+                    num_failed_lines += 1
+                    reportStr += f'Line {line}: peak HF noise in {channel} = {np.max(myStd):.1f}.\n'
+                    if plot_flag:
+                        fig = plt.figure()
+                        y_maxscale = 5.0 * noiseLimit
+                        ax1 = fig.add_subplot(3,1,1)
+                        ax1.plot(time, data, time, noSlope, lw=0.5)
+                        ax1.set_xlim(time[0], time[-1])
+                        plotTitle = f'Line {line}, Channel {channel}: orig and slope removed'
+                        plt.title(plotTitle, fontsize = 8)
+                        plt.grid(True)
+                        for label in ax1.get_xticklabels(): label.set_fontsize(6)
+                        for label in ax1.get_yticklabels(): label.set_fontsize(6)
+                        ax2 = fig.add_subplot(3,1,2)
+                        ax2.plot(time, filtered, lw=0.5)
+                        ax2.set_xlim(time[0], time[-1])
+                        ax2.set_ylim(-y_maxscale, y_maxscale)
+                        plotTitle = 'filtered'
+                        plt.title(plotTitle, fontsize = 8)
+                        plt.grid(True)
+                        for label in ax2.get_xticklabels(): label.set_fontsize(6)
+                        for label in ax2.get_yticklabels(): label.set_fontsize(6)
+                        ax3 = fig.add_subplot(3,1,3)
+                        sTime = time[25:25+len(myStd)]
+                        ax3.plot(sTime, myStd, lw=0.5)
+                        ax3.set_xlim(time[0], time[-1])
+                        ax3.set_ylim(0.0, y_maxscale)
+                        plotTitle = 'rolling stdev'
+                        plt.title(plotTitle, fontsize = 8)
+                        plt.grid(True)
+                        for label in ax3.get_xticklabels(): label.set_fontsize(6)
+                        for label in ax3.get_yticklabels(): label.set_fontsize(6)
+                        fig.tight_layout()
+                        plt.show()
+        if num_failed_lines == 1:
+            summary = f'Checked {num_lines} lines; 1 line had high frequency signal above {noiseLimit}.'
+        elif num_failed_lines > 1:
+            summary = f'Checked {num_lines} lines; {num_failed_lines} lines had high frequency signal above {noiseLimit}.'
+        print(summary)
+        if verbose:
             print(reportStr)
 
     
