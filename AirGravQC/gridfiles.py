@@ -30,7 +30,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False, diff_one=False):
+def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False):
     """
     Return a point-located xArray Dataset of (northing, easting, z), over the `fiducials` dimension,
     from a whizz_file.
@@ -75,11 +75,14 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
             print(f'Cannot process {z_chan}, same as {e_chan} or {n_chan}.')
             return xr.Dataset()
         totalNumFids = 0
+
+        if lines == []:
+            lines = lines_group.keys()
         
-        for line in lines_group.keys():
+        for line in lines:
             xData = np.array(lines_group[line][e_chan])
             totalNumFids += len(xData)
-        print(f'Total number of fids in whizz file = {totalNumFids}.')
+        print(f'{len(lines)} lines; total number of fids in whizz file = {totalNumFids}.')
 
         # initialise an xarray to take the data, with name and units
         fiducials = np.arange(0, totalNumFids)
@@ -131,7 +134,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
 
         sfid = 0
         efid = 0
-        for line in lines_group.keys():
+        for line in lines:
             sfid = efid
             xData = np.array(lines_group[line][e_chan])
             yData = np.array(lines_group[line][n_chan])
@@ -164,7 +167,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', remove_mean=False,
     return my_dataset
 
 
-def xarray_to_grid(my_data, grid_space):
+def xarray_to_grid(my_data, grid_space, region=[]):
     """
     Uses `PyGMT` to interpolate `my_data` onto a regular grid. Method
     uses data to 5 x the grid spacing to focus on QC issues.
@@ -204,7 +207,8 @@ def xarray_to_grid(my_data, grid_space):
     inspc = f'{grid_space:.0f}+e'
     maxradius = 5.0 * grid_space
 
-    region = pygmt.info(data=my_data[[x_chan, y_chan]], spacing=1)  # West, East, South, North
+    if region == []:
+        region = pygmt.info(data=my_data[[x_chan, y_chan]], spacing=1)  # West, East, South, North
     print(f"Data points cover region: {region}")
 
     # Preprocess z_chan data using blockmedian
@@ -287,7 +291,45 @@ def image_pygmt(grid, region):
     fig.show()
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, n_chan='', e_chan=''):
+def oddevenlines(whizz_file, channel, grid_space):
+    """
+    """
+    filename = str(whizz_file)
+    evens = []
+    odds = []
+    
+    with h5py.File(filename, 'r') as f:
+        lines_group = f[groupName]['Lines']
+        lines = lines_group.keys()
+        
+        for line in lines:
+            planned = lines_group[line].attrs['PlannedLine']
+            if planned % 2 == 0:
+                evens.append(line)
+            else:
+                odds.append(line)
+
+    even_data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=evens, remove_mean=False, diff_one=False)
+    odd_data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=odds, remove_mean=False, diff_one=False)
+
+    even_grid, even_region = xarray_to_grid(even_data, grid_space)
+    odd_grid, odd_region = xarray_to_grid(odd_data, grid_space)
+
+    intersectregion = [
+                        max(even_region[0], odd_region[0]),
+                        min(even_region[1], odd_region[1]),
+                        max(even_region[2], odd_region[2]),
+                        min(even_region[3], odd_region[3]),
+                        ]
+    even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion)
+    odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion)
+    d_grid = even_grid - odd_grid
+    image_pygmt(d_grid, intersectregion)
+    print(f'RMS of odd-even difference = {d_grid.std().data.item():.2f}')
+
+
+
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan=''):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -320,7 +362,7 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, n_chan='',
             diff_one = True
 
         print(f'Gridding and imaging {z_chan}')
-        my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, remove_mean=remove_mean, diff_one=diff_one)
+        my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, lines=lines, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space)
