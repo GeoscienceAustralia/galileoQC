@@ -2373,7 +2373,7 @@ def checkDrape(whizzFile, altitude, drape, warningClearance = 20.0, xChannel = '
                 plt.show()
         
 
-def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, plot_flag=False):
+def checkIntersectionZ(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, plot_flag=False):
     """
     Checks that the values of the data in `zChannel` at the intersection of traverse and control
     lines are different by no more than the maximum allowed delta.
@@ -2422,8 +2422,12 @@ def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', 
             yChannel = f[groupName]['CoordinateFrame'].attrs['YChannel']
         if zChannel == '':
             zChannel = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+        all_lines = list(g.keys())
+        alltravs, allcontrols = controls_lessthan_1000(all_lines)
+        if controls == []:
+            controls = allcontrols
         if travs == []:
-            lines = list(g.keys())
+            lines = alltravs
         else:
             lines = travs
         #if the channel has an attribute 'Units'
@@ -2441,6 +2445,8 @@ def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', 
             (y_ctrl1, x_ctrl1) = _rotateCoords(x_ctrl-x_ctrl[0], y_ctrl-y_ctrl[0], -bear_ctrl)
             for linet in lines:
                 # if linet == linec, then it is a control line, not a traverse.
+                # TODO: compare the PlannedLine for linet and linec rather than the lines themselves,
+                #       since we don't want to compare different segments of the same line!
                 if linet == linec:
                     continue
                 x_trav = np.array(g[linet][xChannel])
@@ -2495,8 +2501,31 @@ def checkIntersectionZ(whizzFile, controls, travs=[], xChannel='', yChannel='', 
     print(report)
     return
 
+
+def controls_lessthan_1000(all_lines):
+    all_num_lines = np.array(all_lines).astype(float)
+    ctrl_lines = all_num_lines[all_num_lines < 999.99]
+    trav_lines = all_num_lines[all_num_lines > 999.99]
+    ctrl_strs = []
+    trav_strs = []
+    for myfloat in ctrl_lines:
+        mystr = f'{myfloat:.2f}'
+        if mystr[-1:] == '0':
+            ctrl_strs.append(mystr[:-1])
+        else:
+            ctrl_strs.append(mystr)
+    for myfloat in trav_lines:
+        mystr = f'{myfloat:.2f}'
+        if mystr[-1:] == '0':
+            trav_strs.append(mystr[:-1])
+        else:
+            trav_strs.append(mystr)
+    return trav_strs, ctrl_strs
+
+
 def _ccw(x1, y1, x2, y2, x3, y3):
     return (y3-y1)*(x2-x1) > (y2-y1)*(x3-x1)
+
 
 def _intersect(cx1, cy1, cx2, cy2, tx1, ty1, tx2, ty2):
     return _ccw(cx1, cy1, tx1, ty1, tx2, ty2) != _ccw(cx2, cy2, tx1, ty1, tx2, ty2) and _ccw(cx1, cy1, cx2, cy2, tx1, ty1) != _ccw(cx1, cy1,cx2, cy2, tx2, ty2)
@@ -3857,7 +3886,9 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
     """
 
     # build the arrays to store the data
-    xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, repeatLines, x, z)
+    temp_repeats = repeatLines.copy()
+    xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z)
+    temp_repeats = repeatLines.copy()
 
     # Interpolate the data to common x and store in arrays
     lineCount = 0
@@ -3873,7 +3904,6 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                 z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
             all_flightLines = list(g.keys())
 
-            baseLine = g[all_flightLines[0]].attrs['PlannedLine']
             # if the channel has an attribute 'Units'
             dd = g[all_flightLines[0]][channel]
             chan_y_label = channel
@@ -3886,7 +3916,8 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
 
             # read the data into the arrays
             for line in all_flightLines:
-                if line in repeatLines:
+                if line in temp_repeats:
+                    baseLine = g[line].attrs['PlannedLine']
                     xd = np.array(g[line][x])
                     yd = np.array(g[line][channel])
                     zd = np.array(g[line][z])
@@ -3929,6 +3960,8 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                     yData[lineCount, 0:vec_len] = yOut
                     zData[lineCount, 0:vec_len] = zOut
                     lineCount += 1
+                    # In case the line is in more than one geoWhizz file
+                    temp_repeats.remove(line)
         
     # analyse statistics and report with plots
     _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, yData, zData, channel, repeatLines, baseLine, z, chan_z_units, chan_y_label, chan_y_units)
@@ -4062,6 +4095,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
                     minBigX = min(max(xs), minBigX)
                     maxSmallX = max(min(xs), maxSmallX)
                     deltaX = np.abs(xs[1] - xs[0])
+                    repeatLines.remove(line)
                 
     if minBigX < maxSmallX:
         return 0.0

@@ -324,9 +324,16 @@ def oddevenlines(whizz_file, channel, grid_space):
     even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion)
     odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion)
     d_grid = even_grid - odd_grid
+
+    # Subtraction does not preserve attributes
+    d_grid.attrs['units'] = even_grid.attrs['units']
+    d_grid.attrs['long_name'] = even_grid.attrs['long_name']
+    d_grid.attrs['title'] = f"even minus odd : {even_grid.attrs['title']}"
+    d_grid['x'].attrs['orig_name'] = even_grid['x'].attrs['orig_name']
+    d_grid['y'].attrs['orig_name'] = even_grid['y'].attrs['orig_name']
+
     image_pygmt(d_grid, intersectregion)
     print(f'RMS of odd-even difference = {d_grid.std().data.item():.2f}')
-
 
 
 def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan=''):
