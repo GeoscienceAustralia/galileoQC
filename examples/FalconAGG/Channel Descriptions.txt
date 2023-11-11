@@ -1,0 +1,49 @@
+ChannelName              | Units   | Label                                                                                         
+
+Altitude_Geoid09         | metre   | DGPS Altitude above the AusGeoid09 Geoid                                       
+Altitude_GRS80           | metre   | DGPS Altitude above the GRS80 Spheroid                                         
+Falcon_ANE_ANR_0p0       | eotvos  | A complement noise reduced GNE curvature gradient free air equivalent                         
+Falcon_ANE_ANR_2p67      | eotvos  | A complement noise reduced GNE curvature gradient terrain corrected using a density of 2.67gcc
+Falcon_ANE_Measured_0p0  | eotvos  | A complement measured GNE curvature gradient free air equivalent                              
+Falcon_ANE_Measured_2p67 | eotvos  | A complement measured GNE curvature gradient terrain corrected using a density of 2.67gcc     
+Falcon_AUV_ANR_0p0       | eotvos  | A complement noise reduced GUV curvature gradient free air equivalent                         
+Falcon_AUV_ANR_2p67      | eotvos  | A complement noise reduced GUV curvature gradient terrain corrected using a density of 2.67gcc
+Falcon_AUV_Measured_0p0  | eotvos  | A complement measured GUV curvature gradient free air equivalent                              
+Falcon_AUV_Measured_2p67 | eotvos  | A complement measured GUV curvature gradient terrain corrected using a density of 2.67gcc     
+Falcon_BNE_ANR_0p0       | eotvos  | B complement noise reduced GNE curvature gradient free air equivalent                         
+Falcon_BNE_ANR_2p67      | eotvos  | B complement noise reduced GNE curvature gradient terrain corrected using a density of 2.67gcc
+Falcon_BNE_Measured_0p0  | eotvos  | B complement measured GNE curvature gradient free air equivalent                              
+Falcon_BNE_Measured_2p67 | eotvos  | B complement measured GNE curvature gradient terrain corrected using a density of 2.67gcc     
+Falcon_BUV_ANR_0p0       | eotvos  | B complement noise reduced GUV curvature gradient free air equivalent                         
+Falcon_BUV_ANR_2p67      | eotvos  | B complement noise reduced GUV curvature gradient terrain corrected using a density of 2.67gcc
+Falcon_BUV_Measured_0p0  | eotvos  | B complement measured GUV curvature gradient free air equivalent                              
+Falcon_BUV_Measured_2p67 | eotvos  | B complement measured GUV curvature gradient terrain corrected using a density of 2.67gcc     
+Falcon_gD_0p0            | µm/s/s  | Falcon derived vertical gravity free air equivalent                                          
+Falcon_gD_2p67           | µm/s/s  | Falcon derived vertical gravity terrain corrected using a density of 2.67gcc                 
+Falcon_GDD_0p0           | eotvos  | Veritical gravity gradient free air equivalent                                                
+Falcon_GDD_2p67          | eotvos  | Veritical gravity gradient terrain corrected using a density of 2.67gcc                       
+Falcon_GED_0p0           | eotvos  | GED horizontal gravity gradient free air equivalent                                           
+Falcon_GED_2p67          | eotvos  | GED horizontal gravity gradient terrain corrected using a density of 2.67gcc                  
+Falcon_GEE_0p0           | eotvos  | GEE curvature gravity gradient free air equivalent                                            
+Falcon_GEE_2p67          | eotvos  | GEE curvature gravity gradient terrain corrected using a density of 2.67gcc                   
+Falcon_GND_0p0           | eotvos  | GND horizontal gravity gradient free air equivalent                                           
+Falcon_GND_2p67          | eotvos  | GND horizontal gravity gradient terrain corrected using a density of 2.67gcc                  
+Falcon_GNE_0p0           | eotvos  | GNE curvature gravity gradient free air equivalent                                            
+Falcon_GNE_2p67          | eotvos  | GNE curvature gravity gradient terrain corrected using a density of 2.67gcc                   
+Falcon_GNN_0p0           | eotvos  | GNN curvature gravity gradient free air equivalent                                            
+Falcon_GNN_2p67          | eotvos  | GNN curvature gravity gradient terrain corrected using a density of 2.67gcc                   
+Falcon_GUV_0p0           | eotvos  | GUV curvature gravity gradient free air equivalent                                            
+Falcon_GUV_2p67          | eotvos  | GUV curvature gravity gradient terrain corrected using a density of 2.67gcc                   
+Height                   | metre   | Sensor height above the terrain                                                               
+Latitude_GDA2020         | degree  | DGPS Latitude Coordinate in GDA2020                                                           
+Line                     |         | Line number                                                                                   
+Longitude_GDA2020        | degree  | DGPS Longitude Coordinate in GDA2020                                                          
+Processing_drape         | metre   | Drape surface used to reconstruct the tensor data                                             
+T_1p0_DD                 | eotvos  | Terrain correction for GDD component using a density of 1.0gcc                                
+T_1p0_NE                 | eotvos  | Terrain correction for GNE component using a density of 1.0gcc                                
+T_1p0_UV                 | eotvos  | Terrain correction for GUV component using a density of 1.0gcc                                
+Turbulence               | µm/s/s  | Measured aircraft turbulence                                                                  
+UTC_1980                 | seconds | UTC (Universal Coordinated Time) since Jan 6 1980                                             
+UTC_Day                  | seconds | UTC (Universal Coordinated Time) seconds since midnight                                       
+X_GDA2020                | metre   | DGPS Easting Coordinate in GDA2020 MGA Zone 54                                               
+Y_GDA2020                | metre   | DGPS Northing Coordinate in GDA2020 MGA Zone 54                                              

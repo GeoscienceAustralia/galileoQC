@@ -277,6 +277,29 @@ qc.ilsNoiseVturb(dh, diagComponent1, diagComponent2,
 	diagComponent3, vertvelocity)
 ```
 
+### FTG High frequency noise
+
+There are mechanisms [^SunderlandEtAl] by which gravity gradiometer noise at a frequency higher than the data frequency band can be down-converted to the data frequency band, resulting in errors in the data.
+
+The `checkRawFTG()` function checks for periods of high amplitude, high frequency signal in the raw gradiometer channels. This is not a check mandated by the Deed, but it is useful. It is intended to highlight sections of a survey line where there is excess high-frequency signal which might result in high gradient error.
+
+The function checks the standard deviation, in a standard rolling window, of each high-pass filtered gradiometer channel and plots diagnostic figures if the standard deviation exceeds some given noise limit.
+
+Experience suggests that, for an FTG, a standard deviation above about 50 E is significant and a re-flight should be considered for such data.
+
+```python
+qc.checkRawFTG(
+    whizzFile,
+    lines=[],
+    noiseLimit=50,
+    gradients=[],
+    vertaccel='',
+    vertvelocity='',
+    vertdispl='',
+)
+```
+
+
 ## Aeromagnetics
 
 :::{warning}
@@ -403,9 +426,9 @@ A shaded image of a grid. To be replaced by one of better quality!!!
 ```
 
 
-[^Dransfield2013]: M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013
+[^Dransfield2013]: M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013.
 
-[^HinzeEtAl]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Veronneau, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005
+[^HinzeEtAl]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Veronneau, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005.
 
 [^Jekeli]: C. Jekeli, Theoretical fundamentals of airborne gradiometry. In Airborne Gravity for Geodesy Summer School, 23-27 May, 2016.
 
@@ -413,4 +436,6 @@ A shaded image of a grid. To be replaced by one of better quality!!!
 ISBN: 9781449367831.
 
 [^GDF2]: `AirGravQC` is using the code from <https://github.com/kinverarity1/aseg_gdf2>. The standard can be found at <https://www.aseg.org.au/sites/default/files/pdf/ASEG-GDF2-REV4.pdf>.
+
+[^SunderlandEtAl]: A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.
 

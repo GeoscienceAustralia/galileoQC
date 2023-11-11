@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 #from scipy.signal import butter, lfilter
 from pathlib import Path
 import pathlib
-# import aseg_gdf2 as aseg
+import aseg_gdf2 as aseg
 from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 import filebrowser as fb
@@ -687,7 +687,7 @@ def reportWhizz(whizzFile, line='', channel=''):
                 print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
 
 
-def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
+def reportFlights(whizzFile, flightChannel='', lines=[], detailed=False):
     """
     Prints a summary of the flight numbers in a HDF5 Whizz file.
 
@@ -696,7 +696,7 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
     whizzFile : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension.
     flightChannel : String, optional
-        The name of the channel containing the flight numbers. The default is 'FLIGHT'.
+        The name of the channel containing the flight numbers. The default is '' (get the channel name from attributes).
     lines : String Array, optional
         The array of line numbers, each formatted as a string, to report. The default is [] and all lines.
     detailed : Bool, optional
@@ -705,6 +705,10 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
     Returns
     -------
     None.
+                gg = gLines[line]
+                    gg.attrs['Flight'] = this_flight
+
+            latitude = f[groupName]['CoordinateFrame'].attrs['LatitudeChannel']
 
     """
     filename = str(whizzFile)
@@ -722,7 +726,10 @@ def reportFlights(whizzFile, flightChannel='FLIGHT', lines=[], detailed=False):
             lines = list(gLines.keys())
         numLines = len(lines)
         for line in lines:
-            this_flight = gLines[line][flightChannel][0]
+            if flightChannel != '':
+                this_flight = gLines[line][flightChannel][0]
+            else:
+                this_flight = gLines[line].attrs['Flight']
             if this_flight in flight_dict:
                 flight_dict[this_flight].append(line)
             else:
@@ -1519,7 +1526,7 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False
             #print(gg, lineCount)
             
             # create next line group and metadata
-            gg = gLines.create_group(f'{lines[lineCount + 1]}')
+            gg = gLines.create_group(f'{lines[lineCount + 1]:.3f}')
             gg.attrs['LineNumber'] = lines[lineCount + 1]
         
         # put data in last line subgroup's dataset
@@ -1683,11 +1690,11 @@ def readXYZ(filename, verbose=False):
     fid.close()
     
     # rename key channels TODO : is this necessary now that whizz Files have 'XChannel' etc?
-    for jj in range(num_channels):
-        if channelnames[jj] == 'x' or channelnames[jj] == 'X' or channelnames[jj] == 'easting' or channelnames[jj] == 'Easting':
-            channelnames[jj] = 'X'
-        if channelnames[jj] == 'y' or channelnames[jj] == 'Y' or channelnames[jj] == 'northing' or channelnames[jj] == 'Northing':
-            channelnames[jj] = 'Y'
+    # for jj in range(num_channels):
+    #     if channelnames[jj] == 'x' or channelnames[jj] == 'X' or channelnames[jj] == 'easting' or channelnames[jj] == 'Easting':
+    #         channelnames[jj] = 'X'
+    #     if channelnames[jj] == 'y' or channelnames[jj] == 'Y' or channelnames[jj] == 'northing' or channelnames[jj] == 'Northing':
+    #         channelnames[jj] = 'Y'
 
     # initialise counter for the number of fids per line and storage for lines, flights and dates
     num_fids = np.zeros((num_lines,), dtype=int)
@@ -1712,7 +1719,7 @@ def readXYZ(filename, verbose=False):
                     flight_date = [int(d), int(m), int(y)]
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 current_line = float(file_line.split()[1])
-                line_nos[line_ctr] = f'{current_line:.2f}'
+                line_nos[line_ctr] = f'{current_line:.3f}'
  #               flight_nos[line_ctr] = flight_no
   #              flight_dates[line_ctr] = flight_date
                 line_ctr += 1

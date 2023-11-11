@@ -1,18 +1,23 @@
 # AirGravQC Todo List
 
-1. GRANTED - Get permissions from Xcalibur to use Canobie field data for tutorial.
-2. Get permissions from SGL to use GA/GSV field data for tutorial.
-3. Get permissions from Bell Geospace to use some field data for tutorial.
-4. Get permissions from Andy Gabell to use some field data for tutorial.
-5. Change all QC routines to report in the same format (Projectname, Blockname, summary [, detail text [, plot]]).
-6. Standardise plots as much as possible (plot titles, axis labels, use of units).
-7. Design geoWhizz v1.1, and then upgrade to it.
-8. Test the various height checks: checkSafeClearance, checkClearance, checkVert; that they work as intended.
-9. Is `checkDrape` useful or redundant?
-10. `checkGNSS` only finds at most one error per line. It should find and report against the actual spec like `checkVertPlan`. Similarly it should have an option to plot lines with failures; and an option to test a specified array of lines.
-11. All `check***` routines to have options `lines=[]`, `plot_flag=False`, `known=''`.
-12. Standardise QC (check) functions to report: 1 - what it is doing; 2 - a one sentence result summary; 3 - line-by-line summary.
-13. DONE. Stop using "erm" - use "grd" instead.
+0. Get everything setup as a true package under pip.
+1. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
+2. Change all QC routines to report in the same format (Projectname, Blockname, summary [, detail text [, plot]]).
+3. Standardise plots as much as possible (plot titles, axis labels, use of units).
+4. Design geoWhizz v1.1, and then upgrade to it.
+5. Test the various height checks: checkSafeClearance, checkClearance, checkVert; that they work as intended.
+6. Is `checkDrape` useful or redundant?
+7. `checkGNSS` only finds at most one error per line. It should find and report against the actual spec like `checkVertPlan`. Similarly it should have an option to plot lines with failures; and an option to test a specified array of lines.
+8. All `check***` routines to have options `lines=[]`, `plot_flag=False`, `known=''`.
+9. Standardise QC (check) functions to report: 1 - what it is doing; 2 - a one sentence result summary; 3 - line-by-line summary.
+10. Get permissions from Andy Gabell to use some field data for tutorial.
+11. DONE. Stop using "erm" - use "grd" instead.
+12. DONE - Get permissions from Xcalibur to use Canobie field data for tutorial.
+13. DONE - Get permissions from SGL to use GA/GSV field data for tutorial.
+14. DONE - Get permissions from Bell Geospace to use some field data for tutorial.
+15. Make code insensitive to the case of the channel names.
+16. DONE - Make flightChannel default = attrib.flight
+17. Write checkLineSeparation() against separation = nominal +/- allowance for distance > max_distance.
 
 
 ## geoWhizz v1.1
@@ -27,17 +32,20 @@
 ## Other
 
 1. Vertical axis of second plot needs to be in `xxx xxx m` format.
-2. Dittio for checkDrape, checkClearance.
+2. Ditto for checkDrape, checkClearance.
 3. Ditto for checkSpeed.
 4. Ditto for checkRepeats.
 5. checkRepeats to be re-factored with the plot function (called four times) separate.
 6. checkSpeed plots need horiz axis to match criteria (maxDistance -> easting or northing; maxDuration -> time, maxCount -> Fiducial).
-7. DONE. All QC routines plotting a box-whisker plot to do it via a call to the same wp.plotBoxWhisker() function.
-8. DONE. plotBoxWhisker to have a label for the x axis.
-9. DONE. diffNoiseVturb to have a label_lines Bool parameter which labels each point on the plot so that one can identify outliers.
 10. Ditto ilsNoiseVturb.
-11. DONE. Have `allChanStats` capable of reporting statistics on channels after mean removal and/or first differencing.
 12. checkSafeClearance needs a plot_flag parameter.
 13. If there are lots of lines, and an error persists over all (or most) lines, then the report can be very long. Provide an `verbose=False` parameter which, if true, limits the report to the summary.
 14. Calculating the statistics of angular variables has problems with 0, 2pi. Find a fix and implement.
-15. `checkRawAGG` references the Lawin QC report. Replace this with an actual description in the Methods documentation.
+15. DONE - `checkRawAGG` references the Lawin QC report. Replace this with an actual description in the Methods documentation.
+16. Automate setting of channel attributes by reading a channel description file.
+17. The Vinton Dome database does not contain flight numbers. reportFLights() BUG - should check for 'FLIGHT' attribute and report clean result instead of crashing. gw.reportFlights(dh, detailed=True)
+18. `checkOverlaps` The report could be more informative here - "all overlaps met the requirement", say
+11. DONE. Have `allChanStats` capable of reporting statistics on channels after mean removal and/or first differencing.
+7. DONE. All QC routines plotting a box-whisker plot to do it via a call to the same wp.plotBoxWhisker() function.
+8. DONE. plotBoxWhisker to have a label for the x axis.
+9. DONE. diffNoiseVturb to have a label_lines Bool parameter which labels each point on the plot so that one can identify outliers.

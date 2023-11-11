@@ -1,0 +1,32 @@
+DatasetHeader Begin
+	Version		= "7.0"
+	Name		= "B056a5000.ers"
+	LastUpdated	= Tue Jul 12 10:31:36 GMT 2022
+	DataSetType	= ERStorage
+	DataType	= Raster
+	ByteOrder	= LSBFirst
+	CoordinateSpace Begin
+		Datum		= "WGS84"
+		Projection	= "SUTM55"
+		CoordinateType	= EN
+		Units		= "METERS"
+		Rotation	= 0:0:0.0
+	CoordinateSpace End
+	RasterInfo Begin
+		CellType	= IEEE4ByteReal
+		NullCellValue	= -999999
+		CellInfo Begin
+			Xdimension	= 200
+			Ydimension	= 200
+		CellInfo End
+		NrOfLines	= 2371
+		NrOfCellsPerLine	= 3961
+		RegistrationCoord Begin
+			Eastings	= 65900
+			Northings	= 5580100
+		RegistrationCoord End
+		RegistrationCellX	= 0
+		RegistrationCellY	= 2370
+		NrOfBands	= 1
+	RasterInfo End
+DatasetHeader End

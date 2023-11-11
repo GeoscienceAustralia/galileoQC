@@ -1568,6 +1568,9 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
                             plotline2, = ax.plot(e2, n2, color='green', lw=0.2)
 
     print(f'{num_coinc_lines} coincident lines found.')
+    if report == '':
+        report = f'All overlaps meet requirement (>{min_overlap:.1f} km).'
+
     print(report)
     if num_coinc_lines > 0 and plot_flag:
         ax.set_aspect('equal')
@@ -2503,23 +2506,13 @@ def checkIntersectionZ(whizzFile, controls=[], travs=[], xChannel='', yChannel='
 
 
 def controls_lessthan_1000(all_lines):
-    all_num_lines = np.array(all_lines).astype(float)
-    ctrl_lines = all_num_lines[all_num_lines < 999.99]
-    trav_lines = all_num_lines[all_num_lines > 999.99]
     ctrl_strs = []
     trav_strs = []
-    for myfloat in ctrl_lines:
-        mystr = f'{myfloat:.2f}'
-        if mystr[-1:] == '0':
-            ctrl_strs.append(mystr[:-1])
+    for line in all_lines:
+        if float(line) < 999.99:
+            ctrl_strs.append(line)
         else:
-            ctrl_strs.append(mystr)
-    for myfloat in trav_lines:
-        mystr = f'{myfloat:.2f}'
-        if mystr[-1:] == '0':
-            trav_strs.append(mystr[:-1])
-        else:
-            trav_strs.append(mystr)
+            trav_strs.append(line)
     return trav_strs, ctrl_strs
 
 
@@ -4183,7 +4176,7 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
         plt.show()
 
 
-def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, vertaccel='', vertvelocity='', vertdispl=''):
+def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noiseSpec=17.0, vertaccel='', vertvelocity='', vertdispl=''):
     """
     For a Bell Air-FTG. For each line, reports the standard deviation of the in-line sums,
     and plots these as a scatter plot against the standard deviation of the vertical
@@ -4201,6 +4194,8 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, ver
         The name of the channel containing the second tensor diagonal (in-line) component.
     diagComponent3 : String
         The name of the channel containing the third tensor diagonal (in-line) component.
+    noiseSpec : Float, optional
+        The noise specification (largest allowed in-line sum for any flight line). Default 17.0 E.
     vertaccel : String, optional
         The name of the channel containing the vertical velocity field. Default ''.
     vertvelocity : String, optional
@@ -4242,7 +4237,8 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, ver
             data2 = np.array(g[line][diagComponent2])
             data3 = np.array(g[line][diagComponent3])
             ilsStd[count] = np.std(_inLineSum(data1, data2, data3))
-            print(line, ' ', ilsStd[count])
+            if ilsStd[count] > noiseSpec:
+                print(f'Line {line}: in-line sum = {ilsStd[count]:.1f} exceeds specification of {noiseSpec}.')
             lineNo[count] = line
             count += 1
         
@@ -4289,7 +4285,7 @@ def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', 
         
         for line in lines:
             reportStr = f'Line {line} Noise: '
-            time = g[line]['time']
+            time = g[line]['Time']
             time = time - time[0]
             if vertaccel != '':
                 turb = g[line][vertaccel]
@@ -4365,7 +4361,7 @@ def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', 
                     for label in ax4.get_yticklabels(): label.set_fontsize(6)
                     fig.tight_layout()
                     plt.show()
-            print(reportStr)
+            # print(reportStr)
 
     
 def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', verbose=False, plot_flag=False):
@@ -4400,7 +4396,7 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
         
         num_lines = len(list(lines))
         num_failed_lines = 0
-        summary = f'Checked {num_lines}; no line had high frequency signal above {noiseLimit}.'
+        summary = f'Checked {num_lines} lines; no line had high frequency signal above {noiseLimit}.'
         reportStr = ''
         for line in lines:
             if tChannel == '':
@@ -4703,7 +4699,7 @@ def _FTGTransform(il1, il2, il3, cr1, cr2, cr3):
 def checkRawAGG(whizzFile, ane, auv, bne, buv, turb, time='', lines=[], noiseLimit=10.0):
     """
     Reports the high frequency noise for each line in lines from filename (a whizz file)
-    which exceeds noiseLimit. See QC Report for Lawin for details of method.
+    which exceeds noiseLimit.
 
     Parameters
     ----------

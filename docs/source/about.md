@@ -35,3 +35,7 @@ Whatever GA want.
 ## The Airborne Gravity Deed
 
 Once published, there should be a reference here.
+
+## Data Acknowledgements
+
+BellGeo, Sander Geophysics, and Xcalibur Multiphysics have all very kindly agreed to allow the use of some of their field data for `AirGravQC`. Without these data, the examples and tutorials would have been much less useful to practioners than they might now be. Thank you BellGeo, Sander Geophysics, and Xcalibur Multiphysics.

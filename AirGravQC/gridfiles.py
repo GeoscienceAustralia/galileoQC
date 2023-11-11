@@ -535,9 +535,10 @@ def subtractImages(imagefile1, imagefile2, scale=1.0, band1=0, band2=0):
     x1, _ = gridfile_to_xr(imagefile1, bandout=band1)
     x2, _ = gridfile_to_xr(imagefile2, bandout=band2)
     
-    if x1.coords == x2.coords:
+    try:
+        xr.testing.assert_equal(x1.coords, x2.coords) #x1.coords.all() == x2.coords.all():
         return True, x1 - scale * x2
-    else:
+    except:
         return False, x1
 
 
@@ -1544,3 +1545,8 @@ def write_ers_header(imagefile, headerdict):
     return
 
 
+
+
+
+# def grid_psd(imagefile):
+    

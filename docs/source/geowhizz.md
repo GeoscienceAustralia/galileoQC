@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The `AirGravQC` package includes a non-proprietary binary data file format, called `geoWhizz`. The `geoWhizz` format uses HDF5 [^HDF5] which is a fast hierarchical format that is well established and supported by good open-source packages in a wide variety of languages.
+The `AirGravQC` package includes a non-proprietary binary data file format, called `geoWhizz`. The `geoWhizz` format uses HDF5 [^HDF5] which is a fast hierarchical format that is well established and supported by good open-source packages in a wide variety of languages, and under all common operating systems..
 
 All point-located data must be converted to `geoWhizz` format at the beginning of the QC work-flow because all the QC functions expect it.
 
