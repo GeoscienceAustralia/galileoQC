@@ -336,7 +336,7 @@ def oddevenlines(whizz_file, channel, grid_space):
     print(f'RMS of odd-even difference = {d_grid.std().data.item():.2f}')
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan=''):
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[]):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -352,6 +352,8 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         An array of names of channels from `z_chans` whose mean along each survey line should be subtracted before gridding and imaging.
     d1_chans : [String]
         An array of names of channels from `z_chans` whose first difference along each survey line should be gridded and imaged.
+    sh_chans : [String]
+        An array of names of channels from `z_chans` whose imaged grid will be shaded.
     grid_space : Float
         The distance between grid cell centres in grid distance units.
 
@@ -363,17 +365,23 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
     for z_chan in z_chans:
         remove_mean = False
         diff_one = False
+        shaded = False
         if z_chan in mr_chans:
             remove_mean = True
         if z_chan in d1_chans:
             diff_one = True
+        if z_chan in sh_chans:
+            shaded = True
 
         print(f'Gridding and imaging {z_chan}')
         my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, lines=lines, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space)
-        image_pygmt(my_grid, my_region)
+        if shaded == False:
+            xdImage(my_grid, f'{z_chan}', hs=False)
+        else:
+            xdImage(my_grid, f'{z_chan}')
 
 
 def diff_n_image(whizz_file, channel1, channel2, grid_space):
@@ -943,6 +951,61 @@ def xrImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         vmax = maxClip
     
     graphicsShaded(data_array.E, data_array.N, data_array[first_data], mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
+                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax)
+
+
+def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+        minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+        hs=True, azdeg=45, ax=None, clipTo3Std = True):
+    """
+    Uses `graphicsShaded()` to display the gridded data in data_array. All
+    parameters after the name of the whizzFile are just passed through
+    to `graphicsShaded()`.
+
+    Assumes only one DataArray in the xarray dataset
+
+    Parameters
+    ----------
+    data_array : 2D xarray
+        The data to be imaged.
+    mytitle : String
+        The figure title.
+    colormap : Colormap, optional
+        A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
+    cmap_norm : String, optional
+        Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
+        (equlaization stretch); 'auto'. The default is 'nonorm'.
+    minClip : Float, optional
+        z -> z < minClip : minClip: z. The default is np.nan - no clipping.
+    maxClip : Float, optional
+        z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+    cb_ticks : TYPE, optional
+        DESCRIPTION. The default is 'stats'.
+    nSigma : TYPE, optional
+        Not currently used. The default is 2.
+    hs : Bool, optional
+        hill-shading. The default is True.
+
+    Returns
+    -------
+    None.
+
+    """
+    vmin = np.nan
+    vmax = np.nan
+    
+    fd_mean = data_array.mean()
+    fd_std = data_array.std()
+    if clipTo3Std:
+        a = fd_mean - 3.0 * fd_std
+        vmin = a.data * 1
+        a = fd_mean + 3.0 * fd_std
+        vmax = 1 * a.data
+    elif ~np.isnan(minClip + maxClip):
+        vmin = minClip
+        vmax = maxClip
+    
+    graphicsShaded(data_array.x, data_array.y, data_array.data, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax)
 
 

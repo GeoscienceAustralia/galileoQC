@@ -39,7 +39,7 @@ import matplotlib.ticker as tkr
 #import pathlib as Path
 
 import AirGravQC.config as config
-import AirGravQC.pointfiles as mhd
+import AirGravQC.pointfiles as pf
 import AirGravQC.gridfiles as grd
 import AirGravQC.whizzPlot as wpl
 
@@ -100,7 +100,7 @@ def checkPhase(filename, channel1, channel2):
 
             time = np.arange(dt[0], dt[-1], 0.1)
             # Now interpolate through gaps by cubic spline
-            (xcorrInt, _) = mhd.interpolateLine(dt, xcorr, time)
+            (xcorrInt, _) = pf.interpolateLine(dt, xcorr, time)
             recovered_time_shift2 = time[xcorrInt.argmax()]
             print(f'Line {line}: Recovered time shift = {recovered_time_shift2:.1f}')
             
@@ -700,7 +700,7 @@ def space_thou(x, pos):  # formatter function takes tick label and tick position
     return s + ' '.join(reversed(groups)) #u'\2009'
 
 
-def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr):
+def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr='Line Number'):
     """
 
     """
@@ -721,9 +721,7 @@ def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlab
     for label in ax.get_xticklabels(): label.set_fontsize(6)
     for label in ax.get_yticklabels(): label.set_fontsize(6)
     plt.show()
-    return
-
-        
+    return        
     
     
 def diffChanStats(whizzFile, channel1, channel2):
@@ -1401,8 +1399,11 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
                     fig.subplots_adjust(top=0.85)
                     
                     ax = fig.add_subplot(1,1,1)
+                    thou_format = tkr.FuncFormatter(space_thou)
                     ax.plot(np.array(g[line][x])[1:], heading, 'b', mfc='w')
+                    ax.xaxis.set_major_formatter(thou_format)
                     plt.ylabel('Estimated heading [deg]', fontsize = 6)
+                    plt.xlabel(f'{x} [m]', fontsize = 6)
                     plt.grid(True)
                     for label in ax.get_xticklabels(): label.set_fontsize(6)
                     for label in ax.get_yticklabels(): label.set_fontsize(6)
@@ -1586,7 +1587,7 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
         plt.show()
 
 
-def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, known='', plot_flag=False):
+def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, known='', plot_flag=False, verbose=False):
     """
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
@@ -1976,7 +1977,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                     # interpolate (xm, zM) onto (xp, zmp)
                     if abs(xm[-1] - xm[0]) < abs(ym[-1] - ym[0]):
                         print('ERROR - expect xms > yms but this is not so.')
-                    (zmp, zM_trim) = mhd.interpolateLine(xp, zp, xm, zM, plot_flag=False)
+                    (zmp, zM_trim) = pf.interpolateLine(xp, zp, xm, zM, plot_flag=False)
                     # calculate the deviation vector
                     z_dev = zM_trim - zmp
                 
@@ -2096,8 +2097,7 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
     return
 
 
-def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', altitude_chan='',
-    terrain_chan='', xChannel='', yChannel='', plot_flag=False):
+def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', altitude_chan='', terrain_chan='', xChannel='', yChannel='', plot_flag=False):
     """
     Checks the data from Whizz HDF5 file for low clearance above the terrain (as a safety check).
     
@@ -2130,6 +2130,9 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
     yChannel : String, optional
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+    plot_flag : Bool, optional
+        If True, plot a map of each pair of intersecting lines where the `zChannel`
+        values differ by more than `max_allowed_deltaZ`. Default False.
 
     Returns
     -------
@@ -2172,6 +2175,7 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
                     fig = plt.figure()
 
                     ax = fig.add_subplot(2,1,1)
+                    thou_format = tkr.FuncFormatter(space_thou)
                     if clearance_chan == '':
                         ax.plot(distance, alt)
                         ax.plot(distance, dtm)
@@ -2179,6 +2183,7 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
                     else:
                         ax.plot(distance, clearance)
                         plt.legend([clearance_chan], fontsize=8)
+                    ax.xaxis.set_major_formatter(thou_format)
                     plt.xlabel('distance along line [m]', fontsize = 6)
                     plt.ylabel('height', fontsize = 6)
                     plotTitle = projName + ': Minimum Clearance Check ' + line
@@ -2276,12 +2281,15 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
                 fig = plt.figure()
 
                 ax = fig.add_subplot(2,1,1)
+                thou_format = tkr.FuncFormatter(space_thou)
                 if clearance_chan == '':
                     ax.plot(distance, alt)
                     ax.plot(distance, dtm)
+                    ax.xaxis.set_major_formatter(thou_format)
                     plt.legend([altitude_chan, terrain_chan], fontsize=8)
                 else:
                     ax.plot(distance, clearance)
+                    ax.xaxis.set_major_formatter(thou_format)
                     plt.legend([clearance_chan], fontsize=8)
                 plt.xlabel('distance along line [m]', fontsize = 6)
                 plt.ylabel('height', fontsize = 6)
@@ -2294,6 +2302,7 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
                 ax2.plot(distance, deviation)
                 ax2.plot(distance, allowance * np.ones(y.shape), 'r')
                 ax2.plot(distance, -allowance * np.ones(y.shape), 'r')
+                ax2.xaxis.set_major_formatter(thou_format)
                 plt.ylabel('deviation', fontsize = 6)
                 plt.xlabel('distance along line [m]', fontsize = 6)
                 plt.grid(True)
@@ -2303,9 +2312,9 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
         print(report)
         if num_failed_lines > 0:
             plt.show()
-        
 
-def checkDrape(whizzFile, altitude, drape, warningClearance = 20.0, xChannel = '', yChannel = ''):
+        
+def checkDrape(whizzFile, altitude, drapeChannel, warningClearance = 20.0, xChannel = '', yChannel = '', plot_flag=True):
     """
     Checks actual altitude flown against planned drape in drape channel.
 
@@ -2315,9 +2324,9 @@ def checkDrape(whizzFile, altitude, drape, warningClearance = 20.0, xChannel = '
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
-    altitude : TYPE
+    altitude : String
         The name of the geoWhizz field or channel containing the measured altitudes.
-    drape : TYPE
+    drapeChannel : String
         The name of the geoWhizz field or channel containing the measured drape heights.
     warningClearance : Float, optional
         DESCRIPTION. The default is 20.0.
@@ -2327,6 +2336,9 @@ def checkDrape(whizzFile, altitude, drape, warningClearance = 20.0, xChannel = '
     yChannel : String, optional
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+    plot_flag : Bool, optional
+        If True, plot a map of each pair of intersecting lines where the `zChannel`
+        values differ by more than `max_allowed_deltaZ`. Default False.
 
     Returns
     -------
@@ -2345,35 +2357,38 @@ def checkDrape(whizzFile, altitude, drape, warningClearance = 20.0, xChannel = '
         for line in g.keys():
             lineName = _get_lineName(g[line])
             alt = g[line][altitude]
-            drape = g[line][drape]
+            drape = g[line][drapeChannel]
             clearance = np.abs(alt[()] - drape[()])
             maxDeviation = np.max(clearance)
-            print(f'Drape {maxDeviation} on line {line}')
             if maxDeviation > warningClearance:
-                print(f'Drape deviation of {maxDeviation} on line {lineName}')
-                x = g[line][xChannel]
-                y = g[line][yChannel]
-                distance = _dist(x, y)
-                fig = plt.figure()
-                ax = fig.add_subplot(2,1,1)
-                ax.plot(distance, alt)
-                ax.plot(distance, drape)
-                plt.xlabel('distance along line [m]', fontsize = 6)
-                plt.ylabel('height', fontsize = 6)
-                plotTitle = projName + ': Clearance Check ' + lineName
-                plt.title(plotTitle, fontsize = 8)
-                plt.legend([altitude, drape])
-                plt.grid(True)
-                for label in ax.get_xticklabels(): label.set_fontsize(6)
-                for label in ax.get_yticklabels(): label.set_fontsize(6)
-                ax2 = fig.add_subplot(2,1,2)
-                ax2.plot(distance, clearance)
-                plt.ylabel('deviation', fontsize = 6)
-                plt.xlabel('distance along line [m]', fontsize = 6)
-                plt.grid(True)
-                for label in ax2.get_xticklabels(): label.set_fontsize(6)
-                for label in ax2.get_yticklabels(): label.set_fontsize(6)
-                plt.show()
+                print(f'Exceedance: maximum drape deviation of {maxDeviation:.1f} on line {lineName}')
+                if plot_flag:
+                    x = g[line][xChannel]
+                    y = g[line][yChannel]
+                    distance = _dist(x, y)
+                    fig = plt.figure()
+                    ax = fig.add_subplot(2,1,1)
+                    thou_format = tkr.FuncFormatter(space_thou)
+                    ax.plot(distance, alt[()])
+                    ax.plot(distance, drape[()])
+                    ax.xaxis.set_major_formatter(thou_format)
+                    plt.xlabel('distance along line [m]', fontsize = 6)
+                    plt.ylabel('height', fontsize = 6)
+                    plotTitle = projName + ': Clearance Check ' + lineName
+                    plt.title(plotTitle, fontsize = 8)
+                    plt.legend([altitude, drapeChannel])
+                    plt.grid(True)
+                    for label in ax.get_xticklabels(): label.set_fontsize(6)
+                    for label in ax.get_yticklabels(): label.set_fontsize(6)
+                    ax2 = fig.add_subplot(2,1,2)
+                    ax2.plot(distance, clearance)
+                    ax2.xaxis.set_major_formatter(thou_format)
+                    plt.ylabel('deviation', fontsize = 6)
+                    plt.xlabel('distance along line [m]', fontsize = 6)
+                    plt.grid(True)
+                    for label in ax2.get_xticklabels(): label.set_fontsize(6)
+                    for label in ax2.get_yticklabels(): label.set_fontsize(6)
+                    plt.show()
         
 
 def checkIntersectionZ(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, plot_flag=False):
@@ -2522,7 +2537,6 @@ def _ccw(x1, y1, x2, y2, x3, y3):
 
 def _intersect(cx1, cy1, cx2, cy2, tx1, ty1, tx2, ty2):
     return _ccw(cx1, cy1, tx1, ty1, tx2, ty2) != _ccw(cx2, cy2, tx1, ty1, tx2, ty2) and _ccw(cx1, cy1, cx2, cy2, tx1, ty1) != _ccw(cx1, cy1,cx2, cy2, tx2, ty2)
-
 
 
 def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearingc):
@@ -2927,7 +2941,9 @@ def _plot_speed(t, speed, min_speed=54, max_speed=66, plot_title=''):
     fig.subplots_adjust(top=0.85)
     
     ax = fig.add_subplot(1,1,1)
+    thou_format = tkr.FuncFormatter(space_thou)
     ax.plot(t, speed, 'b', t, np.ones(t.size) * min_speed, 'r', t, np.ones(t.size) * max_speed, 'r', mfc='w')
+    ax.xaxis.set_major_formatter(thou_format)
     plt.xlabel('Time [s]', fontsize = 6)
     plt.ylabel('Speed [m/s]', fontsize = 6)
     plotTitle = 'Speed' + ' Stats'
@@ -3944,8 +3960,8 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                             break
                             
                     # interpolate data
-                    (yOut, _) = mhd.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
-                    (zOut, _) = mhd.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
+                    (yOut, _) = pf.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
+                    (zOut, _) = pf.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
 
                     vec_len = len(xBase)-1 # interpolateLine has lost a datapoint in outputs
                     # print(f'line {line}, shapes: xBase {xBase.shape}, xData {xData.shape}')
@@ -3968,9 +3984,11 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
             xPlot = xPlot - xPlot[0]
         
     fig = plt.figure(figsize=(12,9))
+    thou_format = tkr.FuncFormatter(space_thou)
     
     #plot the y data
     ax = fig.add_subplot(2,2,1)
+    ax.xaxis.set_major_formatter(thou_format)
     for line in range(0, nLines):
         y1 = yData[line,:]
         y1 = y1[np.logical_not(np.isnan(y1))]
@@ -3989,6 +4007,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     
     #plot the z data
     ax = fig.add_subplot(2,2,2)
+    ax.xaxis.set_major_formatter(thou_format)
     for line in range(0, nLines):
         z1 = zData[line,:]
         z1 = z1[np.logical_not(np.isnan(z1))]
@@ -4007,6 +4026,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     
     # plot the y differences and RMS
     ax = fig.add_subplot(2,2,3)
+    ax.xaxis.set_major_formatter(thou_format)
     yMean = np.mean(yData, axis=0)
     ySum = np.zeros(yMean.shape)
     for line in range(0, nLines):
@@ -4031,6 +4051,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     
     # plot the z differences and RMS
     ax = fig.add_subplot(2,2,4)
+    ax.xaxis.set_major_formatter(thou_format)
     zMean = np.mean(zData, axis=0)
     zSum = np.zeros(zMean.shape)
     for line in range(0, nLines):
@@ -4698,7 +4719,7 @@ def _FTGTransform(il1, il2, il3, cr1, cr2, cr3):
 
 def checkRawAGG(whizzFile, ane, auv, bne, buv, turb, time='', lines=[], noiseLimit=10.0):
     """
-    Reports the high frequency noise for each line in lines from filename (a whizz file)
+    Reports the high frequency noise for each line in lines (read from a whizz file)
     which exceeds noiseLimit.
 
     Parameters

@@ -30,13 +30,13 @@ import matplotlib.pyplot as plt
 #from scipy.signal import butter, lfilter
 from pathlib import Path
 import pathlib
-import aseg_gdf2 as aseg
 from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 import filebrowser as fb
 
+import AirGravQC.aseg_gdf2 as aseg
 import AirGravQC.gridfiles as grd
-import AirGravQC.qualityAnalysis as qa
+import AirGravQC.qualityAnalysis as qc
 import AirGravQC.config as config
 
 groupName = config.groupName
@@ -439,7 +439,7 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
                 dd = g[line].create_dataset(newChannelName, data = zm, compression="gzip", compression_opts=4)
                 dd.attrs['Name'] = newChannelName
            
-            fail, numExc = qa.failsDeviation(zm - g[line][height], 20.0, 13)
+            fail, numExc = qc.failsDeviation(zm - g[line][height], 20.0, 13)
             if fail and numExc > 13:
  #           if np.abs(np.max(g[line]['altitude'] - zm)) > 20.0:
                 plotTime = time - time[0]
@@ -825,7 +825,7 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
         min_dt = np.min(time_deltas)
         max_dt = np.max(time_deltas)
         std_dt = np.std(time_deltas)
-        dd = qa._distance(x_deltas, y_deltas)
+        dd = qc._distance(x_deltas, y_deltas)
         mean_dd = np.mean(dd)
         min_dd = np.min(dd)
         max_dd = np.max(dd)

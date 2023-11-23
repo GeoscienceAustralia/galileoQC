@@ -15,7 +15,7 @@ import pooch
 
 import AirGravQC.config as config
 import AirGravQC.qualityAnalysis as qc
-import AirGravQC.pointfiles as mhd
+import AirGravQC.pointfiles as pf
 import matplotlib.ticker as tkr
 from matplotlib import rc
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
@@ -413,7 +413,7 @@ def plotInlineSum(whizzFile, line):
         data1 = np.array(g[line]['Inline1_raw'])
         data2 = np.array(g[line]['Inline2_raw'])
         data3 = np.array(g[line]['Inline3_raw'])
-        ils = mhd.inLineSum(data1, data2, data3)
+        ils = pf.inLineSum(data1, data2, data3)
         
         fig = plt.figure()
         fig.suptitle(f'{projName}: Line {line}', fontsize=10)
