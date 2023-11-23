@@ -35,7 +35,6 @@
 ## Other
 
 1. Vertical axis of second plot needs to be in `xxx xxx m` format.
-6. checkSpeed plots need horiz axis to match criteria (maxDistance -> easting or northing; maxDuration -> time, maxCount -> Fiducial).
 10. ilsNoiseVturb to have a label_lines Bool parameter which labels each point on the plot so that one can identify outliers.
 13. If there are lots of lines, and an error persists over all (or most) lines, then the report can be very long. Provide an `verbose=False` parameter which, if true, limits the report to the summary.
 14. Calculating the statistics of angular variables has problems with 0, 2pi. Find a fix and implement.
@@ -45,6 +44,7 @@
 3. DONE. Ditto for checkSpeed.
 4. DONE. Ditto for checkRepeatLines.
 5. DONE. checkRepeats to be re-factored with the plot function (called four times) separate.
+6. DONE. checkSpeed plots need horiz axis to match criteria (maxDistance -> distance; maxDuration -> time).
 7. DONE. All QC routines plotting a box-whisker plot to do it via a call to the same wp.plotBoxWhisker() function.
 8. DONE. plotBoxWhisker to have a label for the x axis.
 9. DONE. diffNoiseVturb to have a label_lines Bool parameter which labels each point on the plot so that one can identify outliers.

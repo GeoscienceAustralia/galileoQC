@@ -2881,7 +2881,10 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
         if exceedance_in_line:
             num_failed_lines += 1
             if plot_flag:
-                _plot_speed(t, speed, min_allowance, max_allowance, plot_title=plot_title)
+                if check_against_dist:
+                    _plot_speed(dist, 'Distance from start of line [m]', speed, min_allowance, max_allowance, plot_title=plot_title)
+                else:
+                    _plot_speed(t-t[0], 'Time from start of line [sec]', speed, min_allowance, max_allowance, plot_title=plot_title)
 
     print(f' Checked {total_num_lines} lines and {num_exceed_lines} had some short exceedance(s).')
     print(f' {num_failed_lines} lines failed for exceedance > allowed.')
@@ -2898,7 +2901,7 @@ def _get_data(line_group, xChannel, yChannel, tChannel, vel_north, vel_east):
     x = np.array(line_group[xChannel])
     y = np.array(line_group[yChannel])
     t = np.array(line_group[tChannel])
-    distance = np.sqrt(x * x + y * y)
+    distance = _dist(x, y)
     if vel_north == '' or vel_east == '':
         sampleTime = t[1] - t[0]
         xVel = np.diff(x) / sampleTime
@@ -2913,7 +2916,7 @@ def _get_data(line_group, xChannel, yChannel, tChannel, vel_north, vel_east):
     return x, y, distance, t, speed
 
 
-def _plot_speed(t, speed, min_speed=54, max_speed=66, plot_title=''):
+def _plot_speed(t, t_label, speed, min_speed=54, max_speed=66, plot_title=''):
     """
     Plots the speed as a function of t and adds limit lines showing the allowed
     tolerance
@@ -2944,7 +2947,7 @@ def _plot_speed(t, speed, min_speed=54, max_speed=66, plot_title=''):
     thou_format = tkr.FuncFormatter(space_thou)
     ax.plot(t, speed, 'b', t, np.ones(t.size) * min_speed, 'r', t, np.ones(t.size) * max_speed, 'r', mfc='w')
     ax.xaxis.set_major_formatter(thou_format)
-    plt.xlabel('Time [s]', fontsize = 6)
+    plt.xlabel(t_label, fontsize = 6)
     plt.ylabel('Speed [m/s]', fontsize = 6)
     plotTitle = 'Speed' + ' Stats'
     plt.title(plotTitle, fontsize = 8)
