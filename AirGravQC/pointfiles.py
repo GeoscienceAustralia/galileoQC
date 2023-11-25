@@ -13,15 +13,6 @@ project, line or channel) are provided. Given a geoWhizz data file, data
 from a `.ers` (ERMapper) grid file may be interpolated onto the survey
 lines as a new channel.
 
-**TODO**:
-
-    1. If the XYZ file contains a date in the format YYYY/MM/DD, then convert it
-    to a decimal date string. See the stub `translate_date` below.
-
-    2. Write function to compare two whizz datafiles and report which lines have differences.
-    Include a `detail` flag, when true, print the first exemplar difference on the line.
-
-    3. Get the ASEG-GDF2 translator working again.
 """
 # import necessary modules
 import numpy as np
@@ -66,7 +57,34 @@ def getWhizzData(whizzFile, line, channel):
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
-        my_data = np.array(g[line][channel])
+        my_data = getLineData(g[line], channel)
+            
+    return my_data
+
+
+def getLineData(linegroup, channel):
+    """
+    Returns a numpy array containg the specified channel of
+    data for the given line.
+
+    Parameters
+    ----------
+    line : HDF5 Group
+        A flight-line group.
+    channel : String
+        The name of a channel in the database, e.g. 'EASTING'.
+
+    Returns
+    -------
+    my_data : numpy array
+        The requested data.
+
+    """
+
+    for datachannel in linegroup.items():
+        if datachannel[0].upper() == channel.upper():
+            print(f'datachannel {datachannel[0]}; channel {channel}')
+            my_data = np.array(linegroup[datachannel[0]])
             
     return my_data
 
@@ -296,8 +314,8 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
         if lines == []:
             lines = list(g.keys())
         for line in lines:
-            xPos = np.array(g[line][x])
-            yPos = np.array(g[line][y])
+            xPos = getLineData(g[line], x)#np.array(g[line][x])
+            yPos = getLineData(g[line], y)#np.array(g[line][y])
             lineDistance += _lineLength(xPos, yPos)
             count += 1
             
@@ -374,9 +392,9 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
         for line in lines:
             lineNo = line
             lineText = 'Line ' + lineNo
-            em = np.array(g[line][x])
-            nm = np.array(g[line][y])
-            time = np.array(g[line][t])
+            em = getLineData(g[line], x)#np.array(g[line][x])
+            nm = getLineData(g[line], y)#np.array(g[line][y])
+            time = getLineData(g[line], t)#np.array(g[line][t])
             zm = np.empty(em.shape)
             zm[:] = np.nan
             dist = np.empty(em.shape)
@@ -616,8 +634,8 @@ def getLineXChannel(whizzFile, line, x, channel):
     filename = str(whizzFile)
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
-        xData = np.array(g[line][x])
-        yData = np.array(g[line][channel])
+        xData = getLineData(g[line], x)#np.array(g[line][x])
+        yData = getLineData(g[line], channel)#np.array(g[line][channel])
     return xData, yData
 
     

@@ -24,7 +24,6 @@ missingReal = -99999.99
 missingInt = -999
 missingDate = ""
 
-# Get Project Name, reference [default: ""], and rest of header info. #TODO: get this info from user or file.
+# Get Project Name, reference [default: ""], and rest of header info.
 groupName = 'Whizz Version 1.0'
 projectName = 'Unknown Project'
-# Get Project Name, reference [default: ""], and rest of header info. #TODO: get this info from user or file.

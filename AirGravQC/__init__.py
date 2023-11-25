@@ -11,4 +11,4 @@ References:
     C. Jekeli, Theoretical fundamentals of airborne gradiometry. In Airborne 
     Gravity for Geodesy Summer School, 23-27 May, 2016.
 """
-
+# from AirGravQC import 

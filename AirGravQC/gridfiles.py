@@ -172,10 +172,6 @@ def xarray_to_grid(my_data, grid_space, region=[]):
     Uses `PyGMT` to interpolate `my_data` onto a regular grid. Method
     uses data to 5 x the grid spacing to focus on QC issues.
 
-    TODO:
-
-    1. allow change in size of grid spacing.
-
     Parameters
     ----------
     my_data : xArray Dataset

@@ -6,11 +6,6 @@ Created on Sat Aug 14 20:28:20 2021
 
 @author: markdransfield
 
-TODO
-
-    1. Trap instances where a channel or line name is not found as a dataset or group and suggest a check on spelling and case.
-    2. Re-factor code to NAV, GRAV, AGG, FTG, MISC.
-
 # GENERAL
 checkSpikes()
 allChanStats()
@@ -39,7 +34,7 @@ import matplotlib.ticker as tkr
 #import pathlib as Path
 
 import AirGravQC.config as config
-import AirGravQC.pointfiles as pf
+import AirGravQC.pointfiles as gw
 import AirGravQC.gridfiles as grd
 import AirGravQC.whizzPlot as wpl
 
@@ -77,8 +72,9 @@ def checkPhase(filename, channel1, channel2):
         count = 0
 
         for line in g.keys():
-            A = np.array(g[line][channel1])
-            B = np.array(g[line][channel2])
+            linegroup = g[line]
+            A = gw.getLineData(linegroup, channel1)# np.array(g[line][channel1])
+            B = gw.getLineData(linegroup, channel2)#np.array(g[line][channel2])
             nsamples = A.size
 
             # regularize datasets by subtracting mean and dividing by s.d.
@@ -100,7 +96,7 @@ def checkPhase(filename, channel1, channel2):
 
             time = np.arange(dt[0], dt[-1], 0.1)
             # Now interpolate through gaps by cubic spline
-            (xcorrInt, _) = pf.interpolateLine(dt, xcorr, time)
+            (xcorrInt, _) = gw.interpolateLine(dt, xcorr, time)
             recovered_time_shift2 = time[xcorrInt.argmax()]
             print(f'Line {line}: Recovered time shift = {recovered_time_shift2:.1f}')
             
@@ -129,8 +125,8 @@ def calcDrift(whizzFile, time, gradient):
         g = f[groupName]['Lines']
         
         for line in g.keys():
-            t = np.array(g[line][time]).reshape((-1,1))
-            gamma = g[line][gradient]
+            t = gw.getLineData(g[line], time).reshape((-1,1)) #np.array(g[line][time]).reshape((-1,1))
+            gamma = gw.getLineData(g[line], gradient)#g[line][gradient]
             
             model = LinearRegression().fit(t, gamma)
             r_sq = model.score(t, gamma)
@@ -158,7 +154,7 @@ def _dist(x, y):
     return  np.sqrt((x - x[0]) * (x - x[0]) + (y - y[0]) * (y - y[0]))
 
  
-def checkVertAcc(whizzFile):
+def checkVertAcc(whizzFile, vertvelocity):
     """
     Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
     data (units of m/s) in the channel called `vertvelocity` in whizzFile. Plots the
@@ -184,7 +180,7 @@ def checkVertAcc(whizzFile):
         count = 0
 
         for line in g.keys():
-            data = g[line]['vertvelocity']
+            data = gw.getLineData(g[line], vertvelocity)#g[line]['vertvelocity']
             accel = np.diff(data, n = 1)
             chStd[count] = int(np.std(accel) * 100.0)
             fig = plt.figure()
@@ -495,7 +491,8 @@ def checkConstantSlope(whizzFile, fields=[]):
         report = ''
         for line in g.keys():
             for field in fields:
-                deriv = np.diff(g[line][field], n = 1)
+                data = gw.getLineData(g[line], field)
+                deriv = np.diff(data, n = 1)
                 mean_deriv = np.mean(deriv)
                 deriv = deriv - mean_deriv
                 if len(deriv) > 10:
@@ -648,7 +645,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             for line in lines:
                 if line != 'CoordinateFrame':
                     lineNo[count] = line
-                    dd = np.array(g[line][channel])
+                    dd = gw.getLineData(g[line], channel)#np.array(g[line][channel])
                     if remove_sine:
                         dd = np.sin(dd * (np.pi / 180.0))
                     if diff_one:
@@ -656,7 +653,8 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
                     if remove_mean:
                         dd = dd - np.mean(dd)
 
-                    if np.sum(~np.isnan(g[line][channel])) > 3:
+                    # if np.sum(~np.isnan(g[line][channel])) > 3:
+                    if np.sum(~np.isnan(dd)) > 3:
                         chMin[count] = np.nanmin(dd)
                         chMax[count] = np.nanmax(dd)
                         chMean[count] = np.nanmean(dd)
@@ -919,9 +917,9 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         for line in flightLines:
             if line != 'CoordinateFrame':
                 lineNo[count] = line
-                dd = np.array(g[line][channel1]) - np.array(g[line][channel1])
+                dd = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)#np.array(g[line][channel1]) - np.array(g[line][channel1])
 
-                if np.sum(~np.isnan(g[line][channel])) > 3:
+                if np.sum(~np.isnan(dd)) > 3:
                     chMin[count] = np.nanmin(dd)
                     chMax[count] = np.nanmax(dd)
                     chMean[count] = np.nanmean(dd)
@@ -931,7 +929,7 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
                     chMax[count] = 0.0
                     chMean[count] = 0.0
                     chStd[count] = 0.0
-                    print(f'Less than three real values in {lineNo[count]:.2f} for {channel}, no statistics.')
+                    print(f'Less than three real values in {lineNo[count]:.2f} for {channel1}, {channel2}, no statistics.')
                 count += 1
 
         figtitle = wpl.make_plot_title(gProject)
@@ -982,7 +980,7 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         for line in flightLines:
             mean_speed = _mean_line_speed(f[groupName], line)
             f_sample = _time_frequency(f[groupName])
-            data = np.array(g[line][channel1]) - np.array(g[line][channel2])
+            data = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)##np.array(g[line][channel1]) - np.array(g[line][channel2])
 
             freq, Pxx = sig.welch(data, nfft=4*4096, fs = f_sample)
             period = 1.0 / freq[1:]
@@ -1265,10 +1263,10 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
 
         error_count = 0
         for line in lines:
-            x = np.array(g[line][xchan])
-            y = np.array(g[line][ychan])
+            x = gw.getLineData(g[line], xchan)#np.array(g[line][xchan])
+            y = gw.getLineData(g[line], ychan)#np.array(g[line][ychan])
 
-            nsats_data = np.array(g[line][num_sats])
+            nsats_data = gw.getLineData(g[line], num_sats)#np.array(g[line][num_sats])
             min_nsats_data = np.nanmin(nsats_data)
             if min_nsats_data < nsats_min:
                 xmin_fail = np.nanmin(x[nsats_data < nsats_min])
@@ -1281,7 +1279,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            pdop_data = np.array(g[line][pdop])
+            pdop_data = gw.getLineData(g[line], pdop)#np.array(g[line][pdop])
             max_pdop_data = np.nanmax(pdop_data)
             if max_pdop_data > max_pdop:
                 xmin_fail = np.nanmin(x[pdop_data > max_pdop])
@@ -1294,7 +1292,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            vdop_data = np.array(g[line][vdop])
+            vdop_data = gw.getLineData(g[line], vdop)#np.array(g[line][vdop])
             max_vdop_data = np.nanmax(vdop_data)
             if max_vdop_data > max_vdop:
                 xmin_fail = np.nanmin(x[vdop_data > max_vdop])
@@ -1307,7 +1305,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            hdop_data = np.array(g[line][hdop])
+            hdop_data = gw.getLineData(g[line], hdop)#np.array(g[line][hdop])
             max_hdop_data = np.nanmax(hdop_data)
             if max_hdop_data > max_hdop:
                 xmin_fail = np.nanmin(x[hdop_data > max_hdop])
@@ -1372,8 +1370,8 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
         numLines = len(lines)
 
         for line in lines:
-            dx = np.diff(np.array(g[line][x]))
-            dy = np.diff(np.array(g[line][y]))
+            dx = np.diff(gw.getLineData(g[line], x))#np.array(g[line][x]))
+            dy = np.diff(gw.getLineData(g[line], y))#np.array(g[line][y]))
             allok = True
             for nomhead in nominalHeadings:
                 tol_1 = np.cos(np.pi * (nomhead + tolerance) / 180.0)
@@ -1400,7 +1398,7 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
                     
                     ax = fig.add_subplot(1,1,1)
                     thou_format = tkr.FuncFormatter(space_thou)
-                    ax.plot(np.array(g[line][x])[1:], heading, 'b', mfc='w')
+                    ax.plot(gw.getLineData(g[line], x)[1:], heading, 'b', mfc='w')#np.array(g[line][x])[1:], heading, 'b', mfc='w')
                     ax.xaxis.set_major_formatter(thou_format)
                     plt.ylabel('Estimated heading [deg]', fontsize = 6)
                     plt.xlabel(f'{x} [m]', fontsize = 6)
@@ -1977,7 +1975,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                     # interpolate (xm, zM) onto (xp, zmp)
                     if abs(xm[-1] - xm[0]) < abs(ym[-1] - ym[0]):
                         print('ERROR - expect xms > yms but this is not so.')
-                    (zmp, zM_trim) = pf.interpolateLine(xp, zp, xm, zM, plot_flag=False)
+                    (zmp, zM_trim) = gw.interpolateLine(xp, zp, xm, zM, plot_flag=False)
                     # calculate the deviation vector
                     z_dev = zM_trim - zmp
                 
@@ -2157,19 +2155,19 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
         for line in g.keys():
             lineName = _get_lineName(g[line])
             if clearance_chan == '':
-                alt = np.array(g[line][altitude_chan])
-                dtm = np.array(g[line][terrain_chan])
+                alt = gw.getLineData(g[line], altitude_chan)#np.array(g[line][altitude_chan])
+                dtm = gw.getLineData(g[line], terrain_chan)#np.array(g[line][terrain_chan])
                 clearance = alt - dtm
             else:
-                clearance = np.array(g[line][clearance_chan])
+                clearance = gw.getLineData(g[line], clearance_chan)#np.array(g[line][clearance_chan])
             minActualClearance = np.min(clearance)
             # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
 
             if minActualClearance < minimumAllowedClearance:
                 num_failed_lines += 1
                 report += f'\nClearance too low at {minActualClearance:.0f} m on line {lineName}'
-                x = np.array(g[line][xChannel])
-                y = np.array(g[line][yChannel])
+                x = gw.getLineData(g[line], xChannel)#np.array(g[line][xChannel])
+                y = gw.getLineData(g[line], yChannel)#np.array(g[line][yChannel])
                 distance = _dist(x, y)
                 if plot_flag:
                     fig = plt.figure()
@@ -2264,19 +2262,19 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
         for line in g.keys():
             lineName = _get_lineName(g[line])
             if clearance_chan == '':
-                alt = np.array(g[line][altitude_chan])
-                dtm = np.array(g[line][terrain_chan])
+                alt = gw.getLineData(g[line], altitude_chan)#np.array(g[line][altitude_chan])
+                dtm = gw.getLineData(g[line], terrain_chan)#np.array(g[line][terrain_chan])
                 clearance = alt - dtm
             else:
-                clearance = np.array(g[line][clearance_chan])
+                clearance = gw.getLineData(g[line], clearance_chan)#np.array(g[line][clearance_chan])
             deviation = nominalClearance - clearance
             maxDeviation = np.max(abs(deviation))
             # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
             if maxDeviation > allowance:
                 num_failed_lines += 1
                 report += f'\nClearance deviation of {maxDeviation:.0f} m on line {lineName}'
-                x = np.array(g[line][xChannel])
-                y = np.array(g[line][yChannel])
+                x = gw.getLineData(g[line], xChannel)#np.array(g[line][xChannel])
+                y = gw.getLineData(g[line], yChannel)#np.array(g[line][yChannel])
                 distance = _dist(x, y)
                 fig = plt.figure()
 
@@ -3045,13 +3043,13 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
 
         failed_lines = 0
         for line in g.keys():
-            xM = np.array(g[line][measX])
-            yM = np.array(g[line][measY])
+            xM = gw.getLineData(g[line], measX)#np.array(g[line][measX])
+            yM = gw.getLineData(g[line], measY)#np.array(g[line][measY])
             line_length = _displacement2(xM[0], xM[-1], yM[0], yM[-1]) / 1000.0
 
-            turb = np.array(g[line][turbulence])
-            A_d = np.array(g[line][aD])
-            B_d = np.array(g[line][bD])
+            turb = gw.getLineData(g[line], turbulence)#np.array(g[line][turbulence])
+            A_d = gw.getLineData(g[line], aD)#np.array(g[line][aD])
+            B_d = gw.getLineData(g[line], bD)#np.array(g[line][bD])
             idx = np.where(~np.isnan(A_d + B_d))
             Ad = butter_bandpass_filter(A_d[idx], low_cut, 1.0, 8.0, order=3)
             Bd = butter_bandpass_filter(B_d[idx], low_cut, 1.0, 8.0, order=3)
@@ -3170,12 +3168,12 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         if lines == []:
             lines = g.keys()
         for line in lines:
-            turb = np.array(g[line][turbulence])
+            turb = gw.getLineData(g[line], turbulence)#np.array(g[line][turbulence])
             if need_calc:
-                A_ne = np.array(g[line][aNE])
-                A_uv = np.array(g[line][aUV])
-                B_ne = np.array(g[line][bNE])
-                B_uv = np.array(g[line][bUV])
+                A_ne = gw.getLineData(g[line], aNE)#np.array(g[line][aNE])
+                A_uv = gw.getLineData(g[line], aUV)#np.array(g[line][aUV])
+                B_ne = gw.getLineData(g[line], bNE)#np.array(g[line][bNE])
+                B_uv = gw.getLineData(g[line], bUV)#np.array(g[line][bUV])
                 idx = np.where(~np.isnan(A_ne + A_uv + B_ne + B_uv))
                 Ane = A_ne[idx]
                 Auv = A_uv[idx]
@@ -3186,8 +3184,8 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
                 errNE_data = (Ane - Bne)/np.sqrt(8)
                 errUV_data = (Auv - Buv)/np.sqrt(8)
             else:
-                E_ne = np.array(g[line][eNE])
-                E_uv = np.array(g[line][eUV])
+                E_ne = gw.getLineData(g[line], eNE)#np.array(g[line][eNE])
+                E_uv = gw.getLineData(g[line], eUV)#np.array(g[line][eUV])
                 idx = np.where(~np.isnan(E_ne + E_uv))
                 errNE_data = E_ne[idx]
                 errUV_data = E_uv[idx]
@@ -3286,8 +3284,8 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
         count = 0
 
         for line in g.keys():
-            ht_data = np.array(g[line][GRS80_height])
-            cor_data = np.array(g[line][atmosCorr])
+            ht_data = gw.getLineData(g[line], GRS80_height)#np.array(g[line][GRS80_height])
+            cor_data = gw.getLineData(g[line], atmosCorr)#np.array(g[line][atmosCorr])
            
             cal_data = _atmosEffect(ht_data)
             err_data = cor_data * unit_scale - cal_data 
@@ -3358,8 +3356,8 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
         count = 0
 
         for line in g.keys():
-            lat_data = np.array(g[line][latitude])
-            cor_data = np.array(g[line][latCorr])
+            lat_data = gw.getLineData(g[line], latitude)#np.array(g[line][latitude])
+            cor_data = gw.getLineData(g[line], latCorr)#np.array(g[line][latCorr])
             if line == '8474.0':
                 fig = plt.figure()
                 ax = fig.add_subplot(3,1,1)
@@ -3465,17 +3463,17 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         count = 0
 
         for line in g.keys():
-            lat_data = np.array(g[line][latitude])
-            x_data = np.array(g[line][x])
-            y_data = np.array(g[line][y])
-            ht_data = np.array(g[line][GRS80_height])
-            time_data = np.array(g[line][time])
-            cor_data = np.array(g[line][eotCorr])
+            lat_data = gw.getLineData(g[line], latitude)#np.array(g[line][latitude])
+            x_data = gw.getLineData(g[line], x)#np.array(g[line][x])
+            y_data = gw.getLineData(g[line], y)#np.array(g[line][y])
+            ht_data = gw.getLineData(g[line], GRS80_height)#np.array(g[line][GRS80_height])
+            time_data = gw.getLineData(g[line], time)#np.array(g[line][time])
+            cor_data = gw.getLineData(g[line], eotCorr)#np.array(g[line][eotCorr])
             if (east_vel == '')  | (north_vel == ''):
                 (n_speed, e_speed) = _calc_speed(x_data, y_data, time_data)
             else:
-                n_speed = np.array(g[line][north_vel])
-                e_speed = np.array(g[line][east_vel])
+                n_speed = gw.getLineData(g[line], north_vel)#np.array(g[line][north_vel])
+                e_speed = gw.getLineData(g[line], east_vel)#np.array(g[line][east_vel])
             cal_data = _eotvosCorrection(e_speed, n_speed, lat_data, ht_data)
             err_data = cor_data * unit_scale + cal_data
             diffMin[count] = np.min(err_data)
@@ -3589,9 +3587,9 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
         count = 0
 
         for line in g.keys():
-            lat_data = np.array(g[line][latitude])
-            ht_data = np.array(g[line][GRS80_height])
-            cor_data = np.array(g[line][faCorr])
+            lat_data = gw.getLineData(g[line], latitude)#np.array(g[line][latitude])
+            ht_data = gw.getLineData(g[line], GRS80_height)#np.array(g[line][GRS80_height])
+            cor_data = gw.getLineData(g[line], faCorr)#np.array(g[line][faCorr])
            
             cal_data = _freeAirCorrection(ht_data, lat_data)
             err_data = cor_data * unit_scale + cal_data 
@@ -3930,13 +3928,13 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
             for line in all_flightLines:
                 if line in temp_repeats:
                     baseLine = g[line].attrs['PlannedLine']
-                    xd = np.array(g[line][x])
-                    yd = np.array(g[line][channel])
-                    zd = np.array(g[line][z])
+                    xd = gw.getLineData(g[line], x)#np.array(g[line][x])
+                    yd = gw.getLineData(g[line], channel)#np.array(g[line][channel])
+                    zd = gw.getLineData(g[line], z)#np.array(g[line][z])
 
                     # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
                     dx = np.diff(xd)
-                    dy = np.diff(np.array(g[line][north]))
+                    dy = np.diff(gw.getLineData(g[line], north))#np.array(g[line][north]))
                     heading = np.arctan2(dx, dy) * 180.0 / np.pi
                     mean_heading = np.mean(heading)
                     print(f'Line {line} heading = {mean_heading:.1f} deg.')
@@ -3963,8 +3961,8 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                             break
                             
                     # interpolate data
-                    (yOut, _) = pf.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
-                    (zOut, _) = pf.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
+                    (yOut, _) = gw.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
+                    (zOut, _) = gw.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
 
                     vec_len = len(xBase)-1 # interpolateLine has lost a datapoint in outputs
                     # print(f'line {line}, shapes: xBase {xBase.shape}, xData {xData.shape}')
@@ -4107,7 +4105,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
             for line in all_flightLines:
                 if line in repeatLines:
                     linecount += 1
-                    xs = np.array(g[line][x])
+                    xs = gw.getLineData(g[line], x)#np.array(g[line][x])
                     nSamples = max(nSamples, xs.size)
                     minBigX = min(max(xs), minBigX)
                     maxSmallX = max(min(xs), maxSmallX)
@@ -4200,7 +4198,7 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
         plt.show()
 
 
-def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noiseSpec=17.0, vertaccel='', vertvelocity='', vertdispl=''):
+def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noiseSpec=17.0, vertaccel='', vertvelocity='', vertdispl='', labelLines=False):
     """
     For a Bell Air-FTG. For each line, reports the standard deviation of the in-line sums,
     and plots these as a scatter plot against the standard deviation of the vertical
@@ -4226,6 +4224,9 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
         The name of the channel containing the vertical velocity field. Default ''.
     vertdispl : String, optional
         The name of the channel containing the vertical velocity field. Default ''.
+    labelLines : Bool, optional
+        if True, label (with the line number) all points on the plot where the
+        line failed the specification. Defaults to False
 
     Returns
     -------
@@ -4233,23 +4234,30 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
 
     """
     filename = str(whizzFile)
+    report = ''
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
         numLines = len(g.items())
         accStd = np.zeros((numLines,))
         ilsStd = np.zeros((numLines,))
         lineNo = np.zeros((numLines,))
+        labelx = []
+        labely = []
+        labelt = []
+        failed_lines = 0
         count = 0
 
         for line in g.keys():
+            linegroup = g[line]
             if vertaccel != '':
-                accel = g[line][vertaccel]
+                accel = gw.getLineData(linegroup, vertaccel)
             elif vertvelocity != '':
-                data = g[line][vertvelocity]
+                data = gw.getLineData(linegroup, vertvelocity)
                 accel = np.diff(data, n = 1)
             elif vertdispl != '':
-                data = g[line][vertdispl]
+                data = gw.getLineData(linegroup, vertdispl)
                 accel = np.diff(data, n = 2)
             else:
                 print("ERROR - need one of vertical acceleration, velocity or displacement (height/altitude).")
@@ -4257,18 +4265,42 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
 
             accStd[count] = np.std(accel)
 
-            data1 = np.array(g[line][diagComponent1])
-            data2 = np.array(g[line][diagComponent2])
-            data3 = np.array(g[line][diagComponent3])
+            data1 = gw.getLineData(linegroup, diagComponent1)
+            data2 = gw.getLineData(linegroup, diagComponent2)
+            data3 = gw.getLineData(linegroup, diagComponent3)
             ilsStd[count] = np.std(_inLineSum(data1, data2, data3))
             if ilsStd[count] > noiseSpec:
-                print(f'Line {line}: in-line sum = {ilsStd[count]:.1f} exceeds specification of {noiseSpec}.')
+                if labelLines:
+                    labelx.append(accStd[count])
+                    labely.append(ilsStd[count])
+                    labelt.append(line)
+                failed_lines += 1
+                report += f'Line {line}: in-line sum = {ilsStd[count]:.1f} exceeds specification of {noiseSpec}.\n'
+                # print(f'Line {line}: in-line sum = {ilsStd[count]:.1f} exceeds specification of {noiseSpec}.')
             lineNo[count] = line
             count += 1
         
-        x = {'label': 'Vertical acceleration [m/s/s]', 'data': accStd}
-        y = {'label': 'Inline Sum [E]', 'data': ilsStd}
-        wpl.plotxy(y, x, plotTitle = 'In-line Sum Noise versus Turbulence', xOffset=False, plot_symbol='+')
+        # x = {'label': 'Vertical acceleration [m/s/s]', 'data': accStd}
+        # y = {'label': 'Inline Sum [E]', 'data': ilsStd}
+        # wpl.plotxy(y, x, plotTitle = 'In-line Sum Noise versus Turbulence', xOffset=False, plot_symbol='+')
+
+        fig = plt.figure()
+        fig.suptitle(f'In-line Sum Noise vs Turbulence - {projName}', fontsize=12)
+        fig.subplots_adjust(top=0.85)
+        ax = fig.add_subplot(1,1,1)
+        ax.plot(accStd, ilsStd, 'go')
+        if labelLines:
+            for ii in range(failed_lines):
+                plt.text(labelx[ii], labely[ii], labelt[ii], va='top', ha='right', size=6.0)
+        plt.ylabel(f'Inline Sum [E]', fontsize = 8)
+        plt.xlabel(f'Turbulence [m/s/s]', fontsize = 8)
+        plt.grid(True)
+        for label in ax.get_xticklabels(): label.set_fontsize(8)
+        for label in ax.get_yticklabels(): label.set_fontsize(8)
+        fig.tight_layout()
+        plt.show()
+    print(report)
+
 
 
 def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', vertvelocity='', vertdispl=''):
@@ -4327,7 +4359,7 @@ def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', 
                 return
 
             for channel in gradients:
-                data = np.array(g[line][channel])
+                data = gw.getLineData(g[line], channel)#np.array(g[line][channel])
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))
@@ -4425,11 +4457,11 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
         for line in lines:
             if tChannel == '':
                 tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-            time = np.array(g[line][tChannel])
+            time = gw.getLineData(g[line], tChannel)#np.array(g[line][tChannel])
             time = time - time[0]
 
             for channel in channels:
-                data = np.array(g[line][channel])
+                data = gw.getLineData(g[line], channel)#np.array(g[line][channel])
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))
@@ -4587,12 +4619,13 @@ def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0):
     return np.std(frob)
         
         
-def eigenPlot(whizzFile, lines = [], noiselimit=30.0):
+def eigenPlot(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', noiselimit=30.0):
     """
     Reports the noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. Here the noise is calculated by `_FTGeigen` as
     the Frobenius norm.
-    TODO : Why is the function name misleading?
+    TODO :  Why is the function name misleading?
+            channel names for inline and cross components need to be variables.
 
     Parameters
     ----------
@@ -4615,12 +4648,12 @@ def eigenPlot(whizzFile, lines = [], noiselimit=30.0):
             lines = g.keys()
         
         for line in lines:
-            i1 = np.array(g[line]['Inline1_raw'])
-            i2 = np.array(g[line]['Inline2_raw'])
-            i3 = np.array(g[line]['Inline3_raw'])
-            c1 = np.array(g[line]['Cross1_raw'])
-            c2 = np.array(g[line]['Cross2_raw'])
-            c3 = np.array(g[line]['Cross3_raw'])
+            i1 = gw.getLineData(g[line], inline1)#np.array(g[line]['Inline1_raw'])
+            i2 = gw.getLineData(g[line], inline2)#np.array(g[line]['Inline2_raw'])
+            i3 = gw.getLineData(g[line], inline3)#np.array(g[line]['Inline3_raw'])
+            c1 = gw.getLineData(g[line], cross1)#np.array(g[line]['Cross1_raw'])
+            c2 = gw.getLineData(g[line], cross2)#np.array(g[line]['Cross2_raw'])
+            c3 = gw.getLineData(g[line], cross3)#np.array(g[line]['Cross3_raw'])
             (Gxx, Gxy, Gxz, Gyy, Gyz, Gzz) = _FTGTransform(i1, i2, i3, c1, c2, c3)
             Txx = butter_bandpass_filter(Gxx, 0.1, 0.49, 1.0, order = 6)
             Txy = butter_bandpass_filter(Gxy, 0.1, 0.49, 1.0, order = 6)
@@ -4759,12 +4792,12 @@ def checkRawAGG(whizzFile, ane, auv, bne, buv, turb, time='', lines=[], noiseLim
             reportStr = f'Line {line} Noise: '
             if time == '':
                 time = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-            time_data = np.array(g[line][time])
+            time_data = gw.getLineData(g[line], time)#np.array(g[line][time])
             time_data = time_data - time_data[0]
             fs = 1.0 / abs((time_data[1] - time_data[0]))
-            turb_data = np.array(g[line][turb])
+            turb_data = gw.getLineData(g[line], turb)#np.array(g[line][turb])
             for channel in [ane, auv, bne, buv]:
-                data = np.array(g[line][channel])
+                data = gw.getLineData(g[line], channel)#np.array(g[line][channel])
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))
@@ -4862,7 +4895,7 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000):
         for line in g.keys():
             dataFail = False
             # plotTitle = line + ' ' + basemag + ' Peak-to-peak'
-            data = np.array(g[line][basemag])
+            data = gw.getLineData(g[line], basemag)#np.array(g[line][basemag])
             data = data[np.logical_not(np.isnan(data))]
             if len(data) < 2:
                 print(line, ' insufficient data')
@@ -5112,7 +5145,7 @@ def diurnal(filename, lines = [], name = 'Basemag', rangeLimit = 5.0, nSamples =
             lines = g.keys()
         
         for line in lines:
-            basemag = np.array(g[line][name])
+            basemag = gw.getLineData(g[line], name)#np.array(g[line][name])
             lineStatus = True
             if nSamples > len(basemag):
                 nSamples = len(basemag)
