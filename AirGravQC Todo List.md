@@ -16,7 +16,8 @@
 20. checkXYPlan - gets confused about number of zeros after decimal point in line number
 22. If the XYZ file contains a date in the format YYYY/MM/DD, then convert it to a decimal date string. See the stub `translate_date` in `gw`.
 23. Write a function to compare two whizz datafiles and report which lines have differences. Include a `detail` flag, when true, print the first exemplar difference on the line.
-
+24. checkGaps() - modify to allow gaps smaller than some minimum size.
+25. commonErsHdrErrors() - include a check that a Units field is present.
 
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.
 11. DONE. Stop using "erm" - use "grd" instead.

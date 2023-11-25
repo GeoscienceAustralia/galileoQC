@@ -513,7 +513,6 @@ def checkGaps(whizzFile):
     """
     Checks every dataset for each channel and each survey line in filePath for
     gaps, and reports all gaps found.
-    TODO: modify to allow gaps smaller than some minimum size.
 
     Parameters
     ----------
@@ -536,7 +535,6 @@ def _reportGaps(group):
     """
     Checks every dataset for each channel and each survey line in the HDF5 group
     for gaps, and reports all gaps found.
-    TODO: modify to allow gaps smaller than some minimum size.
 
     Parameters
     ----------
@@ -1165,7 +1163,6 @@ def checkErsHeaders(folderPath='\.'):
 def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes, originalnullcell, byteorder, datum, projection):
     """
     Checks a set of ERS header fields for various common errors.
-    TODO Check that there is a Units field.
 
     Parameters
     ----------
@@ -2629,8 +2626,6 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
     
     an error is printed.
 
-    TODO: optionally use min_allowed and max_allowed instead of tolerance.
-
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
@@ -3089,8 +3084,6 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
     For a Falcon AGG. For each line, reports the mean NE and UV difference noise,
     and plots these as a scatter plot against the mean turbulence.
     
-    TODO - fix algorithm, calculation not quite right
-
     Parameters
     ----------
     whizzFile : String or pathlib.PosixPath
@@ -4523,13 +4516,8 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
     
 def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0):
     """
-    Returns Txx, Txy, Txz, Tyy, Tyz, Tzz from an algebraic transform of
-    the three inline and three cross components of the FTG gradiometer.
-    Assumes, I believe, that the FTG is oriented so that the horizontal
-    projection of the spin axis of GGI3 is north (the y-axis). From equation (5)
-    in J. Brewster, Comparison of gravity gradiometer designs using the 3D
-    sensitivity function. In SEG International Exposition and 86th Annual
-    Meeting, 2016.
+    Returns the standard deviation of the Frobenius norm of the gravity gradient.
+    Plots an analysis if this is larger than `noiseLimit`.
 
     Parameters
     ----------
@@ -4619,13 +4607,11 @@ def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0):
     return np.std(frob)
         
         
-def eigenPlot(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', noiselimit=30.0):
+def checkFrobenius(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', noiselimit=30.0):
     """
     Reports the noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. Here the noise is calculated by `_FTGeigen` as
     the Frobenius norm.
-    TODO :  Why is the function name misleading?
-            channel names for inline and cross components need to be variables.
 
     Parameters
     ----------
@@ -4648,12 +4634,12 @@ def eigenPlot(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', il3='
             lines = g.keys()
         
         for line in lines:
-            i1 = gw.getLineData(g[line], inline1)#np.array(g[line]['Inline1_raw'])
-            i2 = gw.getLineData(g[line], inline2)#np.array(g[line]['Inline2_raw'])
-            i3 = gw.getLineData(g[line], inline3)#np.array(g[line]['Inline3_raw'])
-            c1 = gw.getLineData(g[line], cross1)#np.array(g[line]['Cross1_raw'])
-            c2 = gw.getLineData(g[line], cross2)#np.array(g[line]['Cross2_raw'])
-            c3 = gw.getLineData(g[line], cross3)#np.array(g[line]['Cross3_raw'])
+            i1 = gw.getLineData(g[line], il1)#np.array(g[line]['Inline1_raw'])
+            i2 = gw.getLineData(g[line], il2)#np.array(g[line]['Inline2_raw'])
+            i3 = gw.getLineData(g[line], il3)#np.array(g[line]['Inline3_raw'])
+            c1 = gw.getLineData(g[line], cr1)#np.array(g[line]['Cross1_raw'])
+            c2 = gw.getLineData(g[line], cr2)#np.array(g[line]['Cross2_raw'])
+            c3 = gw.getLineData(g[line], cr3)#np.array(g[line]['Cross3_raw'])
             (Gxx, Gxy, Gxz, Gyy, Gyz, Gzz) = _FTGTransform(i1, i2, i3, c1, c2, c3)
             Txx = butter_bandpass_filter(Gxx, 0.1, 0.49, 1.0, order = 6)
             Txy = butter_bandpass_filter(Gxy, 0.1, 0.49, 1.0, order = 6)
