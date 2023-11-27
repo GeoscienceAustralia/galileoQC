@@ -509,7 +509,7 @@ def checkConstantSlope(whizzFile, fields=[]):
     return
 
 
-def checkGaps(whizzFile):
+def checkGaps(whizzFile, maxGapSec=0.0, maxNumGaps=0):
     """
     Checks every dataset for each channel and each survey line in filePath for
     gaps, and reports all gaps found.
@@ -518,6 +518,10 @@ def checkGaps(whizzFile):
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    maxGapSec :  Float, optional
+        The largest allowed gap measured in seconds. Default 0.0
+    maxNumGaps : Integer, optional
+        The maximum number of gaps allowed on any survey line. Default 0
 
     Returns
     -------
@@ -528,10 +532,10 @@ def checkGaps(whizzFile):
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
-        _reportGaps(g)
+        _reportGaps(g, maxGapSec, maxNumGaps)
         
         
-def _reportGaps(group):
+def _reportGaps(group, maxGapSec=0.0, maxNumGaps=0):
     """
     Checks every dataset for each channel and each survey line in the HDF5 group
     for gaps, and reports all gaps found.
@@ -540,6 +544,10 @@ def _reportGaps(group):
     ----------
     group : HDF5 Whizz file 'Lines' group
         The group containing the survey line data.
+    maxGapSec :  Float, optional
+        The largest allowed gap measured in seconds. Default 0.0
+    maxNumGaps : Integer, optional
+        The maximum number of gaps allowed on any survey line. Default 0
 
     Returns
     -------
@@ -555,15 +563,15 @@ def _reportGaps(group):
 
     for line in group.keys():
         total_num_lines += 1
-        gaps_on_line = False
+        gaps_on_line = 0
         lineNo = line
         lineText = f'Line {lineNo}'
         for channel in channelNames:
             numberMissing = np.count_nonzero(np.isnan(group[line][channel]))
             if numberMissing > 0:
                 lineText += f'\n    {channel}, nans: {numberMissing}'
-                gaps_on_line = True
-        if gaps_on_line:
+                gaps_on_line += 1
+        if gaps_on_line > 0:
             num_lines_failed += 1
             message += lineText + '\n'
     print(f'Checking for all gaps in all {num_channels} channels on all {total_num_lines} lines.')
@@ -4026,7 +4034,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     for line in range(0, nLines):
         ySum = ySum + yData[line,:] - yMean
         yStd = np.nanstd(yData[line,:]-yMean)
-        y1 = yData[line,:]-yMean
+        y1 = yData[line,:] - yMean
         y1 = y1[np.logical_not(np.isnan(y1))]
         x1 = xData[line,:]
         x1 = x1[np.logical_not(np.isnan(x1))]
@@ -4169,7 +4177,7 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
             data = g[line][inline3]
             data3 = data[()]
             ils_BP = _inLineSum(data1, data2, data3, dontfilter=dontfilter)
-            print(line, ' STD BPF = ', np.std(ils_BP))
+            print(f'Line {line}, standard deviation of band-pass filtered in-line sum = {np.std(ils_BP):.2g}')
             lineNo[count] = line
             chMin[count] = np.min(ils_BP)
             chMax[count] = np.max(ils_BP)
@@ -4296,7 +4304,7 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
 
 
 
-def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', vertvelocity='', vertdispl=''):
+def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], timechan='', vertaccel='', vertvelocity='', vertdispl=''):
     """
     Reports the high frequency noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. See Mark Dransfield's documentation for details of method.
@@ -4329,12 +4337,14 @@ def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], vertaccel='', 
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
+        if timechan == '':
+            timechan = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
         if lines == []:
             lines = g.keys()
         
         for line in lines:
             reportStr = f'Line {line} Noise: '
-            time = g[line]['Time']
+            time = g[line][timechan]
             time = time - time[0]
             if vertaccel != '':
                 turb = g[line][vertaccel]

@@ -83,7 +83,7 @@ def getLineData(linegroup, channel):
 
     for datachannel in linegroup.items():
         if datachannel[0].upper() == channel.upper():
-            print(f'datachannel {datachannel[0]}; channel {channel}')
+            # print(f'datachannel {datachannel[0]}; channel {channel}')
             my_data = np.array(linegroup[datachannel[0]])
             
     return my_data
@@ -747,7 +747,7 @@ def reportFlights(whizzFile, flightChannel='', lines=[], detailed=False):
             if flightChannel != '':
                 this_flight = gLines[line][flightChannel][0]
             else:
-                this_flight = gLines[line].attrs['Flight']
+                this_flight = gLines[line].attrs['Flight'] #ToDo: make this case insensitive
             if this_flight in flight_dict:
                 flight_dict[this_flight].append(line)
             else:
