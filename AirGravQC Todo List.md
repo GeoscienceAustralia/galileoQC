@@ -3,7 +3,7 @@
 0. Get everything setup as a true package under pip.
 1. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 2. Change all QC routines to report in the same format (Projectname, Blockname, summary [, detail text [, plot]]).
-3. Standardise plots as much as possible (plot titles, axis labels, use of units).
+3. Standardise plots as much as possible (plot titles, axis labels, use of units). Write and use common plot functions.
 4. Design geoWhizz v1.1, and then upgrade to it.
 5. Test the various height checks: checkSafeClearance, checkClearance, checkVert; that they work as intended.
 7. `checkGNSS` only finds at most one error per line. It should find and report against the actual spec like `checkVertPlan`. Similarly it should have an option to plot lines with failures; and an option to test a specified array of lines.
@@ -12,7 +12,7 @@
 10. Get permissions from Andy Gabell to use some field data for tutorial.
 17. Write checkLineSeparation() against separation = nominal +/- allowance for distance > max_distance.
 18. plotBoxWhisker - x axis formatter to include decimals, write another formatter function to do this.
-19. All the source files are way too big - re-factor!!
+19. PROGRESS. All the source files are way too big - re-factor!!
 20. checkXYPlan - gets confused about number of zeros after decimal point in line number
 22. If the XYZ file contains a date in the format YYYY/MM/DD, then convert it to a decimal date string. See the stub `translate_date` in `gw`.
 23. Write a function to compare two whizz datafiles and report which lines have differences. Include a `detail` flag, when true, print the first exemplar difference on the line.

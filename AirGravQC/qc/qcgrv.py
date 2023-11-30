@@ -66,8 +66,8 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
         count = 0
 
         for line in g.keys():
-            ht_data = gw.getLineData(g[line], GRS80_height)#np.array(g[line][GRS80_height])
-            cor_data = gw.getLineData(g[line], atmosCorr)#np.array(g[line][atmosCorr])
+            ht_data = gw.getLineData(g[line], GRS80_height)
+            cor_data = gw.getLineData(g[line], atmosCorr)
            
             cal_data = _atmosEffect(ht_data)
             err_data = cor_data * unit_scale - cal_data 
@@ -138,8 +138,8 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
         count = 0
 
         for line in g.keys():
-            lat_data = gw.getLineData(g[line], latitude)#np.array(g[line][latitude])
-            cor_data = gw.getLineData(g[line], latCorr)#np.array(g[line][latCorr])
+            lat_data = gw.getLineData(g[line], latitude)
+            cor_data = gw.getLineData(g[line], latCorr)
             if line == '8474.0':
                 fig = plt.figure()
                 ax = fig.add_subplot(3,1,1)
@@ -245,17 +245,17 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         count = 0
 
         for line in g.keys():
-            lat_data = gw.getLineData(g[line], latitude)#np.array(g[line][latitude])
-            x_data = gw.getLineData(g[line], x)#np.array(g[line][x])
-            y_data = gw.getLineData(g[line], y)#np.array(g[line][y])
-            ht_data = gw.getLineData(g[line], GRS80_height)#np.array(g[line][GRS80_height])
-            time_data = gw.getLineData(g[line], time)#np.array(g[line][time])
-            cor_data = gw.getLineData(g[line], eotCorr)#np.array(g[line][eotCorr])
+            lat_data = gw.getLineData(g[line], latitude)
+            x_data = gw.getLineData(g[line], x)
+            y_data = gw.getLineData(g[line], y)
+            ht_data = gw.getLineData(g[line], GRS80_height)
+            time_data = gw.getLineData(g[line], time)
+            cor_data = gw.getLineData(g[line], eotCorr)
             if (east_vel == '')  | (north_vel == ''):
                 (n_speed, e_speed) = _calc_speed(x_data, y_data, time_data)
             else:
-                n_speed = gw.getLineData(g[line], north_vel)#np.array(g[line][north_vel])
-                e_speed = gw.getLineData(g[line], east_vel)#np.array(g[line][east_vel])
+                n_speed = gw.getLineData(g[line], north_vel)
+                e_speed = gw.getLineData(g[line], east_vel)
             cal_data = _eotvosCorrection(e_speed, n_speed, lat_data, ht_data)
             err_data = cor_data * unit_scale + cal_data
             diffMin[count] = np.min(err_data)
@@ -369,9 +369,9 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
         count = 0
 
         for line in g.keys():
-            lat_data = gw.getLineData(g[line], latitude)#np.array(g[line][latitude])
-            ht_data = gw.getLineData(g[line], GRS80_height)#np.array(g[line][GRS80_height])
-            cor_data = gw.getLineData(g[line], faCorr)#np.array(g[line][faCorr])
+            lat_data = gw.getLineData(g[line], latitude)
+            ht_data = gw.getLineData(g[line], GRS80_height)
+            cor_data = gw.getLineData(g[line], faCorr)
            
             cal_data = _freeAirCorrection(ht_data, lat_data)
             err_data = cor_data * unit_scale + cal_data 
@@ -710,13 +710,13 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
             for line in all_flightLines:
                 if line in temp_repeats:
                     baseLine = g[line].attrs['PlannedLine']
-                    xd = gw.getLineData(g[line], x)#np.array(g[line][x])
-                    yd = gw.getLineData(g[line], channel)#np.array(g[line][channel])
-                    zd = gw.getLineData(g[line], z)#np.array(g[line][z])
+                    xd = gw.getLineData(g[line], x)
+                    yd = gw.getLineData(g[line], channel)
+                    zd = gw.getLineData(g[line], z)
 
                     # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
                     dx = np.diff(xd)
-                    dy = np.diff(gw.getLineData(g[line], north))#np.array(g[line][north]))
+                    dy = np.diff(gw.getLineData(g[line], north))
                     heading = np.arctan2(dx, dy) * 180.0 / np.pi
                     mean_heading = np.mean(heading)
                     print(f'Line {line} heading = {mean_heading:.1f} deg.')
@@ -784,7 +784,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
             for line in all_flightLines:
                 if line in repeatLines:
                     linecount += 1
-                    xs = gw.getLineData(g[line], x)#np.array(g[line][x])
+                    xs = gw.getLineData(g[line], x)
                     nSamples = max(nSamples, xs.size)
                     minBigX = min(max(xs), minBigX)
                     maxSmallX = max(min(xs), maxSmallX)

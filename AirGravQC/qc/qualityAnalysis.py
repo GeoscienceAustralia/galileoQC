@@ -69,8 +69,8 @@ def checkPhase(filename, channel1, channel2):
 
         for line in g.keys():
             linegroup = g[line]
-            A = gw.getLineData(linegroup, channel1)# np.array(g[line][channel1])
-            B = gw.getLineData(linegroup, channel2)#np.array(g[line][channel2])
+            A = gw.getLineData(linegroup, channel1)
+            B = gw.getLineData(linegroup, channel2)
             nsamples = A.size
 
             # regularize datasets by subtracting mean and dividing by s.d.
@@ -121,7 +121,7 @@ def calcDrift(whizzFile, time, gradient):
         g = f[groupName]['Lines']
         
         for line in g.keys():
-            t = gw.getLineData(g[line], time).reshape((-1,1)) #np.array(g[line][time]).reshape((-1,1))
+            t = gw.getLineData(g[line], time).reshape((-1,1)) 
             gamma = gw.getLineData(g[line], gradient)#g[line][gradient]
             
             model = LinearRegression().fit(t, gamma)
@@ -567,7 +567,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             for line in lines:
                 if line != 'CoordinateFrame':
                     lineNo[count] = line
-                    dd = gw.getLineData(g[line], channel)#np.array(g[line][channel])
+                    dd = gw.getLineData(g[line], channel)
                     if remove_sine:
                         dd = np.sin(dd * (np.pi / 180.0))
                     if diff_one:
@@ -777,7 +777,7 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         for line in flightLines:
             if line != 'CoordinateFrame':
                 lineNo[count] = line
-                dd = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)#np.array(g[line][channel1]) - np.array(g[line][channel1])
+                dd = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)
 
                 if np.sum(~np.isnan(dd)) > 3:
                     chMin[count] = np.nanmin(dd)
@@ -840,7 +840,7 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         for line in flightLines:
             mean_speed = _mean_line_speed(f[groupName], line)
             f_sample = _time_frequency(f[groupName])
-            data = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)##np.array(g[line][channel1]) - np.array(g[line][channel2])
+            data = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)#
 
             freq, Pxx = sig.welch(data, nfft=4*4096, fs = f_sample)
             period = 1.0 / freq[1:]
@@ -1122,10 +1122,10 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
 
         error_count = 0
         for line in lines:
-            x = gw.getLineData(g[line], xchan)#np.array(g[line][xchan])
-            y = gw.getLineData(g[line], ychan)#np.array(g[line][ychan])
+            x = gw.getLineData(g[line], xchan)
+            y = gw.getLineData(g[line], ychan)
 
-            nsats_data = gw.getLineData(g[line], num_sats)#np.array(g[line][num_sats])
+            nsats_data = gw.getLineData(g[line], num_sats)
             min_nsats_data = np.nanmin(nsats_data)
             if min_nsats_data < nsats_min:
                 xmin_fail = np.nanmin(x[nsats_data < nsats_min])
@@ -1138,7 +1138,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            pdop_data = gw.getLineData(g[line], pdop)#np.array(g[line][pdop])
+            pdop_data = gw.getLineData(g[line], pdop)
             max_pdop_data = np.nanmax(pdop_data)
             if max_pdop_data > max_pdop:
                 xmin_fail = np.nanmin(x[pdop_data > max_pdop])
@@ -1151,7 +1151,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            vdop_data = gw.getLineData(g[line], vdop)#np.array(g[line][vdop])
+            vdop_data = gw.getLineData(g[line], vdop)
             max_vdop_data = np.nanmax(vdop_data)
             if max_vdop_data > max_vdop:
                 xmin_fail = np.nanmin(x[vdop_data > max_vdop])
@@ -1164,7 +1164,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            hdop_data = gw.getLineData(g[line], hdop)#np.array(g[line][hdop])
+            hdop_data = gw.getLineData(g[line], hdop)
             max_hdop_data = np.nanmax(hdop_data)
             if max_hdop_data > max_hdop:
                 xmin_fail = np.nanmin(x[hdop_data > max_hdop])
@@ -1229,8 +1229,8 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
         numLines = len(lines)
 
         for line in lines:
-            dx = np.diff(gw.getLineData(g[line], x))#np.array(g[line][x]))
-            dy = np.diff(gw.getLineData(g[line], y))#np.array(g[line][y]))
+            dx = np.diff(gw.getLineData(g[line], x))
+            dy = np.diff(gw.getLineData(g[line], y))
             allok = True
             for nomhead in nominalHeadings:
                 tol_1 = np.cos(np.pi * (nomhead + tolerance) / 180.0)
@@ -1257,7 +1257,7 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
                     
                     ax = fig.add_subplot(1,1,1)
                     thou_format = tkr.FuncFormatter(util._space_thou)
-                    ax.plot(gw.getLineData(g[line], x)[1:], heading, 'b', mfc='w')#np.array(g[line][x])[1:], heading, 'b', mfc='w')
+                    ax.plot(gw.getLineData(g[line], x)[1:], heading, 'b', mfc='w')
                     ax.xaxis.set_major_formatter(thou_format)
                     plt.ylabel('Estimated heading [deg]', fontsize = 6)
                     plt.xlabel(f'{x} [m]', fontsize = 6)
@@ -2106,19 +2106,19 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
         for line in g.keys():
             lineName = _get_lineName(g[line])
             if clearance_chan == '':
-                alt = gw.getLineData(g[line], altitude_chan)#np.array(g[line][altitude_chan])
-                dtm = gw.getLineData(g[line], terrain_chan)#np.array(g[line][terrain_chan])
+                alt = gw.getLineData(g[line], altitude_chan)
+                dtm = gw.getLineData(g[line], terrain_chan)
                 clearance = alt - dtm
             else:
-                clearance = gw.getLineData(g[line], clearance_chan)#np.array(g[line][clearance_chan])
+                clearance = gw.getLineData(g[line], clearance_chan)
             deviation = nominalClearance - clearance
             maxDeviation = np.max(abs(deviation))
             # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
             if maxDeviation > allowance:
                 num_failed_lines += 1
                 report += f'\nClearance deviation of {maxDeviation:.0f} m on line {lineName}'
-                x = gw.getLineData(g[line], xChannel)#np.array(g[line][xChannel])
-                y = gw.getLineData(g[line], yChannel)#np.array(g[line][yChannel])
+                x = gw.getLineData(g[line], xChannel)
+                y = gw.getLineData(g[line], yChannel)
                 distance = util._length(x, y)
                 fig = plt.figure()
 

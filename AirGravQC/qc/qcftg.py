@@ -243,7 +243,7 @@ def checkRawFTG(whizzFile, lines=[], noiseLimit=50, gradients=[], timechan='', v
                 return
 
             for channel in gradients:
-                data = gw.getLineData(g[line], channel)#np.array(g[line][channel])
+                data = gw.getLineData(g[line], channel)
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))
@@ -341,11 +341,11 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
         for line in lines:
             if tChannel == '':
                 tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-            time = gw.getLineData(g[line], tChannel)#np.array(g[line][tChannel])
+            time = gw.getLineData(g[line], tChannel)
             time = time - time[0]
 
             for channel in channels:
-                data = gw.getLineData(g[line], channel)#np.array(g[line][channel])
+                data = gw.getLineData(g[line], channel)
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))
@@ -525,12 +525,12 @@ def checkFrobenius(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', 
             lines = g.keys()
         
         for line in lines:
-            i1 = gw.getLineData(g[line], il1)#np.array(g[line]['Inline1_raw'])
-            i2 = gw.getLineData(g[line], il2)#np.array(g[line]['Inline2_raw'])
-            i3 = gw.getLineData(g[line], il3)#np.array(g[line]['Inline3_raw'])
-            c1 = gw.getLineData(g[line], cr1)#np.array(g[line]['Cross1_raw'])
-            c2 = gw.getLineData(g[line], cr2)#np.array(g[line]['Cross2_raw'])
-            c3 = gw.getLineData(g[line], cr3)#np.array(g[line]['Cross3_raw'])
+            i1 = gw.getLineData(g[line], il1)
+            i2 = gw.getLineData(g[line], il2)
+            i3 = gw.getLineData(g[line], il3)
+            c1 = gw.getLineData(g[line], cr1)
+            c2 = gw.getLineData(g[line], cr2)
+            c3 = gw.getLineData(g[line], cr3)
             (Gxx, Gxy, Gxz, Gyy, Gyz, Gzz) = _FTGTransform(i1, i2, i3, c1, c2, c3)
             Txx = util._butter_bandpass_filter(Gxx, 0.1, 0.49, 1.0, order = 6)
             Txy = util._butter_bandpass_filter(Gxy, 0.1, 0.49, 1.0, order = 6)
@@ -669,12 +669,12 @@ def checkRawAGG(whizzFile, ane, auv, bne, buv, turb, time='', lines=[], noiseLim
             reportStr = f'Line {line} Noise: '
             if time == '':
                 time = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-            time_data = gw.getLineData(g[line], time)#np.array(g[line][time])
+            time_data = gw.getLineData(g[line], time)
             time_data = time_data - time_data[0]
             fs = 1.0 / abs((time_data[1] - time_data[0]))
-            turb_data = gw.getLineData(g[line], turb)#np.array(g[line][turb])
+            turb_data = gw.getLineData(g[line], turb)
             for channel in [ane, auv, bne, buv]:
-                data = gw.getLineData(g[line], channel)#np.array(g[line][channel])
+                data = gw.getLineData(g[line], channel)
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))

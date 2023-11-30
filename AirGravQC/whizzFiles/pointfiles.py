@@ -314,8 +314,8 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
         if lines == []:
             lines = list(g.keys())
         for line in lines:
-            xPos = getLineData(g[line], x)#np.array(g[line][x])
-            yPos = getLineData(g[line], y)#np.array(g[line][y])
+            xPos = getLineData(g[line], x)
+            yPos = getLineData(g[line], y)
             lineDistance += _lineLength(xPos, yPos)
             count += 1
             
@@ -392,9 +392,9 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
         for line in lines:
             lineNo = line
             lineText = 'Line ' + lineNo
-            em = getLineData(g[line], x)#np.array(g[line][x])
-            nm = getLineData(g[line], y)#np.array(g[line][y])
-            time = getLineData(g[line], t)#np.array(g[line][t])
+            em = getLineData(g[line], x)
+            nm = getLineData(g[line], y)
+            time = getLineData(g[line], t)
             zm = np.empty(em.shape)
             zm[:] = np.nan
             dist = np.empty(em.shape)
@@ -634,8 +634,8 @@ def getLineXChannel(whizzFile, line, x, channel):
     filename = str(whizzFile)
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
-        xData = getLineData(g[line], x)#np.array(g[line][x])
-        yData = getLineData(g[line], channel)#np.array(g[line][channel])
+        xData = getLineData(g[line], x)
+        yData = getLineData(g[line], channel)
     return xData, yData
 
     

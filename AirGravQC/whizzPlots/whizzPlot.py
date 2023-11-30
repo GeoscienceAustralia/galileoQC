@@ -58,8 +58,8 @@ def plotChannelLines(whizzFile, channel, flightLines, x, xOffset=True):
         xDel = 0.0
         
         for line in flightLines:
-            yData = gw.getLineData(g[line], channel)#np.array(g[line][channel])
-            xData = gw.getLineData(g[line], x)#np.array(g[line][x])
+            yData = gw.getLineData(g[line], channel)
+            xData = gw.getLineData(g[line], x)
             if xOffset and line == flightLines[0]:
                 xDel = xData[0]
             xData = xData - xDel
@@ -119,9 +119,9 @@ def plot_grid(whizzFile, channel, cellsize, x='', y=''):
         if y == '':
             y = f[groupName]['CoordinateFrame'].attrs['YChannel']
         for line in list(g.keys()):
-            xpos = np.append(xpos, gw.getLineData(g[line], x))#np.array(g[line][x]))
-            ypos = np.append(ypos, gw.getLineData(g[line], y))#np.array(g[line][y]))
-            z = np.append(z, gw.getLineData(g[line], channel))#np.array(g[line][channel]))
+            xpos = np.append(xpos, gw.getLineData(g[line], x))
+            ypos = np.append(ypos, gw.getLineData(g[line], y))
+            z = np.append(z, gw.getLineData(g[line], channel))
             
         x_min = np.nanmin(xpos)
         x_max = np.nanmax(xpos)
@@ -411,9 +411,9 @@ def plotInlineSum(whizzFile, line):
         acqDate = g[line].attrs['Date_Local']
 
         time = g[line]['time']
-        data1 = gw.getLineData(g[line], 'Inline1_raw')#np.array(g[line]['Inline1_raw'])
-        data2 = gw.getLineData(g[line], 'Inline2_raw')#np.array(g[line]['Inline2_raw'])
-        data3 = gw.getLineData(g[line], 'Inline3_raw')#np.array(g[line]['Inline3_raw'])
+        data1 = gw.getLineData(g[line], 'Inline1_raw')
+        data2 = gw.getLineData(g[line], 'Inline2_raw')
+        data3 = gw.getLineData(g[line], 'Inline3_raw')
         ils = gw.inLineSum(data1, data2, data3)
         
         fig = plt.figure()
@@ -500,8 +500,8 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
             fig = plt.figure(figsize=(6,9))
             ax = fig.add_subplot(1,1,1)
             for line in flightLines:
-                xd = gw.getLineData(g[line], x)#np.array(g[line][x])
-                yd = gw.getLineData(g[line], channel)#np.array(g[line][channel])
+                xd = gw.getLineData(g[line], x)
+                yd = gw.getLineData(g[line], channel)
                 #x1 = x1[np.logical_not(np.isnan(x1))]
                 #y1 = y1[np.logical_not(np.isnan(y1))]
                 myPlot, = ax.plot(xd, yd, lw=0.5)
@@ -964,9 +964,9 @@ def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
         for line in list(g.keys()):
             line_path = g[line]
             if line_path.attrs['HasBeenFlown']:
-                status = gw.getLineData(g[line], statusChannel).astype(np.float32)#np.array(g[line][statusChannel]).astype(np.float32)
-                lX = gw.getLineData(g[line], planEast)[status >= 0]#np.array(g[line][planEast])[status >= 0]
-                lY = gw.getLineData(g[line], planNorth)[status >= 0]#np.array(g[line][planNorth])[status >= 0]
+                status = gw.getLineData(g[line], statusChannel).astype(np.float32)
+                lX = gw.getLineData(g[line], planEast)[status >= 0]
+                lY = gw.getLineData(g[line], planNorth)[status >= 0]
                 lS = status[status >= 0]
                 ax.plot(lX, lY, lw=0.2, color='blue')
 

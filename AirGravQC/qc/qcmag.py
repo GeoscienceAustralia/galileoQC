@@ -43,7 +43,7 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000):
         for line in g.keys():
             dataFail = False
             # plotTitle = line + ' ' + basemag + ' Peak-to-peak'
-            data = gw.getLineData(g[line], basemag)#np.array(g[line][basemag])
+            data = gw.getLineData(g[line], basemag)
             data = data[np.logical_not(np.isnan(data))]
             if len(data) < 2:
                 print(line, ' insufficient data')
@@ -293,7 +293,7 @@ def diurnal(filename, lines = [], name = 'Basemag', rangeLimit = 5.0, nSamples =
             lines = g.keys()
         
         for line in lines:
-            basemag = gw.getLineData(g[line], name)#np.array(g[line][name])
+            basemag = gw.getLineData(g[line], name)
             lineStatus = True
             if nSamples > len(basemag):
                 nSamples = len(basemag)
