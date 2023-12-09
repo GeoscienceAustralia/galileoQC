@@ -23,8 +23,9 @@ import pathlib
 from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 import filebrowser as fb
+# import aseg_gdf2 as aseg
+from gspy import Survey
 
-import AirGravQC.aseg_gdf2 as aseg
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.qc.qualityAnalysis as qc
 import AirGravQC.utility.utility as util
@@ -995,6 +996,105 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
             print(f'Changed CoordFrame attribute(s) for {whizzFile.name}.')
 
 
+def flightlines(survey):
+    """
+    Given a GSpy Survey, returns the individual survey line numbers and the number of
+    samples (fiducials) in each survey line.
+    
+    Used for converting ASEG-GDF2 files to GeoWhizz files.
+    
+    It counts the lines regardless of ordering but, be warned, later on we assume
+    that the all samples from one line are contiguous.
+    """
+    # `line_chan` contains the name of the channel with the line numbers.
+    line_chan = survey.tabular.attrs['key_mapping.line_number']
+    # construct a numpy array of all line numbers ...
+    xa = survey.tabular.xarray
+    npa = (xa[line_chan].values)
+    # ... and use the nice `np.unique` function (fast and easy)
+    return np.unique(npa, return_counts=True)
+
+
+def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName = projectName, verbose=False):
+    # Put all the ASEG-GDF2 info into a gspy survey.
+    # TODO:
+    #   1. use the key attributes to populate CoordFrame
+    survey = Survey(surv_metadata)
+    try:
+        survey.add_tabular(type='aseg', data_filename=datafile, metadata_file=data_metadata)
+    except Exception as e:
+       print(e)
+    
+    # get the survey lines and the numbers of fids per survey line
+    lines, fidsperline = flightlines(survey)
+    
+    dataset = survey.tabular.xarray
+    
+
+    if outputHdf == '':
+        outputHdf = Path(datafile).with_suffix('.hdf5')
+
+    with h5py.File(str(outputHdf), 'w') as f:
+        # create all the data structure ready for the datasets
+        g = f.create_group(groupName)
+        g.attrs['ProjectName'] = projectName
+        
+        gCoord = g.create_group('CoordinateFrame')
+        gLines = g.create_group('Lines')
+
+        # if zoneIdx >= 0:
+        #     # s/w limitation - assume all data in the same UTM zone as the first flight line.
+        #     gCoord.attrs['UTMZone'] = zones[0]
+        
+        # Move the data.
+        dtype_error_chan = ''
+        dtype_error = False
+        end = 0
+        for lineIdx in range(0, len(lines)):
+            start = end
+            end = start + fidsperline[lineIdx]
+            if verbose:
+                print(f'  About to add data for line {lines[lineIdx]}, Lcount {lineIdx+1}/{len(lines)}, Fids {start}/{end}')
+
+            # Pick out the XArray DataSet slice with the the current line's data
+            line_ds = dataset.isel(index = slice(start,end))
+
+            # create a HDF5 line group and metadata
+            gg = gLines.create_group(f'{lines[lineIdx]}')
+            gg.attrs['LineNumber'] = lines[lineIdx]
+            try:
+                flight_chan = survey.tabular.attrs['key_mapping.flight_number']
+                gg.attrs['Flight'] = line_ds[flight_chan].data[0]
+            except:
+                print('No FLight channel found. If one should be there, check the data metadata JSON file.')
+            # if dateIdx >= 0:
+            #     gg.attrs['Date_Local'] = dates[lineIdx]
+            gg.attrs['NumberOfFids'] = fidsperline[lineIdx]
+
+            channels = list(line_ds.keys())
+            for channel in channels:
+                if verbose:
+                    print(f'      Adding {channel} data for line {lines[lineIdx]}')
+                if channel == 'RT':
+                    continue
+                dataArray = line_ds[channel]
+                # if not, then what???
+                chan_type = line_ds[channel].dtype
+                if chan_type == 'O':
+                    dtype_error = True
+                    dtype_error_chan = channel
+                    continue
+                dd = gg.create_dataset(channel, data = dataArray, dtype=chan_type, compression="gzip", compression_opts=4)
+                dd.attrs['Name'] = line_ds[channel].standard_name
+                dd.attrs['Alias'] = channel
+                dd.attrs['Units'] = line_ds[channel].units
+                dd.attrs['Description'] = line_ds[channel].long_name
+                dd.attrs['Format'] = line_ds[channel].format
+                dd.attrs['Null_value'] = line_ds[channel].null_value
+    if dtype_error:
+        print(f'      {dtype_error_chan} dtype "O" not accepted, data not copied from ASEG-GDF2')
+
+
 def asegReportChannels(datFilePath):
     """
     Prints out the indices to the first channel name containg each of ['line',
@@ -1026,7 +1126,7 @@ def asegReportChannels(datFilePath):
     flightIdx = index_containing_substring(channelNames, 'flight')
     dateIdx = index_containing_substring(channelNames, 'date')
     zoneIdx = index_containing_substring(channelNames, 'zone')
-    print(f' Indices - line {lineIdx}, flight {flightIdx}, date {dateIdx}, zone {zoneIdx}')
+    print(f'1 Indices - line {lineIdx}, flight {flightIdx}, date {dateIdx}, zone {zoneIdx}')
 
     print(' Channels: ')
     print(channelNames)
@@ -1056,59 +1156,122 @@ def asegReportFirst(datFilePath, channels):
     """
     # open GDF, pull out channel names, the units, and the description
     gdf = aseg.read(str(datFilePath))
-    channelNames = gdf.field_names()
-    chunk = gdf.df_chunked(chunksize=1).get_chunk()
-    dataArray = np.array(chunk.values)
-     
-    print('First Record of selected channels')
-    for channel in channels:
-        chanIdx = index_containing_substring(channelNames, channel.lower())
-        print(f'    {channel}: {dataArray[0, chanIdx]}')
+    print(gdf.record_types.df().to_string(index=False), '\n')
+    print(gdf.df().head(1))
+    # print('First Record of selected channels')
+    # for channel in channels:
+    #     chanIdx = index_containing_substring(channelNames, channel.lower())
+    #     print(f'    {channel}: {dataArray[0, chanIdx]}')
         
     return    
 
 
-def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
-    """
-    Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
-    HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
-    https://github.com/kinverarity1/aseg_gdf2
+# def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], verbose=False):
+#     """
+#     Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
+#     HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
+#     https://github.com/kinverarity1/aseg_gdf2. Relies on version 0.3!!!
 
-    Parameters
-    ----------
-    datFilePath : pathlib.PosixPath
-        The pathlib Path to the input ASEG-GDF2 file.
-    outputHdf : pathlib.PosixPath, optional
-        The pathlib Path to the output Whizz HDF5 file. The default is '' and
-        the output file is then the same as the input file with the extension
-        changed to '.hdf5'.
-    omitChannels : [String]
-        An array of channel or field names to omit from the saved geoWhizz HDF5 file.
-    dontSave : Bool
-        If true, the data are not saved to an output HDF5 file.
+#     Parameters
+#     ----------
+#     datFilePath : pathlib.PosixPath
+#         The pathlib Path to the input ASEG-GDF2 file.
+#     outputHdf : pathlib.PosixPath, optional
+#         The pathlib Path to the output Whizz HDF5 file. The default is '' and
+#         the output file is then the same as the input file with the extension
+#         changed to '.hdf5'.
+#     omitChannels : [String]
+#         An array of channel or field names to omit from the saved geoWhizz HDF5 file.
+#     verbose : Bool
+#         If true, print extra information whilst saving data.
 
-    Returns
-    -------
-    None.
+#     Returns
+#     -------
+#     None.
 
-    """
+#     """
 
-    if outputHdf == '':
-        outputHdf = datFilePath.with_suffix('.hdf5')
-    
-    # open GDF, pull out channel names, the units, and the description
-    gdf = aseg.read(str(datFilePath), method='fixed-widths')
+#     print('\nGetting channel names and indices of key channels ...')
+#     channelNames, channelsOut, lineIdx, flightIdx, dateIdx, zoneIdx = get_gdfchannames(datFilePath, omitChannels=['RT'])
+
+#     print('\n... done. Getting line numbers and line lengths ...')
+#     if flightIdx >= 0:
+#         flight_chan = channelsOut[flightIdx]
+#     else:
+#          flight_chan = ''
+#     if dateIdx >= 0:
+#         date_chan = channelsOut[dateIdx]
+#     else:
+#          date_chan = ''
+#     line_chan = channelNames[lineIdx]
+#     print(channelNames)
+#     print(channelsOut)
+#     lines, line_lengths, flights, dates = get_gdflineinfo(datFilePath, line_chan, channelNames, flight_chan=flight_chan, date_chan=date_chan)
+#     print('... done. Ready to create HDF file and transfer data into it.\n')
+
+#     if outputHdf == '':
+#         outputHdf = datFilePath.with_suffix('.hdf5')
+
+#     gdf = aseg.read(str(datFilePath), method='fixed-widths')
+#     with h5py.File(str(outputHdf), 'w') as f:
+#         # create all the data structure ready for the datasets
+#         g = f.create_group(groupName)
+#         g.attrs['ProjectName'] = projectName
+        
+#         gCoord = g.create_group('CoordinateFrame')
+#         gLines = g.create_group('Lines')
+#         if zoneIdx >= 0:
+#             # s/w limitation - assume all data in the same UTM zone as the first flight line.
+#             gCoord.attrs['UTMZone'] = zones[0]
+        
+#         # Create the data structure and store the metadata
+#         for ii in range(0, len(lines)):
+#             # create a line group and metadata
+#             gg = gLines.create_group(f'{lines[ii]}')
+#             gg.attrs['LineNumber'] = lines[ii]
+#             if flightIdx >= 0:
+#                 gg.attrs['Flight'] = flights[ii]
+#             if dateIdx >= 0:
+#                 gg.attrs['Date_Local'] = dates[ii]
+#             gg.attrs['NumberOfFids'] = line_lengths[ii]
+
+#         # Move the data.
+#         for lineCount in range(0, len(lines)): #for aLine in lines:
+#             if verbose:
+#                 print('  About to add data for line ', lines[lineCount], ' Lcount ', lineCount+1, '/', len(lines))
+#             for channelName in channelsOut:
+#                 #print('Field name ', channelsOut[count])
+                
+#                 mydataframe = gdf.df()
+#                 dataArray = mydataframe.loc[mydataframe[line_chan] == lines[lineCount], channelName]
+                
+#                 dd = gg.create_dataset(channelName, data = dataArray, dtype='float64', compression="gzip", compression_opts=4)
+#                 dd.attrs['Name'] = channelName
+#                 dd.attrs['Alias'] = channelName
+#                 fieldDef = gdf.get_field_definition(channelName)
+#                 dd.attrs['Units'] = cleanUnits(fieldDef['unit'])
+#                 dd.attrs['Description'] = fieldDef['long_name']
+
+#     return
+
+
+def get_gdfchannames(GDF_file, omitChannels=['RT']):
+    gdf = aseg.read(GDF_file, method='fixed-widths')#, engine='pandas')
     channelNames = gdf.field_names()
     channelsOut = channelNames # these are the channels we will save
         
     # next, identify the column containing line numbers etc
     # we won't save these columns but do want the first value for each line
     # so re-get the indices.
-    lineIdx = index_containing_substring(channelsOut, 'line')
+    lineIdx = index_containing_substring(channelNames, 'line')
     flightIdx = index_containing_substring(channelNames, 'flight')
     dateIdx = index_containing_substring(channelNames, 'date')
     zoneIdx = index_containing_substring(channelNames, 'zone')
-    print(f' Indices - line {lineIdx}, flight {flightIdx}, date {dateIdx}, zone {zoneIdx}')
+    print(f'Channels for group metadata Indices:')
+    print(f'    line {lineIdx}, {channelNames[lineIdx]};')
+    print(f'    flight {flightIdx}, {channelNames[flightIdx]};')
+    print(f'    date {dateIdx}, {channelNames[dateIdx]};')
+    print(f'    zone {zoneIdx}, {"" if zoneIdx < 0 else channelNames[zoneIdx]}.')
 
     # now if index not found - error/warning; else pop off the channelName list
     if omitChannels == []:
@@ -1117,21 +1280,25 @@ def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
             return
         else:
             channelsOut.pop(lineIdx)
+            print(f'Line channel = {channelNames[lineIdx]}')
         tempIdx = index_containing_substring(channelsOut, 'flight')
         if flightIdx < 0:
             print('WARNING - flightIdx not found')
         else:
             channelsOut.pop(tempIdx)
+            print(f'Flight channel = {channelNames[flightIdx]}')
         tempIdx = index_containing_substring(channelsOut, 'date')
         if dateIdx < 0:
             print('WARNING - dateIdx not found')
         else:
             channelsOut.pop(tempIdx)
+            print(f'Date channel = {channelNames[dateIdx]}')
         tempIdx = index_containing_substring(channelsOut, 'zone')
         if zoneIdx < 0:
             print('WARNING - zoneIdx not found')
         else:
             channelsOut.pop(tempIdx)
+            print(f'Zone channel = {channelNames[zoneIdx]}')
     else:
         for channel in omitChannels:
             tempIdx = index_containing_substring(channelsOut, channel.lower())
@@ -1140,142 +1307,43 @@ def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
             else:
                 channelsOut.pop(tempIdx)
             
-    print('channels out: ')
+    print('Channels out: ')
     print(channelsOut)
-    
-    # first, some initialisations
-    chunkSize = 10 #000
-    lastLineNumber = 0
-    numLines = 0
-    tempLineSizes = []
-    lineNumbers = []
-    flightNumbers = []
+
+    return channelNames, channelsOut, lineIdx, flightIdx, dateIdx, zoneIdx
+
+
+def get_gdflineinfo(GDF_file, line_chan, channelNames, flight_chan='', date_chan=''):
+    gdf = aseg.read(GDF_file, method='fixed-widths')#, engine='pandas')
+    df = gdf.df()
+    gby = df.groupby(df[line_chan])
+    lines = []
+    flights = []
     dates = []
-    zones = []
-    numRecordsInLine = 0
+    line_lengths = []
+    result = gby.count()
+    for i in range(0, len(result)):
+        lines.append(result.axes[0][i])
+        line_lengths.append(result[channelNames[0]].values[0])
+        # The previous line implicitly assumes all channels have the same number of values.
+        # ToDo: Check if this is true.
+        # for j in range(0, len(field_names)-1):
+        #     print(result[field_names[0]].values[0])#result.axes[1][j])
     
-    # now, iterate through GDF collecting line numbers and sizes
-    print('\nGetting line numbers and lengths ...')
-    for chunk in gdf.df_chunked(chunksize=chunkSize):
-        dataArray = np.array(chunk.values)
-        linesInChunk = dataArray[:, lineIdx]
-        for i, v in enumerate(linesInChunk):
-            # if the line number is new, create a new line sub-group and populate its attributes
-            if v != lastLineNumber:
-                tempLineSizes.append(numRecordsInLine)
-                lineNumbers.append(v)
-                if flightIdx >= 0:
-                    flightNumbers.append(dataArray[i, flightIdx])
-                if dateIdx >= 0:
-                    dates.append(dataArray[i, dateIdx])
-                if zoneIdx >= 0:
-                    zones.append(dataArray[i, zoneIdx])
-                numRecordsInLine = 1
-                numLines += 1
-                lastLineNumber = v
-
-            else:
-                numRecordsInLine += 1
-
-    print('... done. Ready to create HDF file and transfer data into it.\n')
-
-    tempLineSizes.append(numRecordsInLine)
-    tempStarts = np.array(tempLineSizes)
-    lineStarts = np.array(tempStarts.cumsum())
-    lineSizes = np.array(tempLineSizes[1:])
-    # maxLineLen = np.max(lineSizes) # longest line size is the size of the temp array for storing a line of data
-    
-    if len(lineSizes) != numLines:
-        print(f'lineSizes.count = {len(lineSizes)} != numLines = {numLines}')
-
-    with h5py.File(str(outputHdf), 'w') as f:
-        # create all the data structure ready for the datasets
-        g = f.create_group(groupName)
-        g.attrs['ProjectName'] = projectName
+    print(line_chan, flight_chan, date_chan)
+    print(lines)
+    for line in lines:
+        print(f'    ... Line {line}\n')
+        if flight_chan != '':
+            # flights.append(df.loc[df[line_chan] == line, flight_chan][0])
+            aa = df.loc[df[line_chan] == line, flight_chan].iloc[0]
+            flights.append(aa)
+            print(f'    Flights {flights}')
+        if date_chan != '':
+            dates.append(df.loc[df[line_chan] == line, date_chan].iloc[0])
+            print(f'    Dates {dates}')
         
-        gCoord = g.create_group('CoordinateFrame')
-        gLines = g.create_group('Lines')
-        if zoneIdx >= 0:
-            gCoord.attrs['UTMZone'] = zones[0]
-        
-        for ii in range(0, len(lineNumbers)):
-            
-            # create a line group and metadata
-            gg = gLines.create_group(f'{lineNumbers[ii]}')
-            gg.attrs['LineNumber'] = lineNumbers[ii]
-            if flightIdx >= 0:
-                gg.attrs['Flight'] = flightNumbers[ii]
-            if dateIdx >= 0:
-                gg.attrs['Date_Local'] = dates[ii]
-            gg.attrs['NumberOfFids'] = lineSizes[ii]
-
-            # create the DataSets with attributes
-            for channelName in channelsOut:
-                dd = gg.create_dataset(channelName, (lineSizes[ii],), dtype='float64', compression="gzip", compression_opts=4)
-                dd.attrs['Name'] = channelName
-                dd.attrs['Alias'] = channelName
-                fieldDef = gdf.get_field_definition(channelName)
-                dd.attrs['Units'] = cleanUnits(fieldDef['unit'])
-                dd.attrs['Description'] = fieldDef['long_name']
-
-        # now add the data sets, extracting from chunks as they come
-        numChunk = 0
-        lineIndex = 0
-        jStart = 0
-        iStart = 0
-        printSum = False
-        
-        print('\nTransferring data ...')
-        for chunk in gdf.df_chunked(chunksize=chunkSize):
-            if lineIndex >= len(lineNumbers):
-                break
-            nextLineEnd = lineStarts[lineIndex+1] - numChunk * chunkSize
-            blockLength = np.min([chunkSize, nextLineEnd])
-            
-            # transfer a block of data into each line within the chunk & prepare for next line
-            while nextLineEnd < chunkSize:
-                if printSum:
-                    print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
-                    print(f'Line: {lineNumbers[lineIndex]}, ch10= {channelsOut[10]}')
-                    print(chunk.to_string())
-                    
-                transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
-                lineIndex += 1
-                if lineIndex > 7:
-                    printSum = False
-                if lineIndex >= len(lineNumbers):
-                    break
-                
-                nextLineEnd = lineStarts[lineIndex+1] - numChunk * chunkSize
-                iStart += blockLength
-                jStart = 0
-                blockLength = np.min([chunkSize, nextLineEnd]) - iStart
-            
-            if nextLineEnd == chunkSize:
-                if printSum:
-                    print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
-                transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
-                lineIndex += 1
-                if lineIndex > 7:
-                    printSum = False
-                if lineIndex >= len(lineNumbers):
-                    break
-                iStart = 0
-                jStart = 0
-                
-            elif nextLineEnd > chunkSize:
-                if printSum:
-                    print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
-                transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
-                iStart = 0
-                if blockLength == chunkSize:
-                    jStart += blockLength
-                else:
-                    jStart = blockLength
-                
-            numChunk += 1
-
-    return
+    return lines, line_lengths, flights, dates
 
 
 def cleanUnits(fieldDef):
@@ -1367,6 +1435,11 @@ def index_containing_substring(the_list, substring):
         if substring in s:
               return i
     return -1
+
+
+
+
+
     """
     Reads the data from the ASEG-GDF2 survey file and returns an xarray.
     Uses the aseg_gdf2 package by Kent Inverarity at:
@@ -1386,88 +1459,88 @@ def index_containing_substring(the_list, substring):
     """
 
     # open GDF, pull out channel names, the units, and the description
-    gdf = aseg.read(str(datFilePath))
-    channelNames = gdf.field_names()
-    channelsOut = channelNames # these are the channels we will save
+    # gdf = aseg.read(str(datFilePath))
+    # channelNames = gdf.field_names()
+    # channelsOut = channelNames # these are the channels we will save
     
-    # now if index not found - error/warning; else pop off the channelName list
-    if ~omitChannels == []:
-        for channel in omitChannels:
-            tempIdx = index_containing_substring(channelsOut, channel.lower())
-            if tempIdx < 0:
-                print(f'WARNING - {channel} to omit not found')
-            else:
-                channelsOut.pop(tempIdx)
+    # # now if index not found - error/warning; else pop off the channelName list
+    # if ~omitChannels == []:
+    #     for channel in omitChannels:
+    #         tempIdx = index_containing_substring(channelsOut, channel.lower())
+    #         if tempIdx < 0:
+    #             print(f'WARNING - {channel} to omit not found')
+    #         else:
+    #             channelsOut.pop(tempIdx)
             
-    print('channels out: ')
-    print(channelsOut)
+    # print('2 channels out: ')
+    # print(channelsOut)
     
-    # first, some initialisations
-    chunkSize = 10000
+    # # first, some initialisations
+    # chunkSize = 10000
     
-    print('... done. Ready to create HDF file and transfer data into it.\n')
+    # print('... done. Ready to create HDF file and transfer data into it.\n')
     
-    with h5py.File(str(outputHdf), 'w') as f:
-        # create all the data structure ready for the datasets
-        g = f.create_group(groupName)
-        g.attrs['ProjectName'] = projectName
+    # with h5py.File(str(outputHdf), 'w') as f:
+    #     # create all the data structure ready for the datasets
+    #     g = f.create_group(groupName)
+    #     g.attrs['ProjectName'] = projectName
         
-        gCoord = g.create_group('CoordinateFrame')
-        gLines = g.create_group('Lines')
+    #     gCoord = g.create_group('CoordinateFrame')
+    #     gLines = g.create_group('Lines')
         
-        # now add the data sets, extracting from chunks as they come
-        numChunk = 0
-        jStart = 0
-        iStart = 0
-        printSum = True
+    #     # now add the data sets, extracting from chunks as they come
+    #     numChunk = 0
+    #     jStart = 0
+    #     iStart = 0
+    #     printSum = True
         
-        print('\nTransferring data ...')
-        for chunk in gdf.df_chunked(chunksize=chunkSize):
-            if lineIndex >= len(lineNumbers):
-                break
-            nextLineEnd = lineStarts[lineIndex+1] - numChunk * chunkSize
-            blockLength = np.min([chunkSize, nextLineEnd])
+    #     print('\nTransferring data ...')
+    #     for chunk in gdf.df_chunked(chunksize=chunkSize):
+    #         if lineIndex >= len(lineNumbers):
+    #             break
+    #         nextLineEnd = lineStarts[lineIndex+1] - numChunk * chunkSize
+    #         blockLength = np.min([chunkSize, nextLineEnd])
             
-            # transfer a block of data into each line within the chunk & prepare for next line
-            while nextLineEnd < chunkSize:
-                if printSum:
-                    print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
-                transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
-                lineIndex += 1
-                if lineIndex > 7:
-                    printSum = False
-                if lineIndex >= len(lineNumbers):
-                    break
+    #         # transfer a block of data into each line within the chunk & prepare for next line
+    #         while nextLineEnd < chunkSize:
+    #             if printSum:
+    #                 print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
+    #             transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
+    #             lineIndex += 1
+    #             if lineIndex > 7:
+    #                 printSum = False
+    #             if lineIndex >= len(lineNumbers):
+    #                 break
                 
-                nextLineEnd = lineStarts[lineIndex+1] - numChunk * chunkSize
-                iStart += blockLength
-                jStart = 0
-                blockLength = np.min([chunkSize, nextLineEnd]) - iStart
+    #             nextLineEnd = lineStarts[lineIndex+1] - numChunk * chunkSize
+    #             iStart += blockLength
+    #             jStart = 0
+    #             blockLength = np.min([chunkSize, nextLineEnd]) - iStart
             
-            if nextLineEnd == chunkSize:
-                if printSum:
-                    print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
-                transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
-                lineIndex += 1
-                if lineIndex > 7:
-                    printSum = False
-                if lineIndex >= len(lineNumbers):
-                    break
-                iStart = 0
-                jStart = 0
+    #         if nextLineEnd == chunkSize:
+    #             if printSum:
+    #                 print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
+    #             transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
+    #             lineIndex += 1
+    #             if lineIndex > 7:
+    #                 printSum = False
+    #             if lineIndex >= len(lineNumbers):
+    #                 break
+    #             iStart = 0
+    #             jStart = 0
                 
-            elif nextLineEnd > chunkSize:
-                if printSum:
-                    print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
-                transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
-                iStart = 0
-                if blockLength == chunkSize:
-                    jStart += blockLength
-                else:
-                    jStart = blockLength
+    #         elif nextLineEnd > chunkSize:
+    #             if printSum:
+    #                 print(f'is={iStart}, js={jStart}, len={blockLength}, chunk no.={numChunk}')
+    #             transferBlock(lineNumbers[lineIndex], channelsOut, blockLength, iStart, chunk, jStart, gLines)
+    #             iStart = 0
+    #             if blockLength == chunkSize:
+    #                 jStart += blockLength
+    #             else:
+    #                 jStart = blockLength
                 
-            numChunk += 1
-    return
+    #         numChunk += 1
+    # return
 
 
 def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False):

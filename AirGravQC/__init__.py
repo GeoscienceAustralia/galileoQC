@@ -20,9 +20,11 @@ __version__ = "0.0.0"
 #     import AirGravQC as qc
 #     qc.myfun()
 from AirGravQC.whizzFiles.pointfiles import (xyzToHDF, updateCoordFrame, updateProject, 
-    reportSampling, reportFlights, reportWhizz, updateChannelAttributes, updateLineAttributes)
+    reportSampling, reportFlights, reportWhizz, updateChannelAttributes, updateLineAttributes,
+    asegToHDF)
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import image_pygmt, graphicsShaded, grid_n_image, diff_n_image
+from AirGravQC.gridFiles.gridfiles import (image_pygmt, graphicsShaded, grid_n_image, diff_n_image,
+    display_grid)
 from AirGravQC.gridFiles.read_ers import *
 from AirGravQC.qc.qualityAnalysis import *
 from AirGravQC.qc.qcagg import *

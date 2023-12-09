@@ -24,6 +24,7 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
 import AirGravQC.graphics as graphics
 import AirGravQC.utility.utility as util
+import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.config as config
 
 groupName = config.groupName
@@ -481,9 +482,9 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     None.
 
     """
-    n, e, g0 = read_ers_image(file000)
-    n, e, gx = read_ers_image(filexxx)
-    n, e, gy = read_ers_image(fileyyy)
+    n, e, g0 = ers.read_ers_image(file000)
+    n, e, gx = ers.read_ers_image(filexxx)
+    n, e, gy = ers.read_ers_image(fileyyy)
     
     tx = g0 - gx
     predy = g0 - yyy / xxx * tx
@@ -511,9 +512,9 @@ def traceImages(file1, file2, file3, plotTitle):
     None.
 
     """
-    n1, e1, z1 = read_ers_image(file1)
-    n2, e2, z2 = read_ers_image(file2)
-    n3, e3, z3 = read_ers_image(file3)
+    n1, e1, z1 = ers.read_ers_image(file1)
+    n2, e2, z2 = ers.read_ers_image(file2)
+    n3, e3, z3 = ers.read_ers_image(file3)
     trace = z1 + z2 + z3
     graphics.graphicsShaded(n1, e1, trace, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
 
@@ -578,7 +579,7 @@ def gridfile_to_xr(whizzFile='', bandout=0):
         whizzFile = Path(fb.get_grid_filename(filetypes=(('NetCdf4 grid', '*.nc'),
                                                          ('ERMapper grid', '*.ers'))))
     if whizzFile.suffix.upper() == '.ERS':
-        e, n, z, datum, projection = read_ers_image(whizzFile, bandout=bandout)
+        e, n, z, datum, projection = ers.read_ers_image(whizzFile, bandout=bandout)
         xa = xr.DataArray(data=z,#np.flip(z, 0), # DANGER!!!
                           dims=["N", "E"],
                           coords={"N": n, "E": e})

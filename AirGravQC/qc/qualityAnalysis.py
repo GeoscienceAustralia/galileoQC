@@ -33,9 +33,9 @@ import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.utility.utility as util
-# import AirGravQC.gridfiles as grd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
@@ -996,7 +996,7 @@ def checkErsHeaders(folderPath='\.'):
     for aFile in ersFiles:
             [ncells, nrows, nbands, eastings, northings, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection] = grd.read_ers_header(str(aFile))
+                    projection] = ers.read_ers_header(str(aFile))
             commonOK, reportStr = _commonErsHdrErrors(ncells, nrows, nbands, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
                     projection)
