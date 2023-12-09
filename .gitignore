@@ -139,3 +139,4 @@ examples/Canobie/Channel Descriptions.txt
 examples/Canobie/ChannelDescriptions.txt
 examples/Canobie/QC_report.pdf
 *.pyc
+.DS_Store
