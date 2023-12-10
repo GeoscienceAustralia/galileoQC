@@ -1,10 +1,9 @@
 # AirGravQC Todo List
 
 0. Get everything setup as a local package under pip.
-1. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 2. Change all QC routines to report in the same format (Projectname, Blockname, summary [, detail text [, plot]]).
 3. Standardise plots as much as possible (plot titles, axis labels, use of units). Write and use common plot functions.
-4. Design geoWhizz v1.1, and then upgrade to it.
+4. Design geoWhizz v1.1 (based on `gspy`), and then upgrade to it.
 5. Test the various height checks: checkSafeClearance, checkClearance, checkVert; that they work as intended.
 7. `checkGNSS` only finds at most one error per line. It should find and report against the actual spec like `checkVertPlan`. Similarly it should have an option to plot lines with failures; and an option to test a specified array of lines.
 8. All `check***` routines to have options `lines=[]`, `plot_flag=False`, `known=''`, `verbose=False`.
@@ -21,6 +20,7 @@
 26. Set up as a package on Github.
 27. checkHeading plots output from one line even when there are 0 failures.
 
+1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.
 11. DONE. Stop using "erm" - use "grd" instead.
 12. DONE - Get permissions from Xcalibur to use Canobie field data for tutorial.
@@ -34,6 +34,7 @@
 
 ## geoWhizz v1.1
 
+0. Use `gspy` as the basis.
 1. Get rid of separate CoordinateFrame and hold that info as project metadata.
 2. Put in EPSG metadata.
 3. Allow user to invent and store their own metadata at Project, Line, and Channel level. In other words, some metadata is there "just for the record" and is not used by the s/w and we can allow anything the user might want (and of course, `reportWhizz` will report it by design), and some metadata is actually used by the s/w and must follow the implicit conventions.

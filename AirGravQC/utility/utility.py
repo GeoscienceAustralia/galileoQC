@@ -37,7 +37,31 @@ def _length(x, y):
     """
     return  np.sqrt((x - x[0]) * (x - x[0]) + (y - y[0]) * (y - y[0]))
 
- 
+
+def _displacement2(x0, x1, y0, y1):
+    """
+    The displacement distance from (xo, y0) to (x1, y1).
+
+    Parameters
+    ----------
+    x0 : TYPE
+        DESCRIPTION.
+    x1 : TYPE
+        DESCRIPTION.
+    y0 : TYPE
+        DESCRIPTION.
+    y1 : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
+    return np.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1))
+            
+
 def _butter_bandpass(lowcut, highcut, fs, order=5):
     """
     Calculates the parameters of a Butterworth bandpass filter.
@@ -104,5 +128,76 @@ def _space_thou(x, pos):  # formatter function takes tick label and tick positio
         groups.append(s[-3:])
         s = s[:-3]
     return s + ' '.join(reversed(groups)) #u'\2009'
+
+
+
+
+
+def _get_lineName(linegroup):
+    lineNo = linegroup.attrs['LineNumber']
+    lineName = f'{lineNo:.2f}'
+    if 'Flight' in linegroup.attrs:
+        flightNo = linegroup.attrs['Flight']
+        lineName += ":" + f'{flightNo:.0f}'
+    return lineName
+
+
+def _rotateCoords(x, y, angle):
+    """
+    Rotates Cartesian vectors x and y, by `angle` to xr and yr.
+
+    Parameters
+    ----------
+    x : numpy Float 1D array
+        DESCRIPTION.
+    y : numpy Float 1D array
+        DESCRIPTION.
+    angle : Float
+        Angle in radians by which coordinates are to be rotated.
+
+    Returns
+    -------
+    xr : numpy Float 1D array
+        DESCRIPTION.
+    yr : numpy Float 1D array
+        DESCRIPTION.
+
+    """
+    xr = np.cos(angle) * x + np.sin(angle) * y
+    yr = np.sin(angle) * x - np.cos(angle) * y
+    return xr, yr
+
+
+def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance):
+    """
+    Given a specification, maxCounter, on number of fids and, maxDistance,
+    on distance, checks to see if either  num_fids_in_exceedance > maxCounter
+    or len_exceedance > maxDistance. If either is True, returns True.
+
+    Parameters
+    ----------
+    num_fids_in_exceedance : Integer
+        DESCRIPTION.
+    len_exceedance : Float
+        DESCRIPTION.
+    maxCounter : Integer
+        DESCRIPTION.
+    maxDistance : Float
+        DESCRIPTION.
+
+    Returns
+    -------
+    Bool.
+
+    """
+    if maxCounter < 1 and maxDistance < 1:
+        return False
+    if maxCounter > 0:
+        if num_fids_in_exceedance > maxCounter:
+            return True
+    if maxDistance > 0:
+        if len_exceedance > maxDistance:
+            return True
+    return False
 
 

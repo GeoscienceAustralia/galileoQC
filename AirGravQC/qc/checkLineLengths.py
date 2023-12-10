@@ -1,0 +1,49 @@
+import numpy as np
+import h5py
+
+import AirGravQC.config as config
+import AirGravQC.utility.utility as util
+
+groupName = config.groupName
+    
+
+def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
+    """
+    Checks that all lines in whizzFile are at least min_len km long.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension, to be checked.
+    min_len : TYPE, optional
+        The minimum allowed line length in km. The default is 50.0.
+    measX : String, optional
+        The name of the geoWhizz field or channel containing the measured x positions. The
+        default is to read the xChannel field name from the Coordinate Frame.
+    measY : String, optional
+        The name of the geoWhizz field or channel containing the measured y positions. The
+        default is to read the yChannel field name from the Coordinate Frame.
+
+    Returns
+    -------
+    None.
+
+    """
+    measFile = str(whizzFile)
+    
+    with h5py.File(measFile, 'r') as f:
+        gMeas = f[groupName]['Lines']
+        if measX == '':
+            measX = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if measY == '':
+            measY = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        
+        num_failed_lines = 0
+        for line in gMeas.keys():
+            xM = np.array(gMeas[line][measX])
+            yM = np.array(gMeas[line][measY])
+            line_length = util._displacement2(xM[0], xM[-1], yM[0], yM[-1])
+            if line_length < min_len * 1000.0:
+                num_failed_lines += 1
+                print(f'Line {line} length = {line_length:.1f} less than allowed min {min_len*1000.0:.1f}')
+        print(f'Number failed lines = {num_failed_lines}')

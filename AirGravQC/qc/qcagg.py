@@ -73,7 +73,7 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
         for line in g.keys():
             xM = gw.getLineData(g[line], measX)
             yM = gw.getLineData(g[line], measY)
-            line_length = _displacement2(xM[0], xM[-1], yM[0], yM[-1]) / 1000.0
+            line_length = util._displacement2(xM[0], xM[-1], yM[0], yM[-1]) / 1000.0
 
             turb = gw.getLineData(g[line], turbulence)
             A_d = gw.getLineData(g[line], aD)

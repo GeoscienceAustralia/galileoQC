@@ -31,6 +31,15 @@ from AirGravQC.qc.qcagg import *
 from AirGravQC.qc.qcftg import *
 from AirGravQC.qc.qcgrv import *
 from AirGravQC.qc.qcmag import *
+from AirGravQC.qc.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
+from AirGravQC.qc.checkIntersection import checkIntersection
+from AirGravQC.qc.checkSpeeds import checkSpeeds
+from AirGravQC.qc.checkOverlaps import checkOverlaps
+from AirGravQC.qc.checkXYPlan import checkXYPlan
+from AirGravQC.qc.checkVertPlan import checkVertPlan
+from AirGravQC.qc.checkLineLengths import checkLineLengths
+from AirGravQC.qc.checkGNSS import checkGNSS
+from AirGravQC.qc.checkLineLengths import checkLineLengths
 # from AirGravQC.qc.qcnav import *
 from AirGravQC.graphics import *
 
