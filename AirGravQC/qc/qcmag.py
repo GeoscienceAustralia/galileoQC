@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.utility.utility as util
 
 groupName = config.groupName
 
@@ -227,7 +228,7 @@ def _groupMagDiff4(group, TCDiff4='', rawMag='', limit = 0.02, nSamples = 3000, 
         rangeTooHigh = False
         plotTitle = line + ' ' + TCDiff4 + ' Range'
         
-        rangeTooHigh, numExceedances = failsDeviation(data, limit, nSamples)
+        rangeTooHigh, numExceedances = util._failsDeviation(data, limit, nSamples)
         
         if rangeTooHigh:
             fig = plt.figure()

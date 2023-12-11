@@ -201,3 +201,52 @@ def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDist
     return False
 
 
+def _failsDeviation(data, limit, nSamples):
+    """
+    Checks data, testing for more than `nSamples` consecutive instances where
+    the data values are outside the range [-limit, limit].
+    
+    Parameters
+    ----------
+    data : Numpy 1D Float array
+        The data to be checked.
+    limit : Float
+        The limit, assumed > 0.
+    nSamples : Float
+        Maximum allowed number of deviations allowed.
+
+    Returns
+    -------
+    Bool
+        True if the data failed.
+    Float
+        The number of exceedances (regardless of whether consecutive).
+    
+    """
+    
+    if np.max(data) < limit and np.min(data) > -limit:
+        print('all ok')
+        return False, 0
+    
+    indxSpikes = np.argwhere(np.logical_or(data > limit, data < -limit))
+    numExceedances = indxSpikes.shape[0]
+    if numExceedances < nSamples:
+        print(f'only {numExceedances} exceedances')
+        return False, numExceedances
+    
+    else:
+        count = 1
+        for jj in range(1, len(indxSpikes)):
+            if indxSpikes[jj][0] == indxSpikes[jj-1][0] + 1:
+                count += 1
+            else:
+                if count >= nSamples:
+                    return True, count
+                else:
+                    count = 1
+        if count >= nSamples:
+            return True, count
+        print(f'{numExceedances} but not consecutive, most {count}')
+        return False, numExceedances
+        
+

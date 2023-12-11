@@ -19,6 +19,9 @@
 25. commonErsHdrErrors() - include a check that a Units field is present.
 26. Set up as a package on Github.
 27. checkHeading plots output from one line even when there are 0 failures.
+28. Have `asegToHDF` read string fields such as dates '12/04/2021' and store them.
+29. Have `asegToHDF` use the key attributes to populate CoordFrame.
+30. `checkSpikes` needs to give some report when there are no spikes found.
 
 1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.
@@ -36,7 +39,7 @@
 
 0. Use `gspy` as the basis.
 1. Get rid of separate CoordinateFrame and hold that info as project metadata.
-2. Put in EPSG metadata.
+2. Put in EPSG metadata or other Coordinate Reference Systems (CRS) as per `gspy`.
 3. Allow user to invent and store their own metadata at Project, Line, and Channel level. In other words, some metadata is there "just for the record" and is not used by the s/w and we can allow anything the user might want (and of course, `reportWhizz` will report it by design), and some metadata is actually used by the s/w and must follow the implicit conventions.
 4. Stop storing channels that are expected, and are constant: `FLIGHT`, `LINE`, `PROJECTNUM`, `DOY`, etc. Channels constant across a line should be Line metadata and those constant across the project should be Project metadata. In every case, check that they are constant before reducing to metadata; report the error if they are not and do not convert to metadata in that case.
 5. Channels that should be integers (e.g. observed number of GNSS satellites) must be checked that they are integers by `xyzToHDF`, and stored as integers.

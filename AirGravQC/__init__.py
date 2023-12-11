@@ -27,10 +27,18 @@ from AirGravQC.gridFiles.gridfiles import (image_pygmt, graphicsShaded, grid_n_i
     display_grid)
 from AirGravQC.gridFiles.read_ers import *
 from AirGravQC.qc.qualityAnalysis import *
-from AirGravQC.qc.qcagg import *
 from AirGravQC.qc.qcftg import *
-from AirGravQC.qc.qcgrv import *
 from AirGravQC.qc.qcmag import *
+
+# AGG (Falcon) checks
+from AirGravQC.qc.diffNoiseVturb import diffNoiseVturb
+from AirGravQC.qc.diffGravVturb import diffGravVturb
+
+# FTG checks
+from AirGravQC.qc.checkHighFreq import checkHighFreq
+
+
+# Navigation and position checks
 from AirGravQC.qc.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
 from AirGravQC.qc.checkIntersection import checkIntersection
 from AirGravQC.qc.checkSpeeds import checkSpeeds
@@ -39,7 +47,20 @@ from AirGravQC.qc.checkXYPlan import checkXYPlan
 from AirGravQC.qc.checkVertPlan import checkVertPlan
 from AirGravQC.qc.checkLineLengths import checkLineLengths
 from AirGravQC.qc.checkGNSS import checkGNSS
-from AirGravQC.qc.checkLineLengths import checkLineLengths
-# from AirGravQC.qc.qcnav import *
+
+# General checks
+from AirGravQC.qc.checkErsHeaders import checkErsHeaders
+from AirGravQC.qc.psdChannelDiff import psdChannelDiff
+from AirGravQC.qc.allChanStats import allChanStats
+from AirGravQC.qc.checkGaps import checkGaps
+
+# Airborne gravimetry checks
+from AirGravQC.qc.diffGroundGrid import diffGroundGrid
+from AirGravQC.qc.checkRepeatLines import checkRepeatLines
+from AirGravQC.qc.checkFreeAirCorr import checkFreeAirCorr
+from AirGravQC.qc.checkEotvosCorr import checkEotvosCorr
+from AirGravQC.qc.checkLatCorr import checkLatCorr
+from AirGravQC.qc.checkAtmosEffect import checkAtmosEffect
+
 from AirGravQC.graphics import *
 

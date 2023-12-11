@@ -1,0 +1,29 @@
+{
+    "dataset_attrs" :   {
+        "comment": "<additional details or ancillary information>",
+        "content": "<summary list of file contents, e.g. raw data (/survey/tabular/0), processed data (/survey/tabular/1)>"
+    },
+
+    "key_mapping" : {
+        "x" : "EAST_MGA",
+        "y" : "NORTH_MGA",
+        "z" : "GPS_HT",
+        "fiducial" : "FIDUCIAL",
+        "line_number" : "LINE",
+        "flight_number" : "FLIGHT"
+    },
+
+    "dimensions" : {
+        "fiducial" : {
+            "standard_name" : "fid",
+            "long_name" : "fiducial",
+            "units" : "na",
+            "null_value" : "not_defined",
+            "centers" : [0.0]
+        }
+    },
+
+    "variable_metadata": {
+        
+    }
+}

@@ -1,0 +1,64 @@
+{
+    "dataset_attrs" :   {
+        "title": "Example Aeromag (TMI) Dataset",
+        "institution": "Mark Dransfield Consulting",
+        "source":  "Contractor provided ASEG-formatted data",
+        "history": "<date and time when the data were produced and/or modified>",
+        "references": "<data release reference>",
+        "comment": "<additional details or ancillary information>",
+        "content": "<summary list of file contents, e.g. raw data (/survey/tabular/0), processed data (/survey/tabular/1)>",
+        "conventions": "CF-1.8, GS-0.0",
+        "created_by": "gspy==1.1.1"
+    },
+
+    "coordinate_information" : {
+        "wkid" : "7854",
+        "authority" : "EPSG",
+        "vertical_crs" : "WGS84"
+    },
+
+    "survey_information" : {
+        "contractor_project_number" : "902212",
+        "contractor" : "Xcalibur Multiphysics",
+        "client" : "Queensland Geological Survey",
+        "survey_type" : ["magnetic"],
+        "survey_area_name" : "Muppet Town",
+        "state" : ["QLD"],
+        "country" : "Australia",
+        "acquisition_start" : "20211124",
+        "acquisition_end" : "20211203",
+        "dataset_created" : "20211210"
+    },
+ 
+    "survey_units" : {
+        "time" : "seconds [s]",
+        "mag" : "nano tesla [nT]"
+    },
+    
+    "system_information" : {
+        "gravity_gradiometer_system": {
+            "sample_frequency" : "0.125",
+            "resolution" : "0.1"
+        }
+    },
+
+    "flightline_information" : {
+        "traverse_line_spacing" : "1000",
+        "traverse_line_direction" : "90",
+        "nominal_terrain_clearance" : "80",
+        "final_line_kilometers" : "4712"
+    },
+
+    "survey_equipment" : {
+        "aircraft" : "Cessna C208B",
+        "aircraft_registration" : "VH-ZKG",
+        "gravity_gradiometer" : "Lockheed Martin single-axis double-complement rotating AGG",
+        "radar_altimeter_system" : "Collins Alt-50",
+        "radar_altimeter_sample_rate" : "0.1 s",
+        "laser_altimeter_system" : "Riegl LD90-3",
+        "laser_altimeter_sample_rate" : "0.1 s",
+        "navigation_system" : "Real-time differential GNSS",
+        "navigation_sample_rate" : "1.0 s",
+        "acquisition_system" : "FASDAS"
+    }
+}

@@ -458,7 +458,7 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
                 dd = g[line].create_dataset(newChannelName, data = zm, compression="gzip", compression_opts=4)
                 dd.attrs['Name'] = newChannelName
            
-            fail, numExc = qc.failsDeviation(zm - g[line][height], 20.0, 13)
+            fail, numExc = util._failsDeviation(zm - g[line][height], 20.0, 13)
             if fail and numExc > 13:
  #           if np.abs(np.max(g[line]['altitude'] - zm)) > 20.0:
                 plotTime = time - time[0]
