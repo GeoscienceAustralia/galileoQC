@@ -1015,7 +1015,7 @@ def flightlines(survey):
     return np.unique(npa, return_counts=True)
 
 
-def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName = projectName, verbose=False):
+def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName = projectName, omitChannels = ['RT'], verbose=False):
     # Put all the ASEG-GDF2 info into a gspy survey.
     # TODO:
     #   1. use the key attributes to populate CoordFrame
@@ -1075,7 +1075,7 @@ def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName 
             for channel in channels:
                 if verbose:
                     print(f'      Adding {channel} data for line {lines[lineIdx]}')
-                if channel == 'RT':
+                if channel in omitChannels:
                     continue
                 dataArray = line_ds[channel]
                 # if not, then what???

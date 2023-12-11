@@ -801,6 +801,10 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
         print("No files provided so no Line Map can be made.")
         return
 
+    plot_subtitle = ''
+    if whizzPlanFile != '' and whizzFiles != []:
+        plot_subtitle = '[planned (red); flown (blue)]'
+
     fig = plt.figure(figsize=(8, 6))
     thou_format = tkr.FuncFormatter(util._space_thou)
     ax = fig.add_subplot(1,1,1)
@@ -845,7 +849,7 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
     plt.xlabel(f'{easting} [m]', fontsize = 10)
     plt.ylabel(f'{northing} [m]', fontsize = 10)
     plt.suptitle(plotTitle, fontsize = 12)
-    plt.title('[planned (red); flown (blue)]', fontsize = 10)
+    plt.title(plot_subtitle, fontsize = 10)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(8)
     for label in ax.get_yticklabels(): label.set_fontsize(8)
