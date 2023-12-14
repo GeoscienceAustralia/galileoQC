@@ -250,3 +250,38 @@ def _failsDeviation(data, limit, nSamples):
         return False, numExceedances
         
 
+def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False):
+    """
+    Calculates the filtered in-line sum of the in-line components.
+
+    Parameters
+    ----------
+    il1 : numpy 1D array
+        The first in-line component data.
+    il2 : numpy 1D array
+        The second in-line component data.
+    il3 : numpy 1D array
+        The third in-line component data.
+    fs : Float
+        The sample frequency.
+    lowcut : Float
+        The low-pass frequency in Hz of the filter.
+    highcut : Float
+        The high-pass frequency in Hz of the filter.
+
+    Returns
+    -------
+    numpy 1D array
+        The filtered in-line sum.
+
+    """
+
+    order = 6
+    ils = (il1 + il2 + il3) / np.sqrt(3.0)
+    ils = ils - np.mean(ils)
+    if dontfilter:
+        return ils
+
+    return _butter_bandpass_filter(ils, lowcut, highcut, fs, order = order)
+
+

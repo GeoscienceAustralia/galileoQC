@@ -10,10 +10,12 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
     
-def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', vertaccel='', vertvelocity='', vertdispl='', verbose=False, plot_flag=False):
+def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tChannel='', vertaccel='', vertvelocity='', vertdispl='', verbose=False, plot_flag=False):
     """
     Reports the high frequency noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. See Mark Dransfield's documentation for details of method.
+
+    For AGG (Falcon), the recommended channels are ANE, AUV, BNE, BUV. For FTG, the 6 raw cross and inline components.
 
     Parameters
     ----------
@@ -23,6 +25,9 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
         The line numbers to be checked. Default is all lines in the whizzFile.
     noiselimit : Float
         The maximum allowable high frequency noise on a line.
+    cutoffs : Array of Float, optional
+        The low pass, and high pass, cutoff frequencies that define "HighFreq".
+        Recommended values: AGG - [0.15, 3.6], FTG - [0.1, 0.48]. Default AGG.
     channels : Array[String]
         An array of channel names containing the gradient component data.
     vertaccel : String, optional
@@ -56,6 +61,7 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
         for line in lines:
             time = gw.getLineData(g[line], tChannel)
             time = time - time[0]
+            fs = 1.0 / abs((time[1] - time[0]))
             if vertaccel != '':
                 turb = gw.getLineData(g[line], vertaccel)
                 time1 = time
@@ -81,8 +87,9 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], tChannel='', 
                 slope = (enData - stData) / len(data)
                 for ii in range(0, len(data)):
                     noSlope[ii] = data[ii] - stData - ii * slope
-                        
-                filtered = util._butter_bandpass_filter(noSlope, 0.1, 0.48, 1, order = 6)
+                
+                filtered = util._butter_bandpass_filter(noSlope, cutoffs[0], cutoffs[1], fs, order = 6)
+                # filtered = util._butter_bandpass_filter(noSlope, 0.1, 0.48, fs, order = 6)
                 
                 for ii in range(0, len(data)-50):
                     myStd[ii] = np.std(filtered[ii:ii+50])

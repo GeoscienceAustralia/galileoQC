@@ -3,6 +3,7 @@ import h5py
 
 import AirGravQC.config as config
 import AirGravQC.utility.utility as util
+import AirGravQC.whizzFiles.pointfiles as gw
 
 groupName = config.groupName
     
@@ -40,8 +41,8 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
         
         num_failed_lines = 0
         for line in gMeas.keys():
-            xM = np.array(gMeas[line][measX])
-            yM = np.array(gMeas[line][measY])
+            xM = gw.getLineData(gMeas[line], measX)# np.array(gMeas[line][measX])
+            yM = gw.getLineData(gMeas[line], measY)#np.array(gMeas[line][measY])
             line_length = util._displacement2(xM[0], xM[-1], yM[0], yM[-1])
             if line_length < min_len * 1000.0:
                 num_failed_lines += 1

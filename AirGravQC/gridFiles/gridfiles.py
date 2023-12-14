@@ -25,6 +25,7 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 import AirGravQC.graphics as graphics
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
+import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.config as config
 
 groupName = config.groupName
@@ -144,7 +145,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             lines = lines_group.keys()
         
         for line in lines:
-            xData = np.array(lines_group[line][e_chan])
+            xData = gw.getLineData(lines_group[line], e_chan)
             totalNumFids += len(xData)
         print(f'{len(lines)} lines; total number of fids in whizz file = {totalNumFids}.')
 
@@ -200,9 +201,9 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
         efid = 0
         for line in lines:
             sfid = efid
-            xData = np.array(lines_group[line][e_chan])
-            yData = np.array(lines_group[line][n_chan])
-            zData = np.array(lines_group[line][z_chan])
+            xData = gw.getLineData(lines_group[line], e_chan)
+            yData = gw.getLineData(lines_group[line], n_chan)
+            zData = gw.getLineData(lines_group[line], z_chan)
             efid += len(yData)
             if remove_mean:
                 zData = zData - np.mean(zData)
@@ -213,12 +214,9 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             my_dataset[n_chan][sfid:efid] = yData
             my_dataset[xr_zchan][sfid:efid] = zData
 
-            if 'Units' in lines_group[line][e_chan].attrs:
-                my_dataset[e_chan].attrs['units'] = lines_group[line][e_chan].attrs["Units"]
-            if 'Units' in lines_group[line][n_chan].attrs:
-                my_dataset[n_chan].attrs['units'] = lines_group[line][n_chan].attrs["Units"]
-            if 'Units' in lines_group[line][z_chan].attrs:
-                my_dataset[xr_zchan].attrs['units'] = lines_group[line][z_chan].attrs["Units"]
+            my_dataset[e_chan].attrs['units'] = gw.getChannelAttrs(lines_group[line], e_chan)
+            my_dataset[n_chan].attrs['units'] = gw.getChannelAttrs(lines_group[line], n_chan)
+            my_dataset[xr_zchan].attrs['units'] = gw.getChannelAttrs(lines_group[line], z_chan)
             if remove_mean and diff_one:
                 my_dataset.attrs['title'] = f'{z_chan} (mr) (d1)'
             elif remove_mean:

@@ -60,10 +60,10 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
                 if line1 != line2 and line1_plan == line2_plan:
                     num_coinc_lines += 1
                     # extract positions
-                    n1 = np.array(gMeas[line1][nrth])
-                    e1 = np.array(gMeas[line1][east])
-                    n2 = np.array(gMeas[line2][nrth])
-                    e2 = np.array(gMeas[line2][east])
+                    n1 = gw.getLineData(gMeas[line1], nrth)# np.array(gMeas[line1][nrth])
+                    e1 = gw.getLineData(gMeas[line1], east)
+                    n2 = gw.getLineData(gMeas[line1], nrth)
+                    e2 = gw.getLineData(gMeas[line1], east)
                     # get line direction in radians
                     dirn = np.arctan2((e1[-1] - e1[0]), (n1[-1] - n1[0]))
                     

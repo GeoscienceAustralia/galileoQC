@@ -81,13 +81,46 @@ def getLineData(linegroup, channel):
         The requested data.
 
     """
-
+    my_data = []
     for datachannel in linegroup.items():
         if datachannel[0].upper() == channel.upper():
             # print(f'datachannel {datachannel[0]}; channel {channel}')
             my_data = np.array(linegroup[datachannel[0]])
-            
+    if my_data == []:
+        print(f'ERROR - {channel} not found.')
+
     return my_data
+
+
+def getChannelAttrs(linegroup, channel):
+    """
+    Returns the `Units` attribute for the specified channel of
+    data for the given line.
+
+    Parameters
+    ----------
+    line : HDF5 Group
+        A flight-line group.
+    channel : String
+        The name of a channel in the database, e.g. 'EASTING'.
+
+    Returns
+    -------
+    my_units : String
+        The `Units` attribute for channel, empty string if `Units` was not found.
+
+    """
+    for datachannel in linegroup.items():
+        if datachannel[0].upper() == channel.upper():
+            # print(f'datachannel {datachannel[0]}; channel {channel}')
+            myChanGroup = linegroup[datachannel[0]]
+            chanAttrs = list(myChanGroup.attrs)
+            if 'Units' in chanAttrs:
+                my_units = myChanGroup.attrs['Units']
+                return my_units
+            break
+                
+    return ''
 
 
 def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, flight_chan='', date_chan='', verbose=False):
@@ -250,7 +283,7 @@ def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', des
         changed = False
         
         for line in g.keys():
-            dd = g[line][channel]
+            dd = g[line][channel] # ToDo: make this case insensitive
             if name != '':
                 dd.attrs['Name'] = name
                 changed = True
@@ -458,13 +491,13 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
                 dd = g[line].create_dataset(newChannelName, data = zm, compression="gzip", compression_opts=4)
                 dd.attrs['Name'] = newChannelName
            
-            fail, numExc = util._failsDeviation(zm - g[line][height], 20.0, 13)
+            fail, numExc = util._failsDeviation(zm - getLineData(g[line], height), 20.0, 13)
             if fail and numExc > 13:
- #           if np.abs(np.max(g[line]['altitude'] - zm)) > 20.0:
+ #           if np.abs(np.max(getLineData(g[line], 'altitude') - zm)) > 20.0:
                 plotTime = time - time[0]
                 fig = plt.figure()
                 ax1 = fig.add_subplot(2,1,1)
-                ax1.plot(plotTime, g[line]['altitude'], plotTime, zm)
+                ax1.plot(plotTime, getLineData(g[line], 'altitude'), plotTime, zm)
                 ax1.set_xlim(plotTime[0], plotTime[-1])
                 plotTitle = f'Line {line}, altitude and planned drape height'
                 plt.title(plotTitle, fontsize = 8)
@@ -473,7 +506,7 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
                 for label in ax1.get_yticklabels(): label.set_fontsize(6)
                 
                 ax2 = fig.add_subplot(2,1,2)
-                ax2.plot(plotTime, g[line]['altitude'] - zm)
+                ax2.plot(plotTime, getLineData(g[line], 'altitude') - zm)
                 ax2.set_xlim(plotTime[0], plotTime[-1])
                 plotTitle = f'Difference'
                 plt.title(plotTitle, fontsize = 8)
@@ -837,9 +870,9 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
         lines = list(gLines.keys())
         numLines = len(lines)
         for line in lines:
-            time_deltas = np.append(time_deltas, np.diff(np.array(gLines[line][timeChannel])))
-            x_deltas = np.append(x_deltas, np.diff(np.array(gLines[line][xChannel])))
-            y_deltas = np.append(y_deltas, np.diff(np.array(gLines[line][yChannel])))
+            time_deltas = np.append(time_deltas, np.diff(getLineData(gLines[line], timeChannel)))#gLines[line][timeChannel])))
+            x_deltas = np.append(x_deltas, np.diff(getLineData(gLines[line], xChannel))) #np.array(gLines[line][xChannel])))
+            y_deltas = np.append(y_deltas, np.diff(getLineData(gLines[line], yChannel))) #np.array(gLines[line][yChannel])))
         mean_dt = np.mean(time_deltas)
         min_dt = np.min(time_deltas)
         max_dt = np.max(time_deltas)

@@ -27,15 +27,29 @@ from AirGravQC.gridFiles.gridfiles import (image_pygmt, graphicsShaded, grid_n_i
     display_grid)
 from AirGravQC.gridFiles.read_ers import *
 from AirGravQC.qc.qualityAnalysis import *
-from AirGravQC.qc.qcftg import *
-from AirGravQC.qc.qcmag import *
+
+# Plotting
+from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines
+from AirGravQC.whizzPlots.plotLinesCompareChannels import plotLinesCompareChannels
+from AirGravQC.whizzPlots.linesMap import linesMap
+
+# Mag
+from AirGravQC.qc.checkDiurnal import checkDiurnal
+from AirGravQC.qc.checkBasemag import checkBasemag
+from AirGravQC.qc.checkTCDiff4 import checkTCDiff4
 
 # AGG (Falcon) checks
 from AirGravQC.qc.diffNoiseVturb import diffNoiseVturb
 from AirGravQC.qc.diffGravVturb import diffGravVturb
 
+# FTG and AGG checks
+from AirGravQC.qc.checkHighFreq import checkHighFreq
+
 # FTG checks
 from AirGravQC.qc.checkHighFreq import checkHighFreq
+from AirGravQC.qc.checkFrobenius import checkFrobenius
+from AirGravQC.qc.ilsNoiseVturb import ilsNoiseVturb
+from AirGravQC.qc.checkInlineSum import checkInlineSum
 
 
 # Navigation and position checks

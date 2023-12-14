@@ -71,12 +71,12 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             count = 0
 
             # get the units for the y axis label
-            dd = g[lines[0]][channel]
             xlabelstr = 'Line number'
-            #if the channel has an attribute 'Units'
-            ylabelstr = channel
-            if 'Units' in dd.attrs.keys():
-                ylabelstr += ' ' + dd.attrs['Units']
+            my_units = gw.getChannelAttrs(g[lines[0]], channel)
+            if my_units == '':
+                ylabelstr = f'{channel}'
+            else:
+                ylabelstr = f'{channel} [{my_units}]'
         
             for line in lines:
                 if line != 'CoordinateFrame':
@@ -89,7 +89,6 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
                     if remove_mean:
                         dd = dd - np.mean(dd)
 
-                    # if np.sum(~np.isnan(g[line][channel])) > 3:
                     if np.sum(~np.isnan(dd)) > 3:
                         chMin[count] = np.nanmin(dd)
                         chMax[count] = np.nanmax(dd)

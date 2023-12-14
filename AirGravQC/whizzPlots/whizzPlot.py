@@ -24,57 +24,6 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 groupName = config.groupName
 
 
-def plotChannelLines(whizzFile, channel, flightLines, x, xOffset=True):
-    """
-    For the given channel in the geoWhizz file filename, plot the values for all
-    specified flightlines versus x.
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension.
-    channel : String
-        The name of the channel or field to plot.
-    flightLines : [String]
-        A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0'] .
-    x : String
-        The name of the independent variable for the plot.
-    xOffset : Bool, optional
-        If True, map x to x - x[0] before plotting. The default is True.
-
-    Returns
-    -------
-    None.
-
-    """
-    filename = str(whizzFile)
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        projName = f[groupName].attrs['ProjectName']
-        plotTitle = f'{projName} : {channel}'
-        xDel = 0.0
-        
-        for line in flightLines:
-            yData = gw.getLineData(g[line], channel)
-            xData = gw.getLineData(g[line], x)
-            if xOffset and line == flightLines[0]:
-                xDel = xData[0]
-            xData = xData - xDel
-            myPlot, = ax.plot(xData, yData, color='blue', lw=0.3)
-            plotTitle += f', L{line}'
-            
-    plt.xlabel(x, fontsize = 6)
-    plt.ylabel(channel, fontsize = 6)
-    plt.title(plotTitle, fontsize = 8)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
-
-
 def plot_grid(whizzFile, channel, cellsize, x='', y=''):
     """
     WARNING - FAILS ON LARGE DATASETS
@@ -298,7 +247,7 @@ def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
         xName = x
         if x == '':
             xName = f[groupName]['CoordinateFrame'].attrs['XChannel']
-        xUnits = g[flightLine][xName].attrs['Units']
+        xUnits = getChannelAttrs(g[flightLine], xName)#g[flightLine][xName].attrs['Units']
         xData = np.array(g[flightLine][xName])
 
         yName = y
@@ -317,73 +266,6 @@ def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
         zUnits = g[flightLine][channel].attrs['Units']
 
     return xData, xUnits, yData, yUnits, hData, hUnits, zData, zUnits, projName
-
-
-def plotLineChannel(whizzFile, flightLine, channel, x='', plotTitle = '', xOffset=True):
-    """
-    For the given flightLine in the whizzFile, plot channel against x.
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension.
-    flightLine : String
-        A flightline, e.g. '1000110.0'.
-    channel : String
-        The name of the channel or field to plot.
-    x : String, optional
-        The name of the independent variable for the plot. The default is ''.
-    plotTitle : String, optional
-        A title for the plot. The default is '' in which case the title will be Project Line Channel.
-    xOffset : Bool, optional
-        If True, map x to x - x[0] before plotting. The default is True.
-
-    Returns
-    -------
-    None.
-
-    """
-    
-    filename = str(whizzFile)
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    xLabel = x
-    
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        projName = f[groupName].attrs['ProjectName']
-        # acqDate = g[flightLine].attrs['Date_Local']
-        
-        yData = np.array(g[flightLine][channel])
-        yUnits = 'units'# g[flightLine][channel].attrs['Units']
-        if x != '':
-            xData = np.array(g[flightLine][x])
-            xUnits = g[flightLine][x].attrs['Units']
-        else:
-            xName = f[groupName]['CoordinateFrame'].attrs['XChannel']
-            xUnits = g[flightLine][xName].attrs['Units']
-            xData = np.array(g[flightLine][xName])
-    
-    fig.suptitle(f'{projName}: Line {flightLine}', fontsize=10)
-    # fig.text(0.8, 0.95, f'acq: {acqDate:.0f}', fontsize=7)
-    fig.subplots_adjust(top=0.85)
-    
-    if plotTitle == '':
-        plotTitle = f'{channel}'
-    if xOffset:
-        xLabel += f' - {xData[0]}'
-        xData = xData - xData[0]
-    xLabel += f' [{xUnits}]'
-    yLabel = f'{channel} [{yUnits}]'
-
-    line, = ax.plot(xData, yData, color='blue', lw=0.3)
-    plt.xlabel(xLabel, fontsize = 7)
-    plt.ylabel(yLabel, fontsize = 7)
-    plt.title(plotTitle, fontsize = 9)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
 
 
 def plotInlineSum(whizzFile, line):
@@ -517,62 +399,6 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
             plt.show()
             
     return
-
-
-def plotLineXChannels(whizzFile, flightLine, x, channel1, channel2, xOffset=True, mean_remove=False):
-    """
-    For the given flightLine in the whizzFile, plot both channel1 and channel2
-    against x.
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension.
-    flightLine : String
-        A flightline, e.g. '1000110.0'.
-    x : String
-        The name of the independent variable for the plot.
-    channel : String
-        The name of the first channel or field to plot.
-    channel : String
-        The name of the second channel or field to plot.
-    xOffset : Bool, optional
-        If True, map x to x - x[0] before plotting. The default is True.
-    mean_remove : Bool, optional
-        If True, the y data will have their means subtracted before plotting. The default is False.
-
-    Returns
-    -------
-    None.
-
-    """
-    
-    filename = str(whizzFile)
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        projName = f[groupName].attrs['ProjectName']
-        
-        xData = np.array(g[flightLine][x])
-        y1Data = np.array(g[flightLine][channel1])
-        y2Data = np.array(g[flightLine][channel2])
-    
-    if xOffset:
-        xData = xData - xData[0]
-    if mean_remove:
-        y1Data = y1Data - np.mean(y1Data)
-        y2Data = y2Data - np.mean(y2Data)
-    ax.plot(xData, y1Data, xData, y2Data, lw=0.5)
-    plt.xlabel(x, fontsize = 6)
-    plt.ylabel(channel1, fontsize = 6)
-    plotTitle = f'{projName}: L{flightLine}, {x} vs {channel1}, {channel2}'
-    plt.title(plotTitle, fontsize = 8)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
 
 
 def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=True):
@@ -777,85 +603,6 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
     plt.show()
 
 
-def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast='', planNorth=''):
-    """
-    Plots a line map of the survey contained in the HDF5 Whizz file.
-
-    Parameters
-    ----------
-    whizzFiles : Array of String or pathlib.PosixPath
-        Each element is the name of a HDF5 Whizz file, including path and extension.
-    easting : String, optional
-        The name of the field containing eastings. The default is the name
-        stored in the Coordinates attribute XChannel.
-    northing : String, optional
-        The name of the field containing eastings. The default is the name
-        stored in the Coordinates attribute YChannel.
-
-    Returns
-    -------
-    None.
-
-    """
-    if whizzPlanFile == '' and whizzFiles == []:
-        print("No files provided so no Line Map can be made.")
-        return
-
-    plot_subtitle = ''
-    if whizzPlanFile != '' and whizzFiles != []:
-        plot_subtitle = '[planned (red); flown (blue)]'
-
-    fig = plt.figure(figsize=(8, 6))
-    thou_format = tkr.FuncFormatter(util._space_thou)
-    ax = fig.add_subplot(1,1,1)
-    plotTitle = ''
-
-    if whizzPlanFile != '':
-        planname = str(whizzPlanFile)
-
-        with h5py.File(planname, 'r') as f:
-            if planEast == '':
-                planEast = f[groupName]['CoordinateFrame'].attrs['XChannel']
-            if planNorth == '':
-                planNorth = f[groupName]['CoordinateFrame'].attrs['YChannel']
-            g = f[groupName]['Lines']
-            plotTitle = make_plot_title(f[groupName]) + ': Line Map'
-                    
-            for line in list(g.keys()):
-                lX = g[line][planEast][0:]
-                lY = g[line][planNorth][0:]
-                planline, = ax.plot(lX, lY, color='red', lw=0.2)
-
-    if whizzFiles != []:
-        for file in whizzFiles:
-            filename = str(file)
-
-            with h5py.File(filename, 'r') as f:
-                if easting == '':
-                    easting = f[groupName]['CoordinateFrame'].attrs['XChannel']
-                if northing == '':
-                    northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
-                g = f[groupName]['Lines']
-                plotTitle = make_plot_title(f[groupName]) + ': Line Map'
-                        
-                for line in list(g.keys()):
-                    lX = g[line][easting][0:]
-                    lY = g[line][northing][0:]
-                    flownline, = ax.plot(lX, lY, color='blue', lw=0.4)
-            
-    ax.set_aspect('equal')
-    ax.xaxis.set_major_formatter(thou_format)
-    ax.yaxis.set_major_formatter(thou_format)
-    plt.xlabel(f'{easting} [m]', fontsize = 10)
-    plt.ylabel(f'{northing} [m]', fontsize = 10)
-    plt.suptitle(plotTitle, fontsize = 12)
-    plt.title(plot_subtitle, fontsize = 10)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(8)
-    for label in ax.get_yticklabels(): label.set_fontsize(8)
-    plt.show()
-
-
 def make_plot_title(group):
     plotTitle = ''
     if 'ProjectName' in group.attrs:
@@ -906,8 +653,8 @@ def specificLinesMap(whizzFile, lines, easting='', northing=''):
         'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
         myc = 0
         for line in lines:
-            lX = g[line][easting][0:]
-            lY = g[line][northing][0:]
+            lX = gw.getLineData(g[line], easting)[0:]
+            lY = gw.getLineData(g[line], northing)[0:]
             flownline, = ax.plot(lX, lY, color=mycolours[myc], label=line, lw=3, alpha=0.7)
             myc += 1
             
@@ -1060,8 +807,8 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
         g = f[groupName]['Lines']
         if fig_title == '':
             fig_title = f[groupName].attrs['ProjectName'] + ': Line(s) on Ground Gravity'
-        lon = g[line][longitude][0:]
-        lat = g[line][latitude][0:]
+        lon = gw.getLineData(g[line], longitude)[0:]
+        lat = gw.getLineData(g[line], latitude)[0:]
     
     SMALL_SIZE = 12
     MEDIUM_SIZE = 14

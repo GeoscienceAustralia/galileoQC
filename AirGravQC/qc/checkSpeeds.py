@@ -314,9 +314,9 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
 def _get_speeddata(line_group, xChannel, yChannel, tChannel, vel_north, vel_east):
     """
     """
-    x = np.array(line_group[xChannel])
-    y = np.array(line_group[yChannel])
-    t = np.array(line_group[tChannel])
+    x = gw.getLineData(line_group, xChannel) #np.array(line_group[xChannel])
+    y = gw.getLineData(line_group, yChannel)
+    t = gw.getLineData(line_group, tChannel)
     distance = util._length(x, y)
     if vel_north == '' or vel_east == '':
         sampleTime = t[1] - t[0]
@@ -325,8 +325,8 @@ def _get_speeddata(line_group, xChannel, yChannel, tChannel, vel_north, vel_east
         temp = np.sqrt(xVel * xVel + yVel * yVel)
         speed = np.append(temp, np.mean(temp))
     else:
-        xVel = np.array(line_group[vel_east])
-        yVel = np.array(line_group[vel_north])
+        xVel = gw.getLineData(line_group, vel_east)
+        yVel = gw.getLineData(line_group, vel_north)
         speed = np.sqrt(xVel * xVel + yVel * yVel)
 
     return x, y, distance, t, speed
