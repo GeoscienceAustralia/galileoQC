@@ -23,15 +23,21 @@ from AirGravQC.whizzFiles.pointfiles import (xyzToHDF, updateCoordFrame, updateP
     reportSampling, reportFlights, reportWhizz, updateChannelAttributes, updateLineAttributes,
     asegToHDF)
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import (image_pygmt, graphicsShaded, grid_n_image, diff_n_image,
-    display_grid)
+from AirGravQC.gridFiles.gridfiles import (image_pygmt, diff_n_image, display_grid)
 from AirGravQC.gridFiles.read_ers import *
 from AirGravQC.qc.qualityAnalysis import *
 
-# Plotting
+# 1D Plotting
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines
 from AirGravQC.whizzPlots.plotLinesCompareChannels import plotLinesCompareChannels
 from AirGravQC.whizzPlots.linesMap import linesMap
+
+# 2D Plotting
+from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
+from AirGravQC.gridFiles.grid_n_image import grid_n_image
+from AirGravQC.gridFiles.xdImage import xdImage
+from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
+from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 
 # Mag
 from AirGravQC.qc.checkDiurnal import checkDiurnal
