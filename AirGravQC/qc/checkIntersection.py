@@ -4,6 +4,7 @@ import h5py
 import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
+import AirGravQC.utility.utility as util
 
 groupName = config.groupName
         
@@ -77,7 +78,7 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
             z_ctrl = np.array(g[linec][zChannel])
 
             bear_ctrl = _calc_bearing(x_ctrl, y_ctrl)
-            (y_ctrl1, x_ctrl1) = _rotateCoords(x_ctrl-x_ctrl[0], y_ctrl-y_ctrl[0], -bear_ctrl)
+            (y_ctrl1, x_ctrl1) = util._rotateCoords(x_ctrl-x_ctrl[0], y_ctrl-y_ctrl[0], -bear_ctrl)
             for linet in lines:
                 # if linet == linec, then it is a control line, not a traverse.
                 # TODO: compare the PlannedLine for linet and linec rather than the lines themselves,
@@ -87,7 +88,7 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
                 x_trav = np.array(g[linet][xChannel])
                 y_trav = np.array(g[linet][yChannel])
                 z_trav = np.array(g[linet][zChannel])
-                (y_trav1, x_trav1) = _rotateCoords(x_trav-x_ctrl[0], y_trav-y_ctrl[0], -bear_ctrl)
+                (y_trav1, x_trav1) = util._rotateCoords(x_trav-x_ctrl[0], y_trav-y_ctrl[0], -bear_ctrl)
                 # if _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
                 if _intersect(x_ctrl[0], y_ctrl[0], x_ctrl[-1], y_ctrl[-1], x_trav[0], y_trav[0], x_trav[-1], y_trav[-1]):
                     # print(f'bearings: {bearingt}, {bearingt} -- {np.abs(np.cos(bearingc - bearingt))}')

@@ -19,8 +19,20 @@ import rioxarray
 import h5py
 import pygmt
 import matplotlib.ticker as tkr
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
+# from matplotlib import rc
+plt.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
+
+SMALL_SIZE = 6
+MEDIUM_SIZE = 8
+BIGGER_SIZE = 10
+
+plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
+plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 import AirGravQC.graphics as graphics
 import AirGravQC.utility.utility as util
@@ -226,6 +238,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             else:
                 my_dataset.attrs['title'] = z_chan
             
+        print(f'    {my_dataset.attrs["title"]}: min = {my_dataset[xr_zchan].data.min()}, max = {my_dataset[xr_zchan].data.max()}.')
     return my_dataset
 
 
@@ -905,13 +918,15 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         vmin = minClip
         vmax = maxClip
     
+    # displayShadedImage(data_array.x, data_array.y, data_array.data, mytitle)
+
     graphicsShaded(data_array.x, data_array.y, data_array.data, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
-                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax)
+                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')
 
 
 def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
-                   hs=True, azdeg=45, ax=None):
+                   hs=True, azdeg=45, ax=None, origin='upper'):
     """
     Creates a colour image of a data array, with colour bar and grid-lines. The
     shape of z must be $shape(e) \times shape(n)$. The (e, n, z) typically are the 
@@ -967,21 +982,21 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     if ax == None:
         fig, ax = plt.subplots(figsize=(12,6))
     thou_format = tkr.FuncFormatter(util._space_thou)
-    fig.suptitle(mytitle, fontsize=14)
+    fig.suptitle(mytitle)#, fontsize=10)
     fig.subplots_adjust(top=0.85)
     
-    ax.set_xlabel('Eastings [m]', fontsize=12)
-    ax.set_ylabel('Northings [m]', fontsize=12)
+    ax.set_xlabel('Eastings [m]')#, fontsize=8)
+    ax.set_ylabel('Northings [m]')#, fontsize=8)
     ax.grid(True)
     ax.axes.set_aspect('equal')
     plt.tight_layout()
     ax.xaxis.set_major_formatter(thou_format)
     ax.yaxis.set_major_formatter(thou_format)
-    # ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    # ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    # for label in ax.get_xticklabels(): label.set_fontsize(6)
+    # for label in ax.get_yticklabels(): label.set_fontsize(6)
     graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs, colorbar=True,
                    azdeg=45, altdeg = 45, blend_mode = 'alpha', alpha = 0.7,
-                   extent=(e[0], e[-1], n[0], n[-1]),origin='upper')
+                   extent=(e[0], e[-1], n[0], n[-1]),origin=origin)
 
 
 def graphicsTernary(e, n, red, green, blue, mytitle):

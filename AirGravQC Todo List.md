@@ -23,6 +23,7 @@
 29. Have `asegToHDF` use the key attributes to populate CoordFrame.
 30. `checkSpikes` needs to give some report when there are no spikes found.
 31. `checkDiurnal` needs a report when successful.
+32. Ensure all routines are checked in `Test_AirGravQC_overall.ipynb`.
 
 1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.

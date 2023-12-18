@@ -5,6 +5,7 @@ from matplotlib.ticker import StrMethodFormatter
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
+import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName

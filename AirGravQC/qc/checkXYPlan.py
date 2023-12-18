@@ -2,6 +2,7 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
+from matplotlib.ticker import StrMethodFormatter
 
 import AirGravQC.config as config
 import AirGravQC.utility.utility as util
