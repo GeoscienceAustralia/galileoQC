@@ -24,6 +24,12 @@
 30. `checkSpikes` needs to give some report when there are no spikes found.
 31. `checkDiurnal` needs a report when successful.
 32. Ensure all routines are checked in `Test_AirGravQC_overall.ipynb`.
+33. If the previous command showed a plot, and plot_flag is set to true for the current command but no plot is made, then STOP showing the plot from the previous command! Probably need a condition on `plt.show()`.
+34. `checkSpeeds()` should make a plot for lines below minimum safe speed.
+35. `checkTCDiff4` needs a one-line summary report, and a verbose` switch to turn off all the other rubbish.
+36. `checkDiurnal` gives no feedback if there are no problems. A report of success is needed.
+37. `checkGaps` needs an `ignored_chans` option so that processed channels can be ignored.
+38. `checkHighFreq` needs to report the summary before the plots.
 
 1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.

@@ -82,4 +82,4 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         if len(my_data.attrs) == 0:
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space)
-        xdImage(my_grid, f'{z_chan}', hs=shaded)
+        xdImage(my_grid, f'{my_grid.attrs["title"]}', hs=shaded)

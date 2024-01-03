@@ -57,7 +57,7 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
     cmap_norm : String, optional
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
-        (equlaization stretch); 'auto'. The default is 'nonorm'.
+        (equalization stretch); 'auto'. The default is 'nonorm'.
     minClip : Float, optional
         z -> z < minClip : minClip: z. The default is np.nan - no clipping.
     maxClip : Float, optional

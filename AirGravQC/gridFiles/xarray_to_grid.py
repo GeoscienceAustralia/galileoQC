@@ -65,7 +65,7 @@ def xarray_to_grid(my_data, grid_space, region=[]):
     if 'units' in my_data[z_chan].attrs:
         myunits = my_data[z_chan].attrs['units']
     else:
-        myunits = " "
+        myunits = "no units"
     print(f'Processing (x, y, z) = ({x_chan}, {y_chan}, {z_chan}). {z_chan} in {myunits}.')
 
     # grid spacing and search radius

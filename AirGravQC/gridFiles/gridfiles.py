@@ -39,6 +39,9 @@ import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.config as config
+from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
+from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
+from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 
 groupName = config.groupName
 projectName = config.projectName

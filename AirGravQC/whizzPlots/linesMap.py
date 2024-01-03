@@ -16,7 +16,7 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 groupName = config.groupName
 
 
-def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast='', planNorth=''):
+def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines=[], planEast='', planNorth=''):
     """
     Plots a line map of the survey contained in the HDF5 Whizz file.
 
@@ -28,6 +28,18 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute XChannel.
     northing : String, optional
+        The name of the field containing eastings. The default is the name
+        stored in the Coordinates attribute YChannel.
+    whizzPlanFile : String or pathlib.PosixPath
+        The name of a HDF5 Whizz file, including path and extension.
+    planLines : Array of String
+        Each element is the name of a survey line in whizzPlanFile, flown lines will
+        only be plotted if their planned line number is in this list. Default [] ignores
+        this limit.
+    planEast : String, optional
+        The name of the field containing eastings. The default is the name
+        stored in the Coordinates attribute XChannel.
+    planNorth : String, optional
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
 
@@ -60,10 +72,12 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
             g = f[groupName]['Lines']
             plotTitle = wpl.make_plot_title(f[groupName]) + ': Line Map'
                     
-            for line in list(g.keys()):
+            if planLines == []:
+                planLines = list(g.keys())
+            for line in planLines:
                 lX = g[line][planEast][0:]
                 lY = g[line][planNorth][0:]
-                planline, = ax.plot(lX, lY, color='red', lw=0.2)
+                planline, = ax.plot(lX, lY, color='red', lw=0.6, alpha=0.7)
 
     if whizzFiles != []:
         for file in whizzFiles:
@@ -78,9 +92,11 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planEast=
                 plotTitle = wpl.make_plot_title(f[groupName]) + ': Line Map'
                         
                 for line in list(g.keys()):
-                    lX = gw.getLineData(g[line], easting)[0:]
-                    lY = gw.getLineData(g[line], northing)[0:]
-                    flownline, = ax.plot(lX, lY, color='blue', lw=0.4)
+                    planned_line = f"{g[line].attrs['PlannedLine']:.3f}"
+                    if planned_line in planLines:
+                        lX = gw.getLineData(g[line], easting)[0:]
+                        lY = gw.getLineData(g[line], northing)[0:]
+                        flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
             
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(thou_format)
