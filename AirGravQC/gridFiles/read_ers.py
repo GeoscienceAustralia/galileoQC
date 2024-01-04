@@ -47,7 +47,7 @@ def read_ers_image(ersFile, bandout=0):
     # get the header info we need to decode the image file
     [ncells, nrows, nbands, eastings, northings, nullcell, precision,
      headerbytes, originalnullcell, byteorder, datum,
-     projection] = read_ers_header(headerfile)
+     projection, units] = read_ers_header(headerfile)
     # [eastings, northings, zz, ncells, nrows, nbands, nullcell,
     # originalnullcell] = read_ers_header(imagefile)
 
@@ -156,10 +156,11 @@ def read_ers_header(imagefile):
     byteorder = headerdict['byteorder']
     datum = headerdict['datum']
     projection = headerdict['projection']
+    units = headerdict['units']
 
     return [ncells, nrows, nbands, eastings, northings, nullcell,
             precision, headerbytes, originalnullcell, byteorder, datum,
-            projection]
+            projection, units]
 
 
 def _parse_header(imagefile, verbose=False):
@@ -201,7 +202,8 @@ def _parse_header(imagefile, verbose=False):
         HeaderOffset=0,
         ByteOrder='ieee-le',
         Datum='RAW',
-        Projection='RAW')
+        Projection='RAW',
+        Units='NONE')
 
     # open the filename
     headerfile = imagefile
@@ -220,6 +222,8 @@ def _parse_header(imagefile, verbose=False):
                     ersHeader['Datum'] = rawvalue
                 elif 'PROJECTION' in keyword.upper():
                     ersHeader['Projection'] = rawvalue
+                elif 'UNITS' in keyword.upper():
+                    ersHeader['Units'] = rawvalue
                 elif 'NROFCELLSPERLINE' in keyword.upper():
                     ersHeader['NrOfCellsPerLine'] = int(rawvalue)
                 elif 'NROFLINES' in keyword.upper():
@@ -299,6 +303,7 @@ def _parse_header(imagefile, verbose=False):
         print('nullcell, precision, headerbytes ', nullcell, precision, headerbytes)
         print('originalnullcell, byteorder ', originalnullcell, byteorder)
         print('Projection, Datum', ersHeader['Projection'], ersHeader['Datum'])
+        print('Coordinate Units ', ersHeader['Units'])
 
     headerdict = dict(ncells=ncells,
                       nrows=nrows,
@@ -311,7 +316,8 @@ def _parse_header(imagefile, verbose=False):
                       originalnullcell=originalnullcell,
                       byteorder=byteorder,
                       datum=ersHeader['Datum'],
-                      projection=ersHeader['Projection'])
+                      projection=ersHeader['Projection'],
+                      units=ersHeader['Units'])
 
     return headerdict
 

@@ -115,7 +115,6 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
                             _subplot_hiF_analysis(fig, num_subplots, 4, plotTitle, time1, turb, bounds=[time[0], time[-1], 0.0, 2.0])
 
                         fig.tight_layout()
-                        plt.show()
         if num_failed_lines == 1:
             summary = f'Checked {num_lines} lines; 1 line had high frequency signal above {noiseLimit}.'
         elif num_failed_lines > 1:
@@ -123,6 +122,8 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
         print(summary)
         if verbose:
             print(reportStr)
+        if plot_flag and num_failed_lines > 0:
+            plt.show()
 
 
 def _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=[], y2=[], bounds=[]):

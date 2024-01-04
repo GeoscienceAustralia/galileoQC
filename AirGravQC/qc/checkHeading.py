@@ -57,22 +57,17 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
             dy = np.diff(gw.getLineData(g[line], y))
             allok = True
             for nomhead in nominalHeadings:
-                tol_1 = np.cos(np.pi * (nomhead + tolerance) / 180.0)
-                tol_2 = np.cos(np.pi * (nomhead - tolerance) / 180.0)
-                upper_limit = max(tol_1, tol_2)
-                lower_limit = min(tol_1, tol_2)
                 heading = np.arctan2(dx, dy) * 180.0 / np.pi
-                min_heading = np.nanmin(heading)
-                max_heading = np.nanmax(heading)
-                mean_heading = np.mean(heading)
-                cosheading = np.cos(np.pi * heading / 180.0)
-                allok = all(h <= upper_limit for h in cosheading) and all(h >= lower_limit for h in cosheading)
+                allok = all(angle_in_range(heading, nomhead, tolerance))
                 if allok:
                     break
             
             if not allok:
+                min_heading = np.nanmin(heading)
+                max_heading = np.nanmax(heading)
+                mean_heading = np.mean(heading)
                 num_failed_lines += 1
-                report += f'Line {line}: heading range exceeded. Mean {mean_heading:.2f}, '
+                report += f'Line {line}: heading range exceeded at {nomhead}. Mean {mean_heading:.2f}, '
                 report += f'Min {min_heading:.2f}, Max {max_heading:.2f} deg.\n'
                 if plot_flag:
                     fig = plt.figure()
@@ -92,6 +87,12 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
     # print(f'Heading limits: [{nominalHeading}, +/-{tolerance}] deg or equivalent.')
     print(f'  Checked {numLines} lines, {num_failed_lines} failed.\n')
     print(report)
-    if plot_flag:
+    if plot_flag and num_failed_lines > 0:
         plt.show()
     return
+
+
+def angle_in_range(alpha, nominal, tolerance):
+    lower = nominal - abs(tolerance)
+    upper = nominal + abs(tolerance)
+    return (alpha - lower) % 360 <= (upper - lower) % 360

@@ -225,13 +225,13 @@ def _failsDeviation(data, limit, nSamples):
     """
     
     if np.max(data) < limit and np.min(data) > -limit:
-        print('all ok')
+        # print('all ok')
         return False, 0
     
     indxSpikes = np.argwhere(np.logical_or(data > limit, data < -limit))
     numExceedances = indxSpikes.shape[0]
     if numExceedances < nSamples:
-        print(f'only {numExceedances} exceedances')
+        # print(f'only {numExceedances} exceedances')
         return False, numExceedances
     
     else:
@@ -246,7 +246,7 @@ def _failsDeviation(data, limit, nSamples):
                     count = 1
         if count >= nSamples:
             return True, count
-        print(f'{numExceedances} but not consecutive, most {count}')
+        # print(f'{numExceedances} but not consecutive, most {count}')
         return False, numExceedances
         
 

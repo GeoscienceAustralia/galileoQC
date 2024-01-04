@@ -12,23 +12,16 @@
 17. Write checkLineSeparation() against separation = nominal +/- allowance for distance > max_distance.
 18. plotBoxWhisker - x axis formatter to include decimals, write another formatter function to do this.
 19. PROGRESS. All the source files are way too big - re-factor!!
-20. checkXYPlan - gets confused about number of zeros after decimal point in line number
+20. `checkXYPlan` - gets confused about number of zeros after decimal point in line number
 22. If the XYZ file contains a date in the format YYYY/MM/DD, then convert it to a decimal date string. See the stub `translate_date` in `gw`.
 23. Write a function to compare two whizz datafiles and report which lines have differences. Include a `detail` flag, when true, print the first exemplar difference on the line.
-24. checkGaps() - modify to allow gaps smaller than some minimum size.
-25. commonErsHdrErrors() - include a check that a Units field is present.
+24. `checkGaps` - modify to allow gaps smaller than some minimum size.
 26. Set up as a package on Github.
-27. checkHeading plots output from one line even when there are 0 failures.
 28. Have `asegToHDF` read string fields such as dates '12/04/2021' and store them.
 29. Have `asegToHDF` use the key attributes to populate CoordFrame.
-30. `checkSpikes` needs to give some report when there are no spikes found.
-31. `checkDiurnal` needs a report when successful.
 32. Ensure all routines are checked in `Test_AirGravQC_overall.ipynb`.
-33. If the previous command showed a plot, and plot_flag is set to true for the current command but no plot is made, then STOP showing the plot from the previous command! Probably need a condition on `plt.show()`.
+33. If the previous command showed a plot, and plot_flag is set to true for the current command but no plot is made, then STOP showing the plot from the previous command! Probably need a condition on `plt.show()`. `if plot_flag and num_errors > 0`
 34. `checkSpeeds()` should make a plot for lines below minimum safe speed.
-35. `checkTCDiff4` needs a one-line summary report, and a verbose` switch to turn off all the other rubbish.
-36. `checkDiurnal` gives no feedback if there are no problems. A report of success is needed.
-37. `checkGaps` needs an `ignored_chans` option so that processed channels can be ignored.
 38. `checkHighFreq` needs to report the summary before the plots.
 
 1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
@@ -40,6 +33,13 @@
 15. PROGRESS. Make code insensitive to the case of the channel names.
 16. DONE - Make flightChannel default = attrib.flight
 21. DONE. Everywhere: replace 'pf' and 'mhd' as shortcuts for 'pointfiles' with 'gw'.
+25. DONE. `commonErsHdrErrors` - include a check that a Units field is present.
+27. DONE. `checkHeading` plots output from one line even when there are 0 failures.
+30. DONE. `checkSpikes` needs to give some report when there are no spikes found.
+31. DONE. `checkDiurnal` needs a report when successful.
+35. DONE. `checkTCDiff4` needs a one-line summary report, and a verbose` switch to turn off all the other rubbish.
+36. DONE. `checkDiurnal` gives no feedback if there are no problems. A report of success is needed.
+37. DONE. `checkGaps` needs an `ignored_chans` option so that processed channels can be ignored.
 
 
 

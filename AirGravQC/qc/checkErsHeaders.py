@@ -38,13 +38,13 @@ def checkErsHeaders(folderPath='\.'):
     for aFile in ersFiles:
             [ncells, nrows, nbands, eastings, northings, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection] = ers.read_ers_header(str(aFile))
+                    projection, units] = ers.read_ers_header(str(aFile))
             commonOK, reportStr = _commonErsHdrErrors(ncells, nrows, nbands, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection)
+                    projection, units)
             ersDicts.append([ncells, nrows, nbands, nullcell,
                     precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection])
+                    projection, units])
             
     # compare the contents line-by-line
     print(f'Comparing ERS files against {ersFiles[0].name}.')
@@ -64,7 +64,7 @@ def checkErsHeaders(folderPath='\.'):
     return
 
 
-def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes, originalnullcell, byteorder, datum, projection):
+def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes, originalnullcell, byteorder, datum, projection, units):
     """
     Checks a set of ERS header fields for various common errors.
 
@@ -104,6 +104,10 @@ def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes,
     
     if projection == 'WGS84':
         reportStr += 'ERROR: projection cannot be WGS84'
+        allOk = False
+    
+    if units not in ['NONE', 'METERS', 'METER', 'METRES', 'METRE']:
+        reportStr += 'ERROR: units cannot be {units}'
         allOk = False
     
     return allOk, reportStr

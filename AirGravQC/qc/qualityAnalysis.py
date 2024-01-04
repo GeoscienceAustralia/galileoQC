@@ -222,51 +222,6 @@ def checkVertAccStats(whizzFile):
     plt.show()
 
 
-def checkSpikes(whizzFile, fields = [], numStd = 8.0):
-    """
-    Checks for spikes in all the given fields of data.
-    
-    Parameters
-    ----------
-    whizzFile : HDF5 Whizz file pathlib Path
-        The pathlib Path to the Whizz HDF5 file containing the survey line data.
-    fields : String List
-        List of field names from the database to be checked.
-    numStd : Float, optional
-        maximum allowed number of standard deviations allowed. The default is 8.0.
-
-    Returns
-    -------
-    None
-
-    """
-    
-    filename = str(whizzFile)
-    
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        if fields == []:
-            lineGroups = list(g.values())
-            fields = list(lineGroups[0].keys())
-        noSpikes = True
-        report = ''
-        for line in g.keys():
-            for field in fields:
-                deriv = np.diff(g[line][field], n = 1)
-                deriv = deriv - np.mean(deriv)
-                if len(deriv) > 10:
-                    myStd = np.std(deriv)
-                    extremum = np.max(deriv) if np.max(deriv) > -np.min(deriv) else -np.min(deriv)
-                    if extremum > numStd * myStd:
-                        report += f'\n  {line}; {field} Extremum: {extremum:.3g} > {(numStd * myStd):.3g} = {numStd:.3g} x STD of {myStd:.3g}'
-                        noSpikes = False
-                else:
-                    report += f'\n  {line}; {field} data length {len(deriv)+1} is too short for analysis.'
-                    noSpikes = False
-    print(report)
-    return
-
-
 def checkStatcor(whizzFile, statcor, flight=''):
     """
     Plots `statcor` vs `flight` as a scatter plot. Used to compare with static gravimeter readings.

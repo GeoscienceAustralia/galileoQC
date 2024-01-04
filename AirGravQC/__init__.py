@@ -67,12 +67,14 @@ from AirGravQC.qc.checkXYPlan import checkXYPlan
 from AirGravQC.qc.checkVertPlan import checkVertPlan
 from AirGravQC.qc.checkLineLengths import checkLineLengths
 from AirGravQC.qc.checkGNSS import checkGNSS
+from AirGravQC.qc.checkHeading import checkHeading
 
 # General checks
 from AirGravQC.qc.checkErsHeaders import checkErsHeaders
 from AirGravQC.qc.psdChannelDiff import psdChannelDiff
 from AirGravQC.qc.allChanStats import allChanStats
 from AirGravQC.qc.checkGaps import checkGaps
+from AirGravQC.qc.checkSpikes import checkSpikes
 
 # Airborne gravimetry checks
 from AirGravQC.qc.diffGroundGrid import diffGroundGrid
