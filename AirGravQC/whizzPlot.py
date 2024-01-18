@@ -297,7 +297,11 @@ def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
         xName = x
         if x == '':
             xName = f[groupName]['CoordinateFrame'].attrs['XChannel']
+<<<<<<< Updated upstream:AirGravQC/whizzPlot.py
         xUnits = g[flightLine][xName].attrs['Units']
+=======
+        xUnits = getLineDataUnits(g[flightLine], xName)#g[flightLine][xName].attrs['Units']
+>>>>>>> Stashed changes:AirGravQC/whizzPlots/whizzPlot.py
         xData = np.array(g[flightLine][xName])
 
         yName = y
@@ -981,6 +985,7 @@ def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
     plt.show()
 
 
+<<<<<<< Updated upstream:AirGravQC/whizzPlot.py
 def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, maxlat=90, min_reliability=0, fig_title=''):
     """
     Plots the location of the line (in latitude, longitude) overlain on
@@ -1097,6 +1102,8 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     plt.tight_layout()
 
 
+=======
+>>>>>>> Stashed changes:AirGravQC/whizzPlots/whizzPlot.py
 def plotVertPlan(planPath, measPath, line, planX='', planZ='', measX='', measZ=''):
     """
     Reports exceedances of actual vertical position from planned vertical positions

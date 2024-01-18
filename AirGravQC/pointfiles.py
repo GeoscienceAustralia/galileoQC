@@ -34,6 +34,11 @@ import pathlib
 from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 import filebrowser as fb
+<<<<<<< Updated upstream:AirGravQC/pointfiles.py
+=======
+from gspy import Survey
+from datetime import datetime, timedelta
+>>>>>>> Stashed changes:AirGravQC/whizzFiles/pointfiles.py
 
 import AirGravQC.gridfiles as grd
 import AirGravQC.qualityAnalysis as qa
@@ -42,19 +47,17 @@ import AirGravQC.config as config
 groupName = config.groupName
 projectName = config.projectName
 
-def getWhizzData(whizzFile, line, channel):
+# Retrieving information from a whizz file
+def getLineDataUnits(linegroup, channel, verbose=False):
     """
-    Returns a numpy array containg the specified channel of
-    data for the given line.
+    Returns a string from the `channel`'s `units` attribute.
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension.
-    line : String
-        A flightline, e.g. '1000110.0'.
+    line : HDF5 Group
+        A flight-line group.
     channel : String
-        The (case-sensitive) name of a channel in the database, e.g. 'EASTING'.
+        The name of a channel in the database, e.g. 'EASTING'.
 
     Returns
     -------
@@ -62,8 +65,22 @@ def getWhizzData(whizzFile, line, channel):
         The requested data.
 
     """
-    filename = str(whizzFile)
+    founddata = False
+    my_units = ''
+    for datachannel in linegroup.items():
+        if datachannel[0].upper() == channel.upper():
+            founddata = True
+            myChanGroup = linegroup[datachannel[0]]
+            chanAttrs = list(myChanGroup.attrs)
+            if 'Units' in chanAttrs:
+                my_units = myChanGroup.attrs['Units']
+    if verbose:
+        if not founddata:
+            print(f'ERROR {channel} not found.')
+        if my_units == '':
+            print(f'ERROR no units found for {channel}.')
 
+<<<<<<< Updated upstream:AirGravQC/pointfiles.py
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         my_data = np.array(g[line][channel])
@@ -619,6 +636,38 @@ def getLineXChannel(whizzFile, line, x, channel):
         xData = np.array(g[line][x])
         yData = np.array(g[line][channel])
     return xData, yData
+=======
+    return my_units
+
+
+def getLineData(linegroup, channel):
+    """
+    Returns a numpy array containg the specified channel of
+    data for the given line.
+
+    Parameters
+    ----------
+    line : HDF5 Group
+        A flight-line group.
+    channel : String
+        The name of a channel in the database, e.g. 'EASTING'.
+
+    Returns
+    -------
+    my_data : numpy array
+        The requested data.
+
+    """
+    my_data = []
+    for datachannel in linegroup.items():
+        # print(f'datachannel {datachannel[0]}; channel {channel}')
+        if datachannel[0].upper() == channel.upper():
+            my_data = np.array(linegroup[datachannel[0]])
+    if my_data == []:
+        print(f'ERROR - {channel} not found.')
+
+    return my_data
+>>>>>>> Stashed changes:AirGravQC/whizzFiles/pointfiles.py
 
     
 def reportWhizz(whizzFile, line='', channel=''):
@@ -836,6 +885,293 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
         print(f'  Stdev = {std_dt:.3g} s, {std_dd:.1g} m')
 
 
+def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
+    """
+    The total distance flown on the survey.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    x : String, optional
+        The name of the channel of X positions (in metres). The default is '' which
+        causes the channel stored in the CoordinateFram groups XChannel attribute 
+        to be used.
+    y : String, optional
+        The name of the channel of Y positions (in metres). The default is '' which
+        causes the channel stored in the CoordinateFram groups YChannel attribute 
+        to be used.
+    lines : array of strings, optional
+        An array of line identifiers whose total distance will be returned.
+        Default all lines in whizzFile.
+
+    Returns
+    -------
+    count : Integer
+        The total number of lines in the file.
+    Float
+        The total distance in km flown over all lines in the survey.
+
+    """
+    filename = str(whizzFile)
+
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        
+        if x == '':
+            x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if y == '':
+            y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+
+        lineDistance = 0.0
+        count = 0
+    
+        if lines == []:
+            lines = list(g.keys())
+        for line in lines:
+            xPos = getLineData(g[line], x)
+            yPos = getLineData(g[line], y)
+            lineDistance += _lineLength(xPos, yPos)
+            count += 1
+            
+    print(f'{count} lines: total distance flown [km] = {lineDistance/1000.0:,.1f}')
+    return (count, lineDistance/1000.0)
+    
+
+def _lineLength(x, y):
+    """
+    Calculates the point-to-point length of a line defined by discrete (x,y) points.
+
+    Parameters
+    ----------
+    x (numpy 1D array): a 1D array of x positions (units metres).
+
+    y (numpy 1D array): a 1D array of y positions (units metres).
+
+    Returns
+    -------
+    lenOfLine (Float) : the length of the line in metres.
+
+    """
+    lenOfLine = 0.0
+    for ii in range(0, len(x)-1):
+        lenOfLine += util._distance(x[ii] - x[ii+1], y[ii] - y[ii+1])
+    return lenOfLine
+
+
+# update information in whizz file
+def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, flight_chan='', date_chan='', date_format='decimal_year', verbose=False):
+    """
+    For each line group, use the line_type field to set the associated planned
+    line number, the segment number, and the reflight number for the line.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    line_type : TYPE, optional
+        Either 'Xcal_nsw' or 'SGL_GA' or ''. The default is '' which causes
+        the `line`s 'PlannedLine' attridbute to be set to `planned_line`.
+    line : String
+        A flightline, e.g. '1000110.0'.
+    planned_line : String
+        A flightline, e.g. '1000110.0' in a separate whizzFile containing the
+        planned x,y,z locations of the survey flightlines.
+
+    Returns
+    -------
+    None.
+
+    """
+    filename = str(whizzFile)
+
+    with h5py.File(filename, 'r+') as f:
+        # all the lines are in g:
+        g = f[groupName]['Lines']
+
+        if line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA':
+            print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
+            if verbose:
+                print('  {:<14} {:<14} {:<14} {:<14} '.format('Line No.','Plan Line No.', 'Segment No.', 'Re-flight No.'))
+            for line in g:
+                gg = g[line]
+                current_line = gg.attrs['LineNumber']
+                if line_type == 'Xcal_nsw':
+                    if current_line < 8999999.0:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 100.0) * 10.0
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10000.0)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                elif line_type == 'Xcal_can':
+                    if current_line < 8999999.0:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10.0) * 10.0
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line / 10000.0)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                elif line_type == 'SGL_GA':
+                    if current_line < 7000:
+                        gg.attrs['PlannedLine'] = np.floor(current_line * 10.0) / 10.0
+                        current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
+                        gg.attrs['Segment'] = current_segment
+                        gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
+                                                         - 10 * current_segment)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                elif line_type == 'SGL_NSW':
+                    if current_line < 7000:
+                        gg.attrs['PlannedLine'] = np.floor(current_line * 10.0) / 10.0
+                        current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
+                        gg.attrs['Segment'] = current_segment
+                        gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
+                                                         - 10 * current_segment)
+                    else:
+                        gg.attrs['PlannedLine'] = np.floor(current_line)
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                if verbose:
+                    print('  {:<14} {:<14} {:<14} {:<14} '.\
+                        format(current_line, gg.attrs['PlannedLine'], gg.attrs['Segment'], gg.attrs['ReflightNumber']))
+            if verbose:
+                print('\n')
+        elif line != '' and planned_line != 0:
+            gg = g[line]
+            gg.attrs['PlannedLine'] = planned_line
+        else:
+            print('NO ACTION TAKEN ON LINE_TYPE - line_type was neither "Xcal_nsw" or "SGL_GA" and planned_line = 0.')
+
+        if flight_chan != '':
+            print(f'Setting Line attributes for {whizzFile.name} to include flight numbers from {flight_chan}.')
+            for line in g:
+                gg = g[line]
+                this_flight = gg[flight_chan][0]
+                gg.attrs['Flight'] = this_flight
+
+        if date_chan != '' and date_format == 'decimal_year':
+            print(f'Setting Line attributes for {whizzFile.name} to include decimal year dates from {date_chan}.')
+            for line in g:
+                gg = g[line]
+                this_date = gg[date_chan][0]
+                gg.attrs['Date'] = decimalyrToISO8601(this_date)
+        if date_chan != '' and date_format == 'yyyymmdd':
+            print(f'Setting Line attributes for {whizzFile.name} to include yyyymmdd dates from {date_chan}.')
+            for line in g:
+                gg = g[line]
+                this_date = gg[date_chan][0]
+                gg.attrs['Date'] = YmdToISO8601(this_date)
+
+    return
+
+
+def decimalyrToISO8601(decimal_year):
+    """
+    Translate decimal year into isoformat.
+
+    Parameters
+    ----------
+    decimal_year : Float
+        The year, eg 2023.25.
+
+    Returns
+    -------
+    ISO 8601 String, eg 2023-04-02T06:00:00
+
+    """
+    year = int(decimal_year)
+    rem = decimal_year - year
+    startthisyear = datetime(year, 1, 1)
+    startnextyear = startthisyear.replace(year=startthisyear.year + 1)
+    proportionOfYear = (startnextyear - startthisyear).total_seconds() * rem
+    result = startthisyear + timedelta(seconds=proportionOfYear)
+
+    return result.isoformat()
+
+
+def YmdToISO8601(doy):
+    """
+    Converts day-of-year in the format yyyymmdd into an ISO 8601 datetime string. No timezone is recorded.
+
+    Parameters
+    ----------
+    doy : Int
+        Day-of-year encoded as yyyymmdd and stored as Int.
+
+    Returns
+    -------
+    Str
+        The date as a naive (to timezone) ISO 8601 string.
+
+    """
+    return datetime.datetime.strptime(str(doy), '%Y%m%d').isoformat()
+
+
+def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', description='', chan_precision=-1):
+    """
+    Updates the channel attributes for all lines in the geoWhizz HDF5 file. For any
+    attribute, the default is to not change its value.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+    channel : String
+        The name of the channel whose attributes are to be changed.
+    name : String, optional
+        The new name. The default is ''.
+    units : String, optional
+        The new units. The default is ''.
+    alias : String, optional
+        The new alias. The default is ''.
+    description : String, optional
+        The new description. The default is ''.
+    chan_precision : Integer, optional
+        The new chan_precision (number of places after decimal point). The default is -1 (unknown).
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    # In the hdfFile, for all lines, update the attributes of the named channel if,
+    # and only if, the passed attribute is not empty.
+    
+    filename = str(whizzFile)
+
+    with h5py.File(filename, 'r+') as f:
+        # create all the data structure ready for the datasets
+        g = f[groupName]['Lines']
+        changed = False
+        
+        for line in g.keys():
+            dd = g[line][channel] # ToDo: make this case insensitive
+            if name != '':
+                dd.attrs['Name'] = name
+                changed = True
+            if units != '':
+                dd.attrs['Units'] = units
+                changed = True
+            if alias != '':
+                dd.attrs['Alias'] = alias
+                changed = True
+            if description != '':
+                dd.attrs['Description'] = description
+                changed = True
+            if chan_precision > -1:
+                dd.attrs['chan_precision'] = chan_precision
+                changed = True
+        if changed:
+            print(f'Changed channel attribute(s) for {channel} in {whizzFile.name}.')
+    return
+
+
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):
     """
     Change any of the project attributes in the HDF5 Whizz file. Typically most of this information
@@ -970,6 +1306,288 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
         if changed:
             print(f'Changed CoordFrame attribute(s) for {whizzFile.name}.')
 
+<<<<<<< Updated upstream:AirGravQC/pointfiles.py
+=======
+    
+# add data from grids to whizz file
+def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
+    """
+    Interpolates the data in a grid file onto a new channel, with the same name
+    as the gridPath stem, in the geoWhizz HDF5 file. Fills empty channel samples
+    with nans.
+
+    Parameters
+    ----------
+    gridPath : String or pathlib.PosixPath
+        Name of a ERMapper file, including path and extension.
+    hdfFile : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension.
+
+    Returns
+    -------
+    None.
+
+    """
+    gridFile = str(gridPath)
+    hdfFile = str(hdfPath)
+
+    # retrieve the grid information
+    eg, ng, zg, datum, projection = grd.read_ers_image(gridPath)
+    ng0 = np.min(ng)
+    ngd = np.abs(ng[1] - ng[0])
+    eg0 = np.min(eg)
+    egd = np.abs(eg[1] - eg[0])
+    zg = zg[::-1, :]
+    newChannelName = gridPath.stem
+    
+    print('\nGrid file read for channel ', newChannelName)
+    print(ng0, eg0, ngd, egd)
+        
+    with h5py.File(hdfFile, 'r+') as f:
+        g = f[groupName]['Lines']
+        lineGroups = list(g.values())
+        channelNames = list(lineGroups[0].keys())
+        x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        t = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
+        height = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+        if lines == []:
+            lines = list(g.keys())
+    #TODO: if newChannelName is in channelNames, append '_01' and check again.
+    #TODO: handle x or y or zg = nan  
+        for line in lines:
+            lineNo = line
+            lineText = 'Line ' + lineNo
+            em = getLineData(g[line], x)
+            nm = getLineData(g[line], y)
+            time = getLineData(g[line], t)
+            zm = np.empty(em.shape)
+            zm[:] = np.nan
+            dist = np.empty(em.shape)
+            dist[:] = np.nan
+            sampleSpacing = util._distance(em[1]-em[0], nm[1]-nm[0])
+            print(lineText)
+            print('  North min, max ', np.min(nm), np.max(nm), '  East min, max ', np.min(em), np.max(em))
+            
+            # estimate by weighted average about twice per grid cell
+            subRate = int(max(1, int(min(ngd, egd)) / (2 * sampleSpacing)))
+            ttemp = time[0:len(zm):subRate]
+            ztemp = np.empty(ttemp.shape)
+            ztemp[:] = np.nan
+            kz = 0
+            for kk in range(0, len(zm), subRate):
+                ii = int(np.rint((nm[kk] - ng0) / ngd))
+                jj = int(np.rint((em[kk] - eg0) / egd))
+                #print('ii, jj ', ii, jj)
+                
+                if zg[ii, jj] == np.nan:
+                    print('Error - nan in zGrid')
+                    break
+                    continue
+                
+                nCell = 0
+                x = np.zeros((9,))
+                y = np.zeros((9,))
+                z = np.zeros((9,))
+                x[:] = np.nan
+                y[:] = np.nan
+                z[:] = np.nan
+
+                for icount in range(ii-1, ii+1):
+                    if icount < 0:
+                        continue
+                    for jcount in range(jj-1, jj+1):
+                        if jcount < 0:
+                            continue
+                        if zg[icount, jcount] == np.nan:
+                            print('Error - nan in zGrid')
+                            break
+                            continue
+                        x[nCell] = ng[icount]
+                        y[nCell] = eg[jcount]
+                        z[nCell] = zg[icount, jcount] # SWAP???
+                        nCell += 1
+
+                ztemp[kz] = _weightedAverage(x, y, z, em[kk], nm[kk])
+                #print(x, y, z, em[kk], nm[kk], kz, ztemp[kz])                        
+                kz += 1
+                                        
+            print(lineText, ' sampled ', kz, 'of ', len(zm), '. Max value = ', np.nanmax(ztemp))
+            # Now interpolate through gaps by cubic spline
+            (zm, _) = util._interpolateLine(ttemp, ztemp, time)
+            
+            # and store in line sub-group
+            if newChannelName in g[line]:
+                print('already there')
+            else:
+                dd = g[line].create_dataset(newChannelName, data = zm, compression="gzip", compression_opts=4)
+                dd.attrs['Name'] = newChannelName
+           
+            fail, numExc = util._failsDeviation(zm - getLineData(g[line], height), 20.0, 13)
+            if fail and numExc > 13:
+ #           if np.abs(np.max(getLineData(g[line], 'altitude') - zm)) > 20.0:
+                plotTime = time - time[0]
+                fig = plt.figure()
+                ax1 = fig.add_subplot(2,1,1)
+                ax1.plot(plotTime, getLineData(g[line], 'altitude'), plotTime, zm)
+                ax1.set_xlim(plotTime[0], plotTime[-1])
+                plotTitle = f'Line {line}, altitude and planned drape height'
+                plt.title(plotTitle, fontsize = 8)
+                plt.grid(True)
+                for label in ax1.get_xticklabels(): label.set_fontsize(6)
+                for label in ax1.get_yticklabels(): label.set_fontsize(6)
+                
+                ax2 = fig.add_subplot(2,1,2)
+                ax2.plot(plotTime, getLineData(g[line], 'altitude') - zm)
+                ax2.set_xlim(plotTime[0], plotTime[-1])
+                plotTitle = f'Difference'
+                plt.title(plotTitle, fontsize = 8)
+                plt.grid(True)
+                for label in ax2.get_xticklabels(): label.set_fontsize(6)
+                for label in ax2.get_yticklabels(): label.set_fontsize(6)
+            
+                plt.show()
+            
+    print("TODO")
+    
+    # find index of nearest grid cell to sample point at xs
+    # where xo is the origin of the grid and dx is the cell size.
+    # ii = np.rint((xs - xo) / dx).astype(int)
+    return
+
+    
+def _weightedAverage(x, y, z, xo, yo):
+    x = x[np.logical_not(np.isnan(z))]
+    y = y[np.logical_not(np.isnan(z))]
+    z = z[np.logical_not(np.isnan(z))]
+    dx = x - xo
+    dy = y - yo
+    weight = np.zeros(x.shape)
+    for ii in range(0, len(x)):
+        weight[ii] = _invDist(dx[ii], dy[ii])
+    
+    return np.average(z, weights = weight)
+
+
+def _invDist(x, y):
+    """
+    Returns the inverse of `_distance(x,y)`
+    """
+    return 1.0 / util._distance(x, y)
+
+
+# Retrieve data from ASEG-GDF2 files to put into whizz file
+def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName=projectName, omitChannels=['RT'], verbose=False):
+    """
+    Reads the data from the ASEG-GDF2 `datafile` and writes it to a new Whizz
+    HDF5 survey file (`outputHdf`). Uses the `gspy` package to read the ASEG-GDF2
+    data. This requires the prior construction of JSON files `surv_metadata` and
+    `data_metadata`: see `gspy` documentation for details.
+
+    Parameters
+    ----------
+    surv_metadata : String
+        The name of the survey metadata file (JSON).
+    data_metadata : String
+        The name of the data metadata file (JSON).
+    datafile : pathlib.PosixPath
+        The pathlib Path to the input ASEG-GDF2 file.
+    outputHdf : pathlib.PosixPath, optional
+        The pathlib Path to the output Whizz HDF5 file. The default is '' and
+        the output file is then the same as the input file with the extension
+        changed to '.hdf5'.
+    projectName : String
+        The project name, used in reports and plot titles.
+    omitChannels : [String], optional
+        An array of channel or field names to omit from the saved geoWhizz HDF5 file.
+        By default, `RT` is omitted.
+    verbose : Bool
+        If true, print extra information whilst saving data.
+
+    Returns
+    -------
+    None.
+    """
+
+    # Put all the ASEG-GDF2 info into a gspy survey.
+    # TODO:
+    #   1. use the key attributes to populate CoordFrame
+    survey = Survey(surv_metadata)
+    try:
+        survey.add_tabular(type='aseg', data_filename=datafile, metadata_file=data_metadata)
+    except Exception as e:
+       print(e)
+    
+    # get the survey lines and the numbers of fids per survey line
+    lines, fidsperline = gsflightlines(survey)
+    
+    dataset = survey.tabular.xarray
+    
+
+    if outputHdf == '':
+        outputHdf = Path(datafile).with_suffix('.hdf5')
+
+    with h5py.File(str(outputHdf), 'w') as f:
+        # create all the data structure ready for the datasets
+        g = f.create_group(groupName)
+        g.attrs['ProjectName'] = projectName
+        
+        gCoord = g.create_group('CoordinateFrame')
+        gLines = g.create_group('Lines')
+
+        # if zoneIdx >= 0:
+        #     # s/w limitation - assume all data in the same UTM zone as the first flight line.
+        #     gCoord.attrs['UTMZone'] = zones[0]
+        
+        # Move the data.
+        dtype_error_chan = ''
+        dtype_error = False
+        end = 0
+        for lineIdx in range(0, len(lines)):
+            start = end
+            end = start + fidsperline[lineIdx]
+            if verbose:
+                print(f'  About to add data for line {lines[lineIdx]}, Lcount {lineIdx+1}/{len(lines)}, Fids {start}/{end}')
+
+            # Pick out the XArray DataSet slice with the the current line's data
+            line_ds = dataset.isel(index = slice(start,end))
+
+            # create a HDF5 line group and metadata
+            gg = gLines.create_group(f'{lines[lineIdx]}')
+            gg.attrs['LineNumber'] = lines[lineIdx]
+            try:
+                flight_chan = survey.tabular.attrs['key_mapping.flight_number']
+                gg.attrs['Flight'] = line_ds[flight_chan].data[0]
+            except:
+                print('No FLight channel found. If one should be there, check the data metadata JSON file.')
+            # if dateIdx >= 0:
+            #     gg.attrs['Date_Local'] = dates[lineIdx]
+            gg.attrs['NumberOfFids'] = fidsperline[lineIdx]
+
+            channels = list(line_ds.keys())
+            for channel in channels:
+                if verbose:
+                    print(f'      Adding {channel} data for line {lines[lineIdx]}')
+                if channel in omitChannels:
+                    continue
+                dataArray = line_ds[channel]
+                # if not, then what???
+                chan_type = line_ds[channel].dtype
+                if chan_type == 'O':
+                    dtype_error = True
+                    dtype_error_chan = channel
+                    continue
+                dd = gg.create_dataset(channel, data = dataArray, dtype=chan_type, compression="gzip", compression_opts=4)
+                dd.attrs['Name'] = line_ds[channel].standard_name
+                dd.attrs['Alias'] = channel
+                dd.attrs['Units'] = line_ds[channel].units
+                dd.attrs['Description'] = line_ds[channel].long_name
+                dd.attrs['Format'] = line_ds[channel].format
+                dd.attrs['Null_value'] = line_ds[channel].null_value
+    if dtype_error:
+        print(f'      {dtype_error_chan} dtype "O" not accepted, data not copied from ASEG-GDF2')
+
+>>>>>>> Stashed changes:AirGravQC/whizzFiles/pointfiles.py
 
 def asegReportChannels(datFilePath):
     """
@@ -1044,6 +1662,7 @@ def asegReportFirst(datFilePath, channels):
     return    
 
 
+<<<<<<< Updated upstream:AirGravQC/pointfiles.py
 def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
     """
     Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
@@ -1074,6 +1693,10 @@ def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
     
     # open GDF, pull out channel names, the units, and the description
     gdf = aseg.read(str(datFilePath), method='fixed-widths')
+=======
+def get_gdfchannames(GDF_file, omitChannels=['RT']):
+    gdf = aseg.read(GDF_file, method='fixed-widths')#, engine='pandas')
+>>>>>>> Stashed changes:AirGravQC/whizzFiles/pointfiles.py
     channelNames = gdf.field_names()
     channelsOut = channelNames # these are the channels we will save
         
@@ -1252,6 +1875,25 @@ def asegToHDF(datFilePath, outputHdf = '', omitChannels=['RT'], dontSave=False):
             numChunk += 1
 
     return
+
+
+def gsflightlines(survey):
+    """
+    Given a GSpy Survey, returns the individual survey line numbers and the number of
+    samples (fiducials) in each survey line.
+    
+    Used for converting ASEG-GDF2 files to GeoWhizz files.
+    
+    It counts the lines regardless of ordering but, be warned, later on we assume
+    that the all samples from one line are contiguous.
+    """
+    # `line_chan` contains the name of the channel with the line numbers.
+    line_chan = survey.tabular.attrs['key_mapping.line_number']
+    # construct a numpy array of all line numbers ...
+    xa = survey.tabular.xarray
+    npa = (xa[line_chan].values)
+    # ... and use the nice `np.unique` function (fast and easy)
+    return np.unique(npa, return_counts=True)
 
 
 def cleanUnits(fieldDef):
@@ -1446,6 +2088,7 @@ def index_containing_substring(the_list, substring):
     return
 
 
+# Retrieve data from XYZ files to put into whizz file
 def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False):
     """
     Read in a Geosoft XYZ file and write the contents to a Whizz HDF5 file.
@@ -1617,27 +2260,12 @@ def read_xyz_header(filename):
     first_dict = dict(zip(channelnames, first_data_rec))
     return first_dict
 
-    
-def readXYZ(filename, verbose=False):
-    """
-    Open a Geosoft XYZ file, read in the contents and return a dictionary
-    array where each element corresponds to one flight line and contains the
-    line number, flight number, date, and data for each channel.
-    
-    **TODO**:
-    
-        1. remove reliance on Flight, Date and Line fields if possible.
 
-        2. replace the entire routine with a xyzToHdf() function because this function
-        will run out of memory if the XYZ file is large.
-    """
 
+def getxyz_numbers(filename, need_first_data_rec):
     num_lines = 0
     num_head_recs = 0
     num_channels = 0
-    need_first_data_rec = True
-
-    # count number of header records, number of flight lines in file and number of channels
     with open(filename, 'r') as fid:
         print(f'Accessing XYZ data in {filename}.\nFirst few records are:')
         for file_line in fid:
@@ -1661,11 +2289,11 @@ def readXYZ(filename, verbose=False):
             else:
                 continue
     fid.close()
-    print(f'\n  Found {num_head_recs} header records')
-    print(f'  Found {num_lines} lines')
-    print(f'  Found {num_channels} fields\n')
-    
-    # get channel names
+
+    return  num_head_recs, num_lines, num_channels
+
+
+def getxyz_channames(filename, num_channels, num_head_recs, verbose=False):
     header_rec = 0
     with open(filename, 'r') as fid:
         for file_line in fid:
@@ -1682,6 +2310,7 @@ def readXYZ(filename, verbose=False):
                 print(f"Error - can't find header record with {num_channels} channel names.")
                 break
     fid.close()
+<<<<<<< Updated upstream:AirGravQC/pointfiles.py
     
     # rename key channels TODO : is this necessary now that whizz Files have 'XChannel' etc?
     for jj in range(num_channels):
@@ -1689,15 +2318,16 @@ def readXYZ(filename, verbose=False):
             channelnames[jj] = 'X'
         if channelnames[jj] == 'y' or channelnames[jj] == 'Y' or channelnames[jj] == 'northing' or channelnames[jj] == 'Northing':
             channelnames[jj] = 'Y'
+=======
+    return channelnames
+>>>>>>> Stashed changes:AirGravQC/whizzFiles/pointfiles.py
 
+
+def getxyz_lines_fids(filename, num_lines):
     # initialise counter for the number of fids per line and storage for lines, flights and dates
     num_fids = np.zeros((num_lines,), dtype=int)
-    # flight_nos = np.zeros((num_lines,), dtype=int)
     line_nos = np.zeros((num_lines,))
-    # flight_dates = [[1, 1, 1980] for k in range(num_lines)]
     line_ctr = 0
-    # flight_no = 0
-    # flight_date = [1, 1, 1980]
 
     # get lines, flights and dates
     with open(filename, 'r') as fid:
@@ -1713,15 +2343,49 @@ def readXYZ(filename, verbose=False):
                     flight_date = [int(d), int(m), int(y)]
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 current_line = float(file_line.split()[1])
+<<<<<<< Updated upstream:AirGravQC/pointfiles.py
                 line_nos[line_ctr] = f'{current_line:.2f}'
  #               flight_nos[line_ctr] = flight_no
   #              flight_dates[line_ctr] = flight_date
+=======
+                line_nos[line_ctr] = f'{current_line:.3f}'
+>>>>>>> Stashed changes:AirGravQC/whizzFiles/pointfiles.py
                 line_ctr += 1
     #        elif file_line.count('*') != 0:
     #            continue  # print('Skip record for dummy')
             else:
                 num_fids[line_ctr-1] += 1
     fid.close()
+
+
+    return line_nos, num_fids
+
+
+def readXYZ(filename, verbose=False):
+    """
+    Open a Geosoft XYZ file, read in the contents and return a dictionary
+    array where each element corresponds to one flight line and contains the
+    line number, flight number, date, and data for each channel.
+    
+    **TODO**:
+    
+        1. remove reliance on Flight, Date and Line fields if possible.
+
+        2. replace the entire routine with a xyzToHdf() function because this function
+        will run out of memory if the XYZ file is large.
+    """
+
+    need_first_data_rec = True
+
+    num_head_recs, num_lines, num_channels = getxyz_numbers(filename, need_first_data_rec)
+    print(f'\n  Found {num_head_recs} header records')
+    print(f'  Found {num_lines} lines')
+    print(f'  Found {num_channels} fields\n')
+    
+    channelnames = getxyz_channames(filename, num_channels, num_head_recs, verbose=verbose)
+    
+    line_nos, num_fids = getxyz_lines_fids(filename, num_lines)
+
 
     # initialise dictionary list
     geosoftXYZ = [{'line_number': line_nos[0]}]
@@ -1734,8 +2398,6 @@ def readXYZ(filename, verbose=False):
 
     for ii in range(1, num_lines):
         temp = {'line_number': line_nos[ii]}
-                # 'flight_number': flight_nos[ii],
-                # 'date_flown': flight_dates[ii]}
         for jj in range(num_channels):
             mynans = np.zeros(((num_fids[ii]),))
             mynans[mynans == 0] = np.nan
@@ -1743,7 +2405,8 @@ def readXYZ(filename, verbose=False):
 
         geosoftXYZ.append(temp)
 
-    # line_ctr = 0 # for each survey line
+    # line_ctr = 0 # increment for each survey line
+    # TODO: Replace this block with a function call
     line_ctr = 0
 
     with open(filename, 'r') as fid:
@@ -1780,33 +2443,7 @@ def readXYZ(filename, verbose=False):
     return geosoftXYZ
 
 
-def renameChannels(nchannels, chanNames):
-    """
-    Any channel named 'x' is renamed 'X'.
-
-    Redundant function since the use of `XChannel` metadata.
-
-    Parameters
-    ----------
-    nchannels : Int
-        The number of channels.
-    chanNames : [String]
-        Array of channel names.
-
-    Returns
-    -------
-    chanNames : [String]
-        Array of renamed channel names.
-
-    """
-    
-    for ii in range(0, nchannels): # TODO: expand this to cover a large range of possibilities
-        if chanNames[ii] == 'x':
-            chanNames[ii] = 'X'
-            
-    return chanNames
-
-    
+# Incomplete development code
 def addWhizzToWhizz(inputWhizzFile, outputWhizzFile, lines=[]):
     """
     Adds all the ['Lines'] sub-groups (with all they contain) from `inputWhizzFile` to the
@@ -1884,20 +2521,5 @@ def addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX = [], pl
     return        
 
 
-def doyToISO8601(doy):
-    """
-    Converts day-of-year in the format yyyymmdd into an ISO 8601 datetime string. No timezone is recorded.
 
-    Parameters
-    ----------
-    doy : Int
-        Day-of-year encoded as yyyymmdd and stored as Int.
-
-    Returns
-    -------
-    Str
-        The date as a naive (to timezone) ISO 8601 string.
-
-    """
-    return datetime.datetime.strptime(str(doy), '%Y%m%d').isoformat()
 

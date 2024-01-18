@@ -1,5 +1,6 @@
 # AirGravQC Todo List
 
+<<<<<<< Updated upstream
 1. GRANTED - Get permissions from Xcalibur to use Canobie field data for tutorial.
 2. Get permissions from SGL to use GA/GSV field data for tutorial.
 3. Get permissions from Bell Geospace to use some field data for tutorial.
@@ -13,6 +14,50 @@
 11. All `check***` routines to have options `lines=[]`, `plot_flag=False`, `known=''`.
 12. Standardise QC (check) functions to report: 1 - what it is doing; 2 - a one sentence result summary; 3 - line-by-line summary.
 13. DONE. Stop using "erm" - use "grd" instead.
+=======
+0. Get everything setup as a local package under pip.
+2. Change all QC routines to report in the same format (Projectname, Blockname, summary [, detail text [, plot]]).
+3. Standardise plots as much as possible (plot titles, axis labels, use of units). Write and use common plot functions.
+4. Design geoWhizz v1.1 (based on `gspy`), and then upgrade to it.
+5. Test the various height checks: checkSafeClearance, checkClearance, checkVert; that they work as intended.
+7. `checkGNSS` only finds at most one error per line. It should find and report against the actual spec like `checkVertPlan`. Similarly it should have an option to plot lines with failures; and an option to test a specified array of lines.
+8. All `check***` routines to have options `lines=[]`, `plot_flag=False`, `known=''`, `verbose=False`.
+9. Standardise QC (check) functions to report: 1 - what it is doing; 2 - a one sentence result summary; 3 - line-by-line summary.
+10. Get permissions from Andy Gabell to use some field data for tutorial.
+17. Write checkLineSeparation() against separation = nominal +/- allowance for distance > max_distance.
+18. plotBoxWhisker - x axis formatter to include decimals, write another formatter function to do this.
+19. PROGRESS. All the source files are way too big - re-factor!!
+20. `checkXYPlan` - gets confused about number of zeros after decimal point in line number
+22. If the XYZ file contains a date in the format YYYY/MM/DD, then convert it to a decimal date string. See the stub `translate_date` in `gw`.
+23. Write a function to compare two whizz datafiles and report which lines have differences. Include a `detail` flag, when true, print the first exemplar difference on the line.
+24. `checkGaps` - modify to allow gaps smaller than some minimum size.
+26. Set up as a package on Github.
+28. Have `asegToHDF` read string fields such as dates '12/04/2021' and store them.
+29. Have `asegToHDF` use the key attributes to populate CoordFrame.
+32. Ensure all routines are checked in `Test_AirGravQC_overall.ipynb`.
+33. If the previous command showed a plot, and plot_flag is set to true for the current command but no plot is made, then STOP showing the plot from the previous command! Probably need a condition on `plt.show()`. `if plot_flag and num_errors > 0`
+34. `checkSpeeds()` should make a plot for lines below minimum safe speed.
+38. `checkHighFreq` needs to report the summary before the plots.
+39. Move to numeric line numbers. Might need to stick with strings for the sub-group name but use the numeric attribute for processing and selection.
+
+1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
+6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.
+11. DONE. Stop using "erm" - use "grd" instead.
+12. DONE - Get permissions from Xcalibur to use Canobie field data for tutorial.
+13. DONE - Get permissions from SGL to use GA/GSV field data for tutorial.
+14. DONE - Get permissions from Bell Geospace to use some field data for tutorial.
+15. PROGRESS. Make code insensitive to the case of the channel names.
+16. DONE - Make flightChannel default = attrib.flight
+21. DONE. Everywhere: replace 'pf' and 'mhd' as shortcuts for 'pointfiles' with 'gw'.
+25. DONE. `commonErsHdrErrors` - include a check that a Units field is present.
+27. DONE. `checkHeading` plots output from one line even when there are 0 failures.
+30. DONE. `checkSpikes` needs to give some report when there are no spikes found.
+31. DONE. `checkDiurnal` needs a report when successful.
+35. DONE. `checkTCDiff4` needs a one-line summary report, and a verbose` switch to turn off all the other rubbish.
+36. DONE. `checkDiurnal` gives no feedback if there are no problems. A report of success is needed.
+37. DONE. `checkGaps` needs an `ignored_chans` option so that processed channels can be ignored.
+
+>>>>>>> Stashed changes
 
 
 ## geoWhizz v1.1
