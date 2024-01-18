@@ -29,18 +29,18 @@ groupName = config.groupName
 
 def checkPhase(filename, channel1, channel2):
     """
-    For every survey line in a geoWhizz HDF5 file, given two fields, calculate
+    For every survey line in a geoWhizz HDF5 file, given two channels, calculate
     the phase shift (in number of samples) required to maximise the correlation
-    between the two fields
+    between the two channels
 
     Parameters
     ----------
     filename : String
         The name of a geoWhizz HDF5 file.
     channel1 : String
-        The name of the first field.
+        The name of the first channel.
     channel2 : String
-        The name of the second field.
+        The name of the second channel.
     
     Returns
     -------
@@ -273,16 +273,16 @@ def checkStatcor(whizzFile, statcor, flight=''):
     return
 
 
-def checkConstantSlope(whizzFile, fields=[]):
+def checkConstantSlope(whizzFile, channels=[]):
     """
-    Checks for constant slope (`np.diff`) in all the given fields of data.
+    Checks for constant slope (`np.diff`) in all the given channels of data.
     
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
-    fields : String List
-        List of field names from the database to be checked.
+    channels : String List
+        List of channel names from the database to be checked.
 
     Returns
     -------
@@ -293,27 +293,27 @@ def checkConstantSlope(whizzFile, fields=[]):
     
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
-        if fields == []:
+        if channels == []:
             lineGroups = list(g.values())
-            fields = list(lineGroups[0].keys())
+            channels = list(lineGroups[0].keys())
         data_is_good = True
         report = ''
         for line in g.keys():
-            for field in fields:
-                data = gw.getLineData(g[line], field)
+            for channel in channels:
+                data = gw.getLineData(g[line], channel)
                 deriv = np.diff(data, n = 1)
                 mean_deriv = np.mean(deriv)
                 deriv = deriv - mean_deriv
                 if len(deriv) > 10:
                     extremum = np.max(deriv) if np.max(deriv) > -np.min(deriv) else -np.min(deriv)
                     if extremum > mean_deriv / 1000.0:
-                        report += f'\n  {line}; {field} Largest difference (= {extremum:.3g}) > 0.1% of mean difference (= {(mean_deriv / 100.0):.3g})'
+                        report += f'\n  {line}; {channel} Largest difference (= {extremum:.3g}) > 0.1% of mean difference (= {(mean_deriv / 100.0):.3g})'
                         data_is_good = False
                 else:
-                    report += f'\n  {line}; {field} data length {len(deriv)+1} is too short for analysis.'
+                    report += f'\n  {line}; {channel} data length {len(deriv)+1} is too short for analysis.'
                     data_is_good = False
     if data_is_good:
-        report += 'All fields tested were either constant or of constant slope for all lines tested.'
+        report += 'All channels tested were either constant or of constant slope for all lines tested.'
     print(report)
     return
 
@@ -395,7 +395,7 @@ def lineStats(whizzFile, channel):
     whizzFile : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension.
     channel : String
-        The name of the channel or field to plot.
+        The name of the channel to plot.
 
     Returns
     -------
