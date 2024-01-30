@@ -11,7 +11,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
         
 
-def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=10.0, plot_flag=False):
+def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y='', tolerance=10.0, plot_flag=False):
     """
     Checks heading in degrees is within +/- tolerance (in degrees) of nominal (in degrees). Actually
     checks against `sin(nominalHeading +/- tolerance)`.
@@ -22,6 +22,9 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
         Name of a HDF5 Whizz file, including path and extension.
     nominalHeadings : [Float]
         The desired headings in degrees from north.
+    headingchan : String, optional
+        The name of the geoWhizz channel containing the headings. The
+        default is to calculate the heading from the x and y channels.
     x : String, optional
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
@@ -53,22 +56,29 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
         numLines = len(lines)
 
         for line in lines:
-            dx = np.diff(gw.getLineData(g[line], x))
-            dy = np.diff(gw.getLineData(g[line], y))
+            x_data = gw.getLineData(g[line], x)
+            y_data = gw.getLineData(g[line], y)
+            distance = util._length(x_data, y_data)
+            if headingchan == '':
+                dx = np.diff(x_data)
+                dy = np.diff(y_data)
+                heading = np.arctan2(dx, dy) * 180.0 / np.pi
+                plot_x = distance[1:]
+            else:
+                heading = gw.getLineData(g[line], headingchan)
+                plot_x = distance
             allok = True
             for nomhead in nominalHeadings:
-                heading = np.arctan2(dx, dy) * 180.0 / np.pi
                 allok = all(angle_in_range(heading, nomhead, tolerance))
                 if allok:
                     break
             
             if not allok:
-                min_heading = np.nanmin(heading)
-                max_heading = np.nanmax(heading)
-                mean_heading = np.mean(heading)
+                min_heading = np.nanmin(heading % 360)
+                max_heading = np.nanmax(heading % 360)
                 num_failed_lines += 1
-                report += f'Line {line}: heading range exceeded at {nomhead}. Mean {mean_heading:.2f}, '
-                report += f'Min {min_heading:.2f}, Max {max_heading:.2f} deg.\n'
+                report += f'Line {line}: heading exceedance against tolerance {tolerance}. '
+                report += f'Min {min_heading:.2f}, Max {max_heading:.2f} deg. Len={len(heading)}\n'
                 if plot_flag:
                     fig = plt.figure()
                     fig.suptitle(f'Heading Check Line {line}', fontsize=10)
@@ -76,7 +86,7 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], x='', y='', tolerance=1
                     
                     ax = fig.add_subplot(1,1,1)
                     thou_format = tkr.FuncFormatter(util._space_thou)
-                    ax.plot(gw.getLineData(g[line], x)[1:], heading, 'b', mfc='w')
+                    ax.plot(plot_x, heading % 360, 'b', mfc='w')
                     ax.xaxis.set_major_formatter(thou_format)
                     plt.ylabel('Estimated heading [deg]', fontsize = 6)
                     plt.xlabel(f'{x} [m]', fontsize = 6)

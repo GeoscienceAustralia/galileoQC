@@ -108,8 +108,14 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
             for line in lines:
                 line_flagged = False
                 lineName = util._get_lineName(gMeas[line])
-                planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
-                if planLine in gPlan: # 5 DEC
+                # planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
+                planLine = gMeas[line].attrs['PlannedLine'] # a Float double
+                planLineInPlan = False
+                for pline in gPlan:
+                    if pline.attrs['LineNumber'] == planLine:
+                        planLineInPlan = True
+
+                if planLineInPlan:
                     xP = np.array(gPlan[planLine][planX])
                     yP = np.array(gPlan[planLine][planY])
                     zP = np.array(gPlan[planLine][planZ])

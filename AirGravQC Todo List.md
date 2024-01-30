@@ -23,6 +23,7 @@
 33. If the previous command showed a plot, and plot_flag is set to true for the current command but no plot is made, then STOP showing the plot from the previous command! Probably need a condition on `plt.show()`. `if plot_flag and num_errors > 0`
 34. `checkSpeeds()` should make a plot for lines below minimum safe speed.
 38. `checkHighFreq` needs to report the summary before the plots.
+39. `checkDrape`: default plot_flag=False, add distance of exceedance like `checkVertPlan`, allow optional lines=[] argument.
 
 1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.

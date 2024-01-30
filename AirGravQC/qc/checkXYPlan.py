@@ -10,7 +10,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=14, maxDistance=0, known='', plot_flag=False, verbose=False):
+def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=0, maxDistance=0, known='', plot_flag=False, verbose=False):
     """
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
@@ -99,7 +99,7 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                 lines = gMeas.keys()
 
             for line in lines:
-                planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
+                planLine = f"{gMeas[line].attrs['PlannedLine']:.3f}" # DODGY!!! TODO - fix
                 lineName = util._get_lineName(gMeas[line])
                 exceedance_in_line = False
                 if planLine in gPlan:
