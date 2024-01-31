@@ -107,13 +107,9 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
 
             for line in lines:
                 line_flagged = False
-                lineName = util._get_lineName(gMeas[line])
-                planLine = gMeas[line].attrs['PlannedLine'] # a Float double
-                planLineInPlan = False
-                for pline in gPlan.keys():
-                    if gPlan[pline].attrs['LineNumber'] == planLine:
-                        planLineInPlan = True
-                        gpline = pline
+                gLineMeas = gMeas[line]
+                planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
+                lineName = util._get_lineName(gLineMeas)
 
                 if planLineInPlan:
                     xP = np.array(gPlan[gpline][planX])
@@ -187,9 +183,9 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                                     this_exc_known = False
                     if plot_flag and line_flagged:
                         if abs(np.cos(dirn)) > 0.5:
-                            _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn)
+                            _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, lineName, dirn)
                         else:
-                            _plot_vert_exceedance(xm, z_dev, yP, zP, yM, zM, measY, measZ, allowance, line, planLine, dirn)
+                            _plot_vert_exceedance(xm, z_dev, yP, zP, yM, zM, measY, measZ, allowance, line, lineName, dirn)
                 else:
                     print(f'Line {lineName} not in plan.')
                     num_lines_unplanned += 1
@@ -200,7 +196,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
         print(report)
         if plot_flag and numErrLines > 0:
             plt.show()
- 
+
 
 def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn):
     fig = plt.figure()

@@ -27,76 +27,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
 
-def checkPhase(filename, channel1, channel2):
-    """
-    For every survey line in a geoWhizz HDF5 file, given two channels, calculate
-    the phase shift (in number of samples) required to maximise the correlation
-    between the two channels
 
-    Parameters
-    ----------
-    filename : String
-        The name of a geoWhizz HDF5 file.
-    channel1 : String
-        The name of the first channel.
-    channel2 : String
-        The name of the second channel.
-    
-    Returns
-    -------
-    None.
-
-    """
-    from scipy.signal import correlate
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]
-        numLines = len(g.items())
-        offsets = np.zeros((numLines,))
-        count = 0
-
-        for line in g.keys():
-            linegroup = g[line]
-            A = gw.getLineData(linegroup, channel1)
-            B = gw.getLineData(linegroup, channel2)
-            nsamples = A.size
-
-            # regularize datasets by subtracting mean and dividing by s.d.
-            A -= A.mean(); A /= A.std()
-            B -= B.mean(); B /= B.std()
-
-            # Put in an artificial time shift between the two datasets
-            #time_shift = 20
-            #A = numpy.roll(A, time_shift)
-
-            # Find cross-correlation
-            xcorr = correlate(A, B)
-            
-            # delta time array to match xcorr
-            dt = np.arange(1-nsamples, nsamples)
-            recovered_time_shift = dt[xcorr.argmax()]
-            offsets[count] = recovered_time_shift
-            count += 1
-
-            time = np.arange(dt[0], dt[-1], 0.1)
-            # Now interpolate through gaps by cubic spline
-            (xcorrInt, _) = gw.interpolateLine(dt, xcorr, time)
-            recovered_time_shift2 = time[xcorrInt.argmax()]
-            print(f'Line {line}: Recovered time shift = {recovered_time_shift2:.1f}')
-            
-        fig = plt.figure()
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(time, xcorrInt)
-        plt.ylabel('Correlation [arbitrary units]', fontsize = 6)
-        plt.xlabel('FID difference [s]', fontsize = 6)
-        plotTitle = f'Line {line}: Correlation of {channel1} v {channel2}'
-        plt.title(plotTitle, fontsize = 8)
-        plt.grid(True)
-        for label in ax.get_xticklabels(): label.set_fontsize(6)
-        for label in ax.get_yticklabels(): label.set_fontsize(6)
-        plt.show()
-        print(f'Offset MEAN = {np.mean(offsets):.2f}; STD = {np.std(offsets):.3f}')
-        
-        
 def calcDrift(whizzFile, time, gradient):
     """
     NOT USED
@@ -270,51 +201,6 @@ def checkStatcor(whizzFile, statcor, flight=''):
         for label in ax.get_xticklabels(): label.set_fontsize(6)
         for label in ax.get_yticklabels(): label.set_fontsize(6)
         plt.show()
-    return
-
-
-def checkConstantSlope(whizzFile, channels=[]):
-    """
-    Checks for constant slope (`np.diff`) in all the given channels of data.
-    
-    Parameters
-    ----------
-    whizzFile : HDF5 Whizz file pathlib Path
-        The pathlib Path to the Whizz HDF5 file containing the survey line data.
-    channels : String List
-        List of channel names from the database to be checked.
-
-    Returns
-    -------
-    None
-
-    """
-    filename = str(whizzFile)
-    
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        if channels == []:
-            lineGroups = list(g.values())
-            channels = list(lineGroups[0].keys())
-        data_is_good = True
-        report = ''
-        for line in g.keys():
-            for channel in channels:
-                data = gw.getLineData(g[line], channel)
-                deriv = np.diff(data, n = 1)
-                mean_deriv = np.mean(deriv)
-                deriv = deriv - mean_deriv
-                if len(deriv) > 10:
-                    extremum = np.max(deriv) if np.max(deriv) > -np.min(deriv) else -np.min(deriv)
-                    if extremum > mean_deriv / 1000.0:
-                        report += f'\n  {line}; {channel} Largest difference (= {extremum:.3g}) > 0.1% of mean difference (= {(mean_deriv / 100.0):.3g})'
-                        data_is_good = False
-                else:
-                    report += f'\n  {line}; {channel} data length {len(deriv)+1} is too short for analysis.'
-                    data_is_good = False
-    if data_is_good:
-        report += 'All channels tested were either constant or of constant slope for all lines tested.'
-    print(report)
     return
 
 

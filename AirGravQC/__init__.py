@@ -25,7 +25,7 @@ from AirGravQC.whizzFiles.pointfiles import (xyzToHDF, updateCoordFrame, updateP
 from AirGravQC.whizzPlots.whizzPlot import *
 from AirGravQC.gridFiles.gridfiles import (image_pygmt, diff_n_image, display_grid)
 from AirGravQC.gridFiles.read_ers import *
-from AirGravQC.qc.qualityAnalysis import *
+# from AirGravQC.qc.qualityAnalysis import * Commented out to see if we actually ever use any of these!!
 
 # 1D Plotting
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines
@@ -47,12 +47,12 @@ from AirGravQC.qc.checkTCDiff4 import checkTCDiff4
 # AGG (Falcon) checks
 from AirGravQC.qc.diffNoiseVturb import diffNoiseVturb
 from AirGravQC.qc.diffGravVturb import diffGravVturb
+from AirGravQC.qc.checkPhase import checkPhase
 
 # FTG and AGG checks
 from AirGravQC.qc.checkHighFreq import checkHighFreq
 
 # FTG checks
-from AirGravQC.qc.checkHighFreq import checkHighFreq
 from AirGravQC.qc.checkFrobenius import checkFrobenius
 from AirGravQC.qc.ilsNoiseVturb import ilsNoiseVturb
 from AirGravQC.qc.checkInlineSum import checkInlineSum
@@ -75,6 +75,7 @@ from AirGravQC.qc.psdChannelDiff import psdChannelDiff
 from AirGravQC.qc.allChanStats import allChanStats
 from AirGravQC.qc.checkGaps import checkGaps
 from AirGravQC.qc.checkSpikes import checkSpikes
+from AirGravQC.qc.checkConstantSlope import checkConstantSlope
 
 # Airborne gravimetry checks
 from AirGravQC.qc.diffGroundGrid import diffGroundGrid

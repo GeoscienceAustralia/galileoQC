@@ -26,15 +26,17 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
     planPath : String or pathlib.PosixPath
         Name of a HDF5 Whizz file, including path and extension, with the survey
         positions plan.
+    measPath : String or pathlib.PosixPath
+        Name of a HDF5 Whizz file, including path and extension, with the survey
+        measured data.
+    lines : String list, optional.
+        The line numbers to be checked. Default is all lines in the whizzFile.
     planX : String, optional
         The name of the geoWhizz field or channel containing the planned x position. The
         default is to read the xChannel field name from the Coordinate Frame.
     planY : String, optional
         The name of the geoWhizz field or channel containing the planned y position. The
         default is to read the yChannel field name from the Coordinate Frame.
-    measPath : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension, with the survey
-        measured data.
     measX : String, optional
         The name of the geoWhizz field or channel containing the measured x position. The
         default is to read the xChannel field name from the Coordinate Frame.
@@ -54,6 +56,10 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
         The maximum number of consecutive metres for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 0.
+    known : String, optional
+        If present, the name of the channel containing the "known error" flag.
+        This is reported against any error so that known errors can be distinguished
+        from unknown errors.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
 
@@ -99,12 +105,16 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                 lines = gMeas.keys()
 
             for line in lines:
-                planLine = f"{gMeas[line].attrs['PlannedLine']:.3f}" # DODGY!!! TODO - fix
-                lineName = util._get_lineName(gMeas[line])
+                gLineMeas = gMeas[line]
+                planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
+
+                # planLine = f"{gMeas[line].attrs['PlannedLine']:.3f}" # DODGY!!! TODO - fix
+                lineName = util._get_lineName(gLineMeas)
                 exceedance_in_line = False
-                if planLine in gPlan:
-                    xP = np.array(gPlan[planLine][planX])
-                    yP = np.array(gPlan[planLine][planY])
+
+                if planLineInPlan:
+                    xP = np.array(gPlan[gpline][planX])
+                    yP = np.array(gPlan[gpline][planY])
                     xM = np.array(gMeas[line][measX])
                     yM = np.array(gMeas[line][measY])
                     max_deviation = 0.0
@@ -162,15 +172,15 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                                     exceedance_in_line = True
                                 num_fids_in_exceedance = 0
                 else:
-                    print(f'Line {lineName} / {planLine} not in plan.')
+                    print(f'Line {lineName} / {lineName} not in plan.')
                     num_lines_unplanned += 1
                 if exceedance_in_line:
                     num_lines_exceeded += 1
                     if plot_flag:
                         if abs(np.cos(dirn)) > 0.5:
-                            _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn)
+                            _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, lineName, dirn)
                         else:
-                            _plot_exceeding_line(x, y, yP, xP, yM, xM, measY, measX, allowance, line, planLine, dirn)
+                            _plot_exceeding_line(x, y, yP, xP, yM, xM, measY, measX, allowance, line, lineName, dirn)
 
             message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
             message = f'\n{total_num_excs} horizontal exceedances.\n' + message # 5 DEC

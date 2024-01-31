@@ -285,3 +285,38 @@ def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False
     return _butter_bandpass_filter(ils, lowcut, highcut, fs, order = order)
 
 
+def getPlannedLine(gPlan, gLineMeas):
+    """
+    Given the single line group, `gLineMeas`, for a line in a whizzfile of measured
+    data, returns the corresponding line group, 'gpline', from the lines group, 
+    `gPlan`, of a whizzfile of planned data.
+
+    If successful, `planLineInPlan` is True, else it is False.
+
+    Parameters
+    ----------
+    gPlan : HDF5 group
+        The ['Lines'] group for all the survey lines in a survey plan file.
+    gLineMeas : HDF5 group
+        The ['Lines'][line] group for a single survey line in a measured survey file.
+
+    Returns
+    -------
+    planLineInPlan : Bool
+        True if `gpline` found.
+    gpline : HDF5 group
+        The desired line group in the plan lines group.
+    """
+    planLineInPlan = False
+    gpline = ''
+    plannedLineNo = gLineMeas.attrs['PlannedLine'] # a Float double
+    for pline in gPlan.keys():
+        if gPlan[pline].attrs['LineNumber'] == plannedLineNo:
+            planLineInPlan = True
+            gpline = pline
+            break
+    return planLineInPlan, gpline
+ 
+
+
+
