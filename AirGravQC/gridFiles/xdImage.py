@@ -74,6 +74,9 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     None.
 
     """
+    # if dataname == '':
+    #     dataArray = 'data'
+
     vmin = np.nan
     vmax = np.nan
     
@@ -88,5 +91,5 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         vmin = minClip
         vmax = maxClip
     
-    graphicsShaded(data_array.x, data_array.y, data_array.data, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
+    graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')

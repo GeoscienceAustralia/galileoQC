@@ -86,7 +86,7 @@ def getLineData(linegroup, channel):
         if datachannel[0].upper() == channel.upper():
             # print(f'datachannel {datachannel[0]}; channel {channel}')
             my_data = np.array(linegroup[datachannel[0]])
-    if my_data == []:
+    if my_data.size == 0:
         print(f'ERROR - {channel} not found.')
 
     return my_data

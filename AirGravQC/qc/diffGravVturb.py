@@ -5,6 +5,7 @@ from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.utility.utility as util
 
 groupName = config.groupName
 

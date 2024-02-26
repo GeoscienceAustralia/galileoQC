@@ -3,7 +3,7 @@ import numpy as np
 import AirGravQC.gridFiles.read_ers as ers
 
 
-def checkErsHeaders(folderPath='\.'):
+def checkErsHeaders(folderPath=r'\.'):
     """
     Compares all .ers files in the folder for certain key parameters and reports
     any that are different from the first file found in any parameter value.
