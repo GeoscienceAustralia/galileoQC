@@ -24,6 +24,7 @@
 34. `checkSpeeds()` should make a plot for lines below minimum safe speed.
 38. `checkHighFreq` needs to report the summary before the plots.
 39. `checkDrape`: default plot_flag=False, add distance of exceedance like `checkVertPlan`, allow optional lines=[] argument.
+40. Fix the silly use of Helvetica-Neue. Do we need to force a particular font or just sans serif? If we do, do it in one place only!
 
 1. DONE. Get the ASEG-GDF to Whizz converter working well. (Currently reads data but ought to automatically import meta-data as well.)
 6. DONE. Is `checkDrape` useful or redundant? Required for the case where the planned `drape` is included as a channel in the db.

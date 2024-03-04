@@ -38,6 +38,7 @@ from AirGravQC.gridFiles.grid_n_image import grid_n_image
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
+from AirGravQC.graphics import imshow_hs
 
 # Mag
 from AirGravQC.qc.checkDiurnal import checkDiurnal
@@ -73,6 +74,7 @@ from AirGravQC.qc.checkHeading import checkHeading
 from AirGravQC.qc.checkErsHeaders import checkErsHeaders
 from AirGravQC.qc.psdChannelDiff import psdChannelDiff
 from AirGravQC.qc.allChanStats import allChanStats
+from AirGravQC.qc.diffChanStats import diffChanStats
 from AirGravQC.qc.checkGaps import checkGaps
 from AirGravQC.qc.checkSpikes import checkSpikes
 from AirGravQC.qc.checkConstantSlope import checkConstantSlope
@@ -85,5 +87,4 @@ from AirGravQC.qc.checkEotvosCorr import checkEotvosCorr
 from AirGravQC.qc.checkLatCorr import checkLatCorr
 from AirGravQC.qc.checkAtmosEffect import checkAtmosEffect
 
-from AirGravQC.graphics import *
 
