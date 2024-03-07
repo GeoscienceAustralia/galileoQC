@@ -18,8 +18,6 @@ import AirGravQC.qc.qualityAnalysis as qc
 import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.utility.utility as util
 import matplotlib.ticker as tkr
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Verdana']})#Helvetica Neue']})
 
 groupName = config.groupName
 

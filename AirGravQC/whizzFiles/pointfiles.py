@@ -1576,7 +1576,7 @@ def index_containing_substring(the_list, substring):
     # return
 
 
-def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False):
+def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False):
     """
     Read in a Geosoft XYZ file and write the contents to a Whizz HDF5 file.
 
@@ -1584,7 +1584,7 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False
     ----------
     xyzFilePath : pathlib.PosixPath
         The pathlib Path to the Geosoft XYZ file.
-    hdfFileName : pathlib.PosixPath, optional
+    hdfFilePath : pathlib.PosixPath, optional
         The pathlib Path to the Whizz HDF5 file to be created. The default is ''
         leaving the Whizz file to have the same path as the input file but with
         a ".HDF5" extension.
@@ -1605,11 +1605,25 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False
     if xyzFilePath == '':
         xyzFilePath = fb.get_grid_filename()
 
-    if xyzFilePath.__class__ == pathlib.PosixPath:
-
-        xyzFile = str(xyzFilePath)
-        if hdfFileName == '':
-            hdfFileName = xyzFilePath.with_suffix('.hdf5')
+    if isinstance(xyzFilePath, pathlib.Path):
+        xyzFileStr = str(xyzFilePath)
+    elif isinstance(xyzFilePath, str):
+        xyzFileStr = xyzFilePath
+        xyzFilePath = Path(xyzFileStr)
+    else:
+        print('Error - type of xyzFilePath not recognised. Must be Path or String')
+        return
+    if hdfFilePath == '':
+        hdfFilePath = xyzFilePath.with_suffix('.hdf5')
+        hdfFileStr = str(hdfFilePath)
+    elif isinstance(hdfFilePath, pathlib.Path):
+        hdfFileStr = str(hdfFilePath)
+    elif isinstance(hdfFilePath, str):
+        hdfFileStr = hdfFilePath
+        hdfFilePath = Path(hdfFileStr)
+    else:
+        print('Error - type of hdfFilePath not recognised. Must be Path or String')
+        return
 
     # access the data via Geosoft XYZ
     geosoftXYZ = readXYZ(xyzFile)
@@ -1620,9 +1634,9 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False
     for count in range(0, num_lines):
         lines[count] = geosoftXYZ[count]['line_number']
         
-    print('Creating: ', str(hdfFileName))
+    print('Creating: ', hdfFileStr)
         
-    with h5py.File(hdfFileName, 'w') as f: # better data file
+    with h5py.File(hdfFilePath, 'w') as f: # better data file
         # copy over survey metadata
         g = f.create_group(groupName)
         g.attrs['ProjectName'] = projectName
@@ -1664,7 +1678,7 @@ def xyzToHDF(xyzFilePath = '', hdfFileName = '', projectName = '', verbose=False
                                       compression="gzip", compression_opts=4)
            dd.attrs['Name'] = desiredFieldNames[count]
         
-    return hdfFileName
+    return hdfFilePath
 
 
 def read_xyz_header(filename):

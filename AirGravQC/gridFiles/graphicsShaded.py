@@ -10,8 +10,6 @@ import rioxarray
 import h5py
 import pygmt
 import matplotlib.ticker as tkr
-# from matplotlib import rc
-plt.rc('font',**{'family':'sans-serif','sans-serif':['Verdana']})#Helvetica Neue']})Helvetica Neue']})
 
 SMALL_SIZE = 6
 MEDIUM_SIZE = 8

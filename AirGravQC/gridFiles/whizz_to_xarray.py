@@ -1,39 +1,13 @@
 import numpy as np
-# import matplotlib.pyplot as plt
-# from matplotlib import cm
 from pathlib import Path
-# import colorcet as cc
 import xarray as xr
-# import netCDF4 as nc4
-# import filebrowser as fb
-# import rioxarray
 import h5py
-# import pygmt
-# import matplotlib.ticker as tkr
-# # from matplotlib import rc
-# plt.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
-# SMALL_SIZE = 6
-# MEDIUM_SIZE = 8
-# BIGGER_SIZE = 10
-
-# plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
-# plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
-# plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
-# plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-# plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-# plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
-# plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-
-# import AirGravQC.graphics as graphics
-# import AirGravQC.utility.utility as util
-# import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.config as config
 
 groupName = config.groupName
 projectName = config.projectName
-
 
 
 def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[]):
