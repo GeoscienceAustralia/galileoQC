@@ -1626,7 +1626,7 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
         return
 
     # access the data via Geosoft XYZ
-    geosoftXYZ = readXYZ(xyzFile)
+    geosoftXYZ = readXYZ(xyzFileStr)
     desiredFieldNames = [*geosoftXYZ[0]]
     num_lines = len(geosoftXYZ)
     lines = np.zeros((num_lines,))
