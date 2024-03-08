@@ -98,6 +98,8 @@ def image_pygmt(grid, region):
 
 def oddevenlines(whizz_file, channel, grid_space):
     """
+    TODO
+    1. Allow user to enter lists of even and odd lines as optional parameters.
     """
     filename = str(whizz_file)
     evens = []
@@ -108,7 +110,11 @@ def oddevenlines(whizz_file, channel, grid_space):
         lines = lines_group.keys()
         
         for line in lines:
-            planned = lines_group[line].attrs['PlannedLine']
+            if 'PlannedLine' in lines_group[line].attrs.keys():
+                planned = lines_group[line].attrs['PlannedLine']
+            else:
+                print('ERROR. Cant find PlannedLine attribute required to sort into even and odd line numbers.')
+                return
             if planned % 2 == 0:
                 evens.append(line)
             else:

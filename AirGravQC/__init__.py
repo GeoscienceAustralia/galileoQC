@@ -19,13 +19,17 @@ __version__ = "0.0.0"
 # in the named directories. The user can then do:
 #     import AirGravQC as qc
 #     qc.myfun()
-from AirGravQC.whizzFiles.pointfiles import (xyzToHDF, updateCoordFrame, updateProject, 
-    reportSampling, reportFlights, reportWhizz, updateChannelAttributes, updateLineAttributes,
-    asegToHDF)
+from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject, 
+    updateChannelAttributes, updateLineAttributes)
 from AirGravQC.whizzPlots.whizzPlot import *
 from AirGravQC.gridFiles.gridfiles import (image_pygmt, diff_n_image, display_grid)
 from AirGravQC.gridFiles.read_ers import *
 # from AirGravQC.qc.qualityAnalysis import * Commented out to see if we actually ever use any of these!!
+
+# Data management
+from AirGravQC.whizzFiles.asegReader import asegToHDF
+from AirGravQC.whizzFiles.xyzReader import xyzToHDF
+from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling)
 
 # 1D Plotting
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines

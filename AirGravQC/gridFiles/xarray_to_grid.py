@@ -75,7 +75,7 @@ def xarray_to_grid(my_data, grid_space, region=[]):
         y=data_trm[1],
         z=data_trm[2],
         spacing=inspc,
-        M=maxradius,
+        M=maxradius, # maxradius parameter (use long form name for later version of pygmt)
         region=region,  # xmin, xmax, ymin, ymax
         T=0.35,  # tension factor
     )

@@ -90,11 +90,12 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
                 plotTitle = wpl.make_plot_title(f[groupName]) + ': Line Map'
                         
                 for line in list(g.keys()):
-                    planned_line = f"{g[line].attrs['PlannedLine']:.3f}"
-                    if planned_line in planLines:
-                        lX = gw.getLineData(g[line], easting)[0:]
-                        lY = gw.getLineData(g[line], northing)[0:]
-                        flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
+                    if 'PlannedLine' in g[line].attrs.keys(): #whizzAttrExists(g[line], 'PlannedLine'):
+                        planned_line = f"{g[line].attrs['PlannedLine']:.3f}"
+                        if planned_line in planLines:
+                            lX = gw.getLineData(g[line], easting)[0:]
+                            lY = gw.getLineData(g[line], northing)[0:]
+                            flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
             
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(thou_format)

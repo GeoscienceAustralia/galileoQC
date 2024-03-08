@@ -318,5 +318,12 @@ def getPlannedLine(gPlan, gLineMeas):
     return planLineInPlan, gpline
  
 
+def e2norm(x, y):
+    """
+    Returns the Euclidean norm of `x` and `y`.
+    """
+    return np.sqrt(x * x + y * y)
+
+
 
 

@@ -71,7 +71,10 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
             # read the data into the arrays
             for line in all_flightLines:
                 if line in temp_repeats:
-                    baseLine = g[line].attrs['PlannedLine']
+                    if 'PlannedLine' in g[line].attrs.keys():
+                        baseLine = g[line].attrs['PlannedLine']
+                    else:
+                        baseline = ''
                     xd = gw.getLineData(g[line], x)
                     yd = gw.getLineData(g[line], channel)
                     zd = gw.getLineData(g[line], z)

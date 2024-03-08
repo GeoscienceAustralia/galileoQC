@@ -51,11 +51,18 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
 
         for idx1 in range(0, len(lines)): #line1 in lines: #gMeas.keys():
             line1 = lines[idx1]
-            line1_plan = gMeas[line1].attrs['PlannedLine']
+            if 'PlannedLine' in gMeas[line1].attrs.keys():
+                line1_plan = gMeas[line1].attrs['PlannedLine']
+            else:
+                print(f'ERROR. The required PlannedLine attribute cant be found for line {line1}. Aborting.')
 
             for idx2 in range (idx1 + 1, len(lines)):#line2 in gMeas.keys():
                 line2 = lines[idx2]
-                line2_plan = gMeas[line2].attrs['PlannedLine']
+                if 'PlannedLine' in gMeas[line2].attrs.keys():
+                    line2_plan = gMeas[line2].attrs['PlannedLine']
+                else:
+                    print(f'ERROR. The required PlannedLine attribute cant be found for line {line1}. Aborting.')
+                
                 # if the second line isn't the first line but has the same planned line no.
                 if line1 != line2 and line1_plan == line2_plan:
                     num_coinc_lines += 1

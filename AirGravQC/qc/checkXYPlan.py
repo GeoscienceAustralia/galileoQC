@@ -108,7 +108,6 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                 gLineMeas = gMeas[line]
                 planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
 
-                # planLine = f"{gMeas[line].attrs['PlannedLine']:.3f}" # DODGY!!! TODO - fix
                 lineName = util._get_lineName(gLineMeas)
                 exceedance_in_line = False
 

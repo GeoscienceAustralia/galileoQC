@@ -126,7 +126,7 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
             plt.show()
 
 
-def _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=[], y2=[], bounds=[]):
+def _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=np.array([]), y2=np.array([]), bounds=[]):
     if bounds != []:
         xmin = bounds[0]
         xmax = bounds[1]
@@ -138,7 +138,7 @@ def _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=[], 
         ymin = 0.0
         ymax = ymin
     ax = fig.add_subplot(num_subplots, 1, plotIdx)
-    if x2 == [] or y2 == []:
+    if x2.size == 0 or y2.size == 0:
         ax.plot(x1, y1, lw=0.5)
     else:
         ax.plot(x1, y1, x2, y2, lw=0.5)
