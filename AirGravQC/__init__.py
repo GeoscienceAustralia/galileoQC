@@ -35,6 +35,7 @@ from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportS
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines
 from AirGravQC.whizzPlots.plotLinesCompareChannels import plotLinesCompareChannels
 from AirGravQC.whizzPlots.linesMap import linesMap
+from AirGravQC.whizzPlots.plotLinesOnGroundStns import plotLinesOnGroundStns
 
 # 2D Plotting
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
