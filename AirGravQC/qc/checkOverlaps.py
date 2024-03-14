@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.whizzPlots.whizzPlot as wpl
 
@@ -18,7 +18,7 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, to be checked.
     min_overlap : Float, optional
         The minimum overlap distance in km, default 7.6 km.
@@ -67,10 +67,10 @@ def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_
                 if line1 != line2 and line1_plan == line2_plan:
                     num_coinc_lines += 1
                     # extract positions
-                    n1 = gw.getLineData(gMeas[line1], nrth)# np.array(gMeas[line1][nrth])
-                    e1 = gw.getLineData(gMeas[line1], east)
-                    n2 = gw.getLineData(gMeas[line1], nrth)
-                    e2 = gw.getLineData(gMeas[line1], east)
+                    n1 = rd.getLineData(gMeas[line1], nrth)# np.array(gMeas[line1][nrth])
+                    e1 = rd.getLineData(gMeas[line1], east)
+                    n2 = rd.getLineData(gMeas[line1], nrth)
+                    e2 = rd.getLineData(gMeas[line1], east)
                     # get line direction in radians
                     dirn = np.arctan2((e1[-1] - e1[0]), (n1[-1] - n1[0]))
                     

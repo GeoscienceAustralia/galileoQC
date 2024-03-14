@@ -3,7 +3,7 @@ from pathlib import Path
 import xarray as xr
 import h5py
 
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.config as config
 
 groupName = config.groupName
@@ -70,7 +70,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
                 lines.remove(ctrl)
 
         for line in lines:
-            xData = gw.getLineData(lines_group[line], e_chan)
+            xData = rd.getLineData(lines_group[line], e_chan)
             totalNumFids += len(xData)
         print(f'{len(lines)} lines; total number of fids in whizz file = {totalNumFids}.')
 
@@ -126,9 +126,9 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
         efid = 0
         for line in lines:
             sfid = efid
-            xData = gw.getLineData(lines_group[line], e_chan)
-            yData = gw.getLineData(lines_group[line], n_chan)
-            zData = gw.getLineData(lines_group[line], z_chan)
+            xData = rd.getLineData(lines_group[line], e_chan)
+            yData = rd.getLineData(lines_group[line], n_chan)
+            zData = rd.getLineData(lines_group[line], z_chan)
             efid += len(yData)
             if remove_mean:
                 zData = zData - np.mean(zData)
@@ -139,9 +139,9 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             my_dataset[n_chan][sfid:efid] = yData
             my_dataset[xr_zchan][sfid:efid] = zData
 
-            my_dataset[e_chan].attrs['units'] = gw.getChannelAttrs(lines_group[line], e_chan)
-            my_dataset[n_chan].attrs['units'] = gw.getChannelAttrs(lines_group[line], n_chan)
-            my_dataset[xr_zchan].attrs['units'] = gw.getChannelAttrs(lines_group[line], z_chan)
+            my_dataset[e_chan].attrs['units'] = rd.getChannelAttrs(lines_group[line], e_chan)
+            my_dataset[n_chan].attrs['units'] = rd.getChannelAttrs(lines_group[line], n_chan)
+            my_dataset[xr_zchan].attrs['units'] = rd.getChannelAttrs(lines_group[line], z_chan)
             if remove_mean and diff_one:
                 my_dataset.attrs['title'] = f'{z_chan} (mr) (d1)'
             elif remove_mean:

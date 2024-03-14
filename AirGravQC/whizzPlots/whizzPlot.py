@@ -15,7 +15,7 @@ import pooch
 
 import AirGravQC.config as config
 import AirGravQC.qc.qualityAnalysis as qc
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import matplotlib.ticker as tkr
 
@@ -32,7 +32,7 @@ def plot_grid(whizzFile, channel, cellsize, x='', y=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     channel : String
         The name of the first channel or field to analyse.
@@ -66,9 +66,9 @@ def plot_grid(whizzFile, channel, cellsize, x='', y=''):
         if y == '':
             y = f[groupName]['CoordinateFrame'].attrs['YChannel']
         for line in list(g.keys()):
-            xpos = np.append(xpos, gw.getLineData(g[line], x))
-            ypos = np.append(ypos, gw.getLineData(g[line], y))
-            z = np.append(z, gw.getLineData(g[line], channel))
+            xpos = np.append(xpos, rd.getLineData(g[line], x))
+            ypos = np.append(ypos, rd.getLineData(g[line], y))
+            z = np.append(z, rd.getLineData(g[line], channel))
             
         x_min = np.nanmin(xpos)
         x_max = np.nanmax(xpos)
@@ -153,7 +153,7 @@ def plotWsLineChannel(whizzFile1, flightLine1, channel1,
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLine : String
         A flightline, e.g. '1000110.0'.
@@ -274,7 +274,7 @@ def plotInlineSum(whizzFile, line):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     line : String
         The flight line identifier.
@@ -291,9 +291,9 @@ def plotInlineSum(whizzFile, line):
         acqDate = g[line].attrs['Date_Local']
 
         time = g[line]['time']
-        data1 = gw.getLineData(g[line], 'Inline1_raw')
-        data2 = gw.getLineData(g[line], 'Inline2_raw')
-        data3 = gw.getLineData(g[line], 'Inline3_raw')
+        data1 = rd.getLineData(g[line], 'Inline1_raw')
+        data2 = rd.getLineData(g[line], 'Inline2_raw')
+        data3 = rd.getLineData(g[line], 'Inline3_raw')
         ils = gw.inLineSum(data1, data2, data3)
         
         fig = plt.figure()
@@ -331,7 +331,7 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLines : [String]
         An array of flightline, e.g. ['1000110.0'].
@@ -380,8 +380,8 @@ def plotAllRepeatLines(filename, flightLines, x='', channels=[], xOffset=True):
             fig = plt.figure(figsize=(6,9))
             ax = fig.add_subplot(1,1,1)
             for line in flightLines:
-                xd = gw.getLineData(g[line], x)
-                yd = gw.getLineData(g[line], channel)
+                xd = rd.getLineData(g[line], x)
+                yd = rd.getLineData(g[line], channel)
                 #x1 = x1[np.logical_not(np.isnan(x1))]
                 #y1 = y1[np.logical_not(np.isnan(y1))]
                 myPlot, = ax.plot(xd, yd, lw=0.5)
@@ -407,7 +407,7 @@ def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=Tr
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLine : String
         A flightline, e.g. '1000110.0'.
@@ -457,7 +457,7 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLine : String
         A flightline, e.g. '1000110.0'.
@@ -503,7 +503,7 @@ def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLine : String
         A flightline, e.g. '1000110.0'.
@@ -555,7 +555,7 @@ def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitl
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLine : String
         A flightline, e.g. '1000110.0'.
@@ -616,7 +616,7 @@ def specificLinesMap(whizzFile, lines, easting='', northing=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         The name of a HDF5 Whizz file, including path and extension.
     lines : Array of String
         The lines to plot to the map
@@ -651,8 +651,8 @@ def specificLinesMap(whizzFile, lines, easting='', northing=''):
         'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
         myc = 0
         for line in lines:
-            lX = gw.getLineData(g[line], easting)[0:]
-            lY = gw.getLineData(g[line], northing)[0:]
+            lX = rd.getLineData(g[line], easting)[0:]
+            lY = rd.getLineData(g[line], northing)[0:]
             flownline, = ax.plot(lX, lY, color=mycolours[myc], label=line, lw=3, alpha=0.7)
             myc += 1
             
@@ -713,9 +713,9 @@ def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
         for line in list(g.keys()):
             line_path = g[line]
             if line_path.attrs['HasBeenFlown']:
-                status = gw.getLineData(g[line], statusChannel).astype(np.float32)
-                lX = gw.getLineData(g[line], planEast)[status >= 0]
-                lY = gw.getLineData(g[line], planNorth)[status >= 0]
+                status = rd.getLineData(g[line], statusChannel).astype(np.float32)
+                lX = rd.getLineData(g[line], planEast)[status >= 0]
+                lY = rd.getLineData(g[line], planNorth)[status >= 0]
                 lS = status[status >= 0]
                 ax.plot(lX, lY, lw=0.2, color='blue')
 

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
@@ -20,7 +20,7 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     atmosCorr : String
         The name of the geoWhizz field or channel containing the atmospheric correction.
@@ -60,8 +60,8 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
         count = 0
 
         for line in g.keys():
-            ht_data = gw.getLineData(g[line], GRS80_height)
-            cor_data = gw.getLineData(g[line], atmosCorr)
+            ht_data = rd.getLineData(g[line], GRS80_height)
+            cor_data = rd.getLineData(g[line], atmosCorr)
            
             cal_data = _atmosEffect(ht_data)
             err_data = cor_data * unit_scale - cal_data 

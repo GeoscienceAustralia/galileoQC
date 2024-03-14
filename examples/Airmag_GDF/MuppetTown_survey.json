@@ -12,7 +12,7 @@
     },
 
     "coordinate_information" : {
-        "wkid" : "7854",
+        "wkid" : "28354",
         "authority" : "EPSG",
         "vertical_crs" : "WGS84"
     },

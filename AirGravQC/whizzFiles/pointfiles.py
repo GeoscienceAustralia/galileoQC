@@ -7,10 +7,9 @@ Created on Sat Jul 18 16:43:31 2020
 
 Data file management tools for AirGravQC.
 
-Converts airborne survey data in Geosoft `XYZ` format or in ASEG-GDF2 format
-to geoWhizz format. Utility functions to add or update data or metadata (at
-project, line or channel) are provided. Given a geoWhizz data file, data
-from a `.ers` (ERMapper) grid file may be interpolated onto the survey
+Utility functions to add or update data or metadata (at project, line 
+or channel) are provided. Given a geoWhizz data file, data from a 
+`.ers` (ERMapper) grid file may be interpolated onto the survey
 lines as a new channel.
 
 """
@@ -18,109 +17,15 @@ lines as a new channel.
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-from pathlib import Path
-import pathlib
 from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
-import filebrowser as fb
-# import aseg_gdf2 as aseg
-from gspy import Survey
 
 import AirGravQC.gridFiles.gridfiles as grd
-import AirGravQC.qc.qualityAnalysis as qc
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config
 
 groupName = config.groupName
 projectName = config.projectName
-
-def getWhizzData(whizzFile, line, channel):
-    """
-    Returns a numpy array containg the specified channel of
-    data for the given line.
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension.
-    line : String
-        A flightline, e.g. '1000110.0'.
-    channel : String
-        The (case-sensitive) name of a channel in the database, e.g. 'EASTING'.
-
-    Returns
-    -------
-    my_data : numpy array
-        The requested data.
-
-    """
-    filename = str(whizzFile)
-
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        my_data = getLineData(g[line], channel)
-            
-    return my_data
-
-
-def getLineData(linegroup, channel):
-    """
-    Returns a numpy array containg the specified channel of
-    data for the given line.
-
-    Parameters
-    ----------
-    line : HDF5 Group
-        A flight-line group.
-    channel : String
-        The name of a channel in the database, e.g. 'EASTING'.
-
-    Returns
-    -------
-    my_data : numpy array
-        The requested data.
-
-    """
-    my_data = []
-    for datachannel in linegroup.items():
-        if datachannel[0].upper() == channel.upper():
-            # print(f'datachannel {datachannel[0]}; channel {channel}')
-            my_data = np.array(linegroup[datachannel[0]])
-    if my_data.size == 0:
-        print(f'ERROR - {channel} not found.')
-
-    return my_data
-
-
-def getChannelAttrs(linegroup, channel):
-    """
-    Returns the `Units` attribute for the specified channel of
-    data for the given line.
-
-    Parameters
-    ----------
-    line : HDF5 Group
-        A flight-line group.
-    channel : String
-        The name of a channel in the database, e.g. 'EASTING'.
-
-    Returns
-    -------
-    my_units : String
-        The `Units` attribute for channel, empty string if `Units` was not found.
-
-    """
-    for datachannel in linegroup.items():
-        if datachannel[0].upper() == channel.upper():
-            # print(f'datachannel {datachannel[0]}; channel {channel}')
-            myChanGroup = linegroup[datachannel[0]]
-            chanAttrs = list(myChanGroup.attrs)
-            if 'Units' in chanAttrs:
-                my_units = myChanGroup.attrs['Units']
-                return my_units
-            break
-                
-    return ''
 
 
 def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, flight_chan='', date_chan='', verbose=False):
@@ -130,7 +35,7 @@ def updateLineAttributes(whizzFile, line_type='', line='', planned_line=0, fligh
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     line_type : TYPE, optional
         Either 'Xcal_nsw' or 'SGL_GA' or ''. The default is '' which causes
@@ -251,7 +156,7 @@ def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', des
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     channel : String
         The name of the channel whose attributes are to be changed.
@@ -312,9 +217,9 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
 
     Parameters
     ----------
-    gridPath : String or pathlib.PosixPath
+    gridPath : String or pathlib Path
         Name of a ERMapper file, including path and extension.
-    hdfFile : String or pathlib.PosixPath
+    hdfFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
 
     Returns
@@ -559,39 +464,6 @@ def _weightedAverage(x, y, z, xo, yo):
     return np.average(z, weights = weight)
 
 
-def getLineXChannel(whizzFile, line, x, channel):
-    """
-    Returns 1D numpy arrays of x and channel in line from geoWhizz filename. The
-    inputs are just two channels in the data and the names 'x' and 'channel' do
-    not carry intrinsic meaning.
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib.PosixPath
-        Name of a HDF5 Whizz file, including path and extension.
-    line : String
-        A flightline, e.g. '1000110.0'.
-    x : String
-        The name of the x variable.
-    channel : String
-        The name of the channel.
-
-    Returns
-    -------
-    xData : numpy 1D array
-        A numpy array of data, float32 or float64.
-    yData : numpy 1D array
-        A numpy array of data, float32 or float64.
-
-    """
-    filename = str(whizzFile)
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        xData = getLineData(g[line], x)
-        yData = getLineData(g[line], channel)
-    return xData, yData
-
-    
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):
     """
     Change any of the project attributes in the HDF5 Whizz file. Typically most of this information
@@ -600,7 +472,7 @@ def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerPr
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     projectName : String, optional
         The name of the survey. The default is ''.
@@ -648,7 +520,7 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     lat : String, optional
         The name of the latitude field. The default is ''.

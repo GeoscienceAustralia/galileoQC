@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
@@ -21,7 +21,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     eotCorr : String
         The name of the geoWhizz field or channel containing the eotvos correction.
@@ -89,17 +89,17 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         count = 0
 
         for line in g.keys():
-            lat_data = gw.getLineData(g[line], latitude)
-            x_data = gw.getLineData(g[line], x)
-            y_data = gw.getLineData(g[line], y)
-            ht_data = gw.getLineData(g[line], GRS80_height)
-            time_data = gw.getLineData(g[line], time)
-            cor_data = gw.getLineData(g[line], eotCorr)
+            lat_data = rd.getLineData(g[line], latitude)
+            x_data = rd.getLineData(g[line], x)
+            y_data = rd.getLineData(g[line], y)
+            ht_data = rd.getLineData(g[line], GRS80_height)
+            time_data = rd.getLineData(g[line], time)
+            cor_data = rd.getLineData(g[line], eotCorr)
             if (east_vel == '')  | (north_vel == ''):
                 (n_speed, e_speed) = _calc_speed(x_data, y_data, time_data)
             else:
-                n_speed = gw.getLineData(g[line], north_vel)
-                e_speed = gw.getLineData(g[line], east_vel)
+                n_speed = rd.getLineData(g[line], north_vel)
+                e_speed = rd.getLineData(g[line], east_vel)
             cal_data = _eotvosCorrection(e_speed, n_speed, lat_data, ht_data)
             err_data = cor_data * unit_scale + cal_data
             diffMin[count] = np.min(err_data)

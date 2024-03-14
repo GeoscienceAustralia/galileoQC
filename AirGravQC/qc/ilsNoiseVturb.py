@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -20,7 +20,7 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     diagComponent1 : String
         The name of the channel containing the first tensor diagonal (in-line) component.
@@ -64,12 +64,12 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
         for line in g.keys():
             linegroup = g[line]
             if vertaccel != '':
-                accel = gw.getLineData(linegroup, vertaccel)
+                accel = rd.getLineData(linegroup, vertaccel)
             elif vertvelocity != '':
-                data = gw.getLineData(linegroup, vertvelocity)
+                data = rd.getLineData(linegroup, vertvelocity)
                 accel = np.diff(data, n = 1)
             elif vertdispl != '':
-                data = gw.getLineData(linegroup, vertdispl)
+                data = rd.getLineData(linegroup, vertdispl)
                 accel = np.diff(data, n = 2)
             else:
                 print("ERROR - need one of vertical acceleration, velocity or displacement (height/altitude).")
@@ -77,9 +77,9 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
 
             accStd[count] = np.std(accel)
 
-            data1 = gw.getLineData(linegroup, diagComponent1)
-            data2 = gw.getLineData(linegroup, diagComponent2)
-            data3 = gw.getLineData(linegroup, diagComponent3)
+            data1 = rd.getLineData(linegroup, diagComponent1)
+            data2 = rd.getLineData(linegroup, diagComponent2)
+            data3 = rd.getLineData(linegroup, diagComponent3)
             ilsStd[count] = np.std(util._inLineSum(data1, data2, data3))
             if ilsStd[count] > noiseSpec:
                 if labelLines:

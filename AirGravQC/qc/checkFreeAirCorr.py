@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
@@ -21,7 +21,7 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     faCorr : String
         The name of the geoWhizz field or channel containing the free-air correction.
@@ -67,9 +67,9 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
         count = 0
 
         for line in g.keys():
-            lat_data = gw.getLineData(g[line], latitude)
-            ht_data = gw.getLineData(g[line], GRS80_height)
-            cor_data = gw.getLineData(g[line], faCorr)
+            lat_data = rd.getLineData(g[line], latitude)
+            ht_data = rd.getLineData(g[line], GRS80_height)
+            cor_data = rd.getLineData(g[line], faCorr)
            
             cal_data = _freeAirCorrection(ht_data, lat_data)
             err_data = cor_data * unit_scale + cal_data 

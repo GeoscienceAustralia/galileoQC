@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.whizzPlots.whizzPlot as wpl
@@ -75,13 +76,13 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                         baseLine = g[line].attrs['PlannedLine']
                     else:
                         baseline = ''
-                    xd = gw.getLineData(g[line], x)
-                    yd = gw.getLineData(g[line], channel)
-                    zd = gw.getLineData(g[line], z)
+                    xd = rd.getLineData(g[line], x)
+                    yd = rd.getLineData(g[line], channel)
+                    zd = rd.getLineData(g[line], z)
 
                     # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
                     dx = np.diff(xd)
-                    dy = np.diff(gw.getLineData(g[line], north))
+                    dy = np.diff(rd.getLineData(g[line], north))
                     heading = np.arctan2(dx, dy) * 180.0 / np.pi
                     mean_heading = np.mean(heading)
                     print(f'Line {line} heading = {mean_heading:.1f} deg.')
@@ -149,7 +150,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
             for line in all_flightLines:
                 if line in repeatLines:
                     linecount += 1
-                    xs = gw.getLineData(g[line], x)
+                    xs = rd.getLineData(g[line], x)
                     nSamples = max(nSamples, xs.size)
                     minBigX = min(max(xs), minBigX)
                     maxSmallX = max(min(xs), maxSmallX)

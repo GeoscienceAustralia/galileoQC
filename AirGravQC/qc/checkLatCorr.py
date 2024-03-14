@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
@@ -21,7 +21,7 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     latCorr : String
         The name of the geoWhizz field or channel containing the latitude correction
@@ -63,8 +63,8 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
         count = 0
 
         for line in g.keys():
-            lat_data = gw.getLineData(g[line], latitude)
-            cor_data = gw.getLineData(g[line], latCorr)
+            lat_data = rd.getLineData(g[line], latitude)
+            cor_data = rd.getLineData(g[line], latCorr)
             if line == '8474.0':
                 fig = plt.figure()
                 ax = fig.add_subplot(3,1,1)

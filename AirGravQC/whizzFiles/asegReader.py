@@ -1,17 +1,11 @@
 import numpy as np
 import h5py
-# import matplotlib.pyplot as plt
 from pathlib import Path
 import pathlib
-# from scipy.interpolate import CloughTocher2DInterpolator
-# from scipy import interpolate
 import filebrowser as fb
 # import aseg_gdf2 as aseg
 from gspy import Survey
 
-# import AirGravQC.gridFiles.gridfiles as grd
-# import AirGravQC.qc.qualityAnalysis as qc
-# import AirGravQC.utility.utility as util
 import AirGravQC.config as config
 
 groupName = config.groupName
@@ -26,14 +20,15 @@ def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName 
     try:
         survey.add_tabular(type='aseg', data_filename=datafile, metadata_file=data_metadata)
     except Exception as e:
-       print(e)
+        print('ERROR - add_tabular had the following exception.')
+        print(e)
+        # return
     
     # get the survey lines and the numbers of fids per survey line
     lines, fidsperline = _flightlines(survey)
     
     dataset = survey.tabular.xarray
     
-
     if outputHdf == '':
         outputHdf = Path(datafile).with_suffix('.hdf5')
 
@@ -76,17 +71,24 @@ def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName 
 
             channels = list(line_ds.keys())
             for channel in channels:
-                if verbose:
-                    print(f'      Adding {channel} data for line {lines[lineIdx]}')
                 if channel in omitChannels:
                     continue
-                dataArray = line_ds[channel]
-                # if not, then what???
+                if verbose:
+                    print(f'      Adding {channel} data for line {lines[lineIdx]}')
+                # gspy and aseg_gdf2 conspire to often return dtype=object which is no good.
                 chan_type = line_ds[channel].dtype
                 if chan_type == 'O':
-                    dtype_error = True
-                    dtype_error_chan = channel
-                    continue
+                    dataArray = line_ds[channel].astype(float)
+                else:
+                    dataArray = line_ds[channel]
+                chan_type = dataArray.dtype
+                # # if not, then what???
+                # chan_type = line_ds[channel].dtype
+                # if chan_type == 'O':
+                #     dataArray = dataArray.astype(float)
+                    # dtype_error = True
+                    # dtype_error_chan = channel
+                    # continue
                 dd = gg.create_dataset(channel, data = dataArray, dtype=chan_type, compression="gzip", compression_opts=4)
                 dd.attrs['Name'] = line_ds[channel].standard_name
                 dd.attrs['Alias'] = channel

@@ -7,7 +7,7 @@ import pooch
 
 import AirGravQC.config as config
 # import AirGravQC.qc.qualityAnalysis as qc
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 # import AirGravQC.utility.utility as util
 # import matplotlib.ticker as tkr
 
@@ -88,8 +88,8 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
         g = f[groupName]['Lines']
         if fig_title == '':
             fig_title = f[groupName].attrs['ProjectName'] + ': Line(s) on Ground Gravity'
-        lon = gw.getLineData(g[line], longitude)[0:]
-        lat = gw.getLineData(g[line], latitude)[0:]
+        lon = rd.getLineData(g[line], longitude)[0:]
+        lat = rd.getLineData(g[line], latitude)[0:]
     
     SMALL_SIZE = 12
     MEDIUM_SIZE = 14
@@ -108,22 +108,22 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     fig.subplots_adjust(top=0.95)
     
     ax = fig.add_subplot(2,2,1)
-    new.plot.scatter(x='longitude',y='latitude',s=4,hue='gravity_accuracy',ax=ax)
+    new.plot.scatter(x='longitude',y='latitude',s=8,hue='gravity_accuracy',ax=ax)
     ax.plot(lon, lat, 'b', lw=1.0)
     ax.axis('equal')
     plt.grid()
     ax = fig.add_subplot(2,2,2)
-    new.plot.scatter(x='longitude',y='latitude',s=4,hue='reliability_index',ax=ax)
+    new.plot.scatter(x='longitude',y='latitude',s=8,hue='reliability_index',ax=ax)
     ax.plot(lon, lat, 'b', lw=1.0)
     ax.axis('equal')
     plt.grid()
     ax = fig.add_subplot(2,2,3)
-    new.plot.scatter(x='longitude',y='latitude',s=4,hue='height_error',ax=ax)
+    new.plot.scatter(x='longitude',y='latitude',s=8,hue='height_error',ax=ax)
     ax.plot(lon, lat, 'b', lw=1.0)
     ax.axis('equal')
     plt.grid()
     ax = fig.add_subplot(2,2,4)
-    new.plot.scatter(x='longitude',y='latitude',s=4,hue='gravity',ax=ax)
+    new.plot.scatter(x='longitude',y='latitude',s=8,hue='gravity',ax=ax)
     ax.plot(lon, lat, 'b', lw=1.0)
     ax.axis('equal')
     plt.grid()

@@ -6,7 +6,7 @@ from matplotlib.ticker import StrMethodFormatter
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.utility.utility as util
@@ -22,7 +22,7 @@ def diffChanStats(whizzFile, channel1, channel2):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     channel1 : String
         A channel to be subtracted from.

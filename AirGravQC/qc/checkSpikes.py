@@ -6,7 +6,7 @@ import h5py
 # import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-# import AirGravQC.whizzFiles.pointfiles as gw
+# import AirGravQC.whizzFiles.retrieveData as rd
 # import AirGravQC.gridFiles.read_ers as ers
 # import AirGravQC.gridFiles.gridfiles as grd
 # import AirGravQC.utility.utility as util

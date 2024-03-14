@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -17,7 +17,7 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
     
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     turbulence : String
         The name of the channel containing the turbulence field.
@@ -66,13 +66,13 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
 
         failed_lines = 0
         for line in g.keys():
-            xM = gw.getLineData(g[line], measX)
-            yM = gw.getLineData(g[line], measY)
+            xM = rd.getLineData(g[line], measX)
+            yM = rd.getLineData(g[line], measY)
             line_length = util._displacement2(xM[0], xM[-1], yM[0], yM[-1]) / 1000.0
 
-            turb = gw.getLineData(g[line], turbulence)
-            A_d = gw.getLineData(g[line], aD)
-            B_d = gw.getLineData(g[line], bD)
+            turb = rd.getLineData(g[line], turbulence)
+            A_d = rd.getLineData(g[line], aD)
+            B_d = rd.getLineData(g[line], bD)
             idx = np.where(~np.isnan(A_d + B_d))
             Ad = _butter_bandpass_filter(A_d[idx], low_cut, 1.0, 8.0, order=3)
             Bd = _butter_bandpass_filter(B_d[idx], low_cut, 1.0, 8.0, order=3)

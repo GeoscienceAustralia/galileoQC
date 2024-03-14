@@ -6,7 +6,7 @@ import h5py
 # import pooch
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
 import matplotlib.ticker as tkr
@@ -20,7 +20,7 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
 
     Parameters
     ----------
-    whizzFiles : Array of String or pathlib.PosixPath
+    whizzFiles : Array of String or pathlib Path
         Each element is the name of a HDF5 Whizz file, including path and extension.
     easting : String, optional
         The name of the field containing eastings. The default is the name
@@ -28,7 +28,7 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
     northing : String, optional
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
-    whizzPlanFile : String or pathlib.PosixPath
+    whizzPlanFile : String or pathlib Path
         The name of a HDF5 Whizz file, including path and extension.
     planLines : Array of String
         Each element is the name of a survey line in whizzPlanFile, flown lines will
@@ -46,20 +46,28 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
     None.
 
     """
-    if whizzPlanFile == '' and whizzFiles == []:
-        print("No files provided so no Line Map can be made.")
+    observed_files = True
+    if whizzFiles == []:
+        print("No files of observed data provided.")
+        observed_files = False
+    planned_file = True
+    if whizzPlanFile == '':
+        print("No file of planned data provided.")
+        planned_file = False
+    if not (observed_files or planned_file):
+        print("Need at least one file input.")
         return
 
     plot_subtitle = ''
-    if whizzPlanFile != '' and whizzFiles != []:
+    if observed_files and planned_file:
         plot_subtitle = '[planned (red); flown (blue)]'
 
     fig = plt.figure(figsize=(8, 6))
     thou_format = tkr.FuncFormatter(util._space_thou)
     ax = fig.add_subplot(1,1,1)
-    plotTitle = ''
+    plotTitle = 'Line Map: '
 
-    if whizzPlanFile != '':
+    if planned_file:
         planname = str(whizzPlanFile)
 
         with h5py.File(planname, 'r') as f:
@@ -68,7 +76,7 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
             if planNorth == '':
                 planNorth = f[groupName]['CoordinateFrame'].attrs['YChannel']
             g = f[groupName]['Lines']
-            plotTitle = wpl.make_plot_title(f[groupName]) + ': Line Map'
+            plotTitle += wpl.make_plot_title(f[groupName])
                     
             if planLines == []:
                 planLines = list(g.keys())
@@ -77,7 +85,7 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
                 lY = g[line][planNorth][0:]
                 planline, = ax.plot(lX, lY, color='red', lw=0.6, alpha=0.7)
 
-    if whizzFiles != []:
+    if observed_files:
         for file in whizzFiles:
             filename = str(file)
 
@@ -87,15 +95,22 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
                 if northing == '':
                     northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
                 g = f[groupName]['Lines']
-                plotTitle = wpl.make_plot_title(f[groupName]) + ': Line Map'
+                if not planned_file:
+                    plotTitle += wpl.make_plot_title(f[groupName])
                         
                 for line in list(g.keys()):
-                    if 'PlannedLine' in g[line].attrs.keys(): #whizzAttrExists(g[line], 'PlannedLine'):
+                    if planned_file and 'PlannedLine' in g[line].attrs.keys(): #whizzAttrExists(g[line], 'PlannedLine'):
                         planned_line = f"{g[line].attrs['PlannedLine']:.3f}"
+                        # When comparing woth a plan, only show the planned lines ...
                         if planned_line in planLines:
-                            lX = gw.getLineData(g[line], easting)[0:]
-                            lY = gw.getLineData(g[line], northing)[0:]
+                            lX = rd.getLineData(g[line], easting)[0:]
+                            lY = rd.getLineData(g[line], northing)[0:]
                             flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
+                    else:
+                        # ... otherwise, show all observed lines.
+                        lX = rd.getLineData(g[line], easting)[0:]
+                        lY = rd.getLineData(g[line], northing)[0:]
+                        flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
             
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(thou_format)

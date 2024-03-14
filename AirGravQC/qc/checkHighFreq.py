@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -19,7 +19,7 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, to be checked.
     lines : String list, optional
         The line numbers to be checked. Default is all lines in the whizzFile.
@@ -59,25 +59,25 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
         summary = f'Checked {num_lines} lines; no line had high frequency signal above {noiseLimit}.'
         reportStr = ''
         for line in lines:
-            time = gw.getLineData(g[line], tChannel)
+            time = rd.getLineData(g[line], tChannel)
             time = time - time[0]
             fs = 1.0 / abs((time[1] - time[0]))
             if vertaccel != '':
-                turb = gw.getLineData(g[line], vertaccel)
+                turb = rd.getLineData(g[line], vertaccel)
                 time1 = time
             elif vertvelocity != '':
-                data = gw.getLineData(g[line], vertvelocity)
+                data = rd.getLineData(g[line], vertvelocity)
                 turb = np.diff(data, n = 1)
                 time1 = time[1:]
             elif vertdispl != '':
-                data = gw.getLineData(g[line], vertdispl)
+                data = rd.getLineData(g[line], vertdispl)
                 turb = np.diff(data, n = 2)
                 time1 = time[1:-1]
             else:
                 num_subplots = 3
 
             for channel in channels:
-                data = gw.getLineData(g[line], channel)
+                data = rd.getLineData(g[line], channel)
                 noSlope = np.zeros((len(data),))
                 filtered = np.zeros((len(data),))
                 myStd = np.zeros((len(data)-50,))

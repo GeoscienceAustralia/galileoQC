@@ -29,6 +29,7 @@ from AirGravQC.gridFiles.read_ers import *
 # Data management
 from AirGravQC.whizzFiles.asegReader import asegToHDF
 from AirGravQC.whizzFiles.xyzReader import xyzToHDF
+from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
 from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling)
 
 # 1D Plotting
@@ -43,7 +44,7 @@ from AirGravQC.gridFiles.grid_n_image import grid_n_image
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
-from AirGravQC.graphics import imshow_hs
+from AirGravQC.gridFiles.graphics import imshow_hs # ??? TODO Is this needed here?
 
 # Mag
 from AirGravQC.qc.checkDiurnal import checkDiurnal

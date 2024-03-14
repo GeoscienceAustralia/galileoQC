@@ -23,10 +23,10 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
 
     Parameters
     ----------
-    planPath : String or pathlib.PosixPath
+    planPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, with the survey
         positions plan.
-    measPath : String or pathlib.PosixPath
+    measPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, with the survey
         measured data.
     lines : String list, optional.

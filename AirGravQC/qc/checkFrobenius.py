@@ -4,13 +4,16 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
         
         
-def checkFrobenius(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', noiselimit=30.0):
+def checkFrobenius(whizzFile, lines = [], 
+    il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', 
+    cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', 
+    noiselimit=30.0, verbose=True, plot_flag=False):
     """
     Reports the noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. Here the noise is calculated by `_FTGeigen` as
@@ -18,7 +21,7 @@ def checkFrobenius(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', 
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, to be checked.
     lines : String list, optional.
         The line numbers to be checked. Default is all lines in the whizzFile.
@@ -37,12 +40,12 @@ def checkFrobenius(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', 
             lines = g.keys()
         
         for line in lines:
-            i1 = gw.getLineData(g[line], il1)
-            i2 = gw.getLineData(g[line], il2)
-            i3 = gw.getLineData(g[line], il3)
-            c1 = gw.getLineData(g[line], cr1)
-            c2 = gw.getLineData(g[line], cr2)
-            c3 = gw.getLineData(g[line], cr3)
+            i1 = rd.getLineData(g[line], il1)
+            i2 = rd.getLineData(g[line], il2)
+            i3 = rd.getLineData(g[line], il3)
+            c1 = rd.getLineData(g[line], cr1)
+            c2 = rd.getLineData(g[line], cr2)
+            c3 = rd.getLineData(g[line], cr3)
             (Gxx, Gxy, Gxz, Gyy, Gyz, Gzz) = _FTGTransform(i1, i2, i3, c1, c2, c3)
             Txx = util._butter_bandpass_filter(Gxx, 0.1, 0.49, 1.0, order = 6)
             Txy = util._butter_bandpass_filter(Gxy, 0.1, 0.49, 1.0, order = 6)
@@ -50,11 +53,12 @@ def checkFrobenius(whizzFile, lines = [], il1='Inline1_raw', il2='Inline2_raw', 
             Tyy = util._butter_bandpass_filter(Gxy, 0.1, 0.49, 1.0, order = 6)
             Tyz = util._butter_bandpass_filter(Gyz, 0.1, 0.49, 1.0, order = 6)
             Tzz = util._butter_bandpass_filter(Gzz, 0.1, 0.49, 1.0, order = 6)
-            noise = _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line, noiselimit)
-            print(f'Check line {line}. Noise = {noise:.1f}')
+            noise = _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line, noiselimit, plot_flag=plot_flag)
+            if verbose:
+                print(f'Check line {line}. Noise = {noise:.1f}')
     
     
-def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0):
+def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0, plot_flag=False):
     """
     Returns the standard deviation of the Frobenius norm of the gravity gradient.
     Plots an analysis if this is larger than `noiseLimit`.
@@ -100,7 +104,7 @@ def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0):
         I2[ii] = w[0] * w[1] - (w[0] + w[1]) * (w[0] + w[1])
         frob[ii] = np.linalg.norm(a, 'fro')
 
-    if np.std(frob) > noiselimit:
+    if plot_flag and np.std(frob) > noiselimit:
         myTitle = 'Trace for Line ' + line
         fig = plt.figure(figsize=(5,8))
         ax1 = fig.add_subplot(4,1,1)

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 # import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.whizzFiles.pointfiles as gw
 # import AirGravQC.gridFiles.read_ers as ers
 # import AirGravQC.gridFiles.gridfiles as grd
@@ -59,9 +60,9 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
 
         for line in lines:
             linegroup = g[line]
-            A = gw.getLineData(linegroup, channel1)
-            B = gw.getLineData(linegroup, channel2)
-            time = gw.getLineData(linegroup, tChannel)
+            A = rd.getLineData(linegroup, channel1)
+            B = rd.getLineData(linegroup, channel2)
+            time = rd.getLineData(linegroup, tChannel)
             fs = 1.0 / abs(time[1] - time[0])
             
             nsamples = len(A)

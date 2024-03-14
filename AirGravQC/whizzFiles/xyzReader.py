@@ -23,9 +23,9 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
 
     Parameters
     ----------
-    xyzFilePath : pathlib.PosixPath
+    xyzFilePath : pathlib Path
         The pathlib Path to the Geosoft XYZ file.
-    hdfFilePath : pathlib.PosixPath, optional
+    hdfFilePath : pathlib Path, optional
         The pathlib Path to the Whizz HDF5 file to be created. The default is ''
         leaving the Whizz file to have the same path as the input file but with
         a ".HDF5" extension.

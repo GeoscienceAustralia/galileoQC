@@ -11,10 +11,9 @@ import h5py
 import pygmt
 import matplotlib.ticker as tkr
 
-import AirGravQC.graphics as graphics
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.config as config
 
 groupName = config.groupName

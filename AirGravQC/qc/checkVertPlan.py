@@ -28,9 +28,9 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
 
     Parameters
     ----------
-    planPath : String or pathlib.PosixPath
+    planPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, of survey plan.
-    measPath : String or pathlib.PosixPath
+    measPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, of measured data.
     lines : Array{String}, optional
         Array of line numbers as strings. Default = [], meaning all lines are checked.

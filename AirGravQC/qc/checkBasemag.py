@@ -3,7 +3,7 @@ import h5py
 import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -38,7 +38,7 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000):
         for line in g.keys():
             dataFail = False
             # plotTitle = line + ' ' + basemag + ' Peak-to-peak'
-            data = gw.getLineData(g[line], basemag)
+            data = rd.getLineData(g[line], basemag)
             data = data[np.logical_not(np.isnan(data))]
             if len(data) < 2:
                 print(line, ' insufficient data')

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.whizzPlots.whizzPlot as wpl
 
@@ -71,21 +71,21 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
         for line in g.keys():
             lineName = util._get_lineName(g[line])
             if clearance_chan == '':
-                alt = gw.getLineData(g[line], altitude_chan)
-                dtm = gw.getLineData(g[line], terrain_chan)
+                alt = rd.getLineData(g[line], altitude_chan)
+                dtm = rd.getLineData(g[line], terrain_chan)
                 clearance = alt - dtm
             else:
                 alt = []
                 dtm = []
-                clearance = gw.getLineData(g[line], clearance_chan)
+                clearance = rd.getLineData(g[line], clearance_chan)
             minActualClearance = np.min(clearance)
             # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
 
             if minActualClearance < minimumAllowedClearance:
                 num_failed_lines += 1
                 report += f'\nClearance too low at {minActualClearance:.0f} m on line {lineName}'
-                x = gw.getLineData(g[line], xChannel)
-                y = gw.getLineData(g[line], yChannel)
+                x = rd.getLineData(g[line], xChannel)
+                y = rd.getLineData(g[line], yChannel)
                 distance = util._length(x, y)
                 if plot_flag:
                     wpl._plotcheckSafeClearance(projName, line, distance, clearance_chan, altitude_chan, terrain_chan, alt, dtm, clearance)
@@ -162,19 +162,19 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
         for line in g.keys():
             lineName = util._get_lineName(g[line])
             if clearance_chan == '':
-                alt = gw.getLineData(g[line], altitude_chan)
-                dtm = gw.getLineData(g[line], terrain_chan)
+                alt = rd.getLineData(g[line], altitude_chan)
+                dtm = rd.getLineData(g[line], terrain_chan)
                 clearance = alt - dtm
             else:
-                clearance = gw.getLineData(g[line], clearance_chan)
+                clearance = rd.getLineData(g[line], clearance_chan)
             deviation = nominalClearance - clearance
             maxDeviation = np.max(abs(deviation))
             # print(f'Line {line}: Max deviation from {nominalClearance:.0f} m clearance = {maxDeviation:.0f} m.')
             if maxDeviation > allowance:
                 num_failed_lines += 1
                 report += f'\nClearance deviation of {maxDeviation:.0f} m on line {lineName}'
-                x = gw.getLineData(g[line], xChannel)
-                y = gw.getLineData(g[line], yChannel)
+                x = rd.getLineData(g[line], xChannel)
+                y = rd.getLineData(g[line], yChannel)
                 distance = util._length(x, y)
                 fig = plt.figure()
 

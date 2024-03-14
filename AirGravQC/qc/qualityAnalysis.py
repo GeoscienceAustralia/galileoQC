@@ -19,7 +19,7 @@ from matplotlib.ticker import StrMethodFormatter
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.utility.utility as util
@@ -39,8 +39,8 @@ def calcDrift(whizzFile, time, gradient):
         g = f[groupName]['Lines']
         
         for line in g.keys():
-            t = gw.getLineData(g[line], time).reshape((-1,1)) 
-            gamma = gw.getLineData(g[line], gradient)#g[line][gradient]
+            t = rd.getLineData(g[line], time).reshape((-1,1)) 
+            gamma = rd.getLineData(g[line], gradient)#g[line][gradient]
             
             model = LinearRegression().fit(t, gamma)
             r_sq = model.score(t, gamma)
@@ -73,7 +73,7 @@ def checkVertAcc(whizzFile, vertvelocity):
         count = 0
 
         for line in g.keys():
-            data = gw.getLineData(g[line], vertvelocity)#g[line]['vertvelocity']
+            data = rd.getLineData(g[line], vertvelocity)#g[line]['vertvelocity']
             accel = np.diff(data, n = 1)
             chStd[count] = int(np.std(accel) * 100.0)
             fig = plt.figure()
@@ -212,7 +212,7 @@ def lineStats(whizzFile, channel):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     channel : String
         The name of the channel to plot.
@@ -262,7 +262,7 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLines : String List, optional
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
@@ -303,7 +303,7 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         for line in flightLines:
             if line != 'CoordinateFrame':
                 lineNo[count] = line
-                dd = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)
+                dd = rd.getLineData(g[line], channel1) - rd.getLineData(g[line], channel2)
 
                 if np.sum(~np.isnan(dd)) > 3:
                     chMin[count] = np.nanmin(dd)

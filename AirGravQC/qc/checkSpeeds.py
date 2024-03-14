@@ -18,7 +18,7 @@ from matplotlib.ticker import StrMethodFormatter
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.utility.utility as util
@@ -314,9 +314,9 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
 def _get_speeddata(line_group, xChannel, yChannel, tChannel, vel_north, vel_east):
     """
     """
-    x = gw.getLineData(line_group, xChannel) #np.array(line_group[xChannel])
-    y = gw.getLineData(line_group, yChannel)
-    t = gw.getLineData(line_group, tChannel)
+    x = rd.getLineData(line_group, xChannel) #np.array(line_group[xChannel])
+    y = rd.getLineData(line_group, yChannel)
+    t = rd.getLineData(line_group, tChannel)
     distance = util._length(x, y)
     if vel_north == '' or vel_east == '':
         sampleTime = t[1] - t[0]
@@ -325,8 +325,8 @@ def _get_speeddata(line_group, xChannel, yChannel, tChannel, vel_north, vel_east
         temp = np.sqrt(xVel * xVel + yVel * yVel)
         speed = np.append(temp, np.mean(temp))
     else:
-        xVel = gw.getLineData(line_group, vel_east)
-        yVel = gw.getLineData(line_group, vel_north)
+        xVel = rd.getLineData(line_group, vel_east)
+        yVel = rd.getLineData(line_group, vel_north)
         speed = np.sqrt(xVel * xVel + yVel * yVel)
 
     return x, y, distance, t, speed

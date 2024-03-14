@@ -2,7 +2,7 @@ import numpy as np
 import h5py
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 
 groupName = config.groupName
 
@@ -14,7 +14,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     num_sats : String
         Name of the channel containing the number of satellites visible for
@@ -53,10 +53,10 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
 
         error_count = 0
         for line in lines:
-            x = gw.getLineData(g[line], xchan)
-            y = gw.getLineData(g[line], ychan)
+            x = rd.getLineData(g[line], xchan)
+            y = rd.getLineData(g[line], ychan)
 
-            nsats_data = gw.getLineData(g[line], num_sats)
+            nsats_data = rd.getLineData(g[line], num_sats)
             min_nsats_data = np.nanmin(nsats_data)
             if min_nsats_data < nsats_min:
                 xmin_fail = np.nanmin(x[nsats_data < nsats_min])
@@ -69,7 +69,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            pdop_data = gw.getLineData(g[line], pdop)
+            pdop_data = rd.getLineData(g[line], pdop)
             max_pdop_data = np.nanmax(pdop_data)
             if max_pdop_data > max_pdop:
                 xmin_fail = np.nanmin(x[pdop_data > max_pdop])
@@ -82,7 +82,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            vdop_data = gw.getLineData(g[line], vdop)
+            vdop_data = rd.getLineData(g[line], vdop)
             max_vdop_data = np.nanmax(vdop_data)
             if max_vdop_data > max_vdop:
                 xmin_fail = np.nanmin(x[vdop_data > max_vdop])
@@ -95,7 +95,7 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
                 report += f' Northing [{ymin_fail:.0f}, {ymax_fail:.0f}].\n'
                 error_count += 1
 
-            hdop_data = gw.getLineData(g[line], hdop)
+            hdop_data = rd.getLineData(g[line], hdop)
             max_hdop_data = np.nanmax(hdop_data)
             if max_hdop_data > max_hdop:
                 xmin_fail = np.nanmin(x[hdop_data > max_hdop])

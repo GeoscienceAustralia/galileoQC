@@ -9,7 +9,7 @@ import pathlib
 
 # import AirGravQC.gridFiles.gridfiles as grd
 # import AirGravQC.qc.qualityAnalysis as qc
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config
 
@@ -22,7 +22,7 @@ def reportWhizz(whizzFile, line='', channel=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     line : String, optional
         The line number, formatted as a string, to report in detail. The default is '' and no line details.
@@ -88,7 +88,7 @@ def reportFlights(whizzFile, flightChannel='', lines=[], detailed=False):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightChannel : String, optional
         The name of the channel containing the flight numbers. The default is '' (get the channel name from attributes).
@@ -178,7 +178,7 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     timeChannel : String, optional
         The name of the channel containing the time data.  The default is '' which
@@ -219,9 +219,9 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
         lines = list(gLines.keys())
         numLines = len(lines)
         for line in lines:
-            time_deltas = np.append(time_deltas, np.diff(gw.getLineData(gLines[line], timeChannel)))#gLines[line][timeChannel])))
-            x_deltas = np.append(x_deltas, np.diff(gw.getLineData(gLines[line], xChannel))) #np.array(gLines[line][xChannel])))
-            y_deltas = np.append(y_deltas, np.diff(gw.getLineData(gLines[line], yChannel))) #np.array(gLines[line][yChannel])))
+            time_deltas = np.append(time_deltas, np.diff(rd.getLineData(gLines[line], timeChannel)))#gLines[line][timeChannel])))
+            x_deltas = np.append(x_deltas, np.diff(rd.getLineData(gLines[line], xChannel))) #np.array(gLines[line][xChannel])))
+            y_deltas = np.append(y_deltas, np.diff(rd.getLineData(gLines[line], yChannel))) #np.array(gLines[line][yChannel])))
         mean_dt = np.mean(time_deltas)
         min_dt = np.min(time_deltas)
         max_dt = np.max(time_deltas)
@@ -249,7 +249,7 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     x : String, optional
         The name of the channel of X positions (in metres). The default is '' which
@@ -287,8 +287,8 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
         if lines == []:
             lines = list(g.keys())
         for line in lines:
-            xPos = gw.getLineData(g[line], x)
-            yPos = gw.getLineData(g[line], y)
+            xPos = rd.getLineData(g[line], x)
+            yPos = rd.getLineData(g[line], y)
             lineDistance += _lineLength(xPos, yPos)
             count += 1
             

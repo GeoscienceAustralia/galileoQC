@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
 
 
-def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=False):
+def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=False, verbose=False):
     """
     Estimates the inline sum for each sample on each line in an FTG whizzFile.
     Plots the min, max, mean and stdev (units of eotvos) for each survey line
@@ -46,11 +46,12 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
         count = 0
 
         for line in g.keys():
-            data1 = gw.getLineData(g[line], inline1)
-            data2 = gw.getLineData(g[line], inline2)
-            data3 = gw.getLineData(g[line], inline3)
+            data1 = rd.getLineData(g[line], inline1)
+            data2 = rd.getLineData(g[line], inline2)
+            data3 = rd.getLineData(g[line], inline3)
             ils_BP = util._inLineSum(data1, data2, data3, dontfilter=dontfilter)
-            print(f'Line {line}, standard deviation of band-pass filtered in-line sum = {np.std(ils_BP):.2g}')
+            if verbose:
+                print(f'Line {line}, standard deviation of band-pass filtered in-line sum = {np.std(ils_BP):.2g}')
             lineNo[count] = line
             chMin[count] = np.min(ils_BP)
             chMax[count] = np.max(ils_BP)

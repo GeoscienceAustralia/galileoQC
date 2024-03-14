@@ -3,7 +3,7 @@ import h5py
 
 import AirGravQC.config as config
 import AirGravQC.utility.utility as util
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 
 groupName = config.groupName
     
@@ -14,7 +14,7 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, to be checked.
     min_len : TYPE, optional
         The minimum allowed line length in km. The default is 50.0.
@@ -41,8 +41,8 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
         
         num_failed_lines = 0
         for line in gMeas.keys():
-            xM = gw.getLineData(gMeas[line], measX)# np.array(gMeas[line][measX])
-            yM = gw.getLineData(gMeas[line], measY)#np.array(gMeas[line][measY])
+            xM = rd.getLineData(gMeas[line], measX)# np.array(gMeas[line][measX])
+            yM = rd.getLineData(gMeas[line], measY)#np.array(gMeas[line][measY])
             line_length = util._displacement2(xM[0], xM[-1], yM[0], yM[-1])
             if line_length < min_len * 1000.0:
                 num_failed_lines += 1

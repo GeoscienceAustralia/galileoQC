@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.whizzPlots.whizzPlot as wpl
 
@@ -18,7 +18,7 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     nominalHeadings : [Float]
         The desired headings in degrees from north.
@@ -56,8 +56,8 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
         numLines = len(lines)
 
         for line in lines:
-            x_data = gw.getLineData(g[line], x)
-            y_data = gw.getLineData(g[line], y)
+            x_data = rd.getLineData(g[line], x)
+            y_data = rd.getLineData(g[line], y)
             distance = util._length(x_data, y_data)
             if headingchan == '':
                 dx = np.diff(x_data)
@@ -65,7 +65,7 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
                 heading = np.arctan2(dx, dy) * 180.0 / np.pi
                 plot_x = distance[1:]
             else:
-                heading = gw.getLineData(g[line], headingchan)
+                heading = rd.getLineData(g[line], headingchan)
                 plot_x = distance
             allok = True
             for nomhead in nominalHeadings:

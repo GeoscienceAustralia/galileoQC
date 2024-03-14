@@ -3,7 +3,7 @@ import h5py
 
 import AirGravQC.config as config
 import AirGravQC.whizzPlots.whizzPlot as wpl
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -19,7 +19,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath.
+    whizzFile : String or pathlib Path.
         Name of a HDF5 Whizz file, including path and extension.
     allChannels : [String], optional.
         A list of the channels or fields to plot. Default is all in whizzFile.
@@ -72,7 +72,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
 
             # get the units for the y axis label
             xlabelstr = 'Line number'
-            my_units = gw.getChannelAttrs(g[lines[0]], channel)
+            my_units = rd.getChannelAttrs(g[lines[0]], channel)
             if my_units == '':
                 ylabelstr = f'{channel}'
             else:
@@ -81,7 +81,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             for line in lines:
                 if line != 'CoordinateFrame':
                     lineNo[count] = line
-                    dd = gw.getLineData(g[line], channel)
+                    dd = rd.getLineData(g[line], channel)
                     if remove_sine:
                         dd = np.sin(dd * (np.pi / 180.0))
                     if diff_one:

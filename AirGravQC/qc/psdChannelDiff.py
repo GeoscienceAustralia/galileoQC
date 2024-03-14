@@ -3,7 +3,7 @@ import h5py
 import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -16,7 +16,7 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLines : String List, optional
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
@@ -51,7 +51,7 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         for line in flightLines:
             mean_speed = _mean_line_speed(f[groupName], line)
             f_sample = _time_frequency(f[groupName])
-            data = gw.getLineData(g[line], channel1) - gw.getLineData(g[line], channel2)#
+            data = rd.getLineData(g[line], channel1) - rd.getLineData(g[line], channel2)#
 
             freq, Pxx = sig.welch(data, nfft=4*4096, fs = f_sample)
             period = 1.0 / freq[1:]

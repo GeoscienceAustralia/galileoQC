@@ -20,10 +20,10 @@ import h5py
 import pygmt
 import matplotlib.ticker as tkr
 
-import AirGravQC.graphics as graphics
+import AirGravQC.gridFiles.graphics as graphics
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.config as config
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
@@ -245,7 +245,7 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     tx = g0 - gx
     predy = g0 - yyy / xxx * tx
     predErr = predy - gy
-    graphics.graphicsShaded(n, e, predErr, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
+    graphicsShaded(n, e, predErr, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
 
 
 def traceImages(file1, file2, file3, plotTitle):
@@ -272,7 +272,7 @@ def traceImages(file1, file2, file3, plotTitle):
     n2, e2, z2 = ers.read_ers_image(file2)
     n3, e3, z3 = ers.read_ers_image(file3)
     trace = z1 + z2 + z3
-    graphics.graphicsShaded(n1, e1, trace, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
+    graphicsShaded(n1, e1, trace, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
 
 
 def subtractImages(imagefile1, imagefile2, scale=1.0, band1=0, band2=0):
