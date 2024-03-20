@@ -97,15 +97,15 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
                 g = f[groupName]['Lines']
                 if not planned_file:
                     plotTitle += wpl.make_plot_title(f[groupName])
-                        
                 for line in list(g.keys()):
-                    if planned_file and 'PlannedLine' in g[line].attrs.keys(): #whizzAttrExists(g[line], 'PlannedLine'):
-                        planned_line = f"{g[line].attrs['PlannedLine']:.3f}"
-                        # When comparing woth a plan, only show the planned lines ...
-                        if planned_line in planLines:
-                            lX = rd.getLineData(g[line], easting)[0:]
-                            lY = rd.getLineData(g[line], northing)[0:]
-                            flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
+                    if planned_file:
+                        if 'PlannedLine' in g[line].attrs.keys(): #whizzAttrExists(g[line], 'PlannedLine'):
+                            planned_line = f"{g[line].attrs['PlannedLine']:.1f}"
+                            # When comparing with a plan, only show the planned lines ...
+                            if planned_line in planLines:
+                                lX = rd.getLineData(g[line], easting)[0:]
+                                lY = rd.getLineData(g[line], northing)[0:]
+                                flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
                     else:
                         # ... otherwise, show all observed lines.
                         lX = rd.getLineData(g[line], easting)[0:]

@@ -325,5 +325,26 @@ def e2norm(x, y):
     return np.sqrt(x * x + y * y)
 
 
+def controls_lessthan_1000(all_lines):
+    ctrl_strs = []
+    trav_strs = []
+    for line in all_lines:
+        if float(line) < 999.99:
+            ctrl_strs.append(line)
+        else:
+            trav_strs.append(line)
+    return trav_strs, ctrl_strs
+
+
+def controls_nineteen(all_lines):
+    ctrl_strs = []
+    trav_strs = []
+    for line in all_lines:
+        if line[:2] == "19":
+            ctrl_strs.append(line)
+        else:
+            trav_strs.append(line)
+    return trav_strs, ctrl_strs
+
 
 

@@ -16,8 +16,11 @@ groupName = config.groupName
 def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True):
     """
     For all repeatLines, plot (x, channel) and report stats of differences to mean.
-    This will require trimming to [minX, maxX] and interpolating to common x.
-    Repeat the analysis for the `z` channel (height).
+    Each line is trimmed to [minX, maxX] and interpolated to common x.
+    The analysis is repeated for the `z` channel (height).
+
+    If there are more than 2 lines, then the standard deviation is calculated for
+    each x over all the lines, and its mean is reported as the "All lines stdev".
 
     Parameters
     ----------

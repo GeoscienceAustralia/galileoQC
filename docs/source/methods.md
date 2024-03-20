@@ -128,6 +128,8 @@ qc.checkGNSS(dh, 'NumSats', 'PDOP', 'VDOP', 'HDOP',
 
 The aircraft position is allowed to deviate horizontally from the planned survey line by more than `allowance` metres for a distance no greater than `maxDistance` metres.
 
+We wish to maintain parallel flight-lines. If they are not parallel, then, in the places where the spacing is larger than intended, the grid interpolation will have greater opportunity to either under- or over-shoot. Ideally therefore, the `allowance` would be much smaller than the intended grid cell width, and so would the `maxDistance`. For gravimetry and gravity gradiometry these ideal restrictions lead, with typical survey aircraft, to situations in which the instrumentation experiences significant accelerations as the aircraft path is corrected. These large aircraft accelerations can result in increased sensor error so it is better to allow a larger `maxDistance` and optimise for gentle corrections to the flight path. A 1 km distance is appropriate.
+
 ```python
 qc.checkXYPlan(ph, dh, allowance=40.0, maxDistance=1000.0)
 ```

@@ -868,6 +868,10 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     ax.xaxis.set_major_formatter(thou_format)
     yMean = np.mean(yData, axis=0)
     ySum = np.zeros(yMean.shape)
+
+    if yData.shape[0] > 2:
+        yOverallStd = np.nanmean(np.nanstd(yData, axis=0))
+        print(f'All lines: stdev({channel}) = {yOverallStd:.2f} {chan_y_units}')
     for line in range(0, nLines):
         ySum = ySum + yData[line,:] - yMean
         yStd = np.nanstd(yData[line,:]-yMean)
@@ -893,6 +897,10 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     ax.xaxis.set_major_formatter(thou_format)
     zMean = np.mean(zData, axis=0)
     zSum = np.zeros(zMean.shape)
+
+    if yData.shape[0] > 2:
+        zOverallStd = np.nanmean(np.nanstd(zData, axis=0))
+        print(f'All lines: stdev({z}) = {zOverallStd:.1f} {chan_z_units}')
     for line in range(0, nLines):
         zSum = zSum + zData[line,:] - zMean
         zStd = np.nanstd(zData[line,:]-zMean)

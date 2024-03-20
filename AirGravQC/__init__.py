@@ -68,6 +68,7 @@ from AirGravQC.qc.checkInlineSum import checkInlineSum
 # Navigation and position checks
 from AirGravQC.qc.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
 from AirGravQC.qc.checkIntersection import checkIntersection
+from AirGravQC.qc.checkRMSIntersection import checkRMSIntersection
 from AirGravQC.qc.checkSpeeds import checkSpeeds
 from AirGravQC.qc.checkOverlaps import checkOverlaps
 from AirGravQC.qc.checkXYPlan import checkXYPlan

@@ -71,7 +71,7 @@ def plotChannelsLines(whizzFile, channels, flightLines, x='', mean_remove=False,
                 myPlot, = ax.plot(xData, yData, color='blue', lw=0.3)
                 plotTitle = f'{plotPreTitle}, L{line}'
                 ax.xaxis.set_major_formatter(thou_format)
-                ax.yaxis.set_major_formatter(thou_format)
+                # ax.yaxis.set_major_formatter(thou_format)
                 plt.xlabel(xlabelstr, fontsize = 6)
                 plt.ylabel(ylabelstr, fontsize = 6)
                 plt.title(plotTitle, fontsize = 8)
