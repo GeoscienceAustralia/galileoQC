@@ -1,10 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
-    import scipy.signal as sig
+import scipy.signal as sig
 
 import AirGravQC.config as config
-import AirGravQC.qc.qualityAnalysis as qc
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import matplotlib.ticker as tkr
@@ -65,4 +64,4 @@ def psdLineChannels(whizzFile, flightLine, channels, time='', plotTitle = ''):
     plt.show()
 
     return
-    
+

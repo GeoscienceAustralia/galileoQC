@@ -2,6 +2,7 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
+import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
