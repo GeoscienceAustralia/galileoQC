@@ -2,6 +2,8 @@ import numpy as np
 import h5py
 
 import AirGravQC.config as config
+from AirGravQC.whizzPlots.plotBoxWhisker import plotBoxWhisker
+import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
@@ -120,5 +122,5 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             if remove_sine:
                 titlestr += ')'
             titlestr += ' Stats'
-            wpl.plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+            plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return

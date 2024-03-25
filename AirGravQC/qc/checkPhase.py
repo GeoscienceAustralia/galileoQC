@@ -16,7 +16,7 @@ import AirGravQC.whizzFiles.pointfiles as gw
 
 groupName = config.groupName
 
-def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=[], plot_flag=False):
+def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=[], verbose=False, plot_flag=False):
     """
     For every survey line in a geoWhizz HDF5 file, given two channels, calculate
     the phase shift (in seconds if time data is available, or number of samples otherwise)
@@ -39,6 +39,8 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
         The maximum allowed phase shift (in seconds if time data are available, else in number of samples).
     lines : String list, optional.
         The line numbers to be checked. Default is all lines in the whizzFile.
+    verbose : Bool, optional
+        If True, report status of all lines, else only report errors. Default False.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
     
@@ -86,7 +88,8 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
             # Now interpolate through gaps by cubic spline
             (xcorrInt, _) = gw.interpolateLine(dt, xcorr, time)
             recovered_time_shift2 = time[xcorrInt.argmax()]
-            print(f'Line {line}: Recovered time shift = {recovered_time_shift2 / fs:.1f} sec.')
+            if verbose:
+                print(f'Line {line}: Recovered time shift = {recovered_time_shift2 / fs:.1f} sec.')
             
             if abs(recovered_time_shift2 / fs) > tolerance and plot_flag:
                 fig = plt.figure()

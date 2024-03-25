@@ -10,6 +10,7 @@ import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.utility.utility as util
+from AirGravQC.whizzPlots.plotBoxWhisker import plotBoxWhisker
 import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
@@ -78,7 +79,7 @@ def diffChanStats(whizzFile, channel1, channel2):
         print(f'Overall mean difference is {allmean / numsamp :.2f}.')
         figtitle = wpl.make_plot_title(gProject)
         titlestr = channel1 + ' - ' + channel2 + ' Stats'
-        wpl.plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+        plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
     
  

@@ -23,6 +23,7 @@ import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.gridFiles.gridfiles as grd
 import AirGravQC.utility.utility as util
+from AirGravQC.whizzPlots.plotBoxWhisker import plotBoxWhisker
 import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
@@ -253,7 +254,7 @@ def lineStats(whizzFile, channel):
             count += 1
     figtitle = wpl.make_plot_title(f[groupName])
     titlestr = channel + ' Stats'
-    wpl.plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+    plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     
 
 def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
@@ -320,5 +321,5 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
 
         figtitle = wpl.make_plot_title(gProject)
         titlestr = channel1 + ' - ' + channel2 + ' Stats'
-        wpl.plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+        plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return

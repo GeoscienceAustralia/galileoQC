@@ -6,6 +6,7 @@ from scipy.signal import butter, lfilter
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.read_ers as grd
+from AirGravQC.whizzPlots.plotBoxWhisker import plotBoxWhisker
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
 
@@ -123,7 +124,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         titlestr = eotCorr + ' Stats'
         xlabelstr = 'Line number'
         ylabelstr = 'Eotvos Correction Error [um/s/s]'
-        wpl.plotBoxWhisker(diffMin, diffMax, diffMean, diffStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+        plotBoxWhisker(diffMin, diffMax, diffMean, diffStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
 
 

@@ -92,10 +92,6 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
             lineNo[count] = line
             count += 1
         
-        # x = {'label': 'Vertical acceleration [m/s/s]', 'data': accStd}
-        # y = {'label': 'Inline Sum [E]', 'data': ilsStd}
-        # wpl.plotxy(y, x, plotTitle = 'In-line Sum Noise versus Turbulence', xOffset=False, plot_symbol='+')
-
         fig = plt.figure()
         fig.suptitle(f'In-line Sum Noise vs Turbulence - {projName}', fontsize=12)
         fig.subplots_adjust(top=0.85)
