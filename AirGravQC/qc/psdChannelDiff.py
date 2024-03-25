@@ -1,6 +1,7 @@
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
+import scipy.signal as sig
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
@@ -30,7 +31,6 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
     None.
 
     """
-    import scipy.signal as sig
     global mean_speed
     
     filename = str(whizzFile)

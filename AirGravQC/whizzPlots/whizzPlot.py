@@ -145,58 +145,6 @@ def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
     return xData, xUnits, yData, yUnits, hData, hUnits, zData, zUnits, projName
 
 
-def plotLineXd4Channels(whizzFile, flightLine, x, channel1, channel2, xOffset=True):
-    """
-    For the given flightLine in the whizzFile, plot the 4th difference of both
-    channel1 and channel2 against x.
-    
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension.
-    flightLine : String
-        A flightline, e.g. '1000110.0'.
-    x : String
-        The name of the independent variable for the plot.
-    channel : String
-        The name of the first channel or field to analyse.
-    channel : String
-        The name of the second channel or field to analyse.
-    xOffset : Bool, optional
-        If True, map x to x - x[0] before plotting. The default is True.
-
-    Returns
-    -------
-    None.
-
-    """
-    
-    filename = str(whizzFile)
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        projName = f[groupName].attrs['ProjectName']
-        
-        xData = np.array(g[flightLine][x])
-        y1Data = np.diff(np.array(g[flightLine][channel1]), n = 4)
-        y2Data = np.diff(np.array(g[flightLine][channel2]), n = 4)
-    
-    if xOffset:
-        xData = xData - xData[0]
-    ax.plot(xData[2:-2], y1Data, xData[2:-2], y2Data, lw=0.5)
-    plt.xlabel(x, fontsize = 6)
-    plt.ylabel(channel1, fontsize = 6)
-    plotTitle = f'{projName}: L{flightLine}, {x} vs D4({channel1}, {channel2})'
-    plt.title(plotTitle, fontsize = 8)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
-
-
 def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     """
     Plot coherence between `xchannel` and `ychannel`.
@@ -288,58 +236,6 @@ def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
     plt.ylabel(channel, fontsize = 6)
     if plotTitle == '':
         plotTitle = f'{projName} : {channel} L{flightLine}'
-    plt.title(plotTitle, fontsize = 8)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
-
-
-def psdLineChannels(whizzFile, flightLine, channel1, channel2, time='', plotTitle = ''):
-    """
-    Plot the PSD (log-log Sqrt(Power) from welch method) of channel in flightLine. 
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension.
-    flightLine : String
-        A flightline, e.g. '1000110.0'.
-    channel : String
-        The name of the channel or field to plot.
-    plotTitle : String, optional
-        A title for the plot. The default is '' in which case the title will be Project Line Channel.
-
-    Returns
-    -------
-    None.
-
-    """
-    import scipy.signal as sig
-    
-    filename = str(whizzFile)
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        projName = f[groupName].attrs['ProjectName']
-        if time == '':
-            time = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-        data1 = np.array(g[flightLine][channel1])
-        data2 = np.array(g[flightLine][channel2])
-        t = np.array(g[flightLine][time])
-        f_sample = 1.0 / (t[1] - t[0])
-
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    freq, Pxx1 = sig.welch(data1, nfft=2048, fs = f_sample)
-    freq, Pxx2 = sig.welch(data2, nfft=2048, fs = f_sample)
-    period = 1.0 / freq[1:]
-    plt.plot(period, np.sqrt(Pxx2[1:]) - np.sqrt(Pxx1[1:]), 'g', lw=0.6)
-    plt.xlim([0, 200])
-    
-    plt.xlabel('Period [s]', fontsize = 6)
-    plt.ylabel(f'{channel2} / {channel1}', fontsize = 6)
-    if plotTitle == '':
-        plotTitle = f'{projName} L{flightLine}: sqrt(Pwr({channel2})) - sqrt(Pwr({channel2}))'
     plt.title(plotTitle, fontsize = 8)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
@@ -515,8 +411,7 @@ def _plot_speed(t, t_label, speed, min_speed=54, max_speed=66, plot_title=''):
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
     for label in ax.get_yticklabels(): label.set_fontsize(6)
-    
-    
+
    
 def _plotcheckSafeClearance(projName, line, distance, clearance_chan='', altitude_chan='', terrain_chan='', alt=[], dtm=[], clearance=[]):
     fig = plt.figure()

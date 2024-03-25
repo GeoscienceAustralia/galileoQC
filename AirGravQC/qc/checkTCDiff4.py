@@ -55,7 +55,7 @@ def checkTCDiff4(whizzFile, TCDiff4='', rawMag='', lines=[], limit = 0.02, nSamp
                 if rawMag == '':
                     print('ERROR - no rawmag or 4th difference channel name supplied.')
                 else:
-                    mag = rd.getLineData(g[line], rawMag) # np.array(group[line][rawMag])
+                    mag = rd.getLineData(g[line], rawMag)
                     md4 = np.diff(mag, n=4)
                     data = np.append(np.append(md4[0:2],md4),md4[-3:-1])
                     plotTitle = line + ' 4th difference of ' + rawMag + ' Range'
