@@ -191,58 +191,6 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     plt.show() 
     
     
-def psdLineChannel(whizzFile, flightLine, channel, time='', plotTitle = ''):
-    """
-    Plot the PSD (log-log Sqrt(Power) from welch method) of channel in flightLine. 
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension.
-    flightLine : String
-        A flightline, e.g. '1000110.0'.
-    channel : String
-        The name of the channel or field to plot.
-    plotTitle : String, optional
-        A title for the plot. The default is '' in which case the title will be Project Line Channel.
-
-    Returns
-    -------
-    None.
-
-    """
-    import scipy.signal as sig
-    
-    filename = str(whizzFile)
-    with h5py.File(filename, 'r') as f:
-        g = f[groupName]['Lines']
-        projName = f[groupName].attrs['ProjectName']
-        if time == '':
-            time = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-        data = np.array(g[flightLine][channel])
-        t = np.array(g[flightLine][time])
-        f_sample = 1.0 / (t[1] - t[0])
-
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    freq, Pxx = sig.welch(data, nfft=2048, fs = f_sample)
-    period = 1.0 / freq[1:]
-    plt.plot(period, np.sqrt(Pxx[1:]), color='blue', lw=0.3)
-    # plt.semilogx(freq, np.sqrt(Pxx), color='blue', lw=0.3)
-
-    plt.xlim([0, 200])
-    plt.xlabel('Period [s]', fontsize = 6)
-    # plt.xlabel('Frequency [Hz]', fontsize = 6)
-    plt.ylabel(channel, fontsize = 6)
-    if plotTitle == '':
-        plotTitle = f'{projName} : {channel} L{flightLine}'
-    plt.title(plotTitle, fontsize = 8)
-    plt.grid(True)
-    for label in ax.get_xticklabels(): label.set_fontsize(6)
-    for label in ax.get_yticklabels(): label.set_fontsize(6)
-    plt.show()
-
-
 def make_plot_title(group):
     plotTitle = ''
     if 'ProjectName' in group.attrs:

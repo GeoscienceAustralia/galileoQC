@@ -121,7 +121,23 @@ def _butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     return y
 
 
-def _space_thou(x, pos):  # formatter function takes tick label and tick position
+def _space_thou(x, pos):
+    """
+      Formatter function takes tick label and tick position
+
+    Parameters
+    ----------
+    x : 
+        tick label.
+    y : 
+        tick position.
+
+    Returns
+    -------
+
+    Integer number formatted as string with spaces as a thousands separator.
+
+    """
     s = '%d' % x
     groups = []
     while s and s[-1].isdigit():
@@ -130,12 +146,30 @@ def _space_thou(x, pos):  # formatter function takes tick label and tick positio
     return s + ' '.join(reversed(groups)) #u'\2009'
 
 
-
-
-
 def _get_lineName(linegroup):
+    """
+    Returns the line number and, if extant, the flight number as a
+    formatted string, suitable for reporting.
+
+    Parameters
+    ----------
+    linegroup : HDF5 group
+        The subgroup containing the line.
+
+    Returns
+    -------
+    lineName : String
+        The line number and flight number formatted like LLLL.LL:FFF.
+
+    """
+    smallnumber = 0.0001
     lineNo = linegroup.attrs['LineNumber']
-    lineName = f'{lineNo:.2f}'
+    if lineNo - int(lineNo) < smallnumber:
+        lineName = f'{lineNo:.0f}'
+    elif lineNo * 10 - int(lineNo * 10) < smallnumber:
+        lineName = f'{lineNo:.1f}'
+    else:
+        lineName = f'{lineNo:.2f}'
     if 'Flight' in linegroup.attrs:
         flightNo = linegroup.attrs['Flight']
         lineName += ":" + f'{flightNo:.0f}'
@@ -316,6 +350,38 @@ def getPlannedLine(gPlan, gLineMeas):
             gpline = pline
             break
     return planLineInPlan, gpline
+ 
+
+def getLineNumberInGroup(linesgroup, lineNumber):
+    """
+    Given the single line group, `gLineMeas`, for a line in a whizzfile of measured
+    data, returns the corresponding line group, 'gpline', from the lines group, 
+    `gPlan`, of a whizzfile of planned data.
+
+    If successful, `lineInGroup` is True, else it is False.
+
+    Parameters
+    ----------
+    linesgroup : HDF5 group
+        The ['Lines'] group for all the survey lines in a whizzfile.
+    lineNumber : HDF5 group
+        The ['Lines'][line] group for a single survey line in a whizzfile.
+
+    Returns
+    -------
+    lineInGroup : Bool
+        True if `gpline` found.
+    gpline : HDF5 group
+        The desired line group in the plan lines group.
+    """
+    lineInGroup = False
+    gpline = ''
+    for line in linesgroup.keys():
+        if linesgroup[line].attrs['LineNumber'] == lineNumber:
+            lineInGroup = True
+            gpline = line
+            break
+    return lineInGroup, gpline
  
 
 def e2norm(x, y):
