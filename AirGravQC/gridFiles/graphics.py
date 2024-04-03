@@ -390,10 +390,10 @@ def imshow_hs(data, ax=None, cmap='geosoft', cmap_norm='equalize', hs=True,
             im.remove()
         
         if cb_ticks=='linear': # normal equidistant ticks on a linear scale 
-            cb1 = fig.colorbar(im,shrink=0.8)
+            cb1 = fig.colorbar(im, ax=ax, shrink=0.8)
         else: # show ticks at min, max, mean and standard deviation interval
             newTicks = stats_boundaries(data,nSigma,nSigma)
-            cb1 = fig.colorbar(im,shrink=0.8,ticks=newTicks)
+            cb1 = fig.colorbar(im, ax=ax, shrink=0.8, ticks=newTicks)
         
         # add optional contour lines on colorbar
         if contours and cb_contours:

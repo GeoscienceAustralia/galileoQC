@@ -50,6 +50,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
 
     # Interpolate the data to common x and store in arrays
     lineCount = 0
+    baseLine = -1.0
     for whizzFile in whizzFiles:
 
         filename = str(whizzFile)
@@ -75,10 +76,9 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
             # read the data into the arrays
             for line in all_flightLines:
                 if line in temp_repeats:
+                    baseLine = -1.0
                     if 'PlannedLine' in g[line].attrs.keys():
                         baseLine = g[line].attrs['PlannedLine']
-                    else:
-                        baseline = ''
                     xd = rd.getLineData(g[line], x)
                     yd = rd.getLineData(g[line], channel)
                     zd = rd.getLineData(g[line], z)
@@ -125,7 +125,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                     temp_repeats.remove(line)
         
     # analyse statistics and report with plots
-    _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, yData, zData, channel, repeatLines, baseLine, z, chan_z_units, chan_y_label, chan_y_units)
+    _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, yData, zData, channel, repeatLines, z, chan_z_units, chan_y_label, chan_y_units)#, baseLine=baseLine)
             
     return
 
@@ -174,11 +174,14 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
     return xBase, xData, yData, zData, minBigX, maxSmallX, deltaX
 
 
-def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, flightLines, baseLine, z, chan_z_units, chan_y_label, chan_y_units):
+def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, flightLines, z, chan_z_units, chan_y_label, chan_y_units, baseLine=-1.0):
     xPlot = xBase
     if xOffset:
             xPlot = xPlot - xPlot[0]
-        
+    if baseLine < 0.0:
+        baseLineStr = ''
+    else:
+        baseLineStr = f'{baseLine:.0f}'
     fig = plt.figure(figsize=(12,9))
     thou_format = tkr.FuncFormatter(util._space_thou)
     
@@ -194,8 +197,8 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
             
     ax.legend(fontsize=8)
     plt.xlabel('x', fontsize = 10)
-    plt.ylabel(chan_y_label, fontsize = 10)
-    plotTitle = f'{baseLine:.0f} Repeat Lines {channel}'
+    plt.ylabel(chan_y_label, fontsize = 10)        
+    plotTitle = f'{baseLineStr} Repeat Lines {channel}'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(8)
@@ -214,7 +217,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
             
     plt.xlabel('x', fontsize = 10)
     plt.ylabel(f'z {chan_z_units}', fontsize = 10)
-    plotTitle = f'{baseLine:.0f} Repeat Lines {z}'
+    plotTitle = f'{baseLineStr} Repeat Lines {z}'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(8)
