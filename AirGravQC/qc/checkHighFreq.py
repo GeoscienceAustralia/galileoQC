@@ -36,6 +36,10 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
         The name of the channel containing the vertical velocity field. Default ''.
     vertdispl : String, optional
         The name of the channel containing the vertical velocity field. Default ''.
+    verbose : Bool, optional
+        If True, report status of all overlaps, else only report errors. Default False.
+    plot_flag : Bool, optional
+        If True, plot exceedances for each failed line.
 
     Returns
     -------

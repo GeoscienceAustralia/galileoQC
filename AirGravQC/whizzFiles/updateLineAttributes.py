@@ -68,7 +68,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
             print('One planned line updated.')
         elif no_plan:
             print('NO ACTION TAKEN ON LINE_TYPE - no plan file provided.')
-        elif line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA':
+        elif line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA' or line_type == 'SGL_NSW':
             print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
             print(f'Verifying planned line numbers against {planfile_str}.')
 
@@ -109,16 +109,10 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                             gg.attrs['Segment'] = 0
                             gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
                     elif line_type == 'SGL_NSW':
-                        if current_line < 7000:
-                            gg_planned_line = np.floor(current_line * 10.0) / 10.0
-                            current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
-                            gg.attrs['Segment'] = current_segment
-                            gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
-                                                             - 10 * current_segment)
+                        if current_line > 1000000:
+                            gg_planned_line = np.floor(current_line / 100.0) / 10.0
                         else:
-                            gg_planned_line = np.floor(current_line)
-                            gg.attrs['Segment'] = 0
-                            gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                            gg_planned_line = np.floor(current_line / 100.0) / 10.0
                     else:
                         print('ERROR ERROR ROEORE REOER EEROE')
 

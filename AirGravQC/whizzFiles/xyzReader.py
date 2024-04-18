@@ -85,7 +85,7 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
         gLines = g.create_group('Lines')
         
         # create first line group and metadata
-        gg = gLines.create_group(f'{lines[0]}')
+        gg = gLines.create_group(f'{lines[0]:.3f}')
         gg.attrs['LineNumber'] = lines[0]
 
         # put this lines data in dataset; create the next line group and metadata
@@ -209,12 +209,6 @@ def readXYZ(filename, verbose=False):
     array where each element corresponds to one flight line and contains the
     line number, flight number, date, and data for each channel.
     
-    **TODO**:
-    
-        1. remove reliance on Flight, Date and Line fields if possible.
-
-        2. replace the entire routine with a xyzToHdf() function because this function
-        will run out of memory if the XYZ file is large.
     """
 
     num_lines = 0
@@ -268,21 +262,10 @@ def readXYZ(filename, verbose=False):
                 break
     fid.close()
     
-    # rename key channels TODO : is this necessary now that whizz Files have 'XChannel' etc?
-    # for jj in range(num_channels):
-    #     if channelnames[jj] == 'x' or channelnames[jj] == 'X' or channelnames[jj] == 'easting' or channelnames[jj] == 'Easting':
-    #         channelnames[jj] = 'X'
-    #     if channelnames[jj] == 'y' or channelnames[jj] == 'Y' or channelnames[jj] == 'northing' or channelnames[jj] == 'Northing':
-    #         channelnames[jj] = 'Y'
-
     # initialise counter for the number of fids per line and storage for lines, flights and dates
     num_fids = np.zeros((num_lines,), dtype=int)
-    # flight_nos = np.zeros((num_lines,), dtype=int)
     line_nos = np.zeros((num_lines,))
-    # flight_dates = [[1, 1, 1980] for k in range(num_lines)]
     line_ctr = 0
-    # flight_no = 0
-    # flight_date = [1, 1, 1980]
 
     # get lines, flights and dates
     with open(filename, 'r') as fid:
@@ -290,28 +273,20 @@ def readXYZ(filename, verbose=False):
             if file_line[0] == '/':
                 if file_line[1] != '/':  # already got channel names
                     continue
-                elif file_line.lstrip().upper().startswith('//FLIGHT'):
-                    flight_no = int(file_line.split()[1])
-                elif file_line.lstrip().upper().startswith('//DATE'):
-                    test = file_line.split()[1]
-                    y, m, d = test.split('/')
-                    flight_date = [int(d), int(m), int(y)]
+                elif file_line.lstrip().upper().startswith('//FLIGHT'): # we will get flight number from channel
+                    continue
+                elif file_line.lstrip().upper().startswith('//DATE'): # we will get date from channel
+                    continue
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 current_line = float(file_line.split()[1])
-                line_nos[line_ctr] = f'{current_line:.3f}'
- #               flight_nos[line_ctr] = flight_no
-  #              flight_dates[line_ctr] = flight_date
+                line_nos[line_ctr] = f'{current_line:.3f}' # FIX THIS TODO
                 line_ctr += 1
-    #        elif file_line.count('*') != 0:
-    #            continue  # print('Skip record for dummy')
             else:
                 num_fids[line_ctr-1] += 1
     fid.close()
 
     # initialise dictionary list
     geosoftXYZ = [{'line_number': line_nos[0]}]
-                   # 'flight_number': flight_nos[0],
-                   # 'date_flown': flight_dates[0]
     for jj in range(num_channels):
         mynans = np.zeros(((num_fids[0]),))
         mynans[mynans == 0] = np.nan
@@ -319,8 +294,6 @@ def readXYZ(filename, verbose=False):
 
     for ii in range(1, num_lines):
         temp = {'line_number': line_nos[ii]}
-                # 'flight_number': flight_nos[ii],
-                # 'date_flown': flight_dates[ii]}
         for jj in range(num_channels):
             mynans = np.zeros(((num_fids[ii]),))
             mynans[mynans == 0] = np.nan
@@ -337,7 +310,7 @@ def readXYZ(filename, verbose=False):
                 continue
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 current_line = float(file_line.split()[1])
-                geosoftXYZ[line_ctr]['line_number'] = f'{current_line:.3f}'#file_line.split()[1]
+                geosoftXYZ[line_ctr]['line_number'] = f'{current_line:.3f}' # TODO FIX THIS
                 fid_ctr = 0
                 line_ctr += 1
             #elif file_line.count('*') != 0:
@@ -351,12 +324,10 @@ def readXYZ(filename, verbose=False):
                     print('Number of channel names mis-match to size of data ', len(line_str))
                     break
                 for ii in range(num_channels):
-                    if line_str[ii] == '*':
-                        line_str[ii] = 'nan'
-                    # if line_str[ii] contains "/" then it is a date
-                    #     decode date to decimal year string.
-                    geosoftXYZ[line_ctr-1][channelnames[ii]][fid_ctr] = \
-                        float(line_str[ii])
+                    try:
+                        geosoftXYZ[line_ctr-1][channelnames[ii]][fid_ctr] = float(line_str[ii])
+                    except:
+                        geosoftXYZ[line_ctr-1][channelnames[ii]][fid_ctr] = float('nan')
 
                 fid_ctr += 1
 

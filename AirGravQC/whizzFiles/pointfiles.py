@@ -288,7 +288,7 @@ def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
     # print(np.min(np.diff(timeIn)), np.max(np.diff(timeIn)))
     # model = interpolate.InterpolatedUnivariateSpline(timeIn, dataIn)
     # return model(timeOut)
-    
+
     min_length = 100
     if timeIn.size < min_length or dataIn.size < min_length or timeOut.size < min_length:
         out = np.zeros(timeOut.shape)

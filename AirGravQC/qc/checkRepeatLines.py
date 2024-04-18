@@ -47,6 +47,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
     temp_repeats = repeatLines.copy()
     xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z)
     temp_repeats = repeatLines.copy()
+    vec_len = len(xBase) - 1 # interpolateLine has lost a datapoint in outputs
 
     # Interpolate the data to common x and store in arrays
     lineCount = 0
@@ -90,6 +91,12 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                     mean_heading = np.mean(heading)
                     print(f'Line {line} heading = {mean_heading:.1f} deg.')
 
+                    # clean out 'nan's'
+                    good = ~np.isnan(xd + yd + zd)
+                    xd = xd[good]
+                    yd = yd[good]
+                    zd = zd[good]
+
                     # ensure ordered in increasing x
                     if xd[1] < xd[0]:
                         xd = xd[::-1]
@@ -97,7 +104,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                         zd = zd[::-1]
 
                     xStart = 0
-                    xEnd = xd.size - 1
+                    xEnd = xd.size #- 1
                     
                     # trim data and store
                     for xSample in range(0, xd.size):
@@ -110,13 +117,11 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                             xEnd = min(xSample, xEnd)
                         else:
                             break
-                            
-                    # interpolate data
-                    (yOut, _) = gw.interpolateLine(xd-xBase[0], yd, xBase-xBase[0])
-                    (zOut, _) = gw.interpolateLine(xd-xBase[0], zd, xBase-xBase[0])
 
-                    vec_len = len(xBase)-1 # interpolateLine has lost a datapoint in outputs
-                    # print(f'line {line}, shapes: xBase {xBase.shape}, xData {xData.shape}')
+                    # interpolate data
+                    (yOut, _) = gw.interpolateLine(xd[xStart:xEnd]-xBase[0], yd[xStart:xEnd], xBase[xStart:xEnd]-xBase[0])
+                    (zOut, _) = gw.interpolateLine(xd[xStart:xEnd]-xBase[0], zd[xStart:xEnd], xBase[xStart:xEnd]-xBase[0])
+
                     xData[lineCount, 0:vec_len] = xBase[1:]
                     yData[lineCount, 0:vec_len] = yOut
                     zData[lineCount, 0:vec_len] = zOut
@@ -132,7 +137,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
 
 def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
 
-    nSamples = 0
+    nSamples = 1000000000
     minBigX = 1.0E12
     maxSmallX = -1.0E12
     nLines = len(repeatLines)
@@ -144,7 +149,6 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
             g = f[groupName]['Lines']
             if x == '':
                 x = f[groupName]['CoordinateFrame'].attrs['XChannel']
-                north = f[groupName]['CoordinateFrame'].attrs['YChannel']
             if z == '':
                 z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
             all_flightLines = list(g.keys())
@@ -154,16 +158,21 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
                 if line in repeatLines:
                     linecount += 1
                     xs = rd.getLineData(g[line], x)
-                    nSamples = max(nSamples, xs.size)
+                    zs = rd.getLineData(g[line], z)
+                    cs = rd.getLineData(g[line], channel)
+
+                    xs = xs[~np.isnan(xs + zs + cs)]
+                    nSamples = min(nSamples, xs.size)
+                    # print(f'Shapes: xs {xs.shape}, nSamples {nSamples}')
                     minBigX = min(max(xs), minBigX)
                     maxSmallX = max(min(xs), maxSmallX)
-                    deltaX = np.abs(xs[1] - xs[0])
                     repeatLines.remove(line)
                 
     if minBigX < maxSmallX:
         return 0.0
+    deltaX = (minBigX - maxSmallX) / (nSamples - 1)
     xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)
-    print(f'{linecount} of {nLines} lines analysed, each with {nSamples} samples.')
+    print(f'{linecount} of {nLines} lines analysed, each interpolated to {nSamples} samples.')
     xData = np.empty((nLines, nSamples))
     xData[:] = np.nan
     yData = np.empty((nLines, nSamples))

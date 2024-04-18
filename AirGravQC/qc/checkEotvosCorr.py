@@ -13,7 +13,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
     
 
-def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height='', time='', east_vel='', north_vel=''):
+def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height='', time='', east_vel='', north_vel='', plot_flag=False):
     """
     Subtracts the eotvos correction in the data file from one calculated using
     Hinze et al (2005) and the latitude and position data in the data file.
@@ -109,7 +109,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
             diffStd[count] = np.std(err_data)
             lineNo[count] = line
             
-            if np.abs(diffMin[count] - diffMax[count]) > 10.0:
+            if np.abs(diffMin[count] - diffMax[count]) > 10.0 and plot_flag:
                 fig = plt.figure()
                 fig.suptitle(f'{projName} L{lineNo[count]}', fontsize=10)
                 fig.subplots_adjust(top=0.85)
