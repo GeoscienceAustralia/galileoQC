@@ -24,7 +24,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[]):
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[], gridlines=True):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -66,4 +66,4 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         if len(my_data.attrs) == 0:
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space)
-        xdImage(my_grid, f'{my_grid.attrs["title"]}', hs=shaded)
+        xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)

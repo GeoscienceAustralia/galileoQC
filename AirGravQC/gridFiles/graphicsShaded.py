@@ -14,7 +14,7 @@ projectName = config.projectName
 
 
 def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
-                   minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+                   minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
                    hs=True, azdeg=45, ax=None, origin='upper'):
     """
     Creates a colour image of a data array, with colour bar and grid-lines. The
@@ -76,7 +76,7 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     
     ax.set_xlabel('Eastings [m]')#, fontsize=8)
     ax.set_ylabel('Northings [m]')#, fontsize=8)
-    ax.grid(True)
+    ax.grid(gridlines)
     ax.axes.set_aspect('equal')
     plt.tight_layout()
     ax.xaxis.set_major_formatter(thou_format)

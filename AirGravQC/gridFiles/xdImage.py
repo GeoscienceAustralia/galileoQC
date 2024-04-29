@@ -23,7 +23,7 @@ projectName = config.projectName
 
 
 def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
-        minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+        minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std = True):
     """
     Uses `graphicsShaded()` to display the gridded data in data_array. All
@@ -76,5 +76,5 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         vmin = minClip
         vmax = maxClip
     
-    graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
+    graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')
