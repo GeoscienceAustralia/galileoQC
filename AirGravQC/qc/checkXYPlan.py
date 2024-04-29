@@ -186,7 +186,7 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
             message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message # 5 DEC
             message = f'\n{number_known} exceedances known in the database.\n' + message # 5 DEC
             print(message)
-            if plot_flag:
+            if plot_flag and num_lines_exceeded > 0:
                 plt.show()
 
 
