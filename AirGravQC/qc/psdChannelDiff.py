@@ -2,6 +2,8 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 import scipy.signal as sig
+from scipy.fft import rfft, rfftfreq
+from scipy.signal.windows import hann
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
@@ -74,6 +76,101 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
             functions=(_period_to_dist, _dist_to_period))
         secax.set_xlabel('wavelength [m]', fontsize=6)
         for label in secax.get_xticklabels(): label.set_fontsize(6)
+        plt.show()
+
+
+
+
+def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.0, verbose=False):
+    """
+    Plot the FFT of filchan / rawchan in each flightLine. 
+    
+    ToDo: average the spectrum over many flight lines to achieve a less noisy result.
+    
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+    flightLines : String List, optional
+        A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+    rawchan : String
+        The name of a channel.
+    filchan : String
+        The name of a channel.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        if flightLines == []:
+            flightLines = list(g.keys())
+        corr_units = g[flightLines[0]][rawchan].attrs['Units']
+        if not (g[flightLines[0]][filchan].attrs['Units'] == corr_units):
+            print('Error: {rawchan} and {filchan} do not have the same units.')
+            return
+
+        y_label = f'{filchan} / {rawchan}' #' [{corr_units}]'
+        fig, ax = plt.subplots()
+        shortestN = pow(2, 30)
+            
+        for line in flightLines:
+            f_sample = _time_frequency(f[groupName])
+            rawdata = rd.getLineData(g[line], rawchan)
+            fildata = rd.getLineData(g[line], filchan)
+
+            q = 3  # over-sampling factor
+            N = rawdata.size
+            if N != fildata.size:
+                print('ERROR - vector lengths unmatched.')
+                continue
+            w = hann(N)
+
+            Rxx = rfft((rawdata - np.mean(rawdata)) * w, n=N*q)
+            freq = rfftfreq(N * q, 1.0 / f_sample)
+            Fxx = rfft((fildata - np.mean(fildata)) * w, n=N*q)
+            freq = rfftfreq(N * q, 1.0 / f_sample)
+
+            periodone = 1.0 / freq[1:]
+            ratioFftone = np.abs((Fxx[1:] / Rxx[1:]))
+
+            if shortestN < pow(2, 30):
+                shortestN = min(periodone.size, shortestN)
+                period = np.column_stack([period[:shortestN], periodone[:shortestN]])
+                ratioFft = np.column_stack([ratioFft[:shortestN], ratioFftone[:shortestN]])
+            else:
+                period = periodone
+                ratioFft = ratioFftone
+                shortestN = min(periodone.size, shortestN)
+            
+            if verbose:    
+                print(f'Line {line}; Num samples = {N}; f_sample = {f_sample} Hz; est line length = {63 * N / f_sample} m. period shape {period.shape}')
+
+        perioda = np.mean(period, axis=1)
+        ratioFfta = np.mean(ratioFft , axis=1)
+        plt.semilogx(perioda, ratioFfta, color='blue', lw=0.3)
+    
+        plt.ylim([1E-2,1])
+
+        ax.set_yticks([0.5], minor=True)
+        ax.yaxis.grid(True, which='major')
+        ax.yaxis.grid(True, which='minor', color='r')
+        if nominalPeriod > 0.0:
+            ax.set_xticks([nominalPeriod], minor=True)
+            ax.xaxis.grid(True, which='minor', color='r')
+
+        plt.xlabel(f'Period [s] at sample rate {f_sample} Hz', fontsize = 6)
+        plt.ylabel(y_label, fontsize = 6)
+        plotTitle = f'{projName} : {y_label}'
+        plt.title(plotTitle, fontsize = 8)
+        plt.grid(True)
+        for label in ax.get_xticklabels(): label.set_fontsize(6)
+        for label in ax.get_yticklabels(): label.set_fontsize(6)
         plt.show()
 
 

@@ -83,6 +83,7 @@ from AirGravQC.qc.checkHeading import checkHeading
 # General checks
 from AirGravQC.qc.checkErsHeaders import checkErsHeaders
 from AirGravQC.qc.psdChannelDiff import psdChannelDiff
+from AirGravQC.qc.psdChannelDiff import psdChannelGain
 from AirGravQC.qc.allChanStats import allChanStats
 from AirGravQC.qc.diffChanStats import diffChanStats
 from AirGravQC.qc.checkGaps import checkGaps
