@@ -13,7 +13,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True):
+def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True, verbose=False):
     """
     For all repeatLines, plot (x, channel) and report stats of differences to mean.
     Each line is trimmed to [minX, maxX] and interpolated to common x.
@@ -45,7 +45,10 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
 
     # build the arrays to store the data
     temp_repeats = repeatLines.copy()
-    xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z)
+    try:
+        xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z, verbose=verbose)
+    except:
+        return
     temp_repeats = repeatLines.copy()
     vec_len = len(xBase) - 1 # interpolateLine has lost a datapoint in outputs
 
@@ -59,7 +62,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
             g = f[groupName]['Lines']
             if x == '':
                 x = f[groupName]['CoordinateFrame'].attrs['XChannel']
-                north = f[groupName]['CoordinateFrame'].attrs['YChannel']
+                # north = f[groupName]['CoordinateFrame'].attrs['YChannel']
             if z == '':
                 z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
             all_flightLines = list(g.keys())
@@ -85,42 +88,34 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
                     zd = rd.getLineData(g[line], z)
 
                     # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
-                    dx = np.diff(xd)
-                    dy = np.diff(rd.getLineData(g[line], north))
-                    heading = np.arctan2(dx, dy) * 180.0 / np.pi
-                    mean_heading = np.mean(heading)
-                    print(f'Line {line} heading = {mean_heading:.1f} deg.')
+                    try:
+                        reportTrackDirection(f[groupName], line)
+                    except:
+                        print(f'    Cannot report heading for line {line}.')
 
                     # clean out 'nan's'
                     good = ~np.isnan(xd + yd + zd)
                     xd = xd[good]
                     yd = yd[good]
                     zd = zd[good]
+                    if xd.size < 10:
+                        print(f'ERROR - after trimming NaNs, the data vectors in {line} are too short for analysis. Stopping.')
+                        return
 
                     # ensure ordered in increasing x
                     if xd[1] < xd[0]:
                         xd = xd[::-1]
                         yd = yd[::-1]
                         zd = zd[::-1]
-
-                    xStart = 0
-                    xEnd = xd.size #- 1
                     
                     # trim data and store
-                    for xSample in range(0, xd.size):
-                        if xd[xSample] < (maxSmallX - deltaX / 2.0):
-                            xStart = max(xSample, xStart)
-                        else:
-                            break
-                    for xSample in range(xd.size-1, 0, -1):
-                        if xd[xSample] > (minBigX + deltaX / 2.0):
-                            xEnd = min(xSample, xEnd)
-                        else:
-                            break
+                    keepsml = xd < xBase[-1]
+                    keepbig = xd > xBase[0]
+                    keep = keepsml & keepbig
 
                     # interpolate data
-                    (yOut, _) = gw.interpolateLine(xd[xStart:xEnd]-xBase[0], yd[xStart:xEnd], xBase[xStart:xEnd]-xBase[0])
-                    (zOut, _) = gw.interpolateLine(xd[xStart:xEnd]-xBase[0], zd[xStart:xEnd], xBase[xStart:xEnd]-xBase[0])
+                    (yOut, _) = gw.interpolateLine(xd[keep]-xBase[0], yd[keep], xBase-xBase[0], plot_flag=False)
+                    (zOut, _) = gw.interpolateLine(xd[keep]-xBase[0], zd[keep], xBase-xBase[0], plot_flag=False)
 
                     xData[lineCount, 0:vec_len] = xBase[1:]
                     yData[lineCount, 0:vec_len] = yOut
@@ -135,7 +130,63 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True)
     return
 
 
-def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
+def reportTrackDirection(surveygroup, line, east='', north=''):
+    if east == '':
+        east = surveygroup['CoordinateFrame'].attrs['XChannel']
+    if north == '':
+        north = surveygroup['CoordinateFrame'].attrs['YChannel']
+
+    g = surveygroup['Lines']
+    linegroup = g[line]
+    dx = np.diff(rd.getLineData(linegroup, east))
+    dy = np.diff(rd.getLineData(linegroup, north))
+    heading = np.arctan2(dx, dy) * 180.0 / np.pi
+    mean_heading = np.mean(heading)
+    print(f'    Line {line} heading = {mean_heading:.1f} deg.')
+
+
+def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=False):
+    """
+    For all `repeatLines` found in the `whizzFiles`, set up the data vectors
+    and parameters for interpolations of both `channel` and `z` over `x` to a 
+    single pseudo- flight-line.
+    
+    Parameters
+    ----------
+    whizzFiles : Array of String or pathlib Path
+        Names of HDF5 Whizz files, including path and extension.
+    channel : String
+        The name of the channel which forms the first dependent variable.
+        Its start, end and length after removal of NaNs and dummies is required.
+    repeatLines : Array of String
+        The flight-lines to be analysed.
+    x : String, optional
+        The name of the channel containing the `x` data to form the independent
+        variable. Defaults to the `XChannel` attribute of each whizzFile.
+    z : String, optional
+        The name of the channel containing the altitude data which form the
+        second dependent variable. Defaults to the `AltitudeChannel` attribute
+        of each whizzFile.
+
+    Returns
+    -------
+    xBase : numpy 1D array of float
+        The uniformly sampled `x` locations onto which all `z` and `channel` 
+        data will be interpolated
+    xData : numpy 2D array of float
+        Returned as NaNs but of the correct size to write the data to. 
+    yData : numpy 2D array of float
+        Returned as NaNs but of the correct size to write the data to. 
+    zData : numpy 2D array of float
+        Returned as NaNs but of the correct size to write the data to. 
+    minBigX : Float
+        For all flight-lines, the minimum of the largest value of `x`.
+    maxSmallX : Float
+        For all flight-lines, the maximum of the smallest value of `x`.
+    deltaX : Float
+        The sampling spacing of the interpolant, `x`.
+
+    """
 
     nSamples = 1000000000
     minBigX = 1.0E12
@@ -143,6 +194,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
     nLines = len(repeatLines)
     linecount = 0
     
+    print('Analysing line data to work out size of interpolated output arrays.')
     for whizzFile in whizzFiles:
         filename = str(whizzFile)
         with h5py.File(filename, 'r') as f:
@@ -162,8 +214,12 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
                     cs = rd.getLineData(g[line], channel)
 
                     xs = xs[~np.isnan(xs + zs + cs)]
+                    if xs.size < 10:
+                        print(f'ERROR - after trimming NaNs, the data vectors in {line} are too short for analysis. Stopping.')
+                        return
                     nSamples = min(nSamples, xs.size)
-                    # print(f'Shapes: xs {xs.shape}, nSamples {nSamples}')
+                    if verbose:
+                        print(f'    Line {line}, Shape of x array = {xs.shape}, number of samples for interpolant = {nSamples}.')
                     minBigX = min(max(xs), minBigX)
                     maxSmallX = max(min(xs), maxSmallX)
                     repeatLines.remove(line)
@@ -172,14 +228,18 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z=''):
         return 0.0
     deltaX = (minBigX - maxSmallX) / (nSamples - 1)
     xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)
-    print(f'{linecount} of {nLines} lines analysed, each interpolated to {nSamples} samples.')
-    xData = np.empty((nLines, nSamples))
+    print(f'{linecount} of {nLines} lines analysed, interpolant length set to {nSamples} samples.')
+    xData = np.empty((linecount, nSamples))
     xData[:] = np.nan
-    yData = np.empty((nLines, nSamples))
+    yData = np.empty((linecount, nSamples))
     yData[:] = np.nan
-    zData = np.empty((nLines, nSamples))
+    zData = np.empty((linecount, nSamples))
     zData[:] = np.nan
-
+    if verbose:
+        print(f'  x range = ({maxSmallX:.2f}, {minBigX:.2f}) , deltaX = {deltaX:.2f}.')
+        print(f'  output array shapes: x {xBase.shape}, y {yData.shape}, z {zData.shape}.')
+    print('')
+    
     return xBase, xData, yData, zData, minBigX, maxSmallX, deltaX
 
 
@@ -240,6 +300,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
 
     if yData.shape[0] > 2:
         yOverallStd = np.nanmean(np.nanstd(yData, axis=0))
+        print('\nSummary Statistics')
         print(f'All lines: stdev({channel}) = {yOverallStd:.2f} {chan_y_units}')
     for line in range(0, nLines):
         ySum = ySum + yData[line,:] - yMean
@@ -251,7 +312,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
 
         myPlot, = ax.plot(x1, y1, lw=0.5, label=f'RMS = {yStd:.1f}')
         ax.legend(fontsize=8)
-        print(f'Line {flightLines[line]}: stdev({channel}) = {yStd:.2f} {chan_y_units}')
+        print(f'    Line {flightLines[line]}: stdev({channel}) = {yStd:.2f} {chan_y_units}')
             
     plt.xlabel('x', fontsize = 10)
     plt.ylabel(chan_y_label, fontsize = 10)
@@ -281,7 +342,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
         myPlot, = ax.plot(x1, z1, lw=0.5, label=f'RMS = {zStd:.2f}')
         ax.legend(fontsize=8)
         # ax.text(x1[0], z1[0], f'RMS = {zStd:.2f}', fontsize=8)
-        print(f'Line {flightLines[line]}: stdev({z}) = {zStd:.1f} {chan_z_units}')
+        print(f'    Line {flightLines[line]}: stdev({z}) = {zStd:.1f} {chan_z_units}')
             
     plt.xlabel('x', fontsize = 10)
     # plt.ylabel(f'z {chan_z_units}', fontsize = 10)
@@ -295,6 +356,4 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     plt.show()
             
     return
-
-
 

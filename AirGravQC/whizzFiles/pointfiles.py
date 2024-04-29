@@ -304,8 +304,8 @@ def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
 
     if plot_flag:
         print(f'Len t: {len(timeIn)}; Len d: {len(dataIn)}')
-        print(f'')
-        plt.plot(timeIn[1:], np.diff(dataIn), 'b', timeIn[1:], np.diff(timeIn), 'g')
+        print(f'Shapes: dataIn {dataIn.shape}, {np.diff(dataIn).shape}; timeIn {timeIn.shape}')
+        plt.plot(timeIn, dataIn, 'r', timeIn[1:], np.diff(dataIn), 'b', timeIn[1:], np.diff(timeIn), 'g')
         plt.show()
     spl = interpolate.splrep(timeIn_trim, dataIn_trim, k=3, s=0)
     # out = interpolate.splev(timeOut, spl)
