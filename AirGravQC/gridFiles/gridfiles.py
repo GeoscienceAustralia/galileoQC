@@ -94,6 +94,63 @@ def image_pygmt(grid, region):
 
 # GRID REPORTING
 
+"""
+ODDEVENLINES_v2()
+- bearing = calcbearing(traverses)
+- rotate into x,y coordinates so x is parallel to bearing
+- spacing = calcLineSpacing()
+- for trav in traverses
+    meany = mean(y)
+    spaces = int(meany / spacing)
+    if spaces % 2 == 0:
+        - assign trav to evens
+    - else:
+        - assign trav to odds
+- analyse_odds_evens()
+
+"""
+
+"""
+updateTravsControls(whizzFile, lines=[], x='', y='', verbose=False)
+
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r+') as f:
+        g = f[groupName]['Lines']
+        if lines == []:
+            lines = list(g.keys())
+        if x = '':
+            x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if y = '':
+            y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+
+        for line in lines:
+            gg = g[line]
+            if not gg.hasTrackAttribute:
+                
+
+"""
+
+"""
+updateLineTracks(whizzFile, lines=[], x='', y='', verbose=False)
+
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r+') as f:
+        g = f[groupName]['Lines']
+        if lines == []:
+            lines = list(g.keys())
+        if x = '':
+            x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        if y = '':
+            y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+
+        for line in lines:
+            gg = g[line]
+            dx = np.diff(xd)
+            dy = np.diff(rd.getLineData(g[line], y))
+            track = np.arctan2(dx, dy) * 180.0 / np.pi
+            mean_track = np.mean(track)
+            gg.attrs['Track'] = mean_track
+"""
 
 
 def oddevenlines(whizz_file, channel, grid_space):
