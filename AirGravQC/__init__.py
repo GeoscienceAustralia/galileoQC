@@ -48,7 +48,9 @@ from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.graphics import imshow_hs # ??? TODO Is this needed here?
-
+from AirGravQC.gridFiles.oddeven import updateLineTracks
+from AirGravQC.gridFiles.oddeven import oddevenlines
+from AirGravQC.gridFiles.oddeven import updateLineSpacing
 # Mag
 from AirGravQC.qc.checkDiurnal import checkDiurnal
 from AirGravQC.qc.checkBasemag import checkBasemag
