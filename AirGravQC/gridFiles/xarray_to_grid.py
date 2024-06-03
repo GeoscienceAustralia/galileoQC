@@ -33,7 +33,7 @@ def xarray_to_grid(my_data, grid_space, region=[]):
 
     Returns
     -------
-    grid : XArray
+    grid : xArray DataArray
         Contains the gridded data.
     region : tuple
         Four floating point values for xmin, xmax, ymin, ymax.

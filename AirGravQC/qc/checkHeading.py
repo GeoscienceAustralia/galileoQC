@@ -11,7 +11,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
         
 
-def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y='', tolerance=10.0, plot_flag=False):
+def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y='', tolerance=10.0, known='', plot_flag=False):
     """
     Checks heading in degrees is within +/- tolerance (in degrees) of nominal (in degrees). Actually
     checks against `sin(nominalHeading +/- tolerance)`.
@@ -33,6 +33,10 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
         default is to read the yChannel field name from the Coordinate Frame.
     tolerance : Float, optional
         Headings within +/- tolerance degrees of nominalHeading are ok.
+    known : String, optional
+        If present, the name of the channel containing the "known error" flag.
+        This is reported against any error so that known errors can be distinguished
+        from unknown errors.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
 
@@ -44,6 +48,10 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
     filename = str(whizzFile)
     report = ''
     num_failed_lines = 0
+
+    exceedances_known = False
+    this_exc_known = False
+    number_known = 0
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -59,6 +67,12 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
             x_data = rd.getLineData(g[line], x)
             y_data = rd.getLineData(g[line], y)
             distance = util._length(x_data, y_data)
+
+            if known != '':
+                exceedances_known = True
+                exc_known = rd.getLineData(g[line], known)
+                report_known = -1
+
             if headingchan == '':
                 dx = np.diff(x_data)
                 dy = np.diff(y_data)
@@ -78,7 +92,11 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
                 max_heading = np.nanmax(heading % 360)
                 num_failed_lines += 1
                 report += f'Line {line}: heading exceedance against tolerance {tolerance}. '
-                report += f'Min {min_heading:.2f}, Max {max_heading:.2f} deg. Len={len(heading)}\n'
+                report += f'Min {min_heading:.2f}, Max {max_heading:.2f} deg. Len={len(heading)} fids.'
+                if exceedances_known:
+                    if np.max(exc_known) > 0:
+                        report += f'Exceedance known on line: {exc_known[fid]:.0f}'
+                report += '\n'
                 if plot_flag:
                     fig = plt.figure()
                     fig.suptitle(f'Heading Check Line {line}', fontsize=10)

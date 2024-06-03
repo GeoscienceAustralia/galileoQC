@@ -44,6 +44,9 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
     """
 
     # build the arrays to store the data
+    if not hasattr(whizzFiles, "__len__"):
+        print('ERROR - whizzFiles not an array.')
+        return
     temp_repeats = repeatLines.copy()
     try:
         xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z, verbose=verbose)
@@ -225,6 +228,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
                     repeatLines.remove(line)
                 
     if minBigX < maxSmallX:
+        print('ERROR: stopping because minBigX ({minBigX}) < maxSmallX ({maxSmallX})')
         return 0.0
     deltaX = (minBigX - maxSmallX) / (nSamples - 1)
     xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)

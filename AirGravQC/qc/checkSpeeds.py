@@ -283,7 +283,7 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
                     else:
                         speed_msg = "too fast"
                     if util._exceedance_fail(durn_exceedance, dist_exceedance, maxDuration, maxDistance):
-                        report += f'\nL {lineName} {speed_msg} for {durn_exceedance} sec '
+                        report += f'\nL {lineName} {speed_msg} for {durn_exceedance:.1f} sec '
                         report += f'({dist_exceedance:.0f} m), peak exceedance = {speed_extreme:.0f} m/s.'
                         report += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
                         exceedance_in_line = True
