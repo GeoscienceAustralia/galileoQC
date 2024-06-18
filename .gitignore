@@ -138,3 +138,4 @@ examples/*
 
 *.hdf5
 *.xyz
+.DS_Store
