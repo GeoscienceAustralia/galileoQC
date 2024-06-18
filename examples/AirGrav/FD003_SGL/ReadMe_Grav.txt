@@ -1,6 +1,6 @@
 ==========================================================================================================
 Project Code: GeoAus21.AUS
-Project:      Airborne Gravity Survey – Victoria and South Australia
+Project:      Airborne Gravity Survey - Victoria and South Australia
 Client:       Geoscience Australia
 
 Date:                          18 April 2022
