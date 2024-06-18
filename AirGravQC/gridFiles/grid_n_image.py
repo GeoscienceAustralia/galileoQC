@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from pathlib import Path
-import colorcet as cc
 import xarray as xr
 import netCDF4 as nc4
 import filebrowser as fb

@@ -207,6 +207,17 @@ def _parse_header(imagefile, verbose=False):
 
     # open the filename
     headerfile = imagefile
+
+    headerfilepath = Path(headerfile)
+    if headerfilepath.with_suffix('.ers').exists():
+        headerfilepath = headerfilepath.with_suffix('.ers')
+    elif headerfilepath.with_suffix('.ERS').exists():
+        headerfilepath = headerfilepath.with_suffix('.ERS')
+    else:
+        print(f'ERROR file {headerfile} does not exist.')
+        return
+    headerfile = str(headerfilepath)
+
     with open(headerfile, 'r') as fid:
         for myline in fid:
             if '=' in myline:

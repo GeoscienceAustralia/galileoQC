@@ -86,3 +86,5 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs, colorbar=True,
                    azdeg=45, altdeg=45, blend_mode='alpha', alpha=0.7,
                    extent=(e[0], e[-1], n[0], n[-1]),origin=origin)
+    return fig
+    
