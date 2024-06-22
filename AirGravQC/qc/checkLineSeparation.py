@@ -65,41 +65,45 @@ def checkLineSeparation(whizzfile, nominalsep, lines=[], measX='', measY='', all
     # start_y = 0.0
     # end_y = 0.0
 
-    exceedances_known = False
-    this_exc_known = False
-    number_known = 0
+    if True:
+    print('checkLineSeparation() is not yet available. It awaits an algorithm that is acceptably fast.')
+        return
+    else:
+        # exceedances_known = False
+        # this_exc_known = False
+        # number_known = 0
 
-    measFile = str(whizzfile)
-    
+        # measFile = str(whizzfile)
+        
 
-    with h5py.File(measFile, 'r+') as fm:
-        linesgroup = fm[groupName]['Lines']
-        if measX == '':
-            measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
-        if measY == '':
-            measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
-        numLines = len(linesgroup.items())
+        # with h5py.File(measFile, 'r+') as fm:
+        #     linesgroup = fm[groupName]['Lines']
+        #     if measX == '':
+        #         measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
+        #     if measY == '':
+        #         measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
+        #     numLines = len(linesgroup.items())
 
-        message = ''
-        num_lines_exceeded = 0
-        total_num_excs = 0
-        num_lines_unplanned = 0
+        #     message = ''
+        #     num_lines_exceeded = 0
+        #     total_num_excs = 0
+        #     num_lines_unplanned = 0
 
-        if lines == []:
-            lines = linesgroup.keys()
+        #     if lines == []:
+        #         lines = linesgroup.keys()
 
-        for line in lines:
-            adjacentlines = findadjacentlines(line, linesgroup)
-            for aline in adjacentlines:
-                separation = calcseparation(line, aline)
-                excess_sep = allowance - np.abs(separation - nominalsep)
+        #     for line in lines:
+        #         adjacentlines = findadjacentlines(line, linesgroup)
+        #         for aline in adjacentlines:
+        #             separation = calcseparation(line, aline)
+        #             excess_sep = allowance - np.abs(separation - nominalsep)
 
-                # no exceedances
-                if np.max(excess_sep) < 0.0:
-                    continue
-                elif 
-                if util._exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance):
-
+        #             # no exceedances
+        #             if np.max(excess_sep) < 0.0:
+        #                 continue
+        #             elif 
+        #             if util._exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance):
+        return
 
 
 

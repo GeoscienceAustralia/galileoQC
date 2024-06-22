@@ -43,6 +43,29 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     None.
 
     """
+
+    # Get the coordinates of the points on the flight-line.
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        latitude = f[groupName]['CoordinateFrame'].attrs['LatitudeChannel']
+        longitude = f[groupName]['CoordinateFrame'].attrs['LongitudeChannel']
+        g = f[groupName]['Lines']
+        if fig_title == '':
+            fig_title = f[groupName].attrs['ProjectName'] + ': Line(s) on Ground Gravity'
+        lon = rd.getLineData(g[line], longitude)[0:]
+        lat = rd.getLineData(g[line], latitude)[0:]
+
+    # Extract geographic range of data
+    margin = 0.15
+    if minlat == -90:
+        minlat = np.min(lat) - margin
+    if maxlat == 90:
+        maxlat = np.max(lat) + margin
+    if minlon == -360:
+        minlon = np.min(lon) - margin
+    if maxlon == 360:
+        maxlon = np.max(lon) + margin
+
     # ensure coords are in Australia
     if (minlat > -11.0) | (minlat < -44.0):
         print(f'Min lat is {minlat} but must be in range [-11, -44]')
@@ -80,16 +103,6 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
         & (data.latitude < maxlat) 
         & (data.reliability_index > min_reliability))
     new = ds_5371.dropna('point')
-
-    filename = str(whizzFile)
-    with h5py.File(filename, 'r') as f:
-        latitude = f[groupName]['CoordinateFrame'].attrs['LatitudeChannel']
-        longitude = f[groupName]['CoordinateFrame'].attrs['LongitudeChannel']
-        g = f[groupName]['Lines']
-        if fig_title == '':
-            fig_title = f[groupName].attrs['ProjectName'] + ': Line(s) on Ground Gravity'
-        lon = rd.getLineData(g[line], longitude)[0:]
-        lat = rd.getLineData(g[line], latitude)[0:]
     
     SMALL_SIZE = 12
     MEDIUM_SIZE = 14
