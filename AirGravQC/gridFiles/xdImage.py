@@ -1,15 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
-from pathlib import Path
 import colorcet as cc
-import xarray as xr
-import netCDF4 as nc4
-import filebrowser as fb
-import rioxarray
-import h5py
-import pygmt
-import matplotlib.ticker as tkr
 
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
