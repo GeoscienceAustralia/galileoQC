@@ -273,7 +273,8 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[]):
 
     # Image and report statistics
     image_pygmt(d_grid, intersectregion)
-    print(f'RMS of odd-even difference = {d_grid.std().data.item():.2f}')
+    print(f'RMS of odd-even difference = {d_grid.std().data.item():.2f} {d_grid.attrs['units']}')
+    print(f'Estimated noise in the data = {d_grid.std().data.item()/2.0:.2f} {d_grid.attrs['units']}')
 
 
 def _getOddEvenLines(whizz_file):
