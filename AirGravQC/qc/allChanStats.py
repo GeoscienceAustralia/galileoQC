@@ -2,16 +2,18 @@ import numpy as np
 import h5py
 
 import AirGravQC.config as config
+from AirGravQC.whizzPlots.plotBoxWhisker import plotBoxWhisker
 import AirGravQC.whizzPlots.whizzPlot as wpl
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzPlots.whizzPlot as wpl
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
 
 
-def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], sin_chans=[], outlierRatio=5.0, verbose=False):
+def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], sin_chans=[]):
     """
-    Generate statistical plots for the channels across the lines. The plots show
+    Generate statistical plots for the channels across all lines. The plots show
     the min, mean, max and stdev for each channel as a function of line number.
 
     The statistics can be optionally calculated on the data after first differencing,
@@ -19,7 +21,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath.
+    whizzFile : String or pathlib Path.
         Name of a HDF5 Whizz file, including path and extension.
     allChannels : [String], optional.
         A list of the channels or fields to plot. Default is all in whizzFile.
@@ -41,7 +43,6 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
 
     """
     filename = str(whizzFile)
-
     with h5py.File(filename, 'r') as f:
         gProject = f[groupName]
         g = gProject['Lines']
@@ -73,7 +74,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
 
             # get the units for the y axis label
             xlabelstr = 'Line number'
-            my_units = gw.getLineDataUnits(g[lines[0]], channel)
+            my_units = rd.getChannelAttrs(g[lines[0]], channel)
             if my_units == '':
                 ylabelstr = f'{channel}'
             else:
@@ -82,7 +83,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             for line in lines:
                 if line != 'CoordinateFrame':
                     lineNo[count] = line
-                    dd = gw.getLineData(g[line], channel)
+                    dd = rd.getLineData(g[line], channel)
                     if remove_sine:
                         dd = np.sin(dd * (np.pi / 180.0))
                     if diff_one:
@@ -95,13 +96,6 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
                         chMax[count] = np.nanmax(dd)
                         chMean[count] = np.nanmean(dd)
                         chStd[count] = np.nanstd(dd)
-                        maxDevRatio = (chMax[count] - chMean[count]) / chStd[count]
-                        minDevRatio = (chMean[count] - chMin[count]) / chStd[count]
-                        if verbose:
-                            if maxDevRatio > outlierRatio:
-                                print(f'{lineNo[count]}: max outlier ratio = {maxDevRatio:.1f}.')
-                            if minDevRatio > outlierRatio:
-                                print(f'{lineNo[count]}: min outlier ratio = {minDevRatio:.1f}.')
                     else:
                         chMin[count] = 0.0
                         chMax[count] = 0.0
@@ -128,5 +122,5 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             if remove_sine:
                 titlestr += ')'
             titlestr += ' Stats'
-            wpl.plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+            plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
     return
