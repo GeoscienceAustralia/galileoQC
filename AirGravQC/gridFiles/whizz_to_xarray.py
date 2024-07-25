@@ -153,4 +153,3 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             
         print(f'    {my_dataset.attrs["title"]}: min = {my_dataset[xr_zchan].data.min()}, max = {my_dataset[xr_zchan].data.max()}.')
     return my_dataset
-

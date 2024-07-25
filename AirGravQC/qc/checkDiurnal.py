@@ -9,7 +9,7 @@ import h5py
 import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -30,7 +30,7 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
             diurnalExceeded = False
             failedSample = 0
             bigExtremum = 0.0
-            data = gw.getLineData(g[line], basemag)
+            data = rd.getLineData(g[line], basemag)
             data = data[np.logical_not(np.isnan(data))]
                 
             if nSamples > len(data):
@@ -55,7 +55,7 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
                         failedSample = ii
                     
             if diurnalExceeded:
-                report += f'\n  Diurnal for {basemag} at line {line}, sample number {failedSample} diverges from chord by {bigExtremum:.2f}, exceeding {rangeLimit:.1f} - FAIL'
+                report += f'\n  Diurnal for {basemag} at sample number {failedSample} diverges from chord by {bigExtremum:.2f}, exceeding {rangeLimit:.1f} - FAIL'
                 num_failed_lines += 1
                 if plot_flag:
                     fig = plt.figure()

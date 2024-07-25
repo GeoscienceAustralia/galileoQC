@@ -1,8 +1,16 @@
 import numpy as np
 import h5py
+# import matplotlib.pyplot as plt
+# from scipy.signal import butter, lfilter
+# from matplotlib.ticker import StrMethodFormatter
+# import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
+# import AirGravQC.gridFiles.read_ers as ers
+# import AirGravQC.gridFiles.gridfiles as grd
+# import AirGravQC.utility.utility as util
+# import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
 
@@ -34,7 +42,7 @@ def checkConstantSlope(whizzFile, channels=[]):
         report = ''
         for line in g.keys():
             for channel in channels:
-                data = gw.getLineData(g[line], channel)
+                data = rd.getLineData(g[line], channel)
                 deriv = np.diff(data, n = 1)
                 mean_deriv = np.mean(deriv)
                 deriv = deriv - mean_deriv
@@ -50,3 +58,5 @@ def checkConstantSlope(whizzFile, channels=[]):
         report += 'All channels tested were either constant or of constant slope for all lines tested.'
     print(report)
     return
+
+

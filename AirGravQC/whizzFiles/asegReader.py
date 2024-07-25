@@ -1,0 +1,145 @@
+import numpy as np
+import h5py
+from pathlib import Path
+import pathlib
+import filebrowser as fb
+# import aseg_gdf2 as aseg
+from gspy import Survey
+
+import AirGravQC.config as config
+
+groupName = config.groupName
+projectName = config.projectName
+
+
+def asegToHDF(surv_metadata, data_metadata, datafile, outputHdf='', projectName = projectName, omitChannels = ['RT'], verbose=False):
+    # Put all the ASEG-GDF2 info into a gspy survey.
+    # TODO:
+    #   1. use the key attributes to populate CoordFrame
+    survey = Survey(surv_metadata)
+    try:
+        survey.add_tabular(type='aseg', data_filename=datafile, metadata_file=data_metadata)
+    except Exception as e:
+        print('ERROR - add_tabular had the following exception.')
+        print(e)
+        # return
+    
+    # get the survey lines and the numbers of fids per survey line
+    lines, fidsperline = _flightlines(survey)
+    
+    dataset = survey.tabular.xarray
+    
+    if outputHdf == '':
+        outputHdf = Path(datafile).with_suffix('.hdf5')
+
+    with h5py.File(str(outputHdf), 'w') as f:
+        # create all the data structure ready for the datasets
+        g = f.create_group(groupName)
+        g.attrs['ProjectName'] = projectName
+        
+        gCoord = g.create_group('CoordinateFrame')
+        gLines = g.create_group('Lines')
+
+        # if zoneIdx >= 0:
+        #     # s/w limitation - assume all data in the same UTM zone as the first flight line.
+        #     gCoord.attrs['UTMZone'] = zones[0]
+        
+        # Move the data.
+        dtype_error_chan = ''
+        dtype_error = False
+        end = 0
+        for lineIdx in range(0, len(lines)):
+            start = end
+            end = start + fidsperline[lineIdx]
+            if verbose:
+                print(f'  About to add data for line {lines[lineIdx]}, Lcount {lineIdx+1}/{len(lines)}, Fids {start}/{end}')
+
+            # Pick out the XArray DataSet slice with the the current line's data
+            line_ds = dataset.isel(index = slice(start,end))
+
+            # create a HDF5 line group and metadata
+            gg = gLines.create_group(f'{lines[lineIdx]}')
+            gg.attrs['LineNumber'] = lines[lineIdx]
+            try:
+                flight_chan = survey.tabular.attrs['key_mapping.flight_number']
+                gg.attrs['Flight'] = line_ds[flight_chan].data[0]
+            except:
+                print('No FLight channel found. If one should be there, check the data metadata JSON file.')
+            # if dateIdx >= 0:
+            #     gg.attrs['Date_Local'] = dates[lineIdx]
+            gg.attrs['NumberOfFids'] = fidsperline[lineIdx]
+
+            channels = list(line_ds.keys())
+            for channel in channels:
+                if channel in omitChannels:
+                    continue
+                if verbose:
+                    print(f'      Adding {channel} data for line {lines[lineIdx]}')
+                # gspy and aseg_gdf2 conspire to often return dtype=object which is no good.
+                chan_type = line_ds[channel].dtype
+                if chan_type == 'O':
+                    dataArray = line_ds[channel].astype(float)
+                else:
+                    dataArray = line_ds[channel]
+                chan_type = dataArray.dtype
+                # # if not, then what???
+                # chan_type = line_ds[channel].dtype
+                # if chan_type == 'O':
+                #     dataArray = dataArray.astype(float)
+                    # dtype_error = True
+                    # dtype_error_chan = channel
+                    # continue
+                dd = gg.create_dataset(channel, data = dataArray, dtype=chan_type, compression="gzip", compression_opts=4)
+                dd.attrs['Name'] = line_ds[channel].standard_name
+                dd.attrs['Alias'] = channel
+                dd.attrs['Units'] = line_ds[channel].units
+                dd.attrs['Description'] = line_ds[channel].long_name
+                dd.attrs['Format'] = line_ds[channel].format
+                dd.attrs['Null_value'] = line_ds[channel].null_value
+    if dtype_error:
+        print(f'      {dtype_error_chan} dtype "O" not accepted, data not copied from ASEG-GDF2')
+
+
+def _flightlines(survey):
+    """
+    Given a GSpy Survey, returns the individual survey line numbers and the number of
+    samples (fiducials) in each survey line.
+    
+    Used for converting ASEG-GDF2 files to GeoWhizz files.
+    
+    It counts the lines regardless of ordering but, be warned, later on we assume
+    that the all samples from one line are contiguous.
+    """
+    # `line_chan` contains the name of the channel with the line numbers.
+    line_chan = survey.tabular.attrs['key_mapping.line_number']
+    # construct a numpy array of all line numbers ...
+    xa = survey.tabular.xarray
+    npa = (xa[line_chan].values)
+    # ... and use the nice `np.unique` function (fast and easy)
+    return np.unique(npa, return_counts=True)
+
+
+
+def _cleanUnits(fieldDef):
+    """
+    ASEG-GDF2 files generated by Atlas (proprietary geophysical processing software
+    from Fugro Airborne, CGG Airborne and XCalibur) does not obey the ASEG-GDF2
+    standard. One issue is the use of an extra colon where the standard requires
+    a comma, making the units field incorrect. This routine takes a units fieldDef
+    and fixes the error by removing the substring from the extra colon. 
+
+    Parameters
+    ----------
+    fieldDef : String
+        The field units from the dictionary fieldDef['units'].
+
+    Returns
+    -------
+    String
+        The field units after correction.
+
+    """
+    return fieldDef.split(':')[0]
+
+
+

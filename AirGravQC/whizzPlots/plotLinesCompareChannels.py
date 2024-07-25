@@ -7,12 +7,10 @@ import pooch
 
 import AirGravQC.config as config
 # import AirGravQC.qc.qualityAnalysis as qc
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
 import matplotlib.ticker as tkr
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
 groupName = config.groupName
 
@@ -24,7 +22,7 @@ def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, 
 
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     flightLine : String
         A flightline, e.g. '1000110.0'.
@@ -55,8 +53,8 @@ def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, 
         xDel = 0.0
         
         for line in flightLines:
-            xData = gw.getLineData(g[line], x)
-            xUnits = gw.getLineDataUnits(g[line], x)
+            xData = rd.getLineData(g[line], x)
+            xUnits = rd.getChannelAttrs(g[line], x)
             if xUnits == '':
                 xlabelstr = f'{x}'
             else:
@@ -67,8 +65,8 @@ def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, 
             thou_format = tkr.FuncFormatter(util._space_thou)
             ax = fig.add_subplot(1,1,1)
             for channel in channels:
-                yData = gw.getLineData(g[line], channel)
-                yUnits = gw.getLineDataUnits(g[line], channel)
+                yData = rd.getLineData(g[line], channel)
+                yUnits = rd.getChannelAttrs(g[line], channel)
                 if yUnits == '':
                     ylabelstr = f'{channel}'
                 else:

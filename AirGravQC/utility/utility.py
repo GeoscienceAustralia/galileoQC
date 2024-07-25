@@ -11,8 +11,6 @@ Created on Sat Aug 14 20:28:20 2021
 # import necessary modules
 import numpy as np
 from scipy.signal import butter, lfilter
-from scipy.interpolate import CloughTocher2DInterpolator
-from scipy import interpolate
 
 
 def _distance(x, y):
@@ -123,7 +121,23 @@ def _butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     return y
 
 
-def _space_thou(x, pos):  # formatter function takes tick label and tick position
+def _space_thou(x, pos):
+    """
+      Formatter function takes tick label and tick position
+
+    Parameters
+    ----------
+    x : 
+        tick label.
+    y : 
+        tick position.
+
+    Returns
+    -------
+
+    Integer number formatted as string with spaces as a thousands separator.
+
+    """
     s = '%d' % x
     groups = []
     while s and s[-1].isdigit():
@@ -133,8 +147,29 @@ def _space_thou(x, pos):  # formatter function takes tick label and tick positio
 
 
 def _get_lineName(linegroup):
+    """
+    Returns the line number and, if extant, the flight number as a
+    formatted string, suitable for reporting.
+
+    Parameters
+    ----------
+    linegroup : HDF5 group
+        The subgroup containing the line.
+
+    Returns
+    -------
+    lineName : String
+        The line number and flight number formatted like LLLL.LL:FFF.
+
+    """
+    smallnumber = 0.0001
     lineNo = linegroup.attrs['LineNumber']
-    lineName = f'{lineNo:.2f}'
+    if lineNo - int(lineNo) < smallnumber:
+        lineName = f'{lineNo:.0f}'
+    elif lineNo * 10 - int(lineNo * 10) < smallnumber:
+        lineName = f'{lineNo:.1f}'
+    else:
+        lineName = f'{lineNo:.2f}'
     if 'Flight' in linegroup.attrs:
         flightNo = linegroup.attrs['Flight']
         lineName += ":" + f'{flightNo:.0f}'
@@ -284,122 +319,98 @@ def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False
     return _butter_bandpass_filter(ils, lowcut, highcut, fs, order = order)
 
 
-def _interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
+def getPlannedLine(gPlan, gLineMeas):
     """
-    Interpolates dataIn, sampled at timeIn, onto the samples timeOut.
-    These three input arrays are pre-processed to ensure that timeIn
-    and timeOut are monotonically increasing, whilst keeping dataIn
-    synchronised with timeIn, and spareOut synchronised with timeOut.
+    Given the single line group, `gLineMeas`, for a line in a whizzfile of measured
+    data, returns the corresponding line group, 'gpline', from the lines group, 
+    `gPlan`, of a whizzfile of planned data.
+
+    If successful, `planLineInPlan` is True, else it is False.
 
     Parameters
     ----------
-    timeIn : 1D numpy float array
-        The independent variable of the inputs to be interpolated.
-    dataIn : 1D numpy float array
-        The input dependent variable to be interpolated.
-    timeOut : 1D numpy float array
-        The independent variable to interpolate onto.
-    spare : 1D numpy float array
-        To be kept synchronised with timeOut and returned.
-    plot_flag : Bool, optional
-        If True, plot the np.diff() of dataIn and timeIn.
-        Default False.
+    gPlan : HDF5 group
+        The ['Lines'] group for all the survey lines in a survey plan file.
+    gLineMeas : HDF5 group
+        The ['Lines'][line] group for a single survey line in a measured survey file.
 
     Returns
     -------
-    out : 1D numpy float array
-        The values of dataIn interpolated onto timeOut.
-    spareOut : 1D numpy float array
-        To be kept synchronised with timeOut and returned.
-
+    planLineInPlan : Bool
+        True if `gpline` found.
+    gpline : HDF5 group
+        The desired line group in the plan lines group.
     """
-    
-    timeIn = timeIn[np.logical_not(np.isnan(dataIn))]
-    dataIn = dataIn[np.logical_not(np.isnan(dataIn))]
-    spareOut = spare
-    # print(np.min(np.diff(timeIn)), np.max(np.diff(timeIn)))
-    # model = interpolate.InterpolatedUnivariateSpline(timeIn, dataIn)
-    # return model(timeOut)
-    
-    min_length = 100
-    if timeIn.size < min_length or dataIn.size < min_length or timeOut.size < min_length:
-        out = np.zeros(timeOut.shape)
-        out[:] = np.nan
-        return out, spare
-    if len(spare) < min_length:
-        spare = []
+    planLineInPlan = False
+    gpline = ''
+    plannedLineNo = gLineMeas.attrs['PlannedLine'] # a Float double
+    for pline in gPlan.keys():
+        if gPlan[pline].attrs['LineNumber'] == plannedLineNo:
+            planLineInPlan = True
+            gpline = pline
+            break
+    return planLineInPlan, gpline
+ 
 
-    (timeIn_trim, dataIn_trim) = _trim_monotonic(timeIn, sync=dataIn)
-    (timeOut_trim, spare_trim) = _trim_monotonic(timeOut, sync=spare)
-    if len(spare) > min_length:
-        spareOut = spare_trim
-
-    if plot_flag:
-        print(f'Len t: {len(timeIn)}; Len d: {len(dataIn)}')
-        print(f'')
-        plt.plot(timeIn[1:], np.diff(dataIn), 'b', timeIn[1:], np.diff(timeIn), 'g')
-        plt.show()
-    spl = interpolate.splrep(timeIn_trim, dataIn_trim, k=3, s=0)
-    # out = interpolate.splev(timeOut, spl)
-    out = interpolate.splev(timeOut_trim, spl)
-    return out, spareOut
-
-
-def _trim_monotonic(data_in, sync=[]):
+def getLineNumberInGroup(linesgroup, lineNumber):
     """
-    Force input to be monotonic by removing samples; keep
-    sync aligned by removing corresponding samples there 
-    as well.
+    Given the single line group, `gLineMeas`, for a line in a whizzfile of measured
+    data, returns the corresponding line group, 'gpline', from the lines group, 
+    `gPlan`, of a whizzfile of planned data.
 
-    """
-    b = np.diff(data_in)
-    # print(len(b[b > 0]), len(b[b < 0]))
-    if len(b[b > 0]) < len(b[b < 0]):
-        # if it is mostly decreasing, reverse, ...
-        data_temp = data_in[::-1]
-        if sync.size != 0:
-            sync_temp = sync[::-1]
-    else:
-        data_temp = data_in
-        if len(sync) != 0:
-            sync_temp = sync
-    # Now mostly increasing, keep only the increases
-    b = np.concatenate(([0],np.diff(data_temp)))
-    data_trim = data_temp[b > 0]
-    if len(sync) != 0:
-        sync_out = sync_temp[b > 0]
-    else:
-        sync_out = []
-    return data_trim, sync_out
-
-
-
-
-
-
-def _time_frequency(group):
-    """
-    Returns the sample frequency of the data in the project group.
-    Simply calculated as the inverse of the difference of the first
-    two sample times in the first line. Relies on the TimeChannel
-    attribute being set. 
+    If successful, `lineInGroup` is True, else it is False.
 
     Parameters
     ----------
-    group : HDF5 group
-        Must be the project group (top level of hierarchy in whizz File).
+    linesgroup : HDF5 group
+        The ['Lines'] group for all the survey lines in a whizzfile.
+    lineNumber : HDF5 group
+        The ['Lines'][line] group for a single survey line in a whizzfile.
 
     Returns
     -------
-    Float. The sample frequency in Hz.
-
+    lineInGroup : Bool
+        True if `gpline` found.
+    gpline : HDF5 group
+        The desired line group in the plan lines group.
     """
-    flightLines = list(group['Lines'].keys())
-    if 'TimeChannel' in group['CoordinateFrame'].attrs:
-        time = group['CoordinateFrame'].attrs['TimeChannel']
-        t = np.array(group['Lines'][flightLines[0]][time])
-        return 1.0 / np.abs(t[1] - t[0])
-    else:
-        return 0.0
+    lineInGroup = False
+    gpline = ''
+    for line in linesgroup.keys():
+        if linesgroup[line].attrs['LineNumber'] == lineNumber:
+            lineInGroup = True
+            gpline = line
+            break
+    return lineInGroup, gpline
+ 
+
+def e2norm(x, y):
+    """
+    Returns the Euclidean norm of `x` and `y`.
+    """
+    return np.sqrt(x * x + y * y)
+
+
+def controls_lessthan_1000(all_lines):
+    ctrl_strs = []
+    trav_strs = []
+    for line in all_lines:
+        if float(line) < 999.99:
+            ctrl_strs.append(line)
+        else:
+            trav_strs.append(line)
+    return trav_strs, ctrl_strs
+
+
+def controls_nineteen(all_lines):
+    ctrl_strs = []
+    trav_strs = []
+    for line in all_lines:
+        if line[:2] == "19":
+            ctrl_strs.append(line)
+        else:
+            trav_strs.append(line)
+    return trav_strs, ctrl_strs
+
 
 

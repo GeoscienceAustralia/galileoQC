@@ -3,7 +3,7 @@ import h5py
 import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 
 groupName = config.groupName
         
@@ -15,7 +15,7 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
     
     Parameters
     ----------
-    whizzFile : String or pathlib.PosixPath
+    whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
     turbulence : String
         The name of the channel containing the turbulence field.
@@ -76,11 +76,11 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         count = 0
         flightLine = list(g.keys())[0]
 
-        turb_units = gw.getLineDataUnits(g[flightLine], turbulence)
+        turb_units = rd.getChannelAttrs(g[flightLine], turbulence)
         if need_calc:
-            err_units = gw.getLineDataUnits(g[flightLine], aNE)
+            err_units = rd.getChannelAttrs(g[flightLine], aNE)
         else:
-            err_units = gw.getLineDataUnits(g[flightLine], eNE)
+            err_units = rd.getChannelAttrs(g[flightLine], eNE)
 
         labelx = []
         labely = []
@@ -90,12 +90,12 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         if lines == []:
             lines = g.keys()
         for line in lines:
-            turb = gw.getLineData(g[line], turbulence)
+            turb = rd.getLineData(g[line], turbulence)
             if need_calc:
-                A_ne = gw.getLineData(g[line], aNE)
-                A_uv = gw.getLineData(g[line], aUV)
-                B_ne = gw.getLineData(g[line], bNE)
-                B_uv = gw.getLineData(g[line], bUV)
+                A_ne = rd.getLineData(g[line], aNE)
+                A_uv = rd.getLineData(g[line], aUV)
+                B_ne = rd.getLineData(g[line], bNE)
+                B_uv = rd.getLineData(g[line], bUV)
                 idx = np.where(~np.isnan(A_ne + A_uv + B_ne + B_uv))
                 Ane = A_ne[idx]
                 Auv = A_uv[idx]
@@ -106,8 +106,8 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
                 errNE_data = (Ane - Bne)/np.sqrt(8)
                 errUV_data = (Auv - Buv)/np.sqrt(8)
             else:
-                E_ne = gw.getLineData(g[line], eNE)
-                E_uv = gw.getLineData(g[line], eUV)
+                E_ne = rd.getLineData(g[line], eNE)
+                E_uv = rd.getLineData(g[line], eUV)
                 idx = np.where(~np.isnan(E_ne + E_uv))
                 errNE_data = E_ne[idx]
                 errUV_data = E_uv[idx]

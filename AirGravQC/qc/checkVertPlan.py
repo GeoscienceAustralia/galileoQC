@@ -28,9 +28,9 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
 
     Parameters
     ----------
-    planPath : String or pathlib.PosixPath
+    planPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, of survey plan.
-    measPath : String or pathlib.PosixPath
+    measPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, of measured data.
     lines : Array{String}, optional
         Array of line numbers as strings. Default = [], meaning all lines are checked.
@@ -107,12 +107,14 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
 
             for line in lines:
                 line_flagged = False
-                lineName = util._get_lineName(gMeas[line])
-                planLine = f"{gMeas[line].attrs['PlannedLine']:.1f}"
-                if planLine in gPlan: # 5 DEC
-                    xP = np.array(gPlan[planLine][planX])
-                    yP = np.array(gPlan[planLine][planY])
-                    zP = np.array(gPlan[planLine][planZ])
+                gLineMeas = gMeas[line]
+                planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
+                lineName = util._get_lineName(gLineMeas)
+
+                if planLineInPlan:
+                    xP = np.array(gPlan[gpline][planX])
+                    yP = np.array(gPlan[gpline][planY])
+                    zP = np.array(gPlan[gpline][planZ])
                     xM = np.array(gMeas[line][measX])
                     yM = np.array(gMeas[line][measY])
                     zM = np.array(gMeas[line][measZ])
@@ -133,7 +135,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                     # interpolate (xm, zM) onto (xp, zmp)
                     if abs(xm[-1] - xm[0]) < abs(ym[-1] - ym[0]):
                         print('ERROR - expect xms > yms but this is not so.')
-                    (zmp, zM_trim) = util._interpolateLine(xp, zp, xm, zM, plot_flag=False)
+                    (zmp, zM_trim) = gw.interpolateLine(xp, zp, xm, zM, plot_flag=False)
                     # calculate the deviation vector
                     z_dev = zM_trim - zmp
                 
@@ -181,9 +183,9 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                                     this_exc_known = False
                     if plot_flag and line_flagged:
                         if abs(np.cos(dirn)) > 0.5:
-                            _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn)
+                            _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, lineName, dirn)
                         else:
-                            _plot_vert_exceedance(xm, z_dev, yP, zP, yM, zM, measY, measZ, allowance, line, planLine, dirn)
+                            _plot_vert_exceedance(xm, z_dev, yP, zP, yM, zM, measY, measZ, allowance, line, lineName, dirn)
                 else:
                     print(f'Line {lineName} not in plan.')
                     num_lines_unplanned += 1
@@ -194,7 +196,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
         print(report)
         if plot_flag and numErrLines > 0:
             plt.show()
- 
+
 
 def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn):
     fig = plt.figure()
