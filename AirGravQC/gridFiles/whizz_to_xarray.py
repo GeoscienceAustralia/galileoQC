@@ -1,42 +1,16 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
 from pathlib import Path
-import colorcet as cc
 import xarray as xr
-import netCDF4 as nc4
-import filebrowser as fb
-import rioxarray
 import h5py
-import pygmt
-import matplotlib.ticker as tkr
-# from matplotlib import rc
-plt.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica Neue']})
 
-SMALL_SIZE = 6
-MEDIUM_SIZE = 8
-BIGGER_SIZE = 10
-
-plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
-plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
-plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
-plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-
-import AirGravQC.graphics as graphics
-import AirGravQC.utility.utility as util
-import AirGravQC.gridFiles.read_ers as ers
-import AirGravQC.whizzFiles.pointfiles as gw
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.config as config
 
 groupName = config.groupName
 projectName = config.projectName
 
 
-
-def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False):
+def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[]):
     """
     Return a point-located xArray Dataset of (northing, easting, z), over the `fiducials` dimension,
     from a whizz_file.
@@ -53,12 +27,18 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
     e_chan : String, optional
         The name of the channel in `whizz_file` containing the eastings (x).
         Default "" causes the name of the "XChannel" in `whizz_file` to be used.
+    lines : String list, optional
+        The line numbers to be checked. Default is all lines in the whizzFile.
     remove_mean : Bool, optional
-        If true, the mean is subtracted from each survey line of data before
+        If True, the mean is subtracted from each survey line of data before
         writing to `my_dataset`. Default False.
     diff_one : Bool, optional
-        If true, the first difference along each survey line of data is
+        If True, the first difference along each survey line of data is
         written to `my_dataset`. Default False.
+    controls : String list, optional
+        The line numbers to be skipped if skipcontrols=True. Default is empty.
+    skipcontrols : Bool, optional
+        If True, control lines are excluded. Default False.
 
     Returns
     -------
@@ -83,10 +63,14 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
         totalNumFids = 0
 
         if lines == []:
-            lines = lines_group.keys()
-        
+            lines = list(lines_group.keys())
+
+        if skipcontrols and len(controls) > 0:
+            for ctrl in controls:
+                lines.remove(ctrl)
+
         for line in lines:
-            xData = gw.getLineData(lines_group[line], e_chan)
+            xData = rd.getLineData(lines_group[line], e_chan)
             totalNumFids += len(xData)
         print(f'{len(lines)} lines; total number of fids in whizz file = {totalNumFids}.')
 
@@ -142,9 +126,9 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
         efid = 0
         for line in lines:
             sfid = efid
-            xData = gw.getLineData(lines_group[line], e_chan)
-            yData = gw.getLineData(lines_group[line], n_chan)
-            zData = gw.getLineData(lines_group[line], z_chan)
+            xData = rd.getLineData(lines_group[line], e_chan)
+            yData = rd.getLineData(lines_group[line], n_chan)
+            zData = rd.getLineData(lines_group[line], z_chan)
             efid += len(yData)
             if remove_mean:
                 zData = zData - np.mean(zData)
@@ -155,9 +139,9 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             my_dataset[n_chan][sfid:efid] = yData
             my_dataset[xr_zchan][sfid:efid] = zData
 
-            my_dataset[e_chan].attrs['units'] = gw.getLineDataUnits(lines_group[line], e_chan)
-            my_dataset[n_chan].attrs['units'] = gw.getLineDataUnits(lines_group[line], n_chan)
-            my_dataset[xr_zchan].attrs['units'] = gw.getLineDataUnits(lines_group[line], z_chan)
+            my_dataset[e_chan].attrs['units'] = rd.getChannelAttrs(lines_group[line], e_chan)
+            my_dataset[n_chan].attrs['units'] = rd.getChannelAttrs(lines_group[line], n_chan)
+            my_dataset[xr_zchan].attrs['units'] = rd.getChannelAttrs(lines_group[line], z_chan)
             if remove_mean and diff_one:
                 my_dataset.attrs['title'] = f'{z_chan} (mr) (d1)'
             elif remove_mean:
@@ -169,3 +153,4 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             
         print(f'    {my_dataset.attrs["title"]}: min = {my_dataset[xr_zchan].data.min()}, max = {my_dataset[xr_zchan].data.max()}.')
     return my_dataset
+
