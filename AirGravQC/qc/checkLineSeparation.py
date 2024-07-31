@@ -66,7 +66,7 @@ def checkLineSeparation(whizzfile, nominalsep, lines=[], measX='', measY='', all
     # end_y = 0.0
 
     if True:
-    print('checkLineSeparation() is not yet available. It awaits an algorithm that is acceptably fast.')
+        print('checkLineSeparation() is not yet available. It awaits an algorithm that is acceptably fast.')
         return
     else:
         # exceedances_known = False
