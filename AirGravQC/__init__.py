@@ -22,7 +22,8 @@ __version__ = "0.0.0"
 from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject, 
     updateChannelAttributes)
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import (image_pygmt, diff_n_image, display_grid, gridfile_to_xr)
+from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xr)
+from AirGravQC.gridFiles.grids_gmt import (image_pygmt)
 from AirGravQC.gridFiles.read_ers import *
 # from AirGravQC.qc.qualityAnalysis import * Commented out to see if we actually ever use any of these!!
 

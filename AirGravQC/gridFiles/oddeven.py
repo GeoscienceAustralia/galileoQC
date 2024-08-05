@@ -10,6 +10,7 @@ import h5py
 import pygmt
 import matplotlib.ticker as tkr
 import collections
+import colorcet as cc
 
 import AirGravQC.gridFiles.graphics as graphics
 import AirGravQC.utility.utility as util
@@ -19,7 +20,8 @@ import AirGravQC.config as config
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
-from AirGravQC.gridFiles.gridfiles import image_pygmt
+from AirGravQC.gridFiles.grids_gmt import image_pygmt
+from AirGravQC.gridFiles.xdImage import xdImage
 
 groupName = config.groupName
 projectName = config.projectName
@@ -239,7 +241,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[]):
 
     """
 
-    if oddlines == [] or evenlines == []:
+    if oddlines.size == 0 or evenlines.size == 0:
         print('ERROR. Please specify the odd and even lines. Automatic sorting of the lines is not yet functional.')
         # oddlines, evenlines = _getOddEvenLines(whizz_file)
         return
@@ -272,7 +274,12 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[]):
     d_grid['y'].attrs['orig_name'] = even_grid['y'].attrs['orig_name']
 
     # Image and report statistics
-    image_pygmt(d_grid, intersectregion)
+    # image_pygmt(d_grid, intersectregion)
+
+    xdImage(d_grid, d_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+        minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
+        hs=True, azdeg=45, ax=None, clipTo3Std = True)
+
     print(f'RMS of odd-even difference = {d_grid.std().data.item():.2f} {d_grid.attrs["units"]}')
     print(f'Estimated noise in the data = {d_grid.std().data.item()/2.0:.2f} {d_grid.attrs["units"]}')
 

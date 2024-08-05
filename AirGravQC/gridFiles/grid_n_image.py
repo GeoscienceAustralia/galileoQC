@@ -1,3 +1,6 @@
+import regionmask
+
+
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
@@ -11,7 +14,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[], gridlines=True):
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[], gridlines=True, method='pygmt', maskRegion=None):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -31,6 +34,7 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         An array of names of channels from `z_chans` whose imaged grid will be shaded.
     grid_space : Float
         The distance between grid cell centres in grid distance units.
+    maskRegion
 
     Returns
     -------
@@ -52,5 +56,10 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, lines=lines, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
-        my_grid, my_region = xarray_to_grid(my_data, grid_space)
-        xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)
+        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method)
+        if maskRegion != None:
+            mask = regionmask.Regions((maskRegion,))#, names=['Blackall',], name='Blackall')
+            my_grid_masked = my_grid.where(mask)
+        else:
+            my_grid_masked = my_grid
+        xdImage(my_grid_masked, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)

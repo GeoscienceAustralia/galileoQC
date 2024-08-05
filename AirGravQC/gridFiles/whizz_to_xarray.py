@@ -62,7 +62,7 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
             return xr.Dataset()
         totalNumFids = 0
 
-        if lines == []:
+        if lines.size == 0:
             lines = list(lines_group.keys())
 
         if skipcontrols and len(controls) > 0:
