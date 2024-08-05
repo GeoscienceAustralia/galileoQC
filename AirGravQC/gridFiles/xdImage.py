@@ -5,6 +5,7 @@ import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.config as config
+import AirGravQC.gridFiles.gridutility as gut
 
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 
@@ -14,13 +15,11 @@ projectName = config.projectName
 
 def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std = True):
+        hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=[]):
     """
     Uses `graphicsShaded()` to display the gridded data in data_array. All
     parameters after the name of the whizzFile are just passed through
     to `graphicsShaded()`.
-
-    Assumes only one DataArray in the xarray dataset
 
     Parameters
     ----------
@@ -43,6 +42,9 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         Not currently used. The default is 2.
     hs : Bool, optional
         hill-shading. The default is True.
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
 
     Returns
     -------
@@ -52,6 +54,8 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     # if dataname == '':
     #     dataArray = 'data'
 
+    if np.array(mask_polygon).size > 0:
+        data_array = gut.maskGridByPolygon(data_array, mask_polygon, x_chan='x', y_chan='y')
     vmin = np.nan
     vmax = np.nan
     
@@ -68,3 +72,5 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     
     graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')
+
+

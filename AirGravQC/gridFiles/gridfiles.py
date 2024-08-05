@@ -27,6 +27,7 @@ from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.xdImage import xdImage
+import AirGravQC.gridFiles.gridutility as gut
 
 groupName = config.groupName
 projectName = config.projectName
@@ -40,7 +41,7 @@ projectName = config.projectName
 
 # GRID REPORTING
 
-def diff_n_image(whizz_file, channel1, channel2, grid_space):
+def diff_n_image(whizz_file, channel1, channel2, grid_space, mask_polygon=[]):
     """
     Subtracts the data in `channel2` from those in `channel1`, then grids and images that difference.
 
@@ -54,6 +55,9 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space):
         A name of a channel in `whizz_file`.
     grid_space : Float
         The distance between grid cell centres in grid distance units.
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
 
     Returns
     -------
@@ -65,13 +69,15 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space):
     my_data2 = whizz_to_xarray(whizz_file, channel2, remove_mean=False, diff_one=False)
     my_data1[channel1] = my_data1[channel1] - my_data2[channel2]
     my_data1.attrs['title'] = f'{channel1} - {channel2}'
+    my_data1[channel1].attrs['units'] =  my_data2[channel2].attrs['units']
     my_grid, my_region = xarray_to_grid(my_data1, grid_space)
     # image_pygmt(my_grid, my_region)
 
     xdImage(my_grid, my_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std = True)
+        hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=mask_polygon)
 
+    gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
 
 def imageStats(whizzFile=''):
     """

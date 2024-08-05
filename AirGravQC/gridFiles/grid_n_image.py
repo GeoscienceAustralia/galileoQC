@@ -9,12 +9,13 @@ import AirGravQC.config as config
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.xdImage import xdImage
+import AirGravQC.gridFiles.gridutility as gut
 
 groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[], gridlines=True, method='pygmt', maskRegion=None):
+def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[], gridlines=True, method='pygmt', mask_polygon=[]):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -34,7 +35,9 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         An array of names of channels from `z_chans` whose imaged grid will be shaded.
     grid_space : Float
         The distance between grid cell centres in grid distance units.
-    maskRegion
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
 
     Returns
     -------
@@ -57,9 +60,6 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         if len(my_data.attrs) == 0:
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method)
-        if maskRegion != None:
-            mask = regionmask.Regions((maskRegion,))#, names=['Blackall',], name='Blackall')
-            my_grid_masked = my_grid.where(mask)
-        else:
-            my_grid_masked = my_grid
-        xdImage(my_grid_masked, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)
+        xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded, mask_polygon=mask_polygon)
+        gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
+        
