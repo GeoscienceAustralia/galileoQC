@@ -15,7 +15,7 @@ projectName = config.projectName
 
 def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=[]):
+        hs=True, azdeg=45, ax=None, clipTo3Std=True, mask_polygon=[]):
     """
     Uses `graphicsShaded()` to display the gridded data in data_array. All
     parameters after the name of the whizzFile are just passed through
@@ -36,12 +36,22 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         z -> z < minClip : minClip: z. The default is np.nan - no clipping.
     maxClip : Float, optional
         z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+    gridlines : Bool, optional
+        If True (the default), then grid lines are drawn on the image, else not.
     cb_ticks : TYPE, optional
         DESCRIPTION. The default is 'stats'.
     nSigma : TYPE, optional
         Not currently used. The default is 2.
     hs : Bool, optional
         hill-shading. The default is True.
+    azdeg: Float, optional
+        The shading azimuth in degrees from north, defaults to 45 deg.
+    ax : Axis, optional
+        The Matplotlib figure axis to be plotted to. Default None, in which case a new
+        figure is made.
+    clipTo3Std : Boolean, optional
+        If True (the default), the data are clipped to +/- 3 standard deviations from
+        the mean before imaging. This over-rides minClip and maxClip.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
@@ -72,5 +82,61 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     
     graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')
+
+
+def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+        minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+        hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=[]):
+    """
+    Uses `graphicsShaded()` to display the gridded data in data_array. All
+    parameters after the name of the whizzFile are just passed through
+    to `graphicsShaded()`.
+
+    Assumes only one DataArray in the xarray dataset
+
+    Parameters
+    ----------
+    data_set : 2D xarray dataset
+        The first dataArray in dataSet will be imaged.
+    mytitle : String
+        The figure title.
+    colormap : Colormap, optional
+        A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
+    cmap_norm : String, optional
+        Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
+        (equlaization stretch); 'auto'. The default is 'nonorm'.
+    minClip : Float, optional
+        z -> z < minClip : minClip: z. The default is np.nan - no clipping.
+    maxClip : Float, optional
+        z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+    cb_ticks : TYPE, optional
+        DESCRIPTION. The default is 'stats'.
+    nSigma : TYPE, optional
+        Not currently used. The default is 2.
+    hs : Bool, optional
+        hill-shading. The default is True.
+    azdeg: Float, optional
+        The shading azimuth in degrees from north, defaults to 45 deg.
+    ax : Axis, optional
+        The Matplotlib figure axis to be plotted to. Default None, in which case a new
+        figure is made.
+    clipTo3Std : Boolean, optional
+        If True (the default), the data are clipped to +/- 3 standard deviations from
+        the mean before imaging. This over-rides minClip and maxClip.
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    first_data = list(data_set.keys())[0]
+    xdImage(first_data, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
+        minClip=minClip, maxClip=maxClip, gridlines=gridlines, cb_ticks=cb_ticks, nSigma=nSigma,
+        hs=hs, azdeg=azdeg, ax=ax, clipTo3Std=clipTo3Std, mask_polygon=mask_polygon)
+
 
 

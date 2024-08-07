@@ -35,10 +35,10 @@ def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_m
     diff_one : Bool, optional
         If True, the first difference along each survey line of data is
         written to `my_dataset`. Default False.
-    controls : String list, optional
-        The line numbers to be skipped if skipcontrols=True. Default is empty.
     skipcontrols : Bool, optional
         If True, control lines are excluded. Default False.
+    controls : String list, optional
+        The line numbers to be skipped if skipcontrols=True. Default is empty.
 
     Returns
     -------

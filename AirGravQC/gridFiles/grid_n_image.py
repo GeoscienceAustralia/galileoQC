@@ -15,7 +15,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], n_chan='', e_chan='', sh_chans=[], gridlines=True, method='pygmt', mask_polygon=[]):
+def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], gridlines=True, method='scipy', mask_polygon=[]):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -27,14 +27,27 @@ def grid_n_image(whizz_file, z_chans, mr_chans, d1_chans, grid_space, lines=[], 
         The Path to, or String name of, the whizz file in HDF5 format.
     z_chans : [String]
         An array of names of channels in `whizz_file` to be interpolated to a regular grid and imaged.
+    grid_space : Float
+        The distance between grid cell centres in grid distance units.
+    lines : String Array, optional
+        List of lines to be gridded. Default all lines.
+    e_chan : String, optional
+        The name of the x (easting) channel in `whizz_file`. Default is to use
+        the `XChannel` attribute.
+    n_chan : String, optional
+        The name of the y (northing) channel in `whizz_file`. Default is to use
+        the `YChannel` attribute.
     mr_chans : [String]
         An array of names of channels from `z_chans` whose mean along each survey line should be subtracted before gridding and imaging.
     d1_chans : [String]
         An array of names of channels from `z_chans` whose first difference along each survey line should be gridded and imaged.
     sh_chans : [String]
         An array of names of channels from `z_chans` whose imaged grid will be shaded.
-    grid_space : Float
-        The distance between grid cell centres in grid distance units.
+    gridlines : Bool, optional
+        If True (the default), then grid lines are drawn on the image, else not.
+    method : string, optional
+        The gridding algorithm to use in interpolating the data. "pygmt" or "scipy".
+        Default scipy `linear` method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.

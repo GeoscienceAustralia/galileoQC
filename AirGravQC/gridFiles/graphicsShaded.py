@@ -40,6 +40,8 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         z -> z < minClip : minClip: z. The default is np.nan - no clipping.
     maxClip : Float, optional
         z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+    gridlines : Bool, optional
+        If True (the default), then grid lines are drawn on the image, else not.
     cb_ticks : TYPE, optional
         DESCRIPTION. The default is 'stats'.
     nSigma : Float, optional
@@ -51,6 +53,10 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     ax : Axis, optional
         The Matplotlib figure axis to be plotted to. Default None, in which case a new
         figure is made.
+    origin : String, optional
+        {'upper', 'lower'} Place the [0, 0] index of the array in the upper left or lower left corner
+        of the Axes. The convention (the default) 'upper' is typically used for
+        matrices and images.
 
     Returns
     -------

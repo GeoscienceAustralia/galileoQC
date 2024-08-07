@@ -142,7 +142,7 @@ def _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=np.a
         ymin = 0.0
         ymax = ymin
     ax = fig.add_subplot(num_subplots, 1, plotIdx)
-    if x2.size == 0 or y2.size == 0:
+    if np.array(x2).size == 0 or np.array(y2).size == 0:
         ax.plot(x1, y1, lw=0.5)
     else:
         ax.plot(x1, y1, x2, y2, lw=0.5)

@@ -17,7 +17,7 @@ lines as a new channel.
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-from scipy.interpolate import CloughTocher2DInterpolator
+# from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 
 import AirGravQC.gridFiles.gridfiles as grd

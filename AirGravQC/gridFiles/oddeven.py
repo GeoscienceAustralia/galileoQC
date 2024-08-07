@@ -7,7 +7,7 @@ import netCDF4 as nc4
 import filebrowser as fb
 import rioxarray
 import h5py
-import pygmt
+# import pygmt
 import matplotlib.ticker as tkr
 import collections
 import colorcet as cc
@@ -20,28 +20,13 @@ import AirGravQC.config as config
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
-from AirGravQC.gridFiles.grids_gmt import image_pygmt
+# from AirGravQC.gridFiles.grids_gmt import image_pygmt
 from AirGravQC.gridFiles.xdImage import xdImage
 import AirGravQC.gridFiles.gridutility as gut
 
 
 groupName = config.groupName
 projectName = config.projectName
-
-
-"""
-ODDEVENLINES_v2()
-- spacing = calcLineSpacing()
-- for trav in traverses
-    meany = mean(y)
-    spaces = int(meany / spacing)
-    if spaces % 2 == 0:
-        - assign trav to evens
-    - else:
-        - assign trav to odds
-- analyse_odds_evens()
-
-"""
 
 
 def updateOddOrEven(whizzFile, lines=[], x='', y='', verbose=False):
@@ -188,7 +173,7 @@ def calcMeanTrack(lineGroup, easting, northing):
     Parameters
     ----------
     linegroup : HDF5 group
-        A whizzFile line group.heir track set. Default all lines.
+        A whizzFile line group. Default all lines.
     easting : String
         The name of the x (easting) channel in `linegroup`.
     northing : String
@@ -200,6 +185,7 @@ def calcMeanTrack(lineGroup, easting, northing):
         The mean aircraft track angle east of north in [0, 180] degrees.
 
     """
+
     # calculate the by-sample track direction
     dx = np.diff(rd.getLineData(lineGroup, easting))
     dy = np.diff(rd.getLineData(lineGroup, northing))
@@ -246,7 +232,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mas
 
     """
 
-    if oddlines.size == 0 or evenlines.size == 0:
+    if np.array(oddlines).size == 0 or np.array(evenlines).size == 0:
         print('ERROR. Please specify the odd and even lines. Automatic sorting of the lines is not yet functional.')
         # oddlines, evenlines = _getOddEvenLines(whizz_file)
         return
@@ -289,7 +275,8 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mas
 
 
 def _getOddEvenLines(whizz_file):
-
+    """
+    """
 
     filename = str(whizz_file)
     numevens = 0

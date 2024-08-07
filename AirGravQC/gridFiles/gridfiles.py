@@ -15,7 +15,7 @@ import netCDF4 as nc4
 import filebrowser as fb
 import rioxarray
 import h5py
-import pygmt
+# import pygmt
 import matplotlib.ticker as tkr
 
 import AirGravQC.gridFiles.graphics as graphics
@@ -26,7 +26,7 @@ import AirGravQC.config as config
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
-from AirGravQC.gridFiles.xdImage import xdImage
+from AirGravQC.gridFiles.xdImage import (xdImage, xdsImage)
 import AirGravQC.gridFiles.gridutility as gut
 
 groupName = config.groupName
@@ -344,7 +344,7 @@ def update_grid(whizzFile='', datum='', projection='', long_name='', units=''):
     xs.to_netcdf(newWhizz)
 
     
-def display_grid(whizzFile, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+def display_grid(gridFile, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
                    hs=True, azdeg=45, ax=None, clipTo3Std = True):
     """
@@ -354,7 +354,7 @@ def display_grid(whizzFile, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
 
     Parameters
     ----------
-    whizzFile : TYPE, optional
+    gridFile : TYPE, optional
         May be either an `ERS` or `NC` grid file. The default is ''.
 
     Returns
@@ -458,67 +458,6 @@ def imageAllInDir(path_name):
     for f in ersFiles:
         (dxt, _) = gridfile_to_xr(f)
         xdsImage(dxt, str(f.name), colormap=cc.m_CET_R1)
-
-
-def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
-        minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std = True):
-    """
-    Uses `graphicsShaded()` to display the gridded data in data_array. All
-    parameters after the name of the whizzFile are just passed through
-    to `graphicsShaded()`.
-
-    Assumes only one DataArray in the xarray dataset
-
-    Parameters
-    ----------
-    data_set : 2D xarray dataset
-        The first dataArray in dataSet will be imaged.
-    mytitle : String
-        The figure title.
-    colormap : Colormap, optional
-        A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
-    cmap_norm : String, optional
-        Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
-        (equlaization stretch); 'auto'. The default is 'nonorm'.
-    minClip : Float, optional
-        z -> z < minClip : minClip: z. The default is np.nan - no clipping.
-    maxClip : Float, optional
-        z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
-    cb_ticks : TYPE, optional
-        DESCRIPTION. The default is 'stats'.
-    nSigma : TYPE, optional
-        Not currently used. The default is 2.
-    hs : Bool, optional
-        hill-shading. The default is True.
-
-    Returns
-    -------
-    None.
-
-    """
-
-    first_data = list(data_set.keys())[0]
-    xdImage(first_data, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
-        minClip=minClip, maxClip=maxClip, gridlines=gridlines, cb_ticks=cb_ticks, nSigma=nSigma,
-        hs=hs, azdeg=azdeg, ax=ax, clipTo3Std=clipTo3Std)
-
-    # vmin = np.nan
-    # vmax = np.nan
-    # first_data = list(data_array.keys())[0]
-    # fd_mean = data_array[first_data].mean()
-    # fd_std = data_array[first_data].std()
-    # if clipTo3Std:
-    #     a = fd_mean - 3.0 * fd_std
-    #     vmin = a.data * 1
-    #     a = fd_mean + 3.0 * fd_std
-    #     vmax = 1 * a.data
-    # elif ~np.isnan(minClip + maxClip):
-    #     vmin = minClip
-    #     vmax = maxClip
-    
-    # graphicsShaded(data_array.E, data_array.N, data_array[first_data], mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, 
-    #                cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax)
 
 
 def graphicsTernary(e, n, red, green, blue, mytitle):
