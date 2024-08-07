@@ -57,6 +57,9 @@ def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan=''
     Nothing.
 
     """
+    if not isinstance(grid_space, float):
+        print('ERROR - the 3rd argument to grid_n_image should be a float (grid_space). Check docstring for details.')
+        return
     for z_chan in z_chans:
         remove_mean = False
         diff_one = False
