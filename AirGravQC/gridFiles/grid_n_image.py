@@ -1,6 +1,3 @@
-import regionmask
-
-
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
@@ -46,7 +43,7 @@ def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan=''
     gridlines : Bool, optional
         If True (the default), then grid lines are drawn on the image, else not.
     method : string, optional
-        The gridding algorithm to use in interpolating the data. "pygmt" or "scipy".
+        The gridding algorithm to use in interpolating the data. Only "scipy" available at present.
         Default scipy `linear` method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area

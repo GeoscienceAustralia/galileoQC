@@ -1,7 +1,5 @@
 import numpy as np
 import xarray as xr
-# import pygmt
-# from scipy.interpolate import CloughTocher2DInterpolator
 from scipy.interpolate import griddata
 
 import AirGravQC.utility.utility as util
@@ -11,7 +9,6 @@ import AirGravQC.config as config
 
 groupName = config.groupName
 projectName = config.projectName
-
 
 
 def xarray_to_grid(my_data, grid_space, region=[], method='scipy'):
@@ -87,9 +84,6 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy'):
                         min(my_data[y_chan].data),
                         max(my_data[y_chan].data)
                     ]
-            # X = np.arange(min(my_data[x_chan].data), max(my_data[x_chan].data), grid_space)
-            # Y = np.arange(min(my_data[y_chan].data), max(my_data[y_chan].data), grid_space)
-        # else:
         X = np.arange(region[0], region[1], grid_space)
         Y = np.arange(region[2], region[3], grid_space)
 
@@ -99,8 +93,6 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy'):
         X, Y = np.meshgrid(X, Y)  # 2D grid for interpolation
 
         grid.values = griddata(list(zip(my_data[x_chan].data, my_data[y_chan].data)), my_data[z_chan].data, (X, Y), method='linear')
-        # interp = CloughTocher2DInterpolator(list(zip(my_data[x_chan].data, my_data[y_chan].data)), my_data[z_chan].data) # my_data[[x_chan, y_chan, z_chan]
-        # grid.values = interp(X, Y)
 
     else:
         print('Error - method must be "scipy".')

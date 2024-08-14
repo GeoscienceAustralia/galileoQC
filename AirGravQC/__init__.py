@@ -22,13 +22,11 @@ __version__ = "0.0.0"
 from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject, 
     updateChannelAttributes)
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xr)
-# from AirGravQC.gridFiles.grids_gmt import (image_pygmt)
+from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio)
 from AirGravQC.gridFiles.read_ers import *
-# from AirGravQC.qc.qualityAnalysis import * Commented out to see if we actually ever use any of these!!
 
 # Data management
-from AirGravQC.whizzFiles.asegReader import asegToHDF
+from AirGravQC.whizzFiles.gdfReader import asegToHDF
 from AirGravQC.whizzFiles.xyzReader import xyzToHDF
 from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
 from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
@@ -48,7 +46,7 @@ from AirGravQC.gridFiles.grid_n_image import grid_n_image
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
-from AirGravQC.gridFiles.graphics import imshow_hs # ??? TODO Is this needed here?
+# from AirGravQC.gridFiles.graphics import imshow_hs # ??? TODO Is this needed here?
 from AirGravQC.gridFiles.oddeven import updateLineTracks
 from AirGravQC.gridFiles.oddeven import oddevenlines
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing

@@ -15,7 +15,6 @@ import netCDF4 as nc4
 import filebrowser as fb
 import rioxarray
 import h5py
-# import pygmt
 import matplotlib.ticker as tkr
 
 import AirGravQC.gridFiles.graphics as graphics
@@ -26,7 +25,7 @@ import AirGravQC.config as config
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
-from AirGravQC.gridFiles.xdImage import (xdImage, xdsImage)
+from AirGravQC.gridFiles.xdImage import xdImage
 import AirGravQC.gridFiles.gridutility as gut
 
 groupName = config.groupName
@@ -71,13 +70,13 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space, mask_polygon=[]):
     my_data1.attrs['title'] = f'{channel1} - {channel2}'
     my_data1[channel1].attrs['units'] =  my_data2[channel2].attrs['units']
     my_grid, my_region = xarray_to_grid(my_data1, grid_space)
-    # image_pygmt(my_grid, my_region)
 
     xdImage(my_grid, my_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=mask_polygon)
 
     gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
+
 
 def imageStats(whizzFile=''):
     """
@@ -97,11 +96,8 @@ def imageStats(whizzFile=''):
     report (String) : the statistical summary report.
 
     """
-    xs, fileUsed = gridfile_to_xr(whizzFile, bandout=0)
-    
-    # Need to extract a DataArray from xs
-    xa = xs
-    
+    xs, fileUsed = gridfile_to_xa(whizzFile, bandout=0)
+        
     report = f'Statistics for {str(fileUsed.name)}'
     report += f'\n Datum  {xa.attrs["datum"]}; Projection {xa.attrs["projection"]}'
     for coord in xa.coords:
@@ -123,13 +119,13 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     Parameters
     ----------
     file000 : String
-        Name of the file containing the data before terrain correction.
+        Name of the file containing the data before terrain correction. May be either an `ERS` or `NC` grid file.
     filexxx : String
-        Name of the file containing the data after xpxx terrain correction.
+        Name of the file containing the data after xpxx terrain correction. May be either an `ERS` or `NC` grid file.
     xxx : Float
         The density used in the filexxx terrain correction.
     fileyyy : String
-        Name of the file containing the data after ypyy terrain correction.
+        Name of the file containing the data after ypyy terrain correction. May be either an `ERS` or `NC` grid file.
     yyy : Float
         The density used in the fileyyy terrain correction.
     plotTitle : String
@@ -141,9 +137,13 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     None.
 
     """
-    n, e, g0 = ers.read_ers_image(file000)
-    n, e, gx = ers.read_ers_image(filexxx)
-    n, e, gy = ers.read_ers_image(fileyyy)
+    (g0, _) = gridfile_to_xa(file000, bandout=0)
+    (gx, _) = gridfile_to_xa(filexxx, bandout=0)
+    (gy, _) = gridfile_to_xa(fileyyy, bandout=0)
+
+    # n, e, g0 = ers.read_ers_image(file000)
+    # n, e, gx = ers.read_ers_image(filexxx)
+    # n, e, gy = ers.read_ers_image(fileyyy)
     
     tx = g0 - gx
     predy = g0 - yyy / xxx * tx
@@ -158,11 +158,11 @@ def traceImages(file1, file2, file3, plotTitle):
     Parameters
     ----------
     file1 : String
-        A grid file containing the first diagonal tensor component.
+        A grid file containing the first diagonal tensor component. May be either an `ERS` or `NC` grid file.
     file2 : String
-        A grid file containing the second diagonal tensor component.
+        A grid file containing the second diagonal tensor component. May be either an `ERS` or `NC` grid file.
     file3 : String
-        A grid file containing the third diagonal tensor component.
+        A grid file containing the third diagonal tensor component. May be either an `ERS` or `NC` grid file.
     plotTitle : String
         A title for the plot of the trace image.
 
@@ -171,11 +171,19 @@ def traceImages(file1, file2, file3, plotTitle):
     None.
 
     """
-    n1, e1, z1 = ers.read_ers_image(file1)
-    n2, e2, z2 = ers.read_ers_image(file2)
-    n3, e3, z3 = ers.read_ers_image(file3)
-    trace = z1 + z2 + z3
-    graphicsShaded(n1, e1, trace, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
+    (x1, _) = gridfile_to_xa(file1, bandout=0)
+    (x2, _) = gridfile_to_xa(file2, bandout=0)
+    (x3, _) = gridfile_to_xa(file3, bandout=0)
+    trace = x1 + x2 + x3
+    xdImage(trace, plotTitle, colormap=colormap, cmap_norm=cmap_norm, 
+                       minClip=minClip, maxClip=maxClip, gridlines=True, cb_ticks=cb_ticks, nSigma=nSigma,
+                       hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std)
+
+    # n1, e1, z1 = ers.read_ers_image(file1)
+    # n2, e2, z2 = ers.read_ers_image(file2)
+    # n3, e3, z3 = ers.read_ers_image(file3)
+    # trace = z1 + z2 + z3
+    # graphicsShaded(n1, e1, trace, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
 
 
 def subtractImages(imagefile1, imagefile2, scale=1.0, band1=0, band2=0):
@@ -206,8 +214,8 @@ def subtractImages(imagefile1, imagefile2, scale=1.0, band1=0, band2=0):
 
     """
     
-    x1, _ = gridfile_to_xr(imagefile1, bandout=band1)
-    x2, _ = gridfile_to_xr(imagefile2, bandout=band2)
+    x1, _ = gridfile_to_xa(imagefile1, bandout=band1)
+    x2, _ = gridfile_to_xa(imagefile2, bandout=band2)
     
     try:
         xr.testing.assert_equal(x1.coords, x2.coords) #x1.coords.all() == x2.coords.all():
@@ -257,6 +265,48 @@ def gridfile_to_xr(whizzFile='', bandout=0):
     else:
         print(f'ERROR: whizzFile has suffix {Path(whizzFile).suffix.upper()} but must be `.nc` or `.ers`.')
     return xd, whizzFile
+
+
+def gridfile_to_xa(whizzFile='', bandout=0):
+    """
+    Returns an xarray DataArray containing the geographically located data from a
+    gridfile in either ERS or NC format.
+
+    Parameters
+    ----------
+    whizzFile : Path
+        The Path to the grid file, must have extension `ers` or `nc`.
+    bandout : Int, optional
+        The band to be read if the grid file is `ERS`. The default is 0.
+
+    Returns
+    -------
+    xd : xarray Dataset
+        The data from `whizzFile`.
+
+    """
+    if whizzFile == '':
+        whizzFile = Path(fb.get_grid_filename(filetypes=(('NetCdf4 grid', '*.nc'),
+                                                         ('ERMapper grid', '*.ers'))))
+    if whizzFile.suffix.upper() == '.ERS':
+        e, n, z, datum, projection = ers.read_ers_image(whizzFile, bandout=bandout)
+        xa = xr.DataArray(data=np.flip(z, 0), # DANGER!!!
+                          dims=["N", "E"],
+                          coords={"N": n, "E": e})
+        xa.dropna(dim='N',how='all')
+        xa.dropna(dim='E',how='all')
+        fname = whizzFile.with_suffix('').name
+        xa.attrs["long_name"] = fname
+        xa.attrs["datum"] = datum
+        xa.attrs["projection"] = projection
+        if datum == 'WGS84' and projection == 'SUTM55':
+            xa.rio.write_crs("epsg:32755", inplace=True)
+    elif whizzFile.suffix.upper() == '.NC':
+        # nc = nc4.Dataset(str(whizzFile), mode='r')
+        xa = xr.load_dataarray(str(whizzFile))#xr.backends.NetCDF4DataStore(nc))
+    else:
+        print(f'ERROR: whizzFile has suffix {Path(whizzFile).suffix.upper()} but must be `.nc` or `.ers`.')
+    return xa, whizzFile
 
 
 def ers_to_netcdf4(ersFile='', ncFile='', datum='', projection='', long_name='', units=''):
@@ -348,13 +398,13 @@ def display_grid(gridFile, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
                    minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
                    hs=True, azdeg=45, ax=None, clipTo3Std = True):
     """
-    Uses `xdsImage()` to display the gridded data array in whizzFile. All
+    Uses `xdImage()` to display the gridded data array in whizzFile. All
     parameters after the name of the whizzFile are just passed through
-    to `xdsImage()`.
+    to `xdImage()`.
 
     Parameters
     ----------
-    gridFile : TYPE, optional
+    gridFile : TYPE
         May be either an `ERS` or `NC` grid file. The default is ''.
 
     Returns
@@ -362,9 +412,9 @@ def display_grid(gridFile, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     None.
 
     """
-    (xa, _) = gridfile_to_xr(whizzFile, bandout=0)
-    xdsImage(xa, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
-                       minClip=minClip, maxClip=maxClip, cb_ticks=cb_ticks, nSigma=nSigma,
+    (xa, _) = gridfile_to_xa(gridFile, bandout=0)
+    xdImage(xa, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
+                       minClip=minClip, maxClip=maxClip, gridlines=True, cb_ticks=cb_ticks, nSigma=nSigma,
                        hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std)
     
     
@@ -456,8 +506,8 @@ def imageAllInDir(path_name):
     print(f'in: {str(path_name)}')
 
     for f in ersFiles:
-        (dxt, _) = gridfile_to_xr(f)
-        xdsImage(dxt, str(f.name), colormap=cc.m_CET_R1)
+        (dxt, _) = gridfile_to_xa(f)
+        xdImage(dxt, str(f.name), colormap=cc.m_CET_R1)
 
 
 def graphicsTernary(e, n, red, green, blue, mytitle):

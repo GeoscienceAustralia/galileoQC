@@ -7,7 +7,6 @@ import netCDF4 as nc4
 import filebrowser as fb
 import rioxarray
 import h5py
-# import pygmt
 import matplotlib.ticker as tkr
 import collections
 import colorcet as cc
@@ -20,7 +19,6 @@ import AirGravQC.config as config
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
-# from AirGravQC.gridFiles.grids_gmt import image_pygmt
 from AirGravQC.gridFiles.xdImage import xdImage
 import AirGravQC.gridFiles.gridutility as gut
 
@@ -265,7 +263,6 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mas
     d_grid['y'].attrs['orig_name'] = even_grid['y'].attrs['orig_name']
 
     # Image and report statistics
-    # image_pygmt(d_grid, intersectregion)
 
     xdImage(d_grid, d_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,

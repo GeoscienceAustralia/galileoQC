@@ -61,8 +61,6 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     None.
 
     """
-    # if dataname == '':
-    #     dataArray = 'data'
 
     if np.array(mask_polygon).size > 0:
         data_array = gut.maskGridByPolygon(data_array, mask_polygon, x_chan='x', y_chan='y')
@@ -79,13 +77,16 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     elif ~np.isnan(minClip + maxClip):
         vmin = minClip
         vmax = maxClip
+
+    if 'E' in list(data_array.coords):
+        data_array = data_array.rename({'E': 'x','N': 'y'})
     
     graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')
 
 
 def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
-        minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+        minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=[]):
     """
     Uses `graphicsShaded()` to display the gridded data in data_array. All
@@ -133,7 +134,8 @@ def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
 
     """
 
-    first_data = list(data_set.keys())[0]
+    first_data = data_set.to_array()
+    first_data = first_data.squeeze('variable')
     xdImage(first_data, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
         minClip=minClip, maxClip=maxClip, gridlines=gridlines, cb_ticks=cb_ticks, nSigma=nSigma,
         hs=hs, azdeg=azdeg, ax=ax, clipTo3Std=clipTo3Std, mask_polygon=mask_polygon)
