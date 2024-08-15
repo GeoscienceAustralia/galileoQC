@@ -22,7 +22,7 @@ __version__ = "0.0.0"
 from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject, 
     updateChannelAttributes)
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio)
+from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio, imageAllInDir, imageStats)
 from AirGravQC.gridFiles.read_ers import *
 
 # Data management
@@ -46,7 +46,6 @@ from AirGravQC.gridFiles.grid_n_image import grid_n_image
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
-# from AirGravQC.gridFiles.graphics import imshow_hs # ??? TODO Is this needed here?
 from AirGravQC.gridFiles.oddeven import updateLineTracks
 from AirGravQC.gridFiles.oddeven import oddevenlines
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing

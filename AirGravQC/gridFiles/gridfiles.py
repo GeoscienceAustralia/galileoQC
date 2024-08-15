@@ -96,7 +96,7 @@ def imageStats(whizzFile=''):
     report (String) : the statistical summary report.
 
     """
-    xs, fileUsed = gridfile_to_xa(whizzFile, bandout=0)
+    xa, fileUsed = gridfile_to_xa(whizzFile, bandout=0)
         
     report = f'Statistics for {str(fileUsed.name)}'
     report += f'\n Datum  {xa.attrs["datum"]}; Projection {xa.attrs["projection"]}'
@@ -148,7 +148,9 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     tx = g0 - gx
     predy = g0 - yyy / xxx * tx
     predErr = predy - gy
-    graphicsShaded(n, e, predErr, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
+
+    xdImage(predErr, plotTitle, colormap=cc.m_CET_L9, cmap_norm='no', hs=False, azdeg=90)
+    # graphicsShaded(n, e, predErr, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)
 
 
 def traceImages(file1, file2, file3, plotTitle):
@@ -175,9 +177,7 @@ def traceImages(file1, file2, file3, plotTitle):
     (x2, _) = gridfile_to_xa(file2, bandout=0)
     (x3, _) = gridfile_to_xa(file3, bandout=0)
     trace = x1 + x2 + x3
-    xdImage(trace, plotTitle, colormap=colormap, cmap_norm=cmap_norm, 
-                       minClip=minClip, maxClip=maxClip, gridlines=True, cb_ticks=cb_ticks, nSigma=nSigma,
-                       hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std)
+    xdImage(trace, plotTitle, colormap=cc.m_CET_L9, cmap_norm='no', hs=False, azdeg=90)
 
     # n1, e1, z1 = ers.read_ers_image(file1)
     # n2, e2, z2 = ers.read_ers_image(file2)

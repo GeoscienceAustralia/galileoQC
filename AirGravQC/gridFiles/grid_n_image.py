@@ -54,8 +54,24 @@ def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan=''
     Nothing.
 
     """
+    # I changed the order of the inputs, so now I need to give feedback to users.
+    if not isinstance(z_chans, list):
+        print('ERROR - the 2nd argument to grid_n_image should be a list (z_chans). Check docstring for details.')
+        return
     if not isinstance(grid_space, float):
         print('ERROR - the 3rd argument to grid_n_image should be a float (grid_space). Check docstring for details.')
+        return
+    if not isinstance(lines, list):
+        print('ERROR - the lines argument to grid_n_image should be a list. Check docstring for details.')
+        return
+    if not isinstance(mr_chans, list):
+        print('ERROR - the mr_chans argument to grid_n_image should be a list. Check docstring for details.')
+        return
+    if not isinstance(d1_chans, list):
+        print('ERROR - the d1_chans argument to grid_n_image should be a list. Check docstring for details.')
+        return
+    if not isinstance(sh_chans, list):
+        print('ERROR - the sh_chans argument to grid_n_image should be a list. Check docstring for details.')
         return
     for z_chan in z_chans:
         remove_mean = False
