@@ -134,3 +134,6 @@ dmypy.json
 *.nc
 *.DS_Store
 *.gdb
+examples/.jupyter/desktop-workspaces/default-37a8.jupyterlab-workspace
+/examples/.jupyter
+*.jupyterlab-workspace

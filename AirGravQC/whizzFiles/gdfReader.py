@@ -3,6 +3,10 @@ import h5py
 from pathlib import Path
 # import pathlib
 # import filebrowser as fb
+
+# aseg_gdf2 uses pandas which is producing annoying Future Warnings, so this to suppress them.
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import aseg_gdf2 as aseg
 
 import AirGravQC.config as config
