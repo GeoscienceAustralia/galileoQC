@@ -30,7 +30,7 @@ projectName = 'Unknown Project'
 
 # Just ensuring that the plot titles and labels have a uniform look that is clean and clear.
 from matplotlib import rc
-rc('figure', max_open_warning=50)
+rc('figure', max_open_warning=0)
 rc('font',**{'family':'sans-serif'})
 
 SMALL_SIZE = 6

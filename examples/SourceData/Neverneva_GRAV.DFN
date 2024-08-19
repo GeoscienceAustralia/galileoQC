@@ -13,56 +13,56 @@ DEFN 12 ST=RECD,RT=DATA; GPSZGDA94:            F12.2:  UNIT=m, GDA94
 DEFN 13 ST=RECD,RT=DATA; MSLZ:                 F12.2:  UNIT=m, AUSGeoid09
 DEFN 14 ST=RECD,RT=DATA; RadarAlt:             F12.1:  UNIT=m
 DEFN 15 ST=RECD,RT=DATA; LaserAlt:             F12.2:  UNIT=m
-DEFN 16 ST=RECD,RT=DATA; La_TerGDA94:          F12.2:  UNIT=m, GDA94
+DEFN 16 ST=RECD,RT=DATA; LaTerGDA94:           F12.2:  UNIT=m, GDA94
 DEFN 17 ST=RECD,RT=DATA; Bare_Earth:           F12.2:  UNIT=m, GDA94
 DEFN 18 ST=RECD,RT=DATA; SRTM_GDA94:           F12.2:  UNIT=m, GDA94
-DEFN 19 ST=RECD,RT=DATA; FZ:                   F12.1:  UNIT=µm/s²
-DEFN 20 ST=RECD,RT=DATA; AZ:                   F12.1:  UNIT=µm/s²
-DEFN 21 ST=RECD,RT=DATA; GrvRaw_SC:            F12.1:  UNIT=µm/s²
-DEFN 22 ST=RECD,RT=DATA; LatCor:               F12.1:  UNIT=µm/s²
-DEFN 23 ST=RECD,RT=DATA; EotCor:               F12.1:  UNIT=µm/s²
-DEFN 24 ST=RECD,RT=DATA; AtmCor:               F12.1:  UNIT=µm/s²
-DEFN 25 ST=RECD,RT=DATA; FACor:                F12.1:  UNIT=µm/s²
-DEFN 26 ST=RECD,RT=DATA; FA:                   F12.1:  UNIT=µm/s²
-DEFN 27 ST=RECD,RT=DATA; BG:                   F12.1:  UNIT=µm/s²
-DEFN 28 ST=RECD,RT=DATA; GRV84s:               F12.1:  UNIT=µm/s²
-DEFN 29 ST=RECD,RT=DATA; GRV100s:              F12.1:  UNIT=µm/s²
-DEFN 30 ST=RECD,RT=DATA; LATCOR84s:            F12.1:  UNIT=µm/s²
-DEFN 31 ST=RECD,RT=DATA; EOTCOR84s:            F12.1:  UNIT=µm/s²
-DEFN 32 ST=RECD,RT=DATA; ATMCOR84s:            F12.1:  UNIT=µm/s²
-DEFN 33 ST=RECD,RT=DATA; FACOR84s:             F12.1:  UNIT=µm/s²
-DEFN 34 ST=RECD,RT=DATA; ADCOR84s:             F12.1:  UNIT=µm/s²
-DEFN 35 ST=RECD,RT=DATA; LATCOR100s:           F12.1:  UNIT=µm/s²
-DEFN 36 ST=RECD,RT=DATA; EOTCOR100s:           F12.1:  UNIT=µm/s²
-DEFN 37 ST=RECD,RT=DATA; ATMCOR100s:           F12.1:  UNIT=µm/s²
-DEFN 38 ST=RECD,RT=DATA; FACOR100s:            F12.1:  UNIT=µm/s²
-DEFN 39 ST=RECD,RT=DATA; ADCOR100s:            F12.1:  UNIT=µm/s²
-DEFN 40 ST=RECD,RT=DATA; FA84s:                F12.1:  UNIT=µm/s²
-DEFN 41 ST=RECD,RT=DATA; FA100s:               F12.1:  UNIT=µm/s²
-DEFN 42 ST=RECD,RT=DATA; TBCor_267:            F12.1:  UNIT=µm/s²
-DEFN 43 ST=RECD,RT=DATA; TBCor84s_267:         F12.1:  UNIT=µm/s²
-DEFN 44 ST=RECD,RT=DATA; TBCor100s_267:        F12.1:  UNIT=µm/s²
-DEFN 45 ST=RECD,RT=DATA; BG84s_267:            F12.1:  UNIT=µm/s²
-DEFN 46 ST=RECD,RT=DATA; BG100s_267:           F12.1:  UNIT=µm/s²
-DEFN 47 ST=RECD,RT=DATA; GND_Grav:             F12.1:  UNIT=µm/s²
-DEFN 48 ST=RECD,RT=DATA; DC_Shift:             F12.1:  UNIT=µm/s²
-DEFN 49 ST=RECD,RT=DATA; FAS84s:               F12.1:  UNIT=µm/s²
-DEFN 50 ST=RECD,RT=DATA; FAS100s:              F12.1:  UNIT=µm/s²
-DEFN 51 ST=RECD,RT=DATA; BGS84s_267:           F12.1:  UNIT=µm/s²
-DEFN 52 ST=RECD,RT=DATA; BGS100s_267:          F12.1:  UNIT=µm/s²
-DEFN 53 ST=RECD,RT=DATA; LevCor:               F12.1:  UNIT=µm/s²
-DEFN 54 ST=RECD,RT=DATA; FAL84s:               F12.1:  UNIT=µm/s²
-DEFN 55 ST=RECD,RT=DATA; FAL100s:              F12.1:  UNIT=µm/s²
-DEFN 56 ST=RECD,RT=DATA; BGL84s_267:           F12.1:  UNIT=µm/s²
-DEFN 57 ST=RECD,RT=DATA; BGL100s_267:          F12.1:  UNIT=µm/s²
-DEFN 58 ST=RECD,RT=DATA; FA5000:               F12.1:  UNIT=µm/s²
+DEFN 19 ST=RECD,RT=DATA; FZ:                   F12.1:  UNIT=um/s/s
+DEFN 20 ST=RECD,RT=DATA; AZ:                   F12.1:  UNIT=um/s/s
+DEFN 21 ST=RECD,RT=DATA; GrvRaw_SC:            F12.1:  UNIT=um/s/s
+DEFN 22 ST=RECD,RT=DATA; LatCor:               F12.1:  UNIT=um/s/s
+DEFN 23 ST=RECD,RT=DATA; EotCor:               F12.1:  UNIT=um/s/s
+DEFN 24 ST=RECD,RT=DATA; AtmCor:               F12.1:  UNIT=um/s/s
+DEFN 25 ST=RECD,RT=DATA; FACor:                F12.1:  UNIT=um/s/s
+DEFN 26 ST=RECD,RT=DATA; FA:                   F12.1:  UNIT=um/s/s
+DEFN 27 ST=RECD,RT=DATA; BG:                   F12.1:  UNIT=um/s/s
+DEFN 28 ST=RECD,RT=DATA; GRV84s:               F12.1:  UNIT=um/s/s
+DEFN 29 ST=RECD,RT=DATA; GRV100s:              F12.1:  UNIT=um/s/s
+DEFN 30 ST=RECD,RT=DATA; LATCOR84s:            F12.1:  UNIT=um/s/s
+DEFN 31 ST=RECD,RT=DATA; EOTCOR84s:            F12.1:  UNIT=um/s/s
+DEFN 32 ST=RECD,RT=DATA; ATMCOR84s:            F12.1:  UNIT=um/s/s
+DEFN 33 ST=RECD,RT=DATA; FACOR84s:             F12.1:  UNIT=um/s/s
+DEFN 34 ST=RECD,RT=DATA; ADCOR84s:             F12.1:  UNIT=um/s/s
+DEFN 35 ST=RECD,RT=DATA; LATCOR100s:           F12.1:  UNIT=um/s/s
+DEFN 36 ST=RECD,RT=DATA; EOTCOR100s:           F12.1:  UNIT=um/s/s
+DEFN 37 ST=RECD,RT=DATA; ATMCOR100s:           F12.1:  UNIT=um/s/s
+DEFN 38 ST=RECD,RT=DATA; FACOR100s:            F12.1:  UNIT=um/s/s
+DEFN 39 ST=RECD,RT=DATA; ADCOR100s:            F12.1:  UNIT=um/s/s
+DEFN 40 ST=RECD,RT=DATA; FA84s:                F12.1:  UNIT=um/s/s
+DEFN 41 ST=RECD,RT=DATA; FA100s:               F12.1:  UNIT=um/s/s
+DEFN 42 ST=RECD,RT=DATA; TBCor_267:            F12.1:  UNIT=um/s/s
+DEFN 43 ST=RECD,RT=DATA; TBCor84s_267:         F12.1:  UNIT=um/s/s
+DEFN 44 ST=RECD,RT=DATA; TBCor100s_267:        F12.1:  UNIT=um/s/s
+DEFN 45 ST=RECD,RT=DATA; BG84s_267:            F12.1:  UNIT=um/s/s
+DEFN 46 ST=RECD,RT=DATA; BG100s_267:           F12.1:  UNIT=um/s/s
+DEFN 47 ST=RECD,RT=DATA; GND_Grav:             F12.1:  UNIT=um/s/s
+DEFN 48 ST=RECD,RT=DATA; DC_Shift:             F12.1:  UNIT=um/s/s
+DEFN 49 ST=RECD,RT=DATA; FAS84s:               F12.1:  UNIT=um/s/s
+DEFN 50 ST=RECD,RT=DATA; FAS100s:              F12.1:  UNIT=um/s/s
+DEFN 51 ST=RECD,RT=DATA; BGS84s_267:           F12.1:  UNIT=um/s/s
+DEFN 52 ST=RECD,RT=DATA; BGS100s_267:          F12.1:  UNIT=um/s/s
+DEFN 53 ST=RECD,RT=DATA; LevCor:               F12.1:  UNIT=um/s/s
+DEFN 54 ST=RECD,RT=DATA; FAL84s:               F12.1:  UNIT=um/s/s
+DEFN 55 ST=RECD,RT=DATA; FAL100s:              F12.1:  UNIT=um/s/s
+DEFN 56 ST=RECD,RT=DATA; BGL84s_267:           F12.1:  UNIT=um/s/s
+DEFN 57 ST=RECD,RT=DATA; BGL100s_267:          F12.1:  UNIT=um/s/s
+DEFN 58 ST=RECD,RT=DATA; FA5000:               F12.1:  UNIT=um/s/s
 DEFN 59 ST=RECD,RT=DATA; FVD_FA5000:           F12.2:  UNIT=Eotvos
-DEFN 60 ST=RECD,RT=DATA; BG5000:               F12.1:  UNIT=µm/s²
+DEFN 60 ST=RECD,RT=DATA; BG5000:               F12.1:  UNIT=um/s/s
 DEFN 61 ST=RECD,RT=DATA; FVD_BG5000:           F12.2:  UNIT=Eotvos
-DEFN 62 ST=RECD,RT=DATA; ISO5000:              F12.1:  UNIT=µm/s²
+DEFN 62 ST=RECD,RT=DATA; ISO5000:              F12.1:  UNIT=um/s/s
 DEFN 63 ST=RECD,RT=DATA; FVD_ISO5000:          F12.2:  UNIT=Eotvos
 DEFN 64 ST=RECD,RT=DATA; END DEFN
-DEFN 1 ST=RECD,RT=PROJ; RT: A4
+DEFN 1 ST=RECD,RT=PROJ; RT: A4:
 DEFN 2 ST=RECD,RT=PROJ; COORDSYS: A40: NAME=GDA 94 / MGA zone 52
 DEFN 3 ST=RECD,RT=PROJ; DATUM: A40: NAME=GRS 1980
 DEFN 4 ST=RECD,RT=PROJ; MAJ_AXIS: D12.1: UNIT=m, NAME=6378137.000000
