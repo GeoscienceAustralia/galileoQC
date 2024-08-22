@@ -8,9 +8,9 @@ All point-located data must be converted to `geoWhizz` format at the beginning o
 
 There is no intent to widely distribute the `geoWhizz` format or any files in this format. It is provided only to allow very fast data access of large data files during QC. There is at least one effort underway to develop a standard for airborne geophysical survey data files [^GSpy] and it is possible that `AirGravQC` might, in the future, replace `geoWhizz` with this or some similar format.
 
-A user of `AirGravQC` will typically receive located line data in one of a variety of industry format files, either proprietary or open. If proprietary, then it is up to the user to transform the data into an open format. `AirGravQC` supports `XYZ` line format [^XYZ] and, very poorly at this time, `ASEG-GDF2` [^GDF2] format.
+A user of `AirGravQC` will typically receive located line data in one of a variety of industry format files, either proprietary or open. If proprietary, then it is up to the user to transform the data into an open format. `AirGravQC` supports `XYZ` line format [^XYZ] and `ASEG-GDF2` [^GDF2] format, the latter via the `aseg-gdf2` [^Kent] package.
 
-It is strongly recommended that the user have their data delivered in `XYZ` format at this time. They can then follow the work-flow demonstrated in the tutorial or any of the notebooks to write the data, and associated meta-data, to `geoWhizz` format.
+Most testing and development has been done on data files in `XYZ` format and `XYZ` data import runs faster than `ASEG-GDF2` data import. Both are demonstrated in the notebook work-flows.
 
 HDF5 is structured into `groups`, `data` and `attributes`. Groups can be thought of as containers for subsidiary groups (the entire file is the root group), data and attributes. Attributes provide meta-data to groups and data.
 
@@ -63,8 +63,9 @@ The Name and Units are obvious and are used often. Alias and Description are pro
 The data are stored in a 1D array, accessed as a Numpy array by AirGravQC.
 
 
-[^HDF5]: See <https://www.h5py.org> or Andrew Collette, 2013, Python and HDF5, O'Reilly Media, Inc., 
-ISBN: 9781449367831.
+[^HDF5]: See <https://www.h5py.org> or Andrew Collette, 2013, Python and HDF5, O'Reilly Media, Inc., ISBN: 9781449367831.
+
+[^Kent]: See <https://github.com/kinverarity1/aseg_gdf2/tree/main> or https://pypi.org/project/aseg-gdf2/.
 
 [^GSpy]: James, S. R., Foks, N.L., and Minsely, B. J. 2022. GSPy: A new toolbox and data standard for Geophysical Datasets. Frontiers in Earth Science. 10. doi:10.3389/feart.2022.907614
 

@@ -30,11 +30,17 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    # 'autodoc2',
     'myst_parser',
-    # 'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon'
 ]
 templates_path = ['_templates']
 exclude_patterns = []
+
+# autodoc2_packages = [
+#     "../../AirGravQC",
+# ]
 
 myst_enable_extensions = [
     'colon_fence',
@@ -42,10 +48,10 @@ myst_enable_extensions = [
     'attrs_block'
 ]
 
-# source_suffix = {
-#     '.rst': 'restructuredtext',
-#     '.md': 'markdown',
-# }
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 html_theme_options = {
     'show_powered_by': 'false',

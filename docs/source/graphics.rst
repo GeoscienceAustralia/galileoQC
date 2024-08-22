@@ -27,7 +27,7 @@ colormap is clra: it comes from Oasis Montaj by Geosoft and is widely used in
 exploration geophysics. Histogram equalization is applied by default to
 improve the contrast of the resulting image.
 
-.. automodule:: AirGravQC.graphics
+.. automodule:: AirGravQC.gridFiles.graphics
    :members:
    :undoc-members:
    :show-inheritance:

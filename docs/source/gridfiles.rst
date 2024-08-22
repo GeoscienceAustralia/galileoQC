@@ -1,7 +1,7 @@
 gridfiles module
 ================
 
-.. automodule:: AirGravQC.gridfiles
+.. automodule:: AirGravQC.gridFiles
    :members:
    :undoc-members:
    :show-inheritance:

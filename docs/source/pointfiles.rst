@@ -1,7 +1,7 @@
 pointfiles module
 =================
 
-.. automodule:: AirGravQC.pointfiles
+.. automodule:: AirGravQC.whizzFiles
    :members:
    :undoc-members:
    :show-inheritance:
