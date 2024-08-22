@@ -39,10 +39,7 @@ src_path = local_docs + "Documents/GitHub/AirGravQC/AirGravQC"
 sys.path.insert(0, src_path)
 
 # Now import the `AirGravQC` modules
-import pointfiles as mhd
-import qualityAnalysis as qc
-import whizzPlot as wp
-import gridfiles as erm
+import AirGravQC as qc
 %matplotlib widget # needed to interact, eg zoom, with plots
 ```
 

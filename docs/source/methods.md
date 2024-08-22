@@ -16,12 +16,34 @@ A typical work-flow to prepare the data for QC would use the following main step
 
 ## Prepare data
 
+### Import `AirGravQC` and set the file paths
+
+The `matplotlib` widget provides scalable plots so you can zoom in on anything interesting or unusual.
+
+It is useful to be able to use variables for the file names.
+
+```python
+%matplotlib widget
+from pathlib import Path
+import AirGravQC as qc
+
+root = r'/my_volume/my_data/my_project/'
+
+plan_root = root + r'FlightPlan/'
+px = Path(plan_root + 'aFlightPlan.xyz')
+ph = px.with_suffix('.hdf5')
+
+agg_root = root + r'SurveyData/Located/'
+dx = Path(agg_root + r'someSurveyData.xyz')
+dh = dx.with_suffix('.hdf5')
+```
+
 ### Convert `XYZ` to `geoWhizz`
 
 Create a `geoWhizz` file in HDF5 format containing the data held in the XYZ file, `dx`, and give it a project name. In the following sections, the output `geoWhizz` file is `dh`.
 
 ```python
-mhd.xyzToHDF(Path(dx), projectName='Canobie')
+qc.xyzToHDF(Path(dx), projectName='Canobie')
 ```
 
 ### Project Meta-data
@@ -30,10 +52,10 @@ These meta-data describe all the contained data. There are other options possibl
 
 ```python
 block_name = 'Prelim Canobie Data'
-mhd.updateProject(dh, acquirer='Xcalibur', blockID=block_name)
-mhd.updateCoordFrame(dh, lat='LATITUDE', lon='LONGITUDE', 
+qc.updateProject(dh, acquirer='Xcalibur', blockID=block_name)
+qc.updateCoordFrame(dh, lat='LATITUDE', lon='LONGITUDE', 
 	x='EASTING', y='NORTHING', time='Time_1980', alt='HEIGHT')
-mhd.updateCoordFrame(dh, geoDatum='WGS84', htDatum='WGS84', 
+qc.updateCoordFrame(dh, geoDatum='WGS84', htDatum='WGS84', 
 	projection='UTM', utmz='54')
 ```
 
@@ -46,15 +68,16 @@ A better system would be good.
 This example has lines numbered according to a system, `Xcal_can`, used on the Canobie data.
 
 ```python
-mhd.updateLineAttributes(dh, line_type='Xcal_can')
+qc.updateLineAttributes(dh, planfile=ph, line_type='Xcal_can', 
+	flight_chan='FLIGHT', date_chan='DATE')
 ```
 
 ### Channel meta-data
 
-As with the project meta-data, the channel meta-data must be delivered with the data. Particularly important are the units, some of which are used, and many assumed, by `AirGravQC`. The following command should be run on all data channels which is somewhat tedious (but necessary).
+As with the project meta-data, the channel meta-data must be delivered with the data. Particularly important are the units, some of which are used, and many assumed, by `AirGravQC`. The following command should be run on all data channels which is somewhat tedious (but necessary because the units are used in checking).
 
 ```python
-mhd.updateChannelAttributes(dh, 'ANE_TC_2p67', units='eotvos', 
+qc.updateChannelAttributes(dh, 'ANE_TC_2p67', units='eotvos', 
 	description='')
 ```
 
@@ -63,7 +86,7 @@ mhd.updateChannelAttributes(dh, 'ANE_TC_2p67', units='eotvos',
 A summary of the contents of the created `geoWhizz` data file is useful.
 
 ```python
-mhd.reportWhizz(dh)
+qc.reportWhizz(dh)
 ```
 
 ### Report Flights
@@ -71,7 +94,7 @@ mhd.reportWhizz(dh)
 Summarises the flight numbers and, optionally, the lines flown on each.
 
 ```python
-mhd.reportFlights(dh, detailed=True)
+qc.reportFlights(dh, flightChannel='FLIGHT', detailed=True)
 ```
 
 ### Report Sampling
@@ -79,7 +102,7 @@ mhd.reportFlights(dh, detailed=True)
 This is done in time (where the sampling rate should be constant) and space (we expect variations due to varying aircraft ground speed).
 
 ```python
-mhd.reportSampling(dh)
+qc.reportSampling(dh)
 ```
 
 ### The Plan
@@ -87,16 +110,15 @@ mhd.reportSampling(dh)
 There should be an `XYZ` file, `px`, that provides the easting, northing, and altitude (or drape) for each planned survey line. We perform a similar process to that used on the acquired data to make a `geoWhizz` plan file, `ph`. This file is used in navigation checking. *TODO LINK TO NAV !!*
 
 ```python
-mhd.xyzToHDF(Path(px), projectName='Canobie')
+qc.xyzToHDF(Path(px), projectName='Canobie')
 block_name = 'Survey Plan'
-mhd.updateProject(ph, acquirer='Xcalibur', blockID=block_name)
-mhd.updateCoordFrame(ph, x='EASTING', y='NORTHING')
-mhd.updateCoordFrame(ph, geoDatum='WGS84', projection='UTM', 
+qc.updateProject(ph, acquirer='Xcalibur', blockID=block_name)
+qc.updateCoordFrame(ph, x='EASTING', y='NORTHING')
+qc.updateCoordFrame(ph, geoDatum='WGS84', projection='UTM', 
 	utmz='54')
-mhd.updateLineAttributes(ph, line_type='Xcal_can')
-mhd.updateChannelAttributes(ph, 'EASTING', units='m')
-mhd.updateChannelAttributes(ph, 'NORTHING', units='m')
-mhd.reportWhizz(ph)
+qc.updateChannelAttributes(ph, 'EASTING', units='m')
+qc.updateChannelAttributes(ph, 'NORTHING', units='m')
+qc.reportWhizz(ph)
 ```
 
 ### Lines Map
@@ -122,6 +144,14 @@ There is a minimum number of GNSS satellites visible to the GNSS receiver, and t
 ```python
 qc.checkGNSS(dh, 'NumSats', 'PDOP', 'VDOP', 'HDOP',
 	nsats_min=5, max_pdop=4, max_hdop=4, max_vdop=4)
+```
+
+### Heading
+
+There is no technical specification on heading but I usually expect it to vary by no more than +/- 10 degrees from nominal. The nominal headings are entered as an array.
+
+```python
+qc.checkHeading(dh, [0.0, 90.0, 180.0, -90.0], headingchan='Bearing', tolerance=10.0, plot_flag=False)
 ```
 
 ### Horizontal Position
@@ -352,7 +382,7 @@ Most of the QC work is done on a line-by-line basis across the survey data. It i
 
 Errors in the line number, flight number, fiducial, latitude, or any channel at all are possible and can often be easily seen in an image. Accordingly, `grid_n_image()` is provided to interpolate every named channel to a regular grid and image it to the Jupyter-lab notebook.
 
-The work is all done by calls to `GMT` via the Python `pyGMT` package after some pre-work.
+The work is all done by calls to the SciPy `griddata` function (after some pre-work).
 
 Channels (for example, line number, flight number, day of year) might vary between lines but be constant along a line. Others might vary at a constant rate along a line but change dramatically between lines flown on different days or in different directions. And some might change sign depending on line direction (bearing, velocity, Eotvos correction).
 
@@ -365,7 +395,7 @@ z_chans = ['ANE_TC_2p67', 'AUV_TC_2p67', 'BNE_TC_2p67', 'BUV_TC_2p67', 'Bearing'
            'PDOP', 'TURBULENCE', 'T_DD', 'T_NE', 'T_UV', 'Time_1980', 'Time_Day', 'VDOP', 'gD_Fourier_2p67']
 mr_chans = ['Bearing']
 d1_chans = ['FIDUCIAL', 'FLIGHT', 'JOB_ID', 'LINE', 'Time_1980', 'Time_Day']
-erm.grid_n_image(dh, z_chans, mr_chans, d1_chans, 500.0)
+qc.grid_n_image(dh, z_chans, 500.0, mr_chans=mr_chans, d1_chans=d1_chans)
 ```
 
 Only a few of the output images are shown here just to illustrate the typical output.
@@ -395,7 +425,7 @@ Removing the mean bearing for each survey line leaves just the variations in air
 When grids are provided by the acquirer, there is no need to use `grid_n_image()`. Instead, the grids can be simply imaged to the Jupyter-lab notebook by `display_grid()`.
 
 ```python
-erm.display_grid(boug_grid_path, 'Bouguer Gravity')
+qc.display_grid(boug_grid_path, 'Bouguer Gravity')
 ```
 
 ```{figure} img_Altitude.png
