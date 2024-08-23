@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Import ASEG-GDF2 data and write to `geoWhizz` format.
+"""
 import numpy as np
 import h5py
 from pathlib import Path
-# import pathlib
-# import filebrowser as fb
 
 # aseg_gdf2 uses pandas which is producing annoying Future Warnings, so this to suppress them.
 import warnings
@@ -48,7 +51,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
         whizzFile = gdf_datfile.with_suffix('.hdf5')
     
     # First, check DFN file is ASCII
-    if not ascii_check(gdf_datfile):
+    if not _ascii_check(gdf_datfile):
         return
     
     # open GDF, pull out channel names, the units, and the description
@@ -63,7 +66,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
     # so re-get the indices.
 
     # now if index not found - error/warning; else pop off the channelName list
-    lineIdx = index_containing_substring(channelsOut, lineChannel)
+    lineIdx = _index_containing_substring(channelsOut, lineChannel)
     if lineIdx < 0:
         print(f'ERROR - column index for {lineChannel} not found.\n')
         return
@@ -72,7 +75,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
     foundChannels = lineChannel
         
     haveFlights = False
-    flightIdx = index_containing_substring(channelNames, flightChannel)
+    flightIdx = _index_containing_substring(channelNames, flightChannel)
     if flightIdx < 0:
         print('WARNING - no flight channel found.\n')
     else:
@@ -81,7 +84,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
         foundChannels += ', ' + flightChannel
         
     haveDates = False
-    dateIdx = index_containing_substring(channelNames, dateChannel)
+    dateIdx = _index_containing_substring(channelNames, dateChannel)
     if dateIdx < 0:
         print('WARNING - no date channel found.\n')
     else:
@@ -94,7 +97,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
         
     if not omitChannels == []:
         for channel in omitChannels:
-            tempIdx = index_containing_substring(channelsOut, channel.lower())
+            tempIdx = _index_containing_substring(channelsOut, channel.lower())
             if tempIdx < 0:
                 print(f'WARNING - {channel} to omit not found.\n')
             else:
@@ -170,7 +173,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
     return
 
 
-def ascii_check(gdf_datfile):
+def _ascii_check(gdf_datfile):
     """
     Returns True if all characters in `textfile` are ASCII, otherwise False.
 
@@ -203,7 +206,7 @@ def ascii_check(gdf_datfile):
     return allASCII
 
 
-def index_containing_substring(the_list, substring):
+def _index_containing_substring(the_list, substring):
     '''
     Returns the index to the substring in the_list; -1 if not found.
 
@@ -227,5 +230,6 @@ def index_containing_substring(the_list, substring):
         if substring.upper() == s:
               return i
     return -1
+
 
 

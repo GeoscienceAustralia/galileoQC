@@ -1,23 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jul 18 16:43:31 2020
-
-@author: markdransfield
-
-Data file management tools for AirGravQC.
-
-Utility functions to add or update data or metadata (at project, line 
-or channel) are provided. Given a geoWhizz data file, data from a 
-`.ers` (ERMapper) grid file may be interpolated onto the survey
-lines as a new channel.
-
+Utility functions to add or update data or metadata.
 """
 # import necessary modules
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-# from scipy.interpolate import CloughTocher2DInterpolator
 from scipy import interpolate
 
 import AirGravQC.gridFiles.gridfiles as grd

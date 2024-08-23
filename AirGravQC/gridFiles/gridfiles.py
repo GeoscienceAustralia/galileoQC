@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Rarely used but possibly useful grid functions.
+"""
 """
 Created on Sat Jul 18 16:43:31 2020
 
@@ -30,13 +35,6 @@ import AirGravQC.gridFiles.gridutility as gut
 
 groupName = config.groupName
 projectName = config.projectName
-
-
-# GRID FILE MANAGEMENT
-
-
-# GRID PLOTTING
-
 
 # GRID REPORTING
 

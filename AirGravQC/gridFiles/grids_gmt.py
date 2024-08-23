@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+DEPRECATED.
+
+@author: markdransfield
+
+Shows a figure of an image of `grid` over a `region`, using
+`PyGMT`'s `grdimage()`. The `pyGMT` package is no longer used.
+
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm

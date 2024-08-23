@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Grid and image many channels of data from a `geoWhizz` file.
+"""
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd

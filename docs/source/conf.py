@@ -7,7 +7,7 @@
 # add these directories to sys.path here.
 
 import pathlib
-# import os
+import importlib.metadata
 
 import sys
 # sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'AirGravQC')))
@@ -21,26 +21,31 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 project = 'AirGravQC'
 copyright = '2023, GA'
 author = 'Mark Dransfield'
-release = '0.0.0'
+version = release = importlib.metadata.version("AirGravQC")
+# release = '0.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'myst_parser',
+    'sphinx.ext.autodoc',
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
-    'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
-    # 'autodoc2',
-    'myst_parser',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
 ]
-templates_path = ['_templates']
-exclude_patterns = []
 
-# autodoc2_packages = [
-#     "../../AirGravQC",
-# ]
+templates_path = ['_templates']
+
+exclude_patterns = [
+    "_build",
+    "**.ipynb_checkpoints",
+    "Thumbs.db",
+    ".DS_Store",
+    ".env",
+    ".venv",
+]
 
 myst_enable_extensions = [
     'colon_fence',

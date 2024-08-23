@@ -1,4 +1,8 @@
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Plot a statistical analysis.
+"""
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 

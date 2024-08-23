@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Update the metadata for a `line group` in a `geoWhizz` file.
+"""
 import numpy as np
 import h5py
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+A collection of possibly useful plot functions, not in common use.
+
 Created on Sat Aug 14 18:21:15 2021
 
 @author: markdransfield
@@ -14,7 +16,7 @@ import verde as vd
 import pooch
 
 import AirGravQC.config as config
-import AirGravQC.qc.qualityAnalysis as qc
+import AirGravQC.qualitycontrol.qualityAnalysis as qc
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import matplotlib.ticker as tkr
@@ -192,6 +194,20 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     
     
 def make_plot_title(group):
+    """
+    Make a title string to be used in plots.
+
+    Parameters
+    ----------
+    group : HDF5 Group
+        Name of a HDF5 group that contains `ProjectName` and `BlockID` attributes.
+
+    Returns
+    -------
+    plotTitle : String
+        The plot title.
+
+    """
     plotTitle = ''
     if 'ProjectName' in group.attrs:
         plotTitle += group.attrs['ProjectName']

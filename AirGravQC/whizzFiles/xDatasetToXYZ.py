@@ -1,11 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Write an `xArray` DataSet to a `geoWhizz` file. A STUB - DON'T USE!
+"""
 import numpy as np
 from pathlib import Path
 import pathlib
 
 
-def xDatasetToXYZ(xd, chans, wids, precisions, xyzFilePath, line="LINE", verbose=False):
+def _xDatasetToXYZ(xd, chans, wids, precisions, xyzFilePath, line="LINE", verbose=False):
     """
-    Read in a Whizz HDF5 file and write the contents to a Geosoft XYZ file.
+     A STUB - DON'T USE! Read in a Whizz HDF5 file and write the contents to a Geosoft XYZ file.
 
     Parameters
     ----------
@@ -45,7 +50,7 @@ def xDatasetToXYZ(xd, chans, wids, precisions, xyzFilePath, line="LINE", verbose
 
     with open(filename, 'w') as fxyz:
         # write xyz header
-        allchanstr = getchanstr(xd, chans, omit='LINE')
+        allchanstr = _getchanstr(xd, chans, omit='LINE')
         fxyz.write(f'/\n/\n/ {allchanstr}')
 
         currentline = 0.0
@@ -64,7 +69,7 @@ def xDatasetToXYZ(xd, chans, wids, precisions, xyzFilePath, line="LINE", verbose
 
 
 
-def getchanstr(xd, inputchans, omit='LINE'):
+def _getchanstr(xd, inputchans, omit='LINE'):
     """
     A string made of the variable names in the `xd` xArray Dataset is useful
     for writing data to XYZ format.

@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Power spectral density plot of channels in a flight-line.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
@@ -13,7 +18,7 @@ groupName = config.groupName
 
 def psdLineChannels(whizzFile, flightLine, channels, time='', plotTitle = ''):
     """
-    Plot the PSD (log-log Sqrt(Power) from welch method) of channels in flightLine. 
+    Plot the PSD (log-log Sqrt(Power) (from welch method) of channels in flightLine. 
 
     Parameters
     ----------

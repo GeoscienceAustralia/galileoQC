@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Perform odd-even analysis of a channel of data in a `whizz_file`.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm

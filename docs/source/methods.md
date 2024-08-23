@@ -1,8 +1,9 @@
+(methods-target)=
 # Methods
 
 This section provides a brief description of airborne gravity QC methods using the `AirGravQC` functions.
 
-The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules.rst) and examples are available in the [Cookbooks](#cookbook-target).
+The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules.md) and examples are available in the [Cookbooks](#cookbook-target).
 
 There are a number of types of different gravity sensor flying airborne gravity surveys on several different types of aircraft. Occasionally, gravity survey aircraft also collect magnetic data and some functions are also provided for QC of aeromagnetic survey data, although these are less thoroughly tested. The methods described here have been tested on the following aircraft and gravity sensors:
 
@@ -10,41 +11,27 @@ There are a number of types of different gravity sensor flying airborne gravity 
 - Gravimeters - Sander AirGrav
 - Gravity Gradiometers - Falcon AGG (both analog and digital), Bell Geo FTG
 
-The acquired data referred to in the following Python function calls are stored in a geoWhizz file (*REF*), `dh`. The planned survey line positions are stored in a different geoWhizz file, `ph`.
+The acquired data referred to in the following Python function calls are stored in a [geoWhizz](#geowhizz-target) file, `dh`. The planned survey line positions are stored in a different geoWhizz file, `ph`.
 
-A typical work-flow to prepare the data for QC would use the following main steps (using the Canobie project data as an example). More information is provided in the tutorial and notebooks. TODO LINK to these!!
+A typical work-flow to prepare the data for QC would use the following main steps (using the Canobie project data as an example). More information is provided in the [tutorial](#cookbook-target) and [notebooks](#cookbook-target).
 
 ## Prepare data
 
-### Import `AirGravQC` and set the file paths
+### Convert data to `geoWhizz`
 
-The `matplotlib` widget provides scalable plots so you can zoom in on anything interesting or unusual.
-
-It is useful to be able to use variables for the file names.
-
-```python
-%matplotlib widget
-from pathlib import Path
-import AirGravQC as qc
-
-root = r'/my_volume/my_data/my_project/'
-
-plan_root = root + r'FlightPlan/'
-px = Path(plan_root + 'aFlightPlan.xyz')
-ph = px.with_suffix('.hdf5')
-
-agg_root = root + r'SurveyData/Located/'
-dx = Path(agg_root + r'someSurveyData.xyz')
-dh = dx.with_suffix('.hdf5')
-```
-
-### Convert `XYZ` to `geoWhizz`
-
-Create a `geoWhizz` file in HDF5 format containing the data held in the XYZ file, `dx`, and give it a project name. In the following sections, the output `geoWhizz` file is `dh`.
+All the qc routines for located data rely on those data being stored in a `geoWhizz` HDF5 format file. `AirGravQC` converts data from either `xyz` format or `ASEG-GDF2` format to a `geoWhizz` file. Here is an example for `xyz` input data (the project name is a reference for all the data, and is used in report and plot titles).:
 
 ```python
 qc.xyzToHDF(Path(dx), projectName='Canobie')
 ```
+
+Similarly, here is an example for `aseg-gdf2` input data:
+
+```python
+qc.xyzToHDF(Path(dx), projectName='Canobie')
+```
+
+In the following sections, the output `geoWhizz` file is `dh`.
 
 ### Project Meta-data
 
@@ -68,13 +55,12 @@ A better system would be good.
 This example has lines numbered according to a system, `Xcal_can`, used on the Canobie data.
 
 ```python
-qc.updateLineAttributes(dh, planfile=ph, line_type='Xcal_can', 
-	flight_chan='FLIGHT', date_chan='DATE')
+qc.updateLineAttributes(dh, line_type='Xcal_can')
 ```
 
 ### Channel meta-data
 
-As with the project meta-data, the channel meta-data must be delivered with the data. Particularly important are the units, some of which are used, and many assumed, by `AirGravQC`. The following command should be run on all data channels which is somewhat tedious (but necessary because the units are used in checking).
+As with the project meta-data, the channel meta-data must be delivered with the data. Particularly important are the units, some of which are used, and many assumed, by `AirGravQC`. The following command should be run on all data channels which is somewhat tedious (but necessary).
 
 ```python
 qc.updateChannelAttributes(dh, 'ANE_TC_2p67', units='eotvos', 
@@ -94,7 +80,7 @@ qc.reportWhizz(dh)
 Summarises the flight numbers and, optionally, the lines flown on each.
 
 ```python
-qc.reportFlights(dh, flightChannel='FLIGHT', detailed=True)
+qc.reportFlights(dh, detailed=True)
 ```
 
 ### Report Sampling
@@ -116,6 +102,7 @@ qc.updateProject(ph, acquirer='Xcalibur', blockID=block_name)
 qc.updateCoordFrame(ph, x='EASTING', y='NORTHING')
 qc.updateCoordFrame(ph, geoDatum='WGS84', projection='UTM', 
 	utmz='54')
+qc.updateLineAttributes(ph, line_type='Xcal_can')
 qc.updateChannelAttributes(ph, 'EASTING', units='m')
 qc.updateChannelAttributes(ph, 'NORTHING', units='m')
 qc.reportWhizz(ph)
@@ -125,7 +112,7 @@ qc.reportWhizz(ph)
 
 
 ```python
-wp.linesMap([dh], whizzPlanFile=ph)
+qc.linesMap([dh], whizzPlanFile=ph)
 ```
 
 ```{figure} linesMap.png
@@ -139,24 +126,18 @@ There are a number of requirements on the navigation and positioning of the airc
 
 ### GNSS Satellites
 
-There is a minimum number of GNSS satellites visible to the GNSS receiver, and there are maximum allowable values of horizontal, vertical, and position dilution of precision (HDOP, VDOP, and PDOP) that must be met for all acceptable data. The values of these variables (number of satellites, HDOP, VDOP and PDOP) must be recored as channels in the data, for each data point. The values in these channels are checked:
+There is a minimum number of GNSS satellites visible to the GNSS receiver, and there are maximum allowable values of horizontal, vertical, and position dilution of precision (HDOP, VDOP, and PDOP) that must be met for all acceptable data. The values of these variables (number of satellites, HDOP, VDOP and PDOP) must be recorded as channels in the data, for each data point. The values in these channels are checked:
 
 ```python
 qc.checkGNSS(dh, 'NumSats', 'PDOP', 'VDOP', 'HDOP',
 	nsats_min=5, max_pdop=4, max_hdop=4, max_vdop=4)
 ```
 
-### Heading
-
-There is no technical specification on heading but I usually expect it to vary by no more than +/- 10 degrees from nominal. The nominal headings are entered as an array.
-
-```python
-qc.checkHeading(dh, [0.0, 90.0, 180.0, -90.0], headingchan='Bearing', tolerance=10.0, plot_flag=False)
-```
-
 ### Horizontal Position
 
 The aircraft position is allowed to deviate horizontally from the planned survey line by more than `allowance` metres for a distance no greater than `maxDistance` metres.
+
+We wish to maintain parallel flight-lines. If they are not parallel, then, in the places where the spacing is larger than intended, the grid interpolation will have greater opportunity to either under- or over-shoot. Ideally therefore, the `allowance` would be much smaller than the intended grid cell width, and so would the `maxDistance`. For gravimetry and gravity gradiometry these ideal restrictions lead, with typical survey aircraft, to situations in which the instrumentation experiences significant accelerations as the aircraft path is corrected. These large aircraft accelerations can result in increased sensor error so it is better to allow a larger `maxDistance` and optimise for gentle corrections to the flight path. A 1 km distance is appropriate.
 
 ```python
 qc.checkXYPlan(ph, dh, allowance=40.0, maxDistance=1000.0)
@@ -307,6 +288,29 @@ qc.ilsNoiseVturb(dh, diagComponent1, diagComponent2,
 	diagComponent3, vertvelocity)
 ```
 
+### FTG High frequency noise
+
+There are mechanisms [^SunderlandEtAl] by which gravity gradiometer noise at a frequency higher than the data frequency band can be down-converted to the data frequency band, resulting in errors in the data.
+
+The `checkRawFTG()` function checks for periods of high amplitude, high frequency signal in the raw gradiometer channels. This is not a check mandated by the Deed, but it is useful. It is intended to highlight sections of a survey line where there is excess high-frequency signal which might result in high gradient error.
+
+The function checks the standard deviation, in a standard rolling window, of each high-pass filtered gradiometer channel and plots diagnostic figures if the standard deviation exceeds some given noise limit.
+
+Experience suggests that, for an FTG, a standard deviation above about 50 E is significant and a re-flight should be considered for such data.
+
+```python
+qc.checkRawFTG(
+    whizzFile,
+    lines=[],
+    noiseLimit=50,
+    gradients=[],
+    vertaccel='',
+    vertvelocity='',
+    vertdispl='',
+)
+```
+
+
 ## Aeromagnetics
 
 :::{warning}
@@ -382,7 +386,7 @@ Most of the QC work is done on a line-by-line basis across the survey data. It i
 
 Errors in the line number, flight number, fiducial, latitude, or any channel at all are possible and can often be easily seen in an image. Accordingly, `grid_n_image()` is provided to interpolate every named channel to a regular grid and image it to the Jupyter-lab notebook.
 
-The work is all done by calls to the SciPy `griddata` function (after some pre-work).
+The work is all done by calls to `GMT` via the Python `pyGMT` package after some pre-work.
 
 Channels (for example, line number, flight number, day of year) might vary between lines but be constant along a line. Others might vary at a constant rate along a line but change dramatically between lines flown on different days or in different directions. And some might change sign depending on line direction (bearing, velocity, Eotvos correction).
 
@@ -395,7 +399,7 @@ z_chans = ['ANE_TC_2p67', 'AUV_TC_2p67', 'BNE_TC_2p67', 'BUV_TC_2p67', 'Bearing'
            'PDOP', 'TURBULENCE', 'T_DD', 'T_NE', 'T_UV', 'Time_1980', 'Time_Day', 'VDOP', 'gD_Fourier_2p67']
 mr_chans = ['Bearing']
 d1_chans = ['FIDUCIAL', 'FLIGHT', 'JOB_ID', 'LINE', 'Time_1980', 'Time_Day']
-qc.grid_n_image(dh, z_chans, 500.0, mr_chans=mr_chans, d1_chans=d1_chans)
+qc.grid_n_image(dh, z_chans, mr_chans, d1_chans, 500.0)
 ```
 
 Only a few of the output images are shown here just to illustrate the typical output.
@@ -433,9 +437,9 @@ A shaded image of a grid. To be replaced by one of better quality!!!
 ```
 
 
-[^Dransfield2013]: M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013
+[^Dransfield2013]: M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013.
 
-[^HinzeEtAl]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Veronneau, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005
+[^HinzeEtAl]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Veronneau, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005.
 
 [^Jekeli]: C. Jekeli, Theoretical fundamentals of airborne gradiometry. In Airborne Gravity for Geodesy Summer School, 23-27 May, 2016.
 
@@ -443,4 +447,6 @@ A shaded image of a grid. To be replaced by one of better quality!!!
 ISBN: 9781449367831.
 
 [^GDF2]: `AirGravQC` is using the code from <https://github.com/kinverarity1/aseg_gdf2>. The standard can be found at <https://www.aseg.org.au/sites/default/files/pdf/ASEG-GDF2-REV4.pdf>.
+
+[^SunderlandEtAl]: A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.
 

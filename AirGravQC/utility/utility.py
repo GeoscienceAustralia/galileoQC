@@ -392,6 +392,20 @@ def e2norm(x, y):
 
 
 def controls_lessthan_1000(all_lines):
+    """
+    Separates line numbers on the basis that those less than 999.99
+    are control lines, and the rest are traverse lines.
+
+    Parameters
+    ----------
+    all_lines : list of strings
+        The line numbers to be separated.
+
+    Returns
+    -------
+    (trav_strs, ctrl_strs) : two lists of strings
+
+    """
     ctrl_strs = []
     trav_strs = []
     for line in all_lines:
@@ -403,6 +417,20 @@ def controls_lessthan_1000(all_lines):
 
 
 def controls_nineteen(all_lines):
+    """
+    Separates line numbers on the basis that those that start with
+    "19" are control lines, and the rest are traverse lines.
+
+    Parameters
+    ----------
+    all_lines : list of strings
+        The line numbers to be separated.
+
+    Returns
+    -------
+    (trav_strs, ctrl_strs) : two lists of strings
+
+    """
     ctrl_strs = []
     trav_strs = []
     for line in all_lines:

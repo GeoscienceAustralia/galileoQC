@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+A collection of useful grid utilities.
+"""
 import numpy as np
 import matplotlib.path as mpltPath
 

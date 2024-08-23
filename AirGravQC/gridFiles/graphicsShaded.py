@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Make a shaded image of grid data.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm

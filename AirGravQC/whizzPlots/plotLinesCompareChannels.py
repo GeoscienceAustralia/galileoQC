@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+For each flight-line, plot the given channels.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
@@ -6,7 +11,7 @@ import verde as vd
 import pooch
 
 import AirGravQC.config as config
-# import AirGravQC.qc.qualityAnalysis as qc
+# import AirGravQC.qualitycontrol.qualityAnalysis as qc
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util
@@ -17,21 +22,18 @@ groupName = config.groupName
 
 def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, mean_remove=False):
     """
-    For the given flightLine in the whizzFile, plot both channel1 and channel2
-    against x.
+    For the given flightLines in the whizzFile, plot all channels against x.
 
     Parameters
     ----------
     whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
-    flightLine : String
-        A flightline, e.g. '1000110.0'.
+    flightLine : List of String
+        A list of flight-lines, e.g. ['1000110.0', '1000110.0'].
     x : String
         The name of the independent variable for the plot.
-    channel : String
-        The name of the first channel or field to plot.
-    channel : String
-        The name of the second channel or field to plot.
+    channels : List of String
+        The names of the channels or fields to plot.
     xOffset : Bool, optional
         If True, map x to x - x[0] before plotting. The default is True.
     mean_remove : Bool, optional

@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Write the contents of a `geoWhizz` file to `XYZ` format.
+"""
 import numpy as np
 import h5py
 from pathlib import Path
@@ -13,7 +18,7 @@ projectName = config.projectName
 
 def whizzToXYZ(whizzfilePath, chans, wids, precisions, xyzFilePath='', verbose=False):
     """
-    Read in a Whizz HDF5 file and write the contents to a Geosoft XYZ file.
+    Read in a `geoWhizz` HDF5 file and write the contents to a `XYZ` file.
 
     Parameters
     ----------

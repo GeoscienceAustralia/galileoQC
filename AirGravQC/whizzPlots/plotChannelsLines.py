@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Plot the values of a channel for each survey flight-line.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
@@ -6,7 +11,7 @@ import verde as vd
 import pooch
 
 import AirGravQC.config as config
-# import AirGravQC.qc.qualityAnalysis as qc
+# import AirGravQC.qualitycontrol.qualityAnalysis as qc
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.whizzPlots.whizzPlot as wpl
 import AirGravQC.utility.utility as util

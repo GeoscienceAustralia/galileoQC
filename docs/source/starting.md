@@ -25,22 +25,14 @@ In a Jupyter-lab notebook, set up your session with the following commands.
 Firstly import the necessary Python packages ...
 
 ```python
-# to set the path to your copy of `AirGravQC` - might not be needed.
-import sys
 from pathlib import Path # useful for file names
+%matplotlib widget # needed to, for example, zoom into plots
 ```
 
-... then set up the path to AirGravQC (this should not be needed when the package is released), and import the needed modules ... 
+... then import AirGravQC ... 
 
 ```python
-# replace the text in "" with the path to your copy of `AirGravQC`
-local_docs = "/Users/markdransfield/"
-src_path = local_docs + "Documents/GitHub/AirGravQC/AirGravQC"
-sys.path.insert(0, src_path)
-
-# Now import the `AirGravQC` modules
 import AirGravQC as qc
-%matplotlib widget # needed to interact, eg zoom, with plots
 ```
 
 ... and finally set the path to your field and plan data:
@@ -61,7 +53,7 @@ The variables `dx`, `dh`, `px` and `ph` are used throughout the documentation to
 
 Now you are ready to QC the data!
 
-Go to `Methods` and choose the QC methods you need, or go to `Cookbooks` and follow along one of the examples.
+Go to [Methods](#methods-target) and choose the QC methods you need, or go to [Cookbooks](#cookbook-target) and follow along one of the examples.
 
 [^Jupyter]: <https://jupyter.org>
 

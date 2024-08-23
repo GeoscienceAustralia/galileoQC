@@ -1,14 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Summarise contents of a `geoWhizz` file.
+"""
 import numpy as np
 import h5py
-# import matplotlib.pyplot as plt
 from pathlib import Path
 import pathlib
-# from scipy.interpolate import CloughTocher2DInterpolator
-# from scipy import interpolate
-# import filebrowser as fb
 
-# import AirGravQC.gridFiles.gridfiles as grd
-# import AirGravQC.qc.qualityAnalysis as qc
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config

@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Plot a survey line map.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
@@ -16,7 +21,7 @@ groupName = config.groupName
 
 def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines=[], planEast='', planNorth=''):
     """
-    Plots a line map of the survey contained in the HDF5 Whizz file.
+    Plots a line map of the flown survey over the planned survey lines.
 
     Parameters
     ----------

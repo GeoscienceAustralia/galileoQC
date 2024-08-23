@@ -21,6 +21,7 @@ __version__ = "0.0.0"
 #     qc.myfun()
 from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject, 
     updateChannelAttributes)
+from AirGravQC.qualitycontrol.qualityAnalysis import *
 from AirGravQC.whizzPlots.whizzPlot import *
 from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio, imageAllInDir, imageStats)
 from AirGravQC.gridFiles.read_ers import *
@@ -50,52 +51,52 @@ from AirGravQC.gridFiles.oddeven import updateLineTracks
 from AirGravQC.gridFiles.oddeven import oddevenlines
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing
 # Mag
-from AirGravQC.qc.checkDiurnal import checkDiurnal
-from AirGravQC.qc.checkBasemag import checkBasemag
-from AirGravQC.qc.checkTCDiff4 import checkTCDiff4
+from AirGravQC.qualitycontrol.checkDiurnal import checkDiurnal
+from AirGravQC.qualitycontrol.checkBasemag import checkBasemag
+from AirGravQC.qualitycontrol.checkTCDiff4 import checkTCDiff4
 
 # AGG (Falcon) checks
-from AirGravQC.qc.diffNoiseVturb import diffNoiseVturb
-from AirGravQC.qc.diffGravVturb import diffGravVturb
-from AirGravQC.qc.checkPhase import checkPhase
+from AirGravQC.qualitycontrol.diffNoiseVturb import diffNoiseVturb
+from AirGravQC.qualitycontrol.diffGravVturb import diffGravVturb
+from AirGravQC.qualitycontrol.checkPhase import checkPhase
 
 # FTG and AGG checks
-from AirGravQC.qc.checkHighFreq import checkHighFreq
+from AirGravQC.qualitycontrol.checkHighFreq import checkHighFreq
 
 # FTG checks
-from AirGravQC.qc.checkFrobenius import checkFrobenius
-from AirGravQC.qc.ilsNoiseVturb import ilsNoiseVturb
-from AirGravQC.qc.checkInlineSum import checkInlineSum
+from AirGravQC.qualitycontrol.checkFrobenius import checkFrobenius
+from AirGravQC.qualitycontrol.ilsNoiseVturb import ilsNoiseVturb
+from AirGravQC.qualitycontrol.checkInlineSum import checkInlineSum
 
 
 # Navigation and position checks
-from AirGravQC.qc.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
-from AirGravQC.qc.checkIntersection import checkIntersection
-from AirGravQC.qc.checkRMSIntersection import checkRMSIntersection
-from AirGravQC.qc.checkSpeeds import checkSpeeds
-from AirGravQC.qc.checkOverlaps import checkOverlaps
-from AirGravQC.qc.checkXYPlan import checkXYPlan
-from AirGravQC.qc.checkVertPlan import checkVertPlan
-from AirGravQC.qc.checkLineLengths import checkLineLengths
-from AirGravQC.qc.checkGNSS import checkGNSS
-from AirGravQC.qc.checkHeading import checkHeading
+from AirGravQC.qualitycontrol.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
+from AirGravQC.qualitycontrol.checkIntersection import checkIntersection
+from AirGravQC.qualitycontrol.checkRMSIntersection import checkRMSIntersection
+from AirGravQC.qualitycontrol.checkSpeeds import checkSpeeds
+from AirGravQC.qualitycontrol.checkOverlaps import checkOverlaps
+from AirGravQC.qualitycontrol.checkXYPlan import checkXYPlan
+from AirGravQC.qualitycontrol.checkVertPlan import checkVertPlan
+from AirGravQC.qualitycontrol.checkLineLengths import checkLineLengths
+from AirGravQC.qualitycontrol.checkGNSS import checkGNSS
+from AirGravQC.qualitycontrol.checkHeading import checkHeading
 
 # General checks
-from AirGravQC.qc.checkErsHeaders import checkErsHeaders
-from AirGravQC.qc.psdChannelDiff import psdChannelDiff
-from AirGravQC.qc.psdChannelDiff import psdChannelGain
-from AirGravQC.qc.allChanStats import allChanStats
-from AirGravQC.qc.diffChanStats import diffChanStats
-from AirGravQC.qc.checkGaps import checkGaps
-from AirGravQC.qc.checkSpikes import checkSpikes
-from AirGravQC.qc.checkConstantSlope import checkConstantSlope
+from AirGravQC.qualitycontrol.checkErsHeaders import checkErsHeaders
+from AirGravQC.qualitycontrol.psdChannelDiff import psdChannelDiff
+from AirGravQC.qualitycontrol.psdChannelDiff import psdChannelGain
+from AirGravQC.qualitycontrol.allChanStats import allChanStats
+from AirGravQC.qualitycontrol.diffChanStats import diffChanStats
+from AirGravQC.qualitycontrol.checkGaps import checkGaps
+from AirGravQC.qualitycontrol.checkSpikes import checkSpikes
+from AirGravQC.qualitycontrol.checkConstantSlope import checkConstantSlope
 
 # Airborne gravimetry checks
-from AirGravQC.qc.diffGroundGrid import diffGroundGrid
-from AirGravQC.qc.checkRepeatLines import checkRepeatLines
-from AirGravQC.qc.checkFreeAirCorr import checkFreeAirCorr
-from AirGravQC.qc.checkEotvosCorr import checkEotvosCorr
-from AirGravQC.qc.checkLatCorr import checkLatCorr
-from AirGravQC.qc.checkAtmosEffect import checkAtmosEffect
+from AirGravQC.qualitycontrol.diffGroundGrid import diffGroundGrid
+from AirGravQC.qualitycontrol.checkRepeatLines import checkRepeatLines
+from AirGravQC.qualitycontrol.checkFreeAirCorr import checkFreeAirCorr
+from AirGravQC.qualitycontrol.checkEotvosCorr import checkEotvosCorr
+from AirGravQC.qualitycontrol.checkLatCorr import checkLatCorr
+from AirGravQC.qualitycontrol.checkAtmosEffect import checkAtmosEffect
 
 

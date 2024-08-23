@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Display the gridded (raster) data in an xArray DataArray
+"""
 import numpy as np
 import colorcet as cc
 

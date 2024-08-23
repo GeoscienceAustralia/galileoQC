@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Read from an ermapper grid into numpy arrays.
+"""
 import numpy as np
 from pathlib import Path
 

@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Interpolate point-located data from a 1-D to a 2-D xArray DataArray.
+"""
 import numpy as np
 import xarray as xr
 from scipy.interpolate import griddata

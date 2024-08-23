@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Read a channel of data from a `geoWhizz` file and return as a 1-D xArray DataArray.
+"""
 import numpy as np
 from pathlib import Path
 import xarray as xr

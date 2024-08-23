@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Write the contents of an `XYZ` file to a `geoWhizz` file.
+"""
 import numpy as np
 import h5py
 from pathlib import Path

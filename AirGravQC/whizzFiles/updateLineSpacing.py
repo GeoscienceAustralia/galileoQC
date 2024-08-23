@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Update the line-spacing info for the Lines group in a `geoWhizz` file.
+"""
 import numpy as np
 from pathlib import Path
 import h5py

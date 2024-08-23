@@ -1,3 +1,4 @@
+(geowhizz-target)=
 # geoWhizz
 
 ## Introduction
