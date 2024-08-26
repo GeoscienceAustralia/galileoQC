@@ -4,11 +4,6 @@ AirGravQC.gridFiles.gridfiles
 .. automodule:: AirGravQC.gridFiles.gridfiles
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -29,15 +24,3 @@ AirGravQC.gridFiles.gridfiles
       traceImages
       update_grid
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

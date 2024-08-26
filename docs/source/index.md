@@ -16,6 +16,7 @@ cookbooks.md
 methods.md
 deed.md
 modules.md
+Test_AirGravQC_griddata
 ```
 
 ## Indices and tables

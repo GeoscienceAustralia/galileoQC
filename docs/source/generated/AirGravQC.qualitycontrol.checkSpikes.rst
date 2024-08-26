@@ -4,11 +4,6 @@ AirGravQC.qualitycontrol.checkSpikes
 .. automodule:: AirGravQC.qualitycontrol.checkSpikes
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ AirGravQC.qualitycontrol.checkSpikes
       spike_test1
       spike_test2
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

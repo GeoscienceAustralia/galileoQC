@@ -4,11 +4,6 @@ AirGravQC.whizzFiles.xyzReader
 .. automodule:: AirGravQC.whizzFiles.xyzReader
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ AirGravQC.whizzFiles.xyzReader
       read_xyz_header
       xyzToHDF
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

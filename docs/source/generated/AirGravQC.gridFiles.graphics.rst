@@ -4,11 +4,6 @@ AirGravQC.gridFiles.graphics
 .. automodule:: AirGravQC.gridFiles.graphics
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,15 +19,3 @@ AirGravQC.gridFiles.graphics
       saveMap
       stats_boundaries
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

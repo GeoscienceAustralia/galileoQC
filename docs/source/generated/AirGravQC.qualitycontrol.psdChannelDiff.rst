@@ -4,11 +4,6 @@ AirGravQC.qualitycontrol.psdChannelDiff
 .. automodule:: AirGravQC.qualitycontrol.psdChannelDiff
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ AirGravQC.qualitycontrol.psdChannelDiff
       psdChannelDiff
       psdChannelGain
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

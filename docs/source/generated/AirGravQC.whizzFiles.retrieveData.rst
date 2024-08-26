@@ -4,11 +4,6 @@ AirGravQC.whizzFiles.retrieveData
 .. automodule:: AirGravQC.whizzFiles.retrieveData
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@ AirGravQC.whizzFiles.retrieveData
       getLineXChannel
       getWhizzData
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

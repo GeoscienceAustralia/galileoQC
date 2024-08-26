@@ -4,11 +4,6 @@ AirGravQC.gridFiles.oddeven
 .. automodule:: AirGravQC.gridFiles.oddeven
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@ AirGravQC.gridFiles.oddeven
       updateLineTracks
       updateOddOrEven
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

@@ -275,7 +275,7 @@ Difference Noise versus turbulence for each flown survey line. There is an outli
 
 ### In Line Sum (ILS)
 
-The FTG is a single-complement, three-axis gradiometer. On each axis, it measures ($\Gamma_{xy}$ and $\Gamma_{uv}^{i}$) relative to that ($i$-th) axis. Theoretically, the sum of the three $\Gamma_{uv}^{i}$ should equal zero and variations from zero reflect error in the measurement. The actual quantity, called the *in-line sum*, must be scaled for the number of axes and is expressed as:
+The FTG is a single-complement, three-axis gradiometer. On each axis, it measures ($\Gamma_{xy}^{i}$ and $\Gamma_{uv}^{i}$) relative to that ($i$-th) axis. Theoretically, the sum of the three $\Gamma_{uv}^{i}$ should equal zero and variations from zero reflect error in the measurement. The actual quantity, called the *in-line sum*, must be scaled for the number of axes and is expressed as:
 
 > $$ \eta = \frac{\Gamma_{uv}^{1} + \Gamma_{uv}^{2} + \Gamma_{uv}^{3}}{\sqrt{3}} $$
 
@@ -442,11 +442,6 @@ A shaded image of a grid. To be replaced by one of better quality!!!
 [^HinzeEtAl]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Veronneau, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005.
 
 [^Jekeli]: C. Jekeli, Theoretical fundamentals of airborne gradiometry. In Airborne Gravity for Geodesy Summer School, 23-27 May, 2016.
-
-[^HDF5]: See <https://www.h5py.org> or Andrew Collette, 2013, Python and HDF5, O'Reilly Media, Inc., 
-ISBN: 9781449367831.
-
-[^GDF2]: `AirGravQC` is using the code from <https://github.com/kinverarity1/aseg_gdf2>. The standard can be found at <https://www.aseg.org.au/sites/default/files/pdf/ASEG-GDF2-REV4.pdf>.
 
 [^SunderlandEtAl]: A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.
 

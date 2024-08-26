@@ -4,11 +4,6 @@ AirGravQC.qualitycontrol.checkClearance
 .. automodule:: AirGravQC.qualitycontrol.checkClearance
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ AirGravQC.qualitycontrol.checkClearance
       checkDrape
       checkSafeClearance
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

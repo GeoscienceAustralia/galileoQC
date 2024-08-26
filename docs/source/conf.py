@@ -28,12 +28,12 @@ version = release = importlib.metadata.version("AirGravQC")
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'myst_parser',
     'sphinx.ext.autodoc',
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
+    'myst_nb',
 ]
 
 templates_path = ['_templates']
@@ -55,7 +55,7 @@ myst_enable_extensions = [
 
 source_suffix = {
     '.rst': 'restructuredtext',
-    '.md': 'markdown',
+    '.ipynb': 'myst-nb',
 }
 
 html_theme_options = {
@@ -63,6 +63,16 @@ html_theme_options = {
     'body_text': 'Black',
     'font_family': 'Palatino',
 }
+
+nbsphinx_execute = "auto"
+
+nbsphinx_execute_arguments = [
+    "--InlineBackend.figure_formats={'png2x'}",
+    "--InlineBackend.rc=figure.dpi=96",
+]
+
+nbsphinx_kernel_name = "python3"
+
 
 # html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 

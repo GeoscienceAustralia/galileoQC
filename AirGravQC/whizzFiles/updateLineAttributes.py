@@ -102,6 +102,10 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                             gg_planned_line = np.floor(current_line / 10000.0)
                             gg.attrs['Segment'] = 0
                             gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                    elif line_type == 'NRG':
+                        gg_planned_line = np.floor(current_line / 10.0) * 10.0
+                        gg.attrs['Segment'] = 0
+                        gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
                     elif line_type == 'SGL_GA':
                         if current_line < 7000:
                             gg_planned_line = np.floor(current_line * 10.0) / 10.0

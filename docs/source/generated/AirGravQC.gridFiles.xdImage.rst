@@ -4,11 +4,6 @@ AirGravQC.gridFiles.xdImage
 .. automodule:: AirGravQC.gridFiles.xdImage
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ AirGravQC.gridFiles.xdImage
       xdImage
       xdsImage
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

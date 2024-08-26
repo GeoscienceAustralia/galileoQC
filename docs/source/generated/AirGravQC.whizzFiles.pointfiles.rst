@@ -4,11 +4,6 @@ AirGravQC.whizzFiles.pointfiles
 .. automodule:: AirGravQC.whizzFiles.pointfiles
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -23,15 +18,3 @@ AirGravQC.whizzFiles.pointfiles
       updateCoordFrame
       updateProject
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

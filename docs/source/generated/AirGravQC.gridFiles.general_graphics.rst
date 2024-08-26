@@ -4,11 +4,6 @@ AirGravQC.gridFiles.general\_graphics
 .. automodule:: AirGravQC.gridFiles.general_graphics
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,10 +11,6 @@ AirGravQC.gridFiles.general\_graphics
       color_rgb
       test
       update
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -38,17 +29,9 @@ AirGravQC.gridFiles.general\_graphics
       Text
       Transform
    
-   
-
-   
-   
    .. rubric:: Exceptions
 
    .. autosummary::
    
       GraphicsError
    
-   
-
-
-

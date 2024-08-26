@@ -4,11 +4,6 @@ AirGravQC.whizzPlots.whizzPlot
 .. automodule:: AirGravQC.whizzPlots.whizzPlot
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ AirGravQC.whizzPlots.whizzPlot
       specificLinesMap
       statusMap
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

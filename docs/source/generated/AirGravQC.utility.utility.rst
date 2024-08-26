@@ -4,11 +4,6 @@ AirGravQC.utility.utility
 .. automodule:: AirGravQC.utility.utility
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ AirGravQC.utility.utility
       getLineNumberInGroup
       getPlannedLine
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

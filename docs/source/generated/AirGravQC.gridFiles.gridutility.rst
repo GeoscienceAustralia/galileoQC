@@ -4,11 +4,6 @@ AirGravQC.gridFiles.gridutility
 .. automodule:: AirGravQC.gridFiles.gridutility
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ AirGravQC.gridFiles.gridutility
       maskGridByPolygon
       report_gridStats
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

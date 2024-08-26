@@ -1,13 +1,8 @@
-﻿AirGravQC.qualitycontrol.qualityAnalysis
+AirGravQC.qualitycontrol.qualityAnalysis
 ========================================
 
 .. automodule:: AirGravQC.qualitycontrol.qualityAnalysis
 
-   
-   
-   
-
-   
    
    .. rubric:: Functions
 
@@ -20,15 +15,3 @@
       lineStats
       statsChannelDiff
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

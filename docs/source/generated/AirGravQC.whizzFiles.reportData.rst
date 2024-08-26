@@ -4,11 +4,6 @@ AirGravQC.whizzFiles.reportData
 .. automodule:: AirGravQC.whizzFiles.reportData
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@ AirGravQC.whizzFiles.reportData
       reportWhizz
       whizzAttrExists
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

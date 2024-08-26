@@ -4,11 +4,6 @@ AirGravQC.qualitycontrol.checkRepeatLines
 .. automodule:: AirGravQC.qualitycontrol.checkRepeatLines
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ AirGravQC.qualitycontrol.checkRepeatLines
       checkRepeatLines
       reportTrackDirection
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
