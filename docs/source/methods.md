@@ -5,7 +5,7 @@ This section provides a brief description of airborne gravity QC methods using t
 
 The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules.md) and examples are available in the [Cookbooks](#cookbook-target).
 
-There are a number of types of different gravity sensor flying airborne gravity surveys on several different types of aircraft. Occasionally, gravity survey aircraft also collect magnetic data and some functions are also provided for QC of aeromagnetic survey data, although these are less thoroughly tested. The methods described here have been tested on the following aircraft and gravity sensors:
+There are a number of types of different gravity sensor flying airborne gravity surveys on several different types of aircraft. The methods described here have been tested on the following aircraft and gravity sensors:
 
 - Aircraft - BT-67, Cessna C208, Twin Otter
 - Gravimeters - Sander AirGrav
@@ -310,23 +310,6 @@ qc.checkRawFTG(
 )
 ```
 
-
-## Aeromagnetics
-
-:::{warning}
-The aeromagnetic QC functions are based on old code, are poorly tested and are not recommended for production use. They are provided here primarily as a starting point for developers.
-:::
-
-### Fourth Difference
-
-This check has not been used for surveys under a Deed but it is based on a common specification in the aeromagnetic survey business. The fourth difference of the total magnetic field may not exceed the agreed peak-to-peak value more than an agreed number of consecutive times along any given survey line.
-
-Usually a fourth difference channel (here `TCDiff4`) is supplied with the data but, if not, then the raw magnetic data (`rawMag`) channel may be used.
-
-```python
-qc.checkTCDiff4(dh, TCDiff4='', rawMag='', limit = 0.02,
-	nSamples = 3000, plotAll = False)
-```
 
 ## General
 

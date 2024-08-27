@@ -50,10 +50,6 @@ from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.oddeven import updateLineTracks
 from AirGravQC.gridFiles.oddeven import oddevenlines
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing
-# Mag
-from AirGravQC.qualitycontrol.checkDiurnal import checkDiurnal
-from AirGravQC.qualitycontrol.checkBasemag import checkBasemag
-from AirGravQC.qualitycontrol.checkTCDiff4 import checkTCDiff4
 
 # AGG (Falcon) checks
 from AirGravQC.qualitycontrol.diffNoiseVturb import diffNoiseVturb
