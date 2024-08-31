@@ -255,7 +255,7 @@ A statistical analysis plot of the Eotvos correction check. The mean (solid squa
 Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by `plotLinesOnGroundStns`. This code relies heavily on the data collection ([^Wynne], 2018) in its compiled form ([^Uieda, 2021]).
 
 ```python
-qc.plotLinesOnGroundStns(whizzFile, line, 
+qc.plotLinesOnGroundStns(dh, line, 
 	fig_title='My Test Line over Ground Gravity Stations')
 ```
 
