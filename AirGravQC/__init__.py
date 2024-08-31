@@ -12,7 +12,7 @@ References:
     Gravity for Geodesy Summer School, 23-27 May, 2016.
 """
 
-__version__ = "0.0.0"
+# __version__ = "0.0.0"
 
 # Make it easy for user to call any function `myfun` as `aqc.myfun`.
 # These lines access all functions and classes in all .py files
@@ -23,7 +23,7 @@ from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject,
     updateChannelAttributes)
 from AirGravQC.qualitycontrol.qualityAnalysis import *
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio, imageAllInDir, imageStats)
+from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio, imageStats)
 from AirGravQC.gridFiles.read_ers import *
 
 # Data management
@@ -50,6 +50,7 @@ from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.oddeven import updateLineTracks
 from AirGravQC.gridFiles.oddeven import oddevenlines
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing
+from AirGravQC.gridFiles.imageAllInDir import imageAllInDir
 
 # AGG (Falcon) checks
 from AirGravQC.qualitycontrol.diffNoiseVturb import diffNoiseVturb

@@ -21,7 +21,7 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 project = 'AirGravQC'
 copyright = '2023, GA'
 author = 'Mark Dransfield'
-version = release = importlib.metadata.version("AirGravQC")
+version = release = importlib.metadata.version('AirGravQC')
 # release = '0.0.0'
 
 # -- General configuration ---------------------------------------------------

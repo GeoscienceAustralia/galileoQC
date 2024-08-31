@@ -250,6 +250,16 @@ qc.checkEotvosCorr(dh, 'EOTCOR', east_vel='V_EAST',
 A statistical analysis plot of the Eotvos correction check. The mean (solid squares), range (open circles) and one standard deviation (horizontal line) summarise the statistics. In this example, all errors are less than $0.8\mu m s^{-2}$ which can be attributed to the limited precision of the speed data.
 ```
 
+### Compare to Ground Gravity
+
+Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by `plotLinesOnGroundStns`. This code relies heavily on the data collection ([^Wynne], 2018) in its compiled form ([^Uieda, 2021]).
+
+```python
+qc.plotLinesOnGroundStns(whizzFile, line, 
+	fig_title='My Test Line over Ground Gravity Stations')
+```
+
+
 ## AGG Gradiometry
 
 The primary method for checking AGG data is `diffNoiseVturb()` which plots the error in each complement for each survey line against the mean turbulence experienced by the AGG along the line.	
@@ -428,3 +438,6 @@ A shaded image of a grid. To be replaced by one of better quality!!!
 
 [^SunderlandEtAl]: A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.
 
+[^Uieda]: Uieda, L. (2021). Ground gravity data compilation for Australia version 2.0. figshare. https://doi.org/10.6084/m9.figshare.13643837
+
+[^Wynne]: Wynne, P. (2018). NetCDF Ground Gravity Point Surveys Collection (Version 1.0). Commonwealth of Australia (Geoscience Australia). https://doi.org/10.26186/5C1987FA17078

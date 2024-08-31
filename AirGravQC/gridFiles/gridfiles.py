@@ -477,37 +477,6 @@ def cmap_exists(name):
     return False
 
 
-def imageAllInDir(path_name):
-    """
-    Quick and dirty method to image all the grids in a 
-    directory for QC.
-
-    Parameters
-    ----------
-    path_name : Path
-        The Path where the ERS grid files are located.
-
-    Returns
-    -------
-    None.
-
-    """
-    # get a list of the ers file paths
-    file_count = 0
-    ersFiles = []
-    folderFiles = path_name.iterdir()
-    for aFile in folderFiles:
-        if aFile.is_file() and (aFile.suffix == '.ERS' or aFile.suffix == '.ers') and (aFile.name[0] != '.'):
-            ersFiles.append(aFile)
-            file_count += 1
-    print(f'Found {file_count} .ers files ...')
-    print(f'in: {str(path_name)}')
-
-    for f in ersFiles:
-        (dxt, _) = gridfile_to_xa(f)
-        xdImage(dxt, str(f.name), colormap=cc.m_CET_R1)
-
-
 def graphicsTernary(e, n, red, green, blue, mytitle):
     """
     Uses Matplotlib's `imshow()` to create a ternary image from three channels
@@ -581,65 +550,5 @@ def _histEqual(img):
     return cdf[img255.astype('uint8')]
 
     
-def displayShadedImage(e, n, z, mytitle):
-    """
-    REDUNDANT
-
-    Given a 2D array z located by 1D arrays e and n, plot an image of z.
-
-    Any invalid values (NaN, Inf) of z are masked out. The plot has grid lines,
-    colorbar, x and y labels (Eastings and Northings respectively) and a title.
-
-    Parameters
-    ----------
-    e : 1D numpy array
-        Eastings.
-    n : 1D numpy array
-        Northings.
-    z : 2D numpy array
-        Data to be imaged.
-    mytitle : String
-        Plot title.
-
-    Returns
-    -------
-    None
-
-    """
-    from matplotlib.colors import LightSource
-
-    my_ls = LightSource(azdeg=315, altdeg=50)
-    cmap = plt.cm.nipy_spectral  # gist_earth
-
-    zm = np.ma.masked_invalid(z)
-    rgb = my_ls.shade(zm, cmap, fraction=0.2)
-    # might change to image histogram-equalised zm or limit the range to 95%
-    # z indices ought to be fixed in ermread
-    fig, ax = plt.subplots()
-    fig.dpi = 200
-
-    ax.imshow(rgb, cmap=cmap)
-    ax.set_title(mytitle, fontsize=8)
-    ax.set_xlabel('Eastings [m]', fontsize=6)
-    ax.set_ylabel('Northings [m]', fontsize=6)
-    ax.grid(True)
-
-    #   Much better is to run pcolormesh, steal its labels, remove it and set the
-    #   labels
-    #    ax.xaxis.set_ticklabels(('1', '692000', '694000', '696000', '698000',
-    #                             '700000', '702000', '704000', '706000'),
-    #                            fontsize=6)
-    #    labels = ax.yaxis.get_ticklabels(which='major')
-    #    ax.yaxis.set_ticklabels(('1', '3676000', '3674000', '3672000', '3670000',
-    #                            '3668000', '3666000', '3664000', '3662000'),
-    #                            fontsize=6)
-
-    plt.axis('equal')
-    plt.show()
-    im = ax.imshow(zm, cmap=cmap)
-    im.remove()
-    fig.colorbar(im)
-
-    return
 
 
