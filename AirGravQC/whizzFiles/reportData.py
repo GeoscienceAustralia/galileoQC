@@ -81,6 +81,45 @@ def reportWhizz(whizzFile, line='', channel=''):
                 print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
 
 
+def reportChannels(whizzFile, channel=''):
+    """
+    Prints a short summary of the channel names in a HDF5 Whizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+
+    Returns
+    -------
+    None.
+
+    """
+    filename = str(whizzFile)
+        
+    with h5py.File(filename, 'r') as f:
+        
+        whizzHeader = list(f.keys())[0]
+        g = f[whizzHeader]        
+        gLines = g['Lines']
+        lineNames = list(gLines.keys())
+        numLines = len(lineNames)
+        lineGroups = list(gLines.values())
+        channelNames = list(lineGroups[0].keys())
+        numChannels = len(channelNames)
+        
+        print(whizzHeader)
+
+        print(f'\n{numChannels} channels:\n', channelNames)
+        if channel != '':
+                
+            myChanGroup = gLines[lineNames[0]][channel]
+            chanAttrs = list(myChanGroup.attrs)
+            print(f'\nChannel {myChanGroup}')
+            for attribute in chanAttrs:
+                print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
+
+
 def reportFlights(whizzFile, flightChannel='', lines=[], detailed=False):
     """
     Prints a summary of the flight numbers in a HDF5 Whizz file.

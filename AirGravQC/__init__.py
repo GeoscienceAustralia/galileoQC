@@ -31,7 +31,7 @@ from AirGravQC.whizzFiles.gdfReader import asegToHDF
 from AirGravQC.whizzFiles.xyzReader import xyzToHDF
 from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
 from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
-from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling)
+from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling, reportChannels)
 
 # 1D Plotting
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines

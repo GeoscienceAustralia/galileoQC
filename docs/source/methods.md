@@ -252,7 +252,7 @@ A statistical analysis plot of the Eotvos correction check. The mean (solid squa
 
 ### Compare to Ground Gravity
 
-Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by `plotLinesOnGroundStns`. This code relies heavily on the data collection ([^Wynne], 2018) in its compiled form ([^Uieda, 2021]).
+Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by `plotLinesOnGroundStns`. This code relies heavily on the data collection[^Wynne] in its compiled form[^Uieda].
 
 ```python
 qc.plotLinesOnGroundStns(dh, line, 
@@ -422,11 +422,11 @@ Removing the mean bearing for each survey line leaves just the variations in air
 When grids are provided by the acquirer, there is no need to use `grid_n_image()`. Instead, the grids can be simply imaged to the Jupyter-lab notebook by `display_grid()`.
 
 ```python
-qc.display_grid(boug_grid_path, 'Bouguer Gravity')
+qc.display_grid(Path(g1), '2205173_Blackall_GD_0p0_Final', azdeg=-40)
 ```
 
 ```{figure} img_Altitude.png
-A shaded image of a grid. To be replaced by one of better quality!!!
+A shaded image of a grid.
 ```
 
 
