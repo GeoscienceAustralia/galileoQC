@@ -140,3 +140,4 @@ examples/.jupyter/desktop-workspaces/default-37a8.jupyterlab-workspace
 docs/.DS_Store
 docs/source/.DS_Store
 *.jupyterlab-workspace
+docs/.DS_Store
