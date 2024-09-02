@@ -204,7 +204,7 @@ def calcMeanTrack(lineGroup, easting, northing):
     return np.mean(track[idx1:idx2])
 
 
-def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mask_polygon=[]):
+def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', mask_polygon=[], numneighbours=1):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
     sorted into two sets of odd and even lines. Each set is gridded and the difference
@@ -245,8 +245,20 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mas
     odd_data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=oddlines, remove_mean=False, diff_one=False)
 
     # Find the coverage for each gridded data set
-    _, even_region = xarray_to_grid(even_data, grid_space)
-    _, odd_region = xarray_to_grid(odd_data, grid_space)
+    e_chan = even_data.attrs['x_channel']
+    n_chan = even_data.attrs['y_channel']
+    even_region = [
+                    np.min(even_data[e_chan].values),
+                    np.max(even_data[e_chan].values),
+                    np.min(even_data[n_chan].values),
+                    np.max(even_data[n_chan].values)
+                ]
+    odd_region = [
+                    np.min(odd_data[e_chan].values),
+                    np.max(odd_data[e_chan].values),
+                    np.min(odd_data[n_chan].values),
+                    np.max(odd_data[n_chan].values)
+                ]
 
     # We are only interested in the statistics over the intersection of the regions.
     intersectregion = [
@@ -255,9 +267,12 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mas
                         max(even_region[2], odd_region[2]),
                         min(even_region[3], odd_region[3]),
                         ]
+                        
     # Grid and difference the data sets
-    even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion)
-    odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion)
+    even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion, method=method, 
+        mask_polygon=mask_polygon, numneighbours=numneighbours)
+    odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion, method=method, 
+        mask_polygon=mask_polygon, numneighbours=numneighbours)
     d_grid = even_grid - odd_grid
 
     # Subtraction does not preserve attributes
@@ -269,11 +284,14 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], mas
 
     # Image and report statistics
 
+    # xdImage(d_grid, d_grid.attrs['title'], cmap_norm='nonorm', 
+    #     nSigma=2, clipTo3Std = True)
     xdImage(d_grid, d_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=mask_polygon)
+        hs=True, azdeg=45, ax=None, clipTo3Std = True)
 
     gut.report_gridStats(d_grid, mask_polygon=mask_polygon)
+
 
 
 def _getOddEvenLines(whizz_file):

@@ -379,7 +379,7 @@ Most of the QC work is done on a line-by-line basis across the survey data. It i
 
 Errors in the line number, flight number, fiducial, latitude, or any channel at all are possible and can often be easily seen in an image. Accordingly, `grid_n_image()` is provided to interpolate every named channel to a regular grid and image it to the Jupyter-lab notebook.
 
-The work is all done by calls to `GMT` via the Python `pyGMT` package after some pre-work.
+The grid interpolation can be done by the SciPy griddata `linear` method, or by the Verde `KNeighbors` method. The latter is recommended if the `pykdtree` package is installed because it is much faster.
 
 Channels (for example, line number, flight number, day of year) might vary between lines but be constant along a line. Others might vary at a constant rate along a line but change dramatically between lines flown on different days or in different directions. And some might change sign depending on line direction (bearing, velocity, Eotvos correction).
 

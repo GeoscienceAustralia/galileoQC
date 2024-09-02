@@ -13,7 +13,6 @@ author: Mark Dransfield
 from pathlib import Path
 import colorcet as cc
 import AirGravQC.config as config
-# import xarray as xr
 from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
 from AirGravQC import xdImage
 

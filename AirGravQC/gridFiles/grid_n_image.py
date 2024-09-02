@@ -17,7 +17,8 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], gridlines=True, method='scipy', mask_polygon=[]):
+def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], 
+    gridlines=True, method='neighbours', mask_polygon=[], numneighbours=1):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -93,7 +94,7 @@ def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan=''
         my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, lines=lines, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
-        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method)
-        xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded, mask_polygon=mask_polygon)
+        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method, mask_polygon=mask_polygon, numneighbours=numneighbours)
+        xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)
         gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
         

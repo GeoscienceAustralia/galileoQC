@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Image the grid of the difference between two channels.
+"""
+"""
+Created on Sat Jul 18 16:43:31 2020
+
+author: Mark Dransfield
+
+"""
+
+import numpy as np
+# import matplotlib.pyplot as plt
+# from matplotlib import cm
+# from pathlib import Path
+import colorcet as cc
+# import xarray as xr
+# import netCDF4 as nc4
+# import filebrowser as fb
+# import rioxarray
+# import h5py
+# import matplotlib.ticker as tkr
+
+# import AirGravQC.gridFiles.graphics as graphics
+# import AirGravQC.utility.utility as util
+# import AirGravQC.gridFiles.read_ers as ers
+# import AirGravQC.whizzFiles.retrieveData as rd
+# import AirGravQC.config as config
+# from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
+from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
+from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
+from AirGravQC.gridFiles.xdImage import xdImage
+import AirGravQC.gridFiles.gridutility as gut
+
+# groupName = config.groupName
+# projectName = config.projectName
+
+# GRID REPORTING
+
+def diff_n_image(whizz_file, channel1, channel2, grid_space, method='neighbours', mask_polygon=[], numneighbours=1):
+    """
+    Subtracts the data in `channel2` from those in `channel1`, then grids and images that difference.
+
+    Parameters
+    ----------
+    whizzFile : Path or String
+        The Path to, or String name of, the whizz file in HDF5 format.
+    channel1 : String
+        A name of a channel in `whizz_file`.
+    channel2 : String
+        A name of a channel in `whizz_file`.
+    grid_space : Float
+        The distance between grid cell centres in grid distance units.
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
+
+    Returns
+    -------
+    Nothing.
+
+    """
+    print(f'Gridding and imaging {channel1} - {channel2}.')
+    my_data1 = whizz_to_xarray(whizz_file, channel1, remove_mean=False, diff_one=False)
+    my_data2 = whizz_to_xarray(whizz_file, channel2, remove_mean=False, diff_one=False)
+    my_data1[channel1] = my_data1[channel1] - my_data2[channel2]
+    my_data1.attrs['title'] = f'{channel1} - {channel2}'
+    if 'units' in my_data2[channel2].attrs:
+        my_data1[channel1].attrs['units'] =  my_data2[channel2].attrs['units']
+    my_grid, my_region = xarray_to_grid(my_data1, grid_space, method=method, mask_polygon=mask_polygon, numneighbours=numneighbours)
+
+    xdImage(my_grid, my_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+        minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
+        hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=mask_polygon)
+
+    gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
+

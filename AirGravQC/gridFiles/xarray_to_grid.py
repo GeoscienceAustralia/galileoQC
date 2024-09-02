@@ -5,18 +5,20 @@ Interpolate point-located data from a 1-D to a 2-D xArray DataArray.
 """
 import numpy as np
 import xarray as xr
+import verde as vd
 from scipy.interpolate import griddata
 
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
+import AirGravQC.gridFiles.gridutility as gut
 import AirGravQC.config as config
 
 groupName = config.groupName
 projectName = config.projectName
 
 
-def xarray_to_grid(my_data, grid_space, region=[], method='scipy'):
+def xarray_to_grid(my_data, grid_space, region=[], method='scipy', mask_polygon=[], numneighbours=5):
     """
     Interpolates `my_data` onto a regular grid.
 
@@ -30,8 +32,14 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy'):
         Coordinates of the corners of the bounding rectangle [West, East, South, North].
         Default uses the minimum and maximum coordinates.
     method : string, optional
-        The gridding algorithm to use in interpolating the data. Only "scipy" available.
-        Default scipy `linear` method.
+        The gridding algorithm to use in interpolating the data. Available is the Verde nearest
+        neighbour method - "neighbours" and the SciPy GridData "linear" method. "neighbours" is
+        much faster if `pykdtree` is installed. Default SciPy `linear` method.
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
+    numneighbours : Integer, optional
+        If method='neighbours', then this is the number of neighbours to average. Default 5.
 
     Returns
     -------
@@ -99,9 +107,26 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy'):
 
         grid.values = griddata(list(zip(my_data[x_chan].data, my_data[y_chan].data)), my_data[z_chan].data, (X, Y), method='linear')
 
+    elif method == 'neighbours':
+        if region == []:
+            region = vd.get_region([my_data[x_chan], my_data[y_chan]])
+            myreg = float(region[0].values), float(region[1].values), float(region[2].values), float(region[3].values)
+        else:
+            myreg = float(region[0]), float(region[1]), float(region[2]), float(region[3])
+
+        east, north = vd.grid_coordinates(region=myreg, spacing=grid_space)
+        grd = vd.KNeighbors(k=numneighbours)
+        grd.fit((my_data[x_chan], my_data[y_chan]), my_data[z_chan])
+        my_grid_ds = grd.grid(coordinates=(east, north) )
+        my_grid = my_grid_ds.to_array()
+        my_grid = my_grid.squeeze('variable')
+        grid = my_grid.rename({'easting': 'x','northing': 'y'})
     else:
         print('Error - method must be "scipy".')
         return
+
+    if np.array(mask_polygon).size > 0:
+        grid = gut.maskGridByPolygon(grid, mask_polygon, x_chan='x', y_chan='y')
 
     grid.attrs['units'] = myunits
     grid.attrs['long_name'] = z_chan

@@ -20,7 +20,7 @@ projectName = config.projectName
 
 def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-                   hs=True, azdeg=45, ax=None, origin='upper'):
+                   hs=True, azdeg=45, ax=None, origin='upper', cb_title=''):
     """
     Creates a colour image of a data array, with colour bar and grid-lines. The
     shape of z must be $shape(e) \times shape(n)$. The (e, n, z) typically are the 
@@ -94,8 +94,8 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     ax.yaxis.set_major_formatter(thou_format)
     # for label in ax.get_xticklabels(): label.set_fontsize(6)
     # for label in ax.get_yticklabels(): label.set_fontsize(6)
-    graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs, colorbar=True,
-                   azdeg=azdeg, altdeg=45, blend_mode='alpha', alpha=0.7,
-                   extent=(e[0], e[-1], n[0], n[-1]),origin=origin)
+    graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs,
+                   azdeg=azdeg, altdeg=45, blend_mode='alpha', alpha=0.7, colorbar=True, cb_title=cb_title,
+                   extent=(e[0], e[-1], n[0], n[-1]), origin=origin)
     return fig
     

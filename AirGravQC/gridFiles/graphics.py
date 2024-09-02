@@ -260,7 +260,7 @@ def alpha_blend(rgb, intensity, alpha = 0.7):
 def imshow_hs(data, ax=None, cmap='geosoft', cmap_norm='equalize', hs=True, 
               zf=10, azdeg=45, altdeg=45, dx=1, dy=1, fraction=1.5, blend_mode='alpha', 
               alpha=0.7, contours=False, levels=32, colorbar=True, cb_contours=False, 
-              cb_ticks='linear', nSigma=1, **kwargs):
+              cb_ticks='linear', nSigma=1, cb_title='', **kwargs):
     """
     Display an array with optional hillshading and contours. The colormap can be
     normalised by equalisation or by clipping extremes (autolevels).
@@ -424,7 +424,11 @@ def imshow_hs(data, ax=None, cmap='geosoft', cmap_norm='equalize', hs=True,
         # add optional contour lines on colorbar
         if contours and cb_contours:
             cb1.add_lines(ct)
-            
+
+        # if units know, write to colorbar title
+        if not cb_title == '':
+            cb1.ax.set_title(cb_title)
+
         cb1.update_normal(im)
         
     # final show

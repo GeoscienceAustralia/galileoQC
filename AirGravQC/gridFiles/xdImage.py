@@ -71,6 +71,11 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         data_array = gut.maskGridByPolygon(data_array, mask_polygon, x_chan='x', y_chan='y')
     vmin = np.nan
     vmax = np.nan
+
+    if 'units' in data_array.attrs:
+        cb_title = data_array.attrs['units']
+    else:
+        cb_title = ''
     
     fd_mean = data_array.mean()
     fd_std = data_array.std()
@@ -87,7 +92,7 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
         data_array = data_array.rename({'E': 'x','N': 'y'})
     
     graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
-                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower')
+                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower', cb_title=cb_title)
 
 
 def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 

@@ -23,7 +23,7 @@ from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject,
     updateChannelAttributes)
 from AirGravQC.qualitycontrol.qualityAnalysis import *
 from AirGravQC.whizzPlots.whizzPlot import *
-from AirGravQC.gridFiles.gridfiles import (diff_n_image, display_grid, gridfile_to_xa, traceImages, checkTCratio, imageStats)
+from AirGravQC.gridFiles.gridfiles import (gridfile_to_xa)
 from AirGravQC.gridFiles.read_ers import *
 
 # Data management
@@ -44,7 +44,12 @@ from AirGravQC.whizzPlots.plotLinesOnGroundStns import plotLinesOnGroundStns
 # 2D Plotting
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.grid_n_image import grid_n_image
+from AirGravQC.gridFiles.display_grid import display_grid
+from AirGravQC.gridFiles.imageStats import imageStats
+from AirGravQC.gridFiles.traceImages import traceImages
+from AirGravQC.gridFiles.checkTCratio import checkTCratio
 from AirGravQC.gridFiles.xdImage import xdImage
+from AirGravQC.gridFiles.diff_n_image import diff_n_image
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.oddeven import updateLineTracks

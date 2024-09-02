@@ -68,10 +68,8 @@ def read_ers_image(ersFile, bandout=0):
 
     if nbands == 1:
         if precision == 'float64':
-            print('64 bit precision')
             zz = np.fromfile(imagefile, 'float64').reshape(nrows, ncells)
         elif precision == 'float32':
-            print('32 bit precision')
             zz = np.fromfile(imagefile, 'float32').reshape(nrows, ncells)
         else:
             print('unrecognised precision {}'.format(precision))
