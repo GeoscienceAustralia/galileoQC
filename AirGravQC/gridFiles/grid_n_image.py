@@ -17,8 +17,8 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], 
-    gridlines=True, method='neighbours', mask_polygon=[], numneighbours=1):
+def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], 
+    gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=0, numneighbours=1):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -49,11 +49,17 @@ def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan=''
     gridlines : Bool, optional
         If True (the default), then grid lines are drawn on the image, else not.
     method : string, optional
-        The gridding algorithm to use in interpolating the data. Only "scipy" available at present.
-        Default scipy `linear` method.
+        The gridding algorithm to use in interpolating the data. Available is the Verde nearest
+        neighbour method - "neighbours" and the SciPy GridData "linear" method. "neighbours" is
+        much faster if `pykdtree` is installed. Default `neighbours` method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+    mask_pixels : Integer, optional
+        If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
+        location will be masked out. Default 0.
+    numneighbours : Integer, optional
+        If method='neighbours', then this is the number of neighbours to average. Default 1.
 
     Returns
     -------
@@ -94,7 +100,8 @@ def grid_n_image(whizz_file, z_chans, grid_space, lines=[], e_chan='', n_chan=''
         my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, lines=lines, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
-        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method, mask_polygon=mask_polygon, numneighbours=numneighbours)
+        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method, mask_polygon=mask_polygon, 
+            mask_pixels=mask_pixels, numneighbours=numneighbours)
         xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)
         gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
         

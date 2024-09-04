@@ -18,7 +18,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def xarray_to_grid(my_data, grid_space, region=[], method='scipy', mask_polygon=[], numneighbours=5):
+def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_polygon=[], mask_pixels=0, numneighbours=5):
     """
     Interpolates `my_data` onto a regular grid.
 
@@ -34,10 +34,13 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy', mask_polygon=
     method : string, optional
         The gridding algorithm to use in interpolating the data. Available is the Verde nearest
         neighbour method - "neighbours" and the SciPy GridData "linear" method. "neighbours" is
-        much faster if `pykdtree` is installed. Default SciPy `linear` method.
+        much faster if `pykdtree` is installed. Default `neighbours` method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+    mask_pixels : Integer, optional
+        If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
+        location will be masked out. Default 0.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 5.
 
@@ -103,9 +106,9 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy', mask_polygon=
         tmpgrid = xr.DataArray(np.zeros((len(X), len(Y))), coords=[X, Y], dims=['x', 'y'])
         grid = tmpgrid.transpose()
 
-        X, Y = np.meshgrid(X, Y)  # 2D grid for interpolation
+        east, north = np.meshgrid(X, Y)  # 2D grid for interpolation
 
-        grid.values = griddata(list(zip(my_data[x_chan].data, my_data[y_chan].data)), my_data[z_chan].data, (X, Y), method='linear')
+        grid.values = griddata(list(zip(my_data[x_chan].data, my_data[y_chan].data)), my_data[z_chan].data, (east, north), method='linear')
 
     elif method == 'neighbours':
         if region == []:
@@ -127,6 +130,15 @@ def xarray_to_grid(my_data, grid_space, region=[], method='scipy', mask_polygon=
 
     if np.array(mask_polygon).size > 0:
         grid = gut.maskGridByPolygon(grid, mask_polygon, x_chan='x', y_chan='y')
+
+    if mask_pixels > 0:
+        mymask = vd.distance_mask(
+            (my_data[x_chan], my_data[y_chan]),
+            maxdist = grid_space * mask_pixels,
+            coordinates = (east, north),
+        )
+        grid = grid.where(mymask)
+
 
     grid.attrs['units'] = myunits
     grid.attrs['long_name'] = z_chan

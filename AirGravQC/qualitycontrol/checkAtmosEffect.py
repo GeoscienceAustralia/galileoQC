@@ -51,7 +51,7 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
         corr_units = g[flightLine][atmosCorr].attrs['Units']
         if corr_units == 'mGal':
             unit_scale = 10.0
-        elif corr_units == 'gu' or corr_units == 'µm/s/s':
+        elif corr_units == 'gu' or corr_units == 'µm/s/s' or corr_units == 'um/s/s':
             unit_scale = 1.0
         else:
             print('ERROR - correction units not recognised, expected mGal or µm/s/s (gu)')

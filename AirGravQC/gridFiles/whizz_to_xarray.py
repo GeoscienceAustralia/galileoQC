@@ -15,7 +15,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def whizz_to_xarray(whizz_file, z_chan, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[]):
+def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[]):
     """
     Return a point-located xArray Dataset of (northing, easting, z), over the `fiducials` dimension,
     from a whizz_file.

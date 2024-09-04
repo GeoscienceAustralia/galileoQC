@@ -204,7 +204,8 @@ def calcMeanTrack(lineGroup, easting, northing):
     return np.mean(track[idx1:idx2])
 
 
-def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', mask_polygon=[], numneighbours=1):
+def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', 
+    mask_polygon=[], mask_pixels=0, numneighbours=1):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
     sorted into two sets of odd and even lines. Each set is gridded and the difference
@@ -228,6 +229,11 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+    mask_pixels : Integer, optional
+        If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
+        location will be masked out. Default 0.
+    numneighbours : Integer, optional
+        If method='neighbours', then this is the number of neighbours to average. Default 5.
 
     Returns
     -------
@@ -270,9 +276,9 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
                         
     # Grid and difference the data sets
     even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion, method=method, 
-        mask_polygon=mask_polygon, numneighbours=numneighbours)
+        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours)
     odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion, method=method, 
-        mask_polygon=mask_polygon, numneighbours=numneighbours)
+        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours)
     d_grid = even_grid - odd_grid
 
     # Subtraction does not preserve attributes

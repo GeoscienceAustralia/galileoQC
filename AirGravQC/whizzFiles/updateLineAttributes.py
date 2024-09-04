@@ -73,7 +73,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
             print('One planned line updated.')
         elif no_plan:
             print('NO ACTION TAKEN ON LINE_TYPE - no plan file provided.')
-        elif line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA' or line_type == 'SGL_NSW':
+        elif line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA' or line_type == 'SGL_NSW' or line_type == 'NRG':
             print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
             print(f'Verifying planned line numbers against {planfile_str}.')
 
