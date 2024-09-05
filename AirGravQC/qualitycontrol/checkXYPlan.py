@@ -66,7 +66,13 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
         If present, the name of the channel containing the "known error" flag.
         This is reported against any error so that known errors can be distinguished
         from unknown errors.
+    needConvertToGeodetic : Bool, optional
+        If True, convert plan coordinates to geographic coordinates to match measured coordinates.
+    crs_epsg : pyproj crs, optional
+        Ideally an EPSG integer code, eg 7854. Default 0, must be a real code if needConvertToGeodetic.
     plot_flag : Bool, optional
+        If True, plot exceedances for each failed line.
+    verbose : Bool, optional
         If True, plot exceedances for each failed line.
 
     Returns
@@ -232,6 +238,8 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
         DESCRIPTION.
     dirn : TYPE
         DESCRIPTION.
+    geoCoords : Bool, optional
+        If True, provide 5 decimal places on axis labelling, else 0.
 
     Returns
     -------
