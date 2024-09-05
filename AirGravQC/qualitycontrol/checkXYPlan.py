@@ -15,7 +15,8 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=0, maxDistance=0, known='', plot_flag=False, verbose=False):
+def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, 
+    maxCounter=0, maxDistance=0, known='', needConvertToGeodetic=False, crs_epsg=0, plot_flag=False, verbose=False):
     """
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
@@ -105,6 +106,11 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
             total_num_excs = 0
             num_lines_unplanned = 0
 
+            if needConvertToGeodetic:
+                maxDistance = maxDistance / 110000.0
+                allowance = allowance / 110000.0
+                print('Performing analysis in geographic coordinates. Criteria converted from Cartesian.')
+                print(f'    Criteria: allowance = {allowance:.6f} deg, maxDistance = {maxDistance:.6f} deg.')
 
             if lines == []:
                 lines = gMeas.keys()
@@ -123,6 +129,8 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                     yM = np.array(gMeas[line][measY])
                     max_deviation = 0.0
 
+                    if needConvertToGeodetic:
+                        yP, xP = util.convertUTMtoGeo(crs_epsg, xP, yP)
                     if known != '':
                         exceedances_known = True
                         exc_known = np.array(gMeas[line][known])
@@ -131,10 +139,15 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                     # rotate to line of x ~ 0 using line direction in radians
                     # if abs(yP[-1] - yP[0]) > epsilon:
                     dirn = np.arctan2((yP[-1] - yP[0]), (xP[-1] - xP[0]))
+                    # print(f'dirn {dirn}')
                     # else:
                     #     dirn = np.pi / 2.0    
 
                     [x, y] = util._rotateCoords(xM - xP[0], yM - yP[0], dirn)
+                    # print(yP[-1], yP[0], xP[-1], xP[0])
+                    # print(yM[-1], yM[0], xM[-1], xM[0])
+                    # print(y[-1], y[0], x[-1], x[0])
+                    # print(maxDistance, allowance)
 
                     num_fids_in_exceedance = 0
                     exceedance_in_line = False
@@ -164,10 +177,16 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                                 end_x = xM[fid]
                                 end_y = yM[fid]
                                 len_exceedance = util._length([start_x, end_x], [start_y, end_y])[1]
+                                # print(f'line {line}: exceedance length {len_exceedance}')
                                 if util._exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance):
-                                    message += f'\nL {lineName} deviates more than {allowance} m for '
-                                    message += f'{num_fids_in_exceedance} fids ({len_exceedance:.0f} m), max exceedance = {max_deviation:.0f} m.'
-                                    message += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
+                                    if needConvertToGeodetic:
+                                        message += f'\nL {lineName} deviates more than {allowance:.4f} deg for '
+                                        message += f'{num_fids_in_exceedance} fids ({len_exceedance:.4f} deg), max exceedance = {max_deviation:.4f} deg.'
+                                        message += f'\n  From ({start_x:.4f} E {start_y:.4f} N) to ({end_x:.4f} E {end_y:.4f} N).'
+                                    else:
+                                        message += f'\nL {lineName} deviates more than {allowance} m for '
+                                        message += f'{num_fids_in_exceedance} fids ({len_exceedance:.0f} m), max exceedance = {max_deviation:.0f} m.'
+                                        message += f'\n  From ({start_x:.0f} E {start_y:.0f} N) to ({end_x:.0f} E {end_y:.0f} N).'
                                     total_num_excs += 1
                                     if this_exc_known:
                                         number_known += 1
@@ -182,9 +201,9 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                     num_lines_exceeded += 1
                     if plot_flag:
                         if abs(np.cos(dirn)) > 0.5:
-                            _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, lineName, dirn)
+                            _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, lineName, dirn, geoCoords=needConvertToGeodetic)
                         else:
-                            _plot_exceeding_line(x, y, yP, xP, yM, xM, measY, measX, allowance, line, lineName, dirn)
+                            _plot_exceeding_line(x, y, yP, xP, yM, xM, measY, measX, allowance, line, lineName, dirn, geoCoords=needConvertToGeodetic)
 
             message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
             message = f'\n{total_num_excs} horizontal exceedances.\n' + message # 5 DEC
@@ -195,7 +214,7 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                 plt.show()
 
 
-def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn):
+def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn, geoCoords=False):
     """
     Plots a standard exceedance figure for checkXYPlan().
 
@@ -228,7 +247,10 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
     ax.plot(x, -allowance * np.ones(y.shape), 'r')
     ax.plot(x, allowance * np.ones(y.shape), 'r')
     ax.set_xlim(x[0], x[-1])
-    ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    if geoCoords:
+        ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.5f}'))
+    else:
+        ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax.set_xlabel('deviation from planned line [m]', fontsize = 8)
     ax.set_ylabel('distance along line', fontsize = 8)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
@@ -238,8 +260,12 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
     ax2 = fig.add_subplot(2,1,2)
     ax2.plot(xP, yP, color='darkorange', label='Plan', lw=1.5, alpha=0.7)
     ax2.plot(xM, yM, color='blue', label='Measured', lw=1.5, alpha=0.7)
-    ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    ax2.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    if geoCoords:
+        ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.5f}'))
+        ax2.yaxis.set_major_formatter(StrMethodFormatter('{x:,.5f}'))
+    else:
+        ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+        ax2.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax2.set_xlim(xM[0], xM[-1])
     ax2.set_ylabel(f'{measY} [m]', fontsize=8)
     ax2.set_xlabel(f'{measX} [m]', fontsize=8)

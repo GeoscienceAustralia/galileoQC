@@ -224,7 +224,7 @@ def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDist
     Bool.
 
     """
-    if maxCounter < 1 and maxDistance < 1:
+    if maxCounter < 1 and maxDistance < 1.0E-6:
         return False
     if maxCounter > 0:
         if num_fids_in_exceedance > maxCounter:
@@ -441,4 +441,28 @@ def controls_nineteen(all_lines):
     return trav_strs, ctrl_strs
 
 
+def convertUTMtoGeo(crs_epsg, x_utm, y_utm):
+    """
+    Return the latitude and longitude for projected coordinates with a common datum.
+
+    Parameters
+    ----------
+    crs_epsg : Integer
+        The common datum CRS EPSG code.
+    x_utm : Float
+        The projected x or easting.
+    y_utm : Float
+        The projected y or northing.
+
+    Returns
+    -------
+    (latitude, longitude) : two Floats
+
+    """
+    from pyproj import CRS
+    from pyproj import Transformer
+
+    mycrs = CRS.from_epsg(crs_epsg)
+    proj = Transformer.from_crs(mycrs, mycrs.geodetic_crs)
+    return proj.transform(x_utm, y_utm)
 
