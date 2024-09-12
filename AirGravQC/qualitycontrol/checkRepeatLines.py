@@ -8,10 +8,10 @@ import h5py
 import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 import matplotlib.ticker as tkr
+from scipy import interpolate
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
-import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.utility.utility as util
 
@@ -70,7 +70,6 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
             g = f[groupName]['Lines']
             if x == '':
                 x = f[groupName]['CoordinateFrame'].attrs['XChannel']
-                # north = f[groupName]['CoordinateFrame'].attrs['YChannel']
             if z == '':
                 z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
             all_flightLines = list(g.keys())
@@ -121,13 +120,17 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                     keepbig = xd > xBase[0]
                     keep = keepsml & keepbig
 
-                    # interpolate data
-                    (yOut, _) = gw.interpolateLine(xd[keep]-xBase[0], yd[keep], xBase-xBase[0], plot_flag=False)
-                    (zOut, _) = gw.interpolateLine(xd[keep]-xBase[0], zd[keep], xBase-xBase[0], plot_flag=False)
+                    # interpolate data (last xBase argument is just a dummy)
+                    spl = interpolate.splrep(xd[keep]-xBase[0], yd[keep], k=3, s=0)
+                    yOut = interpolate.splev(xBase-xBase[0], spl)
+                    spl = interpolate.splrep(xd[keep]-xBase[0], zd[keep], k=3, s=0)
+                    zOut = interpolate.splev(xBase-xBase[0], spl)
+                    vec_len = xBase.shape[0]
 
-                    xData[lineCount, 0:vec_len] = xBase[1:]
+                    xData[lineCount, 0:vec_len] = xBase
                     yData[lineCount, 0:vec_len] = yOut
                     zData[lineCount, 0:vec_len] = zOut
+
                     lineCount += 1
                     # In case the line is in more than one geoWhizz file
                     temp_repeats.remove(line)
@@ -136,7 +139,6 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
     _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, yData, zData, channel, repeatLines, z, chan_z_units, chan_y_label, chan_y_units)#, baseLine=baseLine)
             
     return
-
 
 def reportTrackDirection(surveygroup, line, east='', north=''):
     if east == '':

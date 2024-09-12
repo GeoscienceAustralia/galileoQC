@@ -9,7 +9,8 @@ import h5py
 import matplotlib.pyplot as plt
 from scipy import interpolate
 
-import AirGravQC.gridFiles.gridfiles as grd
+# import AirGravQC.gridFiles.gridfiles as grd
+import AirGravQC.gridFiles.read_ers as grd
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config
 
@@ -241,12 +242,15 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
     return
 
     
-def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
+def interpolateLine(timeIn, dataIn, timeOut, spare=[]):
     """
     Interpolates dataIn, sampled at timeIn, onto the samples timeOut.
     These three input arrays are pre-processed to ensure that timeIn
     and timeOut are monotonically increasing, whilst keeping dataIn
     synchronised with timeIn, and spareOut synchronised with timeOut.
+
+    For use interpolating position data (referenced to time or position)
+    along a flown survey line to positions on a planned survey line.
 
     Parameters
     ----------
@@ -258,9 +262,6 @@ def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
         The independent variable to interpolate onto.
     spare : 1D numpy float array
         To be kept synchronised with timeOut and returned.
-    plot_flag : Bool, optional
-        If True, plot the np.diff() of dataIn and timeIn.
-        Default False.
 
     Returns
     -------
@@ -271,42 +272,137 @@ def interpolateLine(timeIn, dataIn, timeOut, spare=[], plot_flag=False):
 
     """
     
-    timeIn = timeIn[np.logical_not(np.isnan(dataIn))]
-    dataIn = dataIn[np.logical_not(np.isnan(dataIn))]
-    spareOut = spare
-    # print(np.min(np.diff(timeIn)), np.max(np.diff(timeIn)))
-    # model = interpolate.InterpolatedUnivariateSpline(timeIn, dataIn)
-    # return model(timeOut)
+    if False:
+        # timeIn is expected to be a regular fiducial without any NaNs
+        # so just clean up any in dataIn, keeing timeIn synchronised.
+        timeIn2 = timeIn[np.logical_not(np.isnan(dataIn))]
+        dataIn2 = dataIn[np.logical_not(np.isnan(dataIn))]
+        spareOut = spare
 
-    min_length = 100
-    if timeIn.size < min_length or dataIn.size < min_length or timeOut.size < min_length:
-        out = np.zeros(timeOut.shape)
-        out[:] = np.nan
-        return out, spare
-    if len(spare) < min_length:
-        spare = []
+        # Very short sets of data are useless.
+        min_length = 100
+        if timeIn2.size < min_length or dataIn2.size < min_length or timeOut.size < min_length:
+            out = np.zeros(timeOut.shape)
+            out[:] = np.nan
+            return out, spare
+        if len(spare) < min_length:
+            spare = []
 
-    (timeIn_trim, dataIn_trim) = _trim_monotonic(timeIn, sync=dataIn)
-    (timeOut_trim, spare_trim) = _trim_monotonic(timeOut, sync=spare)
-    if len(spare) > min_length:
-        spareOut = spare_trim
+        # Rarely, but occasionally, the data are not monotonic (e.g. a helicopter can fly backwards).
+        (timeIn_trim, dataIn_trim) = _trim_monotonic(timeIn2, sync=dataIn2)
+        (timeOut_trim, spare_trim) = _trim_monotonic(timeOut, sync=spare)
+        if len(spare) > min_length:
+            spareOut = spare_trim
 
-    if plot_flag:
-        print(f'Len t: {len(timeIn)}; Len d: {len(dataIn)}')
-        print(f'Shapes: dataIn {dataIn.shape}, {np.diff(dataIn).shape}; timeIn {timeIn.shape}')
-        plt.plot(timeIn, dataIn, 'r', timeIn[1:], np.diff(dataIn), 'b', timeIn[1:], np.diff(timeIn), 'g')
-        plt.show()
-    spl = interpolate.splrep(timeIn_trim, dataIn_trim, k=3, s=0)
-    # out = interpolate.splev(timeOut, spl)
-    out = interpolate.splev(timeOut_trim, spl)
-    return out, spareOut
+        # Sometimes measured data extend beyond the end of the planned line, so trim back.
+        timeOut_trim, spare_trim = _trim_ends(timeIn_trim, timeOut_trim, spare_trim)
+        if len(spare) > min_length:
+            spareOut = spare_trim
+
+        spl = interpolate.splrep(timeIn_trim, dataIn_trim, k=3, s=0)
+        out = interpolate.splev(timeOut_trim, spl)
+
+    # clean out 'nan's'
+    good = ~np.isnan(timeIn + dataIn)
+    timeIn = timeIn[good]
+    dataIn = dataIn[good]
+    if timeIn.size < 10:
+        print(f'ERROR - after trimming NaNs, the data vectors are too short for analysis.')
+        return
+
+    # ensure ordered in increasing x
+    if timeIn[1] < timeIn[0]:
+        timeIn = timeIn[::-1]
+        dataIn = dataIn[::-1]
+    if timeOut[1] < timeOut[0]:
+        timeOut = timeOut[::-1]
+        spare = spare[::-1]
+    
+    # trim varying data and store
+    keepsml = timeIn < timeOut[-1]
+    keepbig = timeIn > timeOut[0]
+    keep = keepsml & keepbig
+    timeIn = timeIn[keep]
+    dataIn = dataIn[keep]
+    if timeIn.size < 10:
+        print(f'ERROR - after trimming measured data, the vectors are too short for analysis.')
+        return
+
+    # trim base data and store
+    keepsml = timeOut < timeIn[-1]
+    keepbig = timeOut > timeIn[0]
+    keep = keepsml & keepbig
+    timeOut = timeOut[keep]
+    spare = spare[keep]
+    if timeOut.size < 10:
+        print(f'ERROR - after trimming plan data, the vectors are too short for analysis.')
+        return
+
+    spl = interpolate.splrep(timeIn, dataIn, k=3, s=0)
+    out = interpolate.splev(timeOut, spl)
+
+    # print(timeOut.shape, out.shape, timeIn.shape, dataIn.shape, spare.shape)
+
+    # vec_len = len(timeOut) - 1
+    # plt.plot(timeOut, out, 'g', timeIn, dataIn, 'b', timeOut, spare, 'm')
+
+    # xData[0:vec_len] = timeOut[1:]
+    # yData[0:vec_len] = out[1:]
+
+    return out, spare, timeOut
+
+
+def _trim_ends(x0, x1, y1):
+    """
+    Remove elements from x1 (and corresponding elements from y1)
+    outside the range [x0[0], x0[-1]].
+
+    Parameters
+    ----------
+    x0 : 1D numpy float array
+        The independent variable (plan) of the inputs.
+    x1 : 1D numpy float array
+        The independent variable to be trimmed to within the range of x0.
+    y1 : 1D numpy float array
+        The dependent variable to interpolate onto.
+
+    Returns
+    -------
+    newtime : 1D numpy float array
+        The values of dataIn interpolated onto timeOut.
+    newdata : 1D numpy float array
+        To be kept synchronised with timeOut and returned.
+
+    """
+    max_allowed = np.max([x0[0], x0[-1]])
+    min_allowed = np.min([x0[0], x0[-1]])
+    tmptime = x1[x1 > min_allowed]
+    tmpdata = y1[x1 > min_allowed]
+    newtime = tmptime[tmptime < max_allowed]
+    newdata = tmpdata[tmptime < max_allowed]
+
+    return newtime, newdata
 
 
 def _trim_monotonic(data_in, sync=[]):
     """
-    Force input to be monotonic by removing samples; keep
+    Force data_in to be monotonic by removing samples; keep
     sync aligned by removing corresponding samples there 
     as well.
+
+    Parameters
+    ----------
+    data_in : 1D numpy float array
+        The independent variable (plan) of the inputs.
+    sync : 1D numpy float array, optional
+        Data to be kept synchronised with data_in.
+
+    Returns
+    -------
+    data_trim : 1D numpy float array
+        The values of data_in after monotonic trimming.
+    sync_out : 1D numpy float array
+        The sync data after removing samples corresponding to samples removed from data_in.
 
     """
     b = np.diff(data_in)

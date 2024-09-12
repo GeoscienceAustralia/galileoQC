@@ -6,18 +6,11 @@ Report the phase shift required to match two channels.
 import numpy as np
 import h5py
 from scipy.signal import correlate
+from scipy import interpolate
 import matplotlib.pyplot as plt
-# from scipy.signal import butter, lfilter
-# from matplotlib.ticker import StrMethodFormatter
-# import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
-import AirGravQC.whizzFiles.pointfiles as gw
-# import AirGravQC.gridFiles.read_ers as ers
-# import AirGravQC.gridFiles.gridfiles as grd
-# import AirGravQC.utility.utility as util
-# import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
 
@@ -90,8 +83,9 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
             count += 1
 
             time = np.arange(dt[0], dt[-1], 0.1)
+
             # Now interpolate through gaps by cubic spline
-            (xcorrInt, _) = gw.interpolateLine(dt, xcorr, time)
+            xcorrInt = _interpolateCorr(dt, xcorr, time)#  gw.interpolateLine(dt, xcorr, time, time)
             recovered_time_shift2 = time[xcorrInt.argmax()]
             if verbose:
                 print(f'Line {line}: Recovered time shift = {recovered_time_shift2 / fs:.1f} sec.')
@@ -110,4 +104,68 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
                 plt.show()
                 print(f'Offset MEAN = {np.mean(offsets):.2f}; STD = {np.std(offsets):.3f}')
         
+
+def _interpolateCorr(xbase, ybase, xnew):
+    """
+    Interpolates `ybase`, sampled at `xbase`, onto the new vector `xnew`.
+    These three input arrays are pre-processed to ensure that `xbase`
+    and `xnew` are monotonically increasing, whilst keeping `ybase`
+    synchronised with `xbase`.
+
+    For use interpolating phase correlations in `checkPhase`.
+
+    Parameters
+    ----------
+    xbase : 1D numpy float array
+        The independent variable of the inputs to be interpolated.
+    ybase : 1D numpy float array
+        The dependent variable of the inputs to be interpolated.
+    xnew : 1D numpy float array
+        The independent variable to interpolate onto.
+
+    Returns
+    -------
+    out : 1D numpy float array
+        The values of ybase interpolated onto xnew.
+
+    """
+    # clean out 'nan's'
+    good = ~np.isnan(xbase + ybase)
+    xbase = xbase[good]
+    ybase = ybase[good]
+    if xbase.size < 10:
+        print(f'ERROR - after trimming NaNs, the data vectors are too short for analysis.')
+        return
+
+    # ensure ordered in increasing x
+    if xbase[1] < xbase[0]:
+        xbase = xbase[::-1]
+        ybase = ybase[::-1]
+    if xnew[1] < xnew[0]:
+        xnew = xnew[::-1]
+    
+    # trim varying data and store
+    keepsml = xbase < xnew[-1]
+    keepbig = xbase > xnew[0]
+    keep = keepsml & keepbig
+    xbase = xbase[keep]
+    ybase = ybase[keep]
+    if xbase.size < 10:
+        print(f'ERROR - after trimming measured data, the vectors are too short for analysis.')
+        return
+
+    # trim base data and store
+    keepsml = xnew < xbase[-1]
+    keepbig = xnew > xbase[0]
+    keep = keepsml & keepbig
+    xnew = xnew[keep]
+    if xnew.size < 10:
+        print(f'ERROR - after trimming plan data, the vectors are too short for analysis.')
+        return
+
+    spl = interpolate.splrep(xbase, ybase, k=3, s=0)
+    out = interpolate.splev(xnew, spl)
+
+    return out
+
         

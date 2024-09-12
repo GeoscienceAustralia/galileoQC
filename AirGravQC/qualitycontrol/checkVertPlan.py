@@ -7,10 +7,10 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
+from scipy import interpolate
 import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
-import AirGravQC.whizzFiles.pointfiles as gw
 import AirGravQC.utility.utility as util
 
 groupName = config.groupName
@@ -66,9 +66,6 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
     Returns
     -------
     None.
-
-    TODO: If maxCounter unspecified, and maxDistance is specified, test against maxDistance.
-          Use _exceedance_fail() to do this.
 
     """
     planfile = str(planPath)
@@ -131,8 +128,11 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                     
                     # make life easier by transforming to a 2D problem
                     dirn = np.arctan2((yM[-1] - yM[0]), (xM[-1] - xM[0]))
-                    (xm, ym) = util._rotateCoords(xM - xP[0], yM - yP[0], dirn)
-                    (xp0, yp0) = util._rotateCoords(xP - xP[0], yP - yP[0], dirn)
+
+                    xCentre = min(xP[0], xP[-1])
+                    yCentre = min(yP[0], yP[-1])
+                    (xm, ym) = util._rotateCoords(xM - xCentre, yM - yCentre, dirn)
+                    (xp0, yp0) = util._rotateCoords(xP - xCentre, yP - yCentre, dirn)
                     xp = xp0
                     yp = yp0
                     zp = zP
@@ -140,7 +140,11 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                     # interpolate (xm, zM) onto (xp, zmp)
                     if abs(xm[-1] - xm[0]) < abs(ym[-1] - ym[0]):
                         print('ERROR - expect xms > yms but this is not so.')
-                    (zmp, zM_trim) = gw.interpolateLine(xp, zp, xm, zM, plot_flag=False)
+                    (zmp, zM_trim, xm) = _interpolateVert(xp, zp, xm, zM)
+                    if zmp.size == 1 or zM_trim.size == 1 or xm.size == 1:
+                        print(f'    interpolation failed on line {line}.')
+                        continue
+
                     # calculate the deviation vector
                     z_dev = zM_trim - zmp
                 
@@ -187,7 +191,7 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                                     report += f' Known exceedance {report_known}.'
                                     this_exc_known = False
                     if plot_flag and line_flagged:
-                        if abs(np.cos(dirn)) > 0.5:
+                        if abs(np.cos(dirn)) > np.cos(np.pi/4.0):
                             _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, lineName, dirn)
                         else:
                             _plot_vert_exceedance(xm, z_dev, yP, zP, yM, zM, measY, measZ, allowance, line, lineName, dirn)
@@ -203,15 +207,91 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
             plt.show()
 
 
+def _interpolateVert(xbase, ybase, xnew, ynew):
+    """
+    Interpolates ybase, sampled at xbase, onto the samples xnew.
+    These three input arrays are pre-processed to ensure that xbase
+    and xnew are monotonically increasing, whilst keeping ybase
+    synchronised with xbase, and ynew synchronised with xnew.
+
+    For use interpolating y data along a flown survey line onto positions
+    on a planned survey line in preparation for comparison with planned y.
+
+    Parameters
+    ----------
+    xbase : 1D numpy float array
+        The independent variable of the inputs to be interpolated.
+    ybase : 1D numpy float array
+        The input dependent variable to be interpolated.
+    xnew : 1D numpy float array
+        The independent variable to interpolate onto.
+    ynew : 1D numpy float array
+        To be kept synchronised with xnew and returned.
+
+    Returns
+    -------
+    yout : 1D numpy float array
+        The values of ybase interpolated onto xnew.
+    ynew : 1D numpy float array
+        Synchronised with xnew (by trimming) and returned.
+
+    """
+    # clean out 'nan's'
+    good = ~np.isnan(xbase + ybase)
+    xbase = xbase[good]
+    ybase = ybase[good]
+    if xbase.size < 10:
+        print(f'ERROR - after trimming NaNs, the data vectors are too short for analysis.')
+        return np.array([0]), np.array([0]), np.array([0])
+
+    # ensure ordered in increasing x
+    if xbase[1] < xbase[0]:
+        xbase = xbase[::-1]
+        ybase = ybase[::-1]
+    if xnew[1] < xnew[0]:
+        xnew = xnew[::-1]
+        ynew = ynew[::-1]
+    
+    # trim base data and store
+    keepsml = xbase < xnew[-1]
+    keepbig = xbase > xnew[0]
+    keep = keepsml & keepbig
+    xbase = xbase[keep]
+    ybase = ybase[keep]
+    if xbase.size < 10:
+        print(f'ERROR - trimmed planned data are too few. xnew [{xnew[0]:0.1f}:{xnew[-1]:0.1f}]')
+        return np.array([0]), np.array([0]), np.array([0])
+
+    # trim new data and store
+    keepsml = xnew < xbase[-1]
+    keepbig = xnew > xbase[0]
+    keep = keepsml & keepbig
+    xnew = xnew[keep]
+    ynew = ynew[keep]
+    if xnew.size < 10:
+        print(f'ERROR - after trimming measured data, the vectors are too short for analysis.')
+        return np.array([0]), np.array([0]), np.array([0])
+
+    spl = interpolate.splrep(xbase, ybase, k=3, s=0)
+    yout = interpolate.splev(xnew, spl)
+
+    return yout, ynew, xnew
+
+
 def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn):
+
+    if xm[1] < xm[0]:
+        print(f'line {line}: xm decreasing.')
+    if xM[1] < xM[0]:
+        print(f'line {line}: xM decreasing.')
     fig = plt.figure()
     plot_title = f'Line {line} (plan: {planLine}); Bearing {dirn * 180 / np.pi:.1f} deg E'
     fig.suptitle(plot_title, fontsize=10)
     
     ax = fig.add_subplot(2,1,1)
-    ax.plot(xm[1:], z_dev, 'b', lw=0.6)
-    ax.plot(xm[1:], -allowance * np.ones(z_dev.shape), 'r')
-    ax.plot(xm[1:], allowance * np.ones(z_dev.shape), 'r')
+    ax.plot(xm, z_dev, 'b', lw=0.6)
+    ax.plot(xm, -allowance * np.ones(z_dev.shape), 'r')
+    ax.plot(xm, allowance * np.ones(z_dev.shape), 'r')
     ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
     ax.set_xlim(xm[0], xm[-1])
     ax.set_ylabel('deviation from planned drape [m]', fontsize=8)
@@ -221,14 +301,22 @@ def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, li
     ax.grid()
 
     ax2 = fig.add_subplot(2,1,2)
+
+    # Analysis was done without extrapolation so trim plot accordingly.
+    xminlim = np.max([np.min(xM), np.min(xP)])
+    xmaxlim = np.min([np.max(xM), np.max(xP)])
     ax2.plot(xP, zP, color='darkorange', label='Plan', lw=1.5, alpha=0.7)
     ax2.plot(xM, zM, color='blue', label='Measured', lw=1.5, alpha=0.7)
     ax2.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    ax2.set_xlim(xM[0], xM[-1])
+    ax2.set_xlim(xminlim, xmaxlim)
     ax2.set_ylabel(f'{measZ} [m]', fontsize=8)
     ax2.set_xlabel(f'{measX} [m]', fontsize=8)
     for label in ax2.get_xticklabels(): label.set_fontsize(6)
     for label in ax2.get_yticklabels(): label.set_fontsize(6)
     ax2.legend(fontsize=8)
     ax2.grid()
+    # The various rotations and swapping of x and y axes occasionally requires this.
+    if xM[1] < xM[0]:
+        ax2.invert_xaxis()
     return
+
