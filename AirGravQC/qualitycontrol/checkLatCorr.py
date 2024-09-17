@@ -18,7 +18,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
     
-def checkLatCorr(whizzFile, latCorr, latitude='', lines=[]):
+def checkLatCorr(whizzFile, latCorr, latitude='', lines=[], changeSign=False):
     """
     Subtracts the latitude correction in the data file from one calculated using
     Hinze et al (2005) and the latitude data in the data file. The min, max, mean
@@ -37,6 +37,10 @@ def checkLatCorr(whizzFile, latCorr, latitude='', lines=[]):
         default is to read the latitude field name from the Coordinate Frame.
     lines : Array{String}, optional
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+    changeSign : Bool, optional
+        Occasionally the `latCorr` channel is the latitude effect, which has the opposite
+        sign to the latitude correction. If changeSign = True, then `-latCorr` is used.
+        Default False.
 
     Returns
     -------
@@ -88,7 +92,10 @@ def checkLatCorr(whizzFile, latCorr, latitude='', lines=[]):
                 ax.plot(_normalGravity(lat_data))
                 plt.title('My Estimate')
                 
-            err_data = cor_data * unit_scale + _normalGravity(lat_data)
+            if changeSign:
+                err_data = cor_data * unit_scale - _normalGravity(lat_data)
+            else:
+                err_data = cor_data * unit_scale + _normalGravity(lat_data)
             diffMin[count] = np.min(err_data)
             diffMax[count] = np.max(err_data)
             diffMean[count] = np.mean(err_data)
