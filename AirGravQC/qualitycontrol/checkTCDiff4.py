@@ -15,7 +15,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
                             
 
-def checkTCDiff4(whizzFile, TCDiff4='', rawMag='', lines=[], limit = 0.02, nSamples = 3000, plot_flag = False, verbose=False):
+def checkTCDiff4(whizzFile, TCDiff4='', rawMag='', lines=[], limit=0.02, nSamples=3000, plot_flag=False, verbose=False):
     """
     Checks the total magnetic field fourth difference channel in a whizzFile
     against the specification that the peak to peak variation over a set
@@ -32,6 +32,8 @@ def checkTCDiff4(whizzFile, TCDiff4='', rawMag='', lines=[], limit = 0.02, nSamp
     rawMag : String, optional
         The name of the channel in whizzFile containing the raw magnetic data data.
         Default is ''; if both rawMag and TCDiff4 are '', then an error is reported.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     limit : Float, optional
         The maximum allowed peak to peak variation. Default = 0.02
     nSamples : Integer, optional
@@ -53,7 +55,7 @@ def checkTCDiff4(whizzFile, TCDiff4='', rawMag='', lines=[], limit = 0.02, nSamp
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         if lines == []:
-            lines = g.keys()
+            lines = list(g.keys())
         numLines = len(lines)
         for line in lines:
             if TCDiff4 == '':

@@ -16,7 +16,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
             
 
-def checkOverlaps(whizzFile, min_overlap = 7.6, lines = [], verbose=False, plot_flag=False):
+def checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag=False):
     """
     For every line in the file whizzFile, calculate the overlap with each other
     line that has the same prefix. Plot a map. Report overlaps.

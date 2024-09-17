@@ -16,7 +16,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
         
 
-def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y='', tolerance=10.0, known='', plot_flag=False):
+def checkHeading(whizzFile, nominalHeadings, headingchan='', x='', y='', tolerance=10.0, known='', lines=[], plot_flag=False):
     """
     Checks heading in degrees is within +/- tolerance (in degrees) of nominal (in degrees). Actually
     checks against `sin(nominalHeading +/- tolerance)`.
@@ -42,6 +42,8 @@ def checkHeading(whizzFile, nominalHeadings, lines = [], headingchan='', x='', y
         If present, the name of the channel containing the "known error" flag.
         This is reported against any error so that known errors can be distinguished
         from unknown errors.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
 

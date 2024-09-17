@@ -15,10 +15,10 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
         
         
-def checkFrobenius(whizzFile, lines = [], 
+def checkFrobenius(whizzFile, 
     il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', 
     cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', 
-    noiselimit=30.0, verbose=True, plot_flag=False):
+    noiselimit=30.0, lines=[], verbose=True, plot_flag=False):
     """
     Reports the noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. Here the noise is calculated by `_FTGeigen` as
@@ -28,10 +28,10 @@ def checkFrobenius(whizzFile, lines = [],
     ----------
     whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, to be checked.
-    lines : String list, optional.
-        The line numbers to be checked. Default is all lines in the whizzFile.
     noiselimit : Float
         The maximum allowable in-line noise on a line.
+    lines : String list, optional.
+        The line numbers to be checked. Default is all lines in the whizzFile.
 
     Returns
     -------

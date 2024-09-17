@@ -18,7 +18,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
     
 
-def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height='', time='', east_vel='', north_vel='', plot_flag=False):
+def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height='', time='', east_vel='', north_vel='', lines=[], plot_flag=False):
     """
     Subtracts the eotvos correction in the data file from one calculated using
     Hinze et al (2005) and the latitude and position data in the data file.
@@ -54,6 +54,10 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         The name of the geoWhizz field or channel containing the velocity in the
         north direction. The default ('') is to calculate this from the y and time
         channels.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
+    plot_flag : Bool, optional
+        If true, plot details where the difference is large. Summary plot is always done. Default False.
 
     Returns
     -------
@@ -86,7 +90,10 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
             print('ERROR - correction units not recognised, expected mGal or µm/s/s (gu)')
             return
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         diffMin = np.zeros((numLines,))
         diffMax = np.zeros((numLines,))
         diffMean = np.zeros((numLines,))
@@ -94,7 +101,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         lineNo = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             lat_data = rd.getLineData(g[line], latitude)
             x_data = rd.getLineData(g[line], x)
             y_data = rd.getLineData(g[line], y)

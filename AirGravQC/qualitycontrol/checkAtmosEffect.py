@@ -17,7 +17,7 @@ import AirGravQC.utility.utility as util
 
 groupName = config.groupName
 
-def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
+def checkAtmosEffect(whizzFile, atmosCorr, lines=[], GRS80_height=''):
     """
     Subtracts the atomspheric correction in the data file from one calculated using
     Hinze et al (2005) and the height data in the data file.
@@ -30,6 +30,8 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
         Name of a HDF5 Whizz file, including path and extension.
     atmosCorr : String
         The name of the geoWhizz field or channel containing the atmospheric correction.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     GRS80_height : String, optional
         The name of the geoWhizz field or channel containing the GRS80_height. The
         default is to read the altitudeChannel field name from the Coordinate Frame.
@@ -57,7 +59,10 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
             print('ERROR - correction units not recognised, expected mGal or µm/s/s (gu)')
             return
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         diffMin = np.zeros((numLines,))
         diffMax = np.zeros((numLines,))
         diffMean = np.zeros((numLines,))
@@ -65,7 +70,7 @@ def checkAtmosEffect(whizzFile, atmosCorr, GRS80_height=''):
         lineNo = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             ht_data = rd.getLineData(g[line], GRS80_height)
             cor_data = rd.getLineData(g[line], atmosCorr)
            

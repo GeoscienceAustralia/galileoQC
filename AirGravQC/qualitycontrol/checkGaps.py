@@ -11,7 +11,7 @@ import AirGravQC.config as config
 groupName = config.groupName
 
 
-def checkGaps(whizzFile, lines=[], ignored_chans=[], maxGapSec=0.0, maxNumGaps=0):
+def checkGaps(whizzFile, ignored_chans=[], maxGapSec=0.0, maxNumGaps=0, lines=[]):
     """
     Checks every dataset for each channel and each survey line in filePath for
     gaps, and reports all gaps found.
@@ -24,6 +24,8 @@ def checkGaps(whizzFile, lines=[], ignored_chans=[], maxGapSec=0.0, maxNumGaps=0
         The largest allowed gap measured in seconds. Default 0.0
     maxNumGaps : Integer, optional
         The maximum number of gaps allowed on any survey line. Default 0
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -36,11 +38,12 @@ def checkGaps(whizzFile, lines=[], ignored_chans=[], maxGapSec=0.0, maxNumGaps=0
         g = f[groupName]['Lines']
         lineGroups = list(g.values())
         channelNames = list(lineGroups[0].keys())
-        if lines == []:
-            lines = g.keys()
         num_lines_failed = 0
         total_num_lines = 0
         report = ''
+
+        if lines == []:
+            lines = list(g.keys())
 
         for line in lines:
             total_num_lines += 1

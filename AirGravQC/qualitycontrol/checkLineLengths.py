@@ -13,7 +13,7 @@ import AirGravQC.whizzFiles.retrieveData as rd
 groupName = config.groupName
     
 
-def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
+def checkLineLengths(whizzFile, min_len=50.0, measX='', measY='', lines=[]):
     """
     Checks that all lines in whizzFile are at least min_len km long.
 
@@ -29,6 +29,8 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
     measY : String, optional
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -45,9 +47,13 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY=''):
             measY = f[groupName]['CoordinateFrame'].attrs['YChannel']
         
         num_failed_lines = 0
-        for line in gMeas.keys():
-            xM = rd.getLineData(gMeas[line], measX)# np.array(gMeas[line][measX])
-            yM = rd.getLineData(gMeas[line], measY)#np.array(gMeas[line][measY])
+        
+        if lines == []:
+            lines = list(gMeas.keys())
+
+        for line in lines:
+            xM = rd.getLineData(gMeas[line], measX)
+            yM = rd.getLineData(gMeas[line], measY)
             line_length = util._displacement2(xM[0], xM[-1], yM[0], yM[-1])
             if line_length < min_len * 1000.0:
                 num_failed_lines += 1

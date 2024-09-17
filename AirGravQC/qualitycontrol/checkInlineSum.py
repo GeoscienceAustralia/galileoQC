@@ -15,7 +15,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=False, verbose=False):
+def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=False, lines=[], verbose=False):
     """
     Estimates the inline sum for each sample on each line in an FTG whizzFile.
     Plots the min, max, mean and stdev (units of eotvos) for each survey line
@@ -25,6 +25,18 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    inline1 : String, optional
+        The name of the channel containing the first inline gradient data. Default 'Inline1_raw'
+    inline2 : String, optional
+        The name of the channel containing the second inline gradient data. Default 'Inline2_raw'
+    inline3 : String, optional
+        The name of the channel containing the third inline gradient data. Default 'Inline3_raw'
+    dontfilter : Bool, optional
+        If True, do not filter the data before calculating the in-line sum. Default False
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
+    verbose : Bool, optional
+        If True, provide verbose printed reporting. Default False
 
     Returns
     -------
@@ -42,7 +54,10 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         chMin = np.zeros((numLines,))
         chMax = np.zeros((numLines,))
         chMean = np.zeros((numLines,))
@@ -50,11 +65,11 @@ def checkInlineSum(whizzFile, inline1='', inline2='', inline3='', dontfilter=Fal
         lineNo = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             data1 = rd.getLineData(g[line], inline1)
             data2 = rd.getLineData(g[line], inline2)
             data3 = rd.getLineData(g[line], inline3)
-            ils_BP = util._inLineSum(data1, data2, data3, dontfilter=dontfilter)
+            ils_BP = util._inLineSum(data1, data2, data3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=dontfilter)
             if verbose:
                 print(f'Line {line}, standard deviation of band-pass filtered in-line sum = {np.std(ils_BP):.2g}')
             lineNo[count] = line

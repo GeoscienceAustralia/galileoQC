@@ -15,7 +15,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
     
 
-def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noiseSpec=17.0, vertaccel='', vertvelocity='', vertdispl='', labelLines=False):
+def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noiseSpec=17.0, vertaccel='', vertvelocity='', vertdispl='', lines=[], labelLines=False):
     """
     For a Bell Air-FTG. For each line, reports the standard deviation of the in-line sums,
     and plots these as a scatter plot against the standard deviation of the vertical
@@ -41,6 +41,8 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
         The name of the channel containing the vertical velocity field. Default ''.
     vertdispl : String, optional
         The name of the channel containing the vertical velocity field. Default ''.
+    lines : String list, optional
+        The line numbers to be checked. Default is all lines in the whizzFile.
     labelLines : Bool, optional
         if True, label (with the line number) all points on the plot where the
         line failed the specification. Defaults to False
@@ -56,7 +58,10 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         projName = f[groupName].attrs['ProjectName']
-        numLines = len(g.items())
+
+        if lines == []:
+            lines = list(g.keys())
+        numLines = len(lines)
         accStd = np.zeros((numLines,))
         ilsStd = np.zeros((numLines,))
         lineNo = np.zeros((numLines,))
@@ -65,8 +70,7 @@ def ilsNoiseVturb(whizzFile, diagComponent1, diagComponent2, diagComponent3, noi
         labelt = []
         failed_lines = 0
         count = 0
-
-        for line in g.keys():
+        for line in lines:
             linegroup = g[line]
             if vertaccel != '':
                 accel = rd.getLineData(linegroup, vertaccel)

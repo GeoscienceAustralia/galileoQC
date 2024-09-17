@@ -15,7 +15,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkLineSeparation(whizzfile, nominalsep, lines=[], measX='', measY='', allowance=200.0, maxDistance=0, maxCounter=0, known='', plot_flag=False, verbose=False):
+def checkLineSeparation(whizzfile, nominalsep, measX='', measY='', allowance=200.0, maxDistance=0, maxCounter=0, known='', lines=[], plot_flag=False, verbose=False):
     """
     Reports exceedances of survey line separation for an airborne survey Whizz database.
     
@@ -31,8 +31,6 @@ def checkLineSeparation(whizzfile, nominalsep, lines=[], measX='', measY='', all
         measured data.
     nominalsep : Float
         The nominal (planned) line separation in metres.
-    lines : String list, optional.
-        The line numbers to be checked. Default is all lines in the whizzFile.
     measX : String, optional
         The name of the geoWhizz field or channel containing the measured x position. The
         default is to read the xChannel field name from the Coordinate Frame.
@@ -54,6 +52,8 @@ def checkLineSeparation(whizzfile, nominalsep, lines=[], measX='', measY='', all
         If present, the name of the channel containing the "known error" flag.
         This is reported against any error so that known errors can be distinguished
         from unknown errors.
+    lines : String list, optional.
+        The line numbers to be checked. Default is all lines in the whizzFile.
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line. Default False.
     verbose : Bool, optional

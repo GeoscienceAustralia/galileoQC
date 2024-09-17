@@ -83,6 +83,8 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
             ddz = g[all_flightLines[0]][z]
             if 'Units' in ddz.attrs.keys():
                 chan_z_units = ddz.attrs['Units']
+            else:
+                chan_z_units = ''
 
             # read the data into the arrays
             for line in all_flightLines:

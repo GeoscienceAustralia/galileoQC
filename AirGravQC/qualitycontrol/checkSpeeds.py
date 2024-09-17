@@ -20,7 +20,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
 
 
-def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', vel_east='', nominalSpeed=60.0, 
+def checkSpeeds(whizzFile, lines=[], xChannel='', yChannel='', tChannel='', vel_north='', vel_east='', nominalSpeed=60.0, 
     maxDuration=0.0, maxDistance=0.0, allowance=0.1, allowed_range=[], minSafeSpeed=42.0, known='', plot_flag=False):
     """
     Checks the data from Whizz HDF5 file for speed exceedances against a specification
@@ -46,6 +46,8 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     xChannel : String, optional
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
@@ -103,13 +105,13 @@ def checkSpeeds(whizzFile, xChannel='', yChannel='', tChannel='', vel_north='', 
             title_str += f'{project}'
         if block != '':
             title_str += f' {block}'
-        _reportSpeeds(g, maxDuration=maxDuration, maxDistance=maxDistance, xChannel=xChannel, yChannel=yChannel,
+        _reportSpeeds(g, lines=lines, maxDuration=maxDuration, maxDistance=maxDistance, xChannel=xChannel, yChannel=yChannel,
                 tChannel=tChannel, vel_north=vel_north, vel_east=vel_east, nominalSpeed=nominalSpeed, 
                      allowance=allowance, allowed_range=allowed_range, minSafeSpeed=minSafeSpeed, title_str=title_str, known=known,
                      plot_flag=plot_flag)
         
 
-def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChannel='Y',
+def _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X', yChannel='Y',
                 tChannel='time', vel_north='', vel_east='', nominalSpeed=60.0,
                 allowance=0.1, allowed_range=[], minSafeSpeed=42.0, title_str='', known='', plot_flag=False):
     """
@@ -138,6 +140,8 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
     ----------
     group : HDF5 Group
         The Whizz line group containing the survey line data.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     maxDuration : Float, optional
         The time in seconds over which the speed estimate is determined.
         The default is 0.0.
@@ -191,7 +195,9 @@ def _reportSpeeds(group, maxDuration=0.0, maxDistance=0.0, xChannel='X', yChanne
     total_num_lines = 0
     report = ''
 
-    lines = list(group.keys())
+    if lines == []:
+        lines = list(group.keys())
+
     total_num_lines = len(lines)
 
     exceedances_known = False

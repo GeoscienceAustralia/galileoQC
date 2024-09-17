@@ -15,7 +15,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
     
-def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tChannel='', vertaccel='', vertvelocity='', vertdispl='', verbose=False, plot_flag=False):
+def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tChannel='', vertaccel='', vertvelocity='', vertdispl='', lines=[], verbose=False, plot_flag=False):
     """
     Reports the high frequency noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. See Mark Dransfield's documentation for details of method.
@@ -26,8 +26,6 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
     ----------
     whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, to be checked.
-    lines : String list, optional
-        The line numbers to be checked. Default is all lines in the whizzFile.
     noiselimit : Float
         The maximum allowable high frequency noise on a line.
     cutoffs : Array of Float, optional
@@ -41,6 +39,8 @@ def checkHighFreq(whizzFile, lines=[], noiseLimit=50, channels=[], cutoffs=[0.15
         The name of the channel containing the vertical velocity field. Default ''.
     vertdispl : String, optional
         The name of the channel containing the vertical velocity field. Default ''.
+    lines : String list, optional
+        The line numbers to be checked. Default is all lines in the whizzFile.
     verbose : Bool, optional
         If True, report status of all overlaps, else only report errors. Default False.
     plot_flag : Bool, optional

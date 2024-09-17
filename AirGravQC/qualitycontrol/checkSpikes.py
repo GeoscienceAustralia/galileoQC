@@ -20,6 +20,8 @@ def checkSpikes(whizzFile, channels=[], lines=[], numStd = 8.0, window=0, verbos
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
     channels : String List
         List of field names from the database to be checked.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     numStd : Float, optional
         maximum allowed number of standard deviations allowed. The default is 8.0.
 
@@ -34,7 +36,7 @@ def checkSpikes(whizzFile, channels=[], lines=[], numStd = 8.0, window=0, verbos
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         if lines == []:
-            lines = g.keys()
+            lines = list(g.keys())
         numLines = len(lines)
         if channels == []:
             lineGroups = list(g.values())

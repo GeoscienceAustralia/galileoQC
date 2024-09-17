@@ -49,16 +49,18 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
     """
     with h5py.File(whizzFile, 'r') as f:
         g = f[groupName]['Lines']
-        numLines = len(g.items())
+
+        if lines == []:
+            lines = list(g.keys())
+        numLines = len(lines)
         offsets = np.zeros((numLines,))
         count = 0
         # TODO: trap case where tChannel does not exist and report "number of samples"
-        if lines == []:
-            lines = g.keys()
         if tChannel == '':
             tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
 
         for line in lines:
+            print(f'analysing {line} of {numLines}.')
             linegroup = g[line]
             A = rd.getLineData(linegroup, channel1)
             B = rd.getLineData(linegroup, channel2)

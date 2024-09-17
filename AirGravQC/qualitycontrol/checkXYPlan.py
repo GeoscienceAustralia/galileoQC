@@ -105,7 +105,11 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                 measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
             if measY == '':
                 measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
-            numLines = len(gMeas.items())
+
+            if lines == []:
+                lines = list(gMeas.keys())
+
+            numLines = len(lines)
 
             message = ''
             num_lines_exceeded = 0
@@ -117,9 +121,6 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                 allowance = allowance / 110000.0
                 print('Performing analysis in geographic coordinates. Criteria converted from Cartesian.')
                 print(f'    Criteria: allowance = {allowance:.6f} deg, maxDistance = {maxDistance:.6f} deg.')
-
-            if lines == []:
-                lines = gMeas.keys()
 
             for line in lines:
                 gLineMeas = gMeas[line]

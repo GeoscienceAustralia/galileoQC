@@ -18,7 +18,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
     
-def checkLatCorr(whizzFile, latCorr, latitude=''):
+def checkLatCorr(whizzFile, latCorr, latitude='', lines=[]):
     """
     Subtracts the latitude correction in the data file from one calculated using
     Hinze et al (2005) and the latitude data in the data file. The min, max, mean
@@ -35,6 +35,8 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
     latitude : String, optional
         The name of the geoWhizz field or channel containing the latitude. The
         default is to read the latitude field name from the Coordinate Frame.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -60,7 +62,10 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
             print('ERROR - correction units not recognised, expected mGal or µm/s/s (gu)')
             return
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         diffMin = np.zeros((numLines,))
         diffMax = np.zeros((numLines,))
         diffMean = np.zeros((numLines,))
@@ -68,7 +73,7 @@ def checkLatCorr(whizzFile, latCorr, latitude=''):
         lineNo = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             lat_data = rd.getLineData(g[line], latitude)
             cor_data = rd.getLineData(g[line], latCorr)
             if line == '8474.0':

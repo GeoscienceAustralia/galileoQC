@@ -12,7 +12,7 @@ import AirGravQC.whizzFiles.retrieveData as rd
 groupName = config.groupName
 
 
-def checkConstantSlope(whizzFile, channels=[]):
+def checkConstantSlope(whizzFile, lines=[], channels=[]):
     """
     Checks for constant slope (`np.diff`) in all the given channels of data.
     
@@ -20,6 +20,8 @@ def checkConstantSlope(whizzFile, channels=[]):
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
     channels : String List
         List of channel names from the database to be checked.
 
@@ -37,7 +39,11 @@ def checkConstantSlope(whizzFile, channels=[]):
             channels = list(lineGroups[0].keys())
         data_is_good = True
         report = ''
-        for line in g.keys():
+
+        if lines == []:
+            lines = list(g.keys())
+
+        for line in lines:
             for channel in channels:
                 data = rd.getLineData(g[line], channel)
                 deriv = np.diff(data, n = 1)

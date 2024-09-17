@@ -73,7 +73,10 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         projName = f[groupName].attrs['ProjectName']
-        numLines = len(g.items())
+
+        if lines == []:
+            lines = list(g.keys())
+        numLines = len(lines)
         turbMean = np.zeros((numLines,))
         errNEmean = np.zeros((numLines,))
         errUVmean = np.zeros((numLines,))
@@ -92,8 +95,6 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         labelt = []
         failed_lines = 0
 
-        if lines == []:
-            lines = g.keys()
         for line in lines:
             turb = rd.getLineData(g[line], turbulence)
             if need_calc:

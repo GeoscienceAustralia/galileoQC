@@ -38,6 +38,8 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
         The maximum VDOP allowed, default 6
     max_hdop : Integer, optional
         The maximum HDOP allowed, default 6
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -53,10 +55,12 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
         projName = f[groupName].attrs['ProjectName']
         xchan = f[groupName]['CoordinateFrame'].attrs['XChannel']
         ychan = f[groupName]['CoordinateFrame'].attrs['YChannel']
-        if lines == []:
-            lines = g.keys()
 
         error_count = 0
+
+        if lines == []:
+            lines = list(g.keys())
+
         for line in lines:
             x = rd.getLineData(g[line], xchan)
             y = rd.getLineData(g[line], ychan)

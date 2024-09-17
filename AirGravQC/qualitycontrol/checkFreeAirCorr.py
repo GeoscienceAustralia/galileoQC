@@ -18,7 +18,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
                     
 
-def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
+def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[]):
     """
     Subtracts the free-air correction in the data file from one calculated using
     Hinze et al (2005) and the latitude and height data in the data file.
@@ -37,6 +37,8 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
     GRS80_height : String, optional
         The name of the geoWhizz field or channel containing the GRS80_height. The
         default is to read the altitudeChannel field name from the Coordinate Frame.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -64,7 +66,10 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
             print('ERROR - correction units not recognised, expected mGal or µm/s/s (gu)')
             return
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         diffMin = np.zeros((numLines,))
         diffMax = np.zeros((numLines,))
         diffMean = np.zeros((numLines,))
@@ -72,7 +77,7 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height=''):
         lineNo = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             lat_data = rd.getLineData(g[line], latitude)
             ht_data = rd.getLineData(g[line], GRS80_height)
             cor_data = rd.getLineData(g[line], faCorr)
