@@ -205,7 +205,7 @@ def calcMeanTrack(lineGroup, easting, northing):
 
 
 def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', 
-    mask_polygon=[], mask_pixels=0, numneighbours=1):
+    mask_polygon=[], mask_pixels=1, numneighbours=1):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
     sorted into two sets of odd and even lines. Each set is gridded and the difference
@@ -231,7 +231,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         within the polygon defined by it.
     mask_pixels : Integer, optional
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
-        location will be masked out. Default 0.
+        location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 5.
 

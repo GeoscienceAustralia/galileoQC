@@ -18,7 +18,7 @@ projectName = config.projectName
 
 
 def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], 
-    gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=0, numneighbours=1):
+    gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -57,7 +57,7 @@ def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan
         within the polygon defined by it.
     mask_pixels : Integer, optional
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
-        location will be masked out. Default 0.
+        location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 1.
 

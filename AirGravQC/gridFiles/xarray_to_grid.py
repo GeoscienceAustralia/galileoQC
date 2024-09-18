@@ -18,7 +18,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_polygon=[], mask_pixels=0, numneighbours=5):
+def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=5):
     """
     Interpolates `my_data` onto a regular grid.
 
@@ -40,7 +40,7 @@ def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_pol
         within the polygon defined by it.
     mask_pixels : Integer, optional
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
-        location will be masked out. Default 0.
+        location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 5.
 

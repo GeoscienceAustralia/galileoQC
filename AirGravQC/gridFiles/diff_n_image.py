@@ -38,7 +38,7 @@ import AirGravQC.gridFiles.gridutility as gut
 
 # GRID REPORTING
 
-def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbours', mask_polygon=[], mask_pixels=0, numneighbours=1):
+def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1):
     """
     Subtracts the data in `channel2` from those in `channel1`, then grids and images that difference.
 
@@ -57,7 +57,7 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbou
         within the polygon defined by it.
     mask_pixels : Integer, optional
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
-        location will be masked out. Default 0.
+        location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 5.
 
