@@ -12,7 +12,7 @@ import AirGravQC.whizzFiles.retrieveData as rd
 groupName = config.groupName
 
 
-def checkConstantSlope(whizzFile, lines=[], channels=[]):
+def checkConstantSlope(whizzFile, *, lines=[], channels=[]):
     """
     Checks for constant slope (`np.diff`) in all the given channels of data.
     

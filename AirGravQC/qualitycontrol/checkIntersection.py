@@ -103,7 +103,7 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
                         num_failed_intersections += 1
                         # print(dh)
                         bc_deg = bear_ctrl * 180.0 / np.pi
-                        report += f'\n  {linet} : {linec} [bearing={bc_deg:.1f}] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}'
+                        report += f'\n  {linet} : {linec} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}'
                         if z_units != '':
                             report += ' ' + z_units
                         report += '.'

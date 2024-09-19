@@ -16,7 +16,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False):
+def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False):
     """
     Reports exceedances of actual vertical position from planned vertical positions
     (stored in a plan file) for an airborne survey Whizz database.
@@ -126,6 +126,13 @@ def checkVertPlan(planPath, measPath, lines=[], planX='', planY='', planZ='', me
                         exc_known = np.array(gMeas[line][known])
                         report_known = -1
                     
+                    # Occasionally, some survey lines are flown at constant height,
+                    # and the planned drape is all NaNs.
+                    good = np.logical_not(np.isnan(zP))
+                    if zP[good].size == 0:
+                        print(f'Line {line} planned drape is all NaNs; skipping to next line.')
+                        continue
+
                     # make life easier by transforming to a 2D problem
                     dirn = np.arctan2((yM[-1] - yM[0]), (xM[-1] - xM[0]))
 
@@ -237,7 +244,13 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
 
     """
     # clean out 'nan's'
-    good = ~np.isnan(xbase + ybase)
+    # good = ~np.isnan(xbase + ybase)
+    good = np.logical_not(np.isnan(xbase + ybase))
+    # if xbase[good].size < 10:
+    #     print(good)
+    #     print(xbase)
+    #     print(ybase)
+    #     print(xbase.size, ybase.size, len(good), xbase[good].size)
     xbase = xbase[good]
     ybase = ybase[good]
     if xbase.size < 10:
