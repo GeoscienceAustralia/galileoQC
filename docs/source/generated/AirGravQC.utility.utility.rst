@@ -1,4 +1,4 @@
-AirGravQC.utility.utility
+﻿AirGravQC.utility.utility
 =========================
 
 .. automodule:: AirGravQC.utility.utility
@@ -10,6 +10,7 @@ AirGravQC.utility.utility
    
       controls_lessthan_1000
       controls_nineteen
+      convertUTMtoGeo
       e2norm
       getLineNumberInGroup
       getPlannedLine

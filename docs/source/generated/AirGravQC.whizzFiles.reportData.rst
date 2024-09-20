@@ -1,4 +1,4 @@
-AirGravQC.whizzFiles.reportData
+﻿AirGravQC.whizzFiles.reportData
 ===============================
 
 .. automodule:: AirGravQC.whizzFiles.reportData
@@ -8,6 +8,7 @@ AirGravQC.whizzFiles.reportData
 
    .. autosummary::
    
+      reportChannels
       reportFlights
       reportSampling
       reportWhizz
