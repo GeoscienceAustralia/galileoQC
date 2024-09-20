@@ -7,7 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from pathlib import Path
-import colorcet as cc
 import matplotlib.ticker as tkr
 
 import AirGravQC.gridFiles.graphics as graphics
@@ -18,7 +17,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
                    hs=True, azdeg=45, ax=None, origin='upper', cb_title=''):
     """
@@ -37,7 +36,7 @@ def graphicsShaded(e, n, z, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     mytitle : String
         The figure title.
     colormap : Colormap, optional
-        A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
+        A colour map, eg cc.m_CET_L9. The default is config.qc_colormap.
     cmap_norm : String, optional
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
         (equlaization stretch); 'auto'. The default is 'nonorm'.

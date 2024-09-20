@@ -1,6 +1,6 @@
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
-import colorcet as cc
+import AirGravQC.config as config
 
 
 def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
@@ -40,4 +40,4 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     predy = g0 - yyy / xxx * tx
     predErr = predy - gy
 
-    xdImage(predErr, plotTitle, colormap=cc.m_CET_L9, cmap_norm='no', hs=False, azdeg=90)
+    xdImage(predErr, plotTitle, colormap=config.qc_colormap, cmap_norm='no', hs=False, azdeg=90)

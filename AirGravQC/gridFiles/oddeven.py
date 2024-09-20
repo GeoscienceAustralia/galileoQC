@@ -14,7 +14,6 @@ import rioxarray
 import h5py
 import matplotlib.ticker as tkr
 import collections
-import colorcet as cc
 
 import AirGravQC.gridFiles.graphics as graphics
 import AirGravQC.utility.utility as util
@@ -292,7 +291,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
 
     # xdImage(d_grid, d_grid.attrs['title'], cmap_norm='nonorm', 
     #     nSigma=2, clipTo3Std = True)
-    xdImage(d_grid, d_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+    xdImage(d_grid, d_grid.attrs['title'], colormap=config.qc_colormap, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std = True)
 

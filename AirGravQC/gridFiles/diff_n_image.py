@@ -11,23 +11,7 @@ author: Mark Dransfield
 """
 
 import numpy as np
-# import matplotlib.pyplot as plt
-# from matplotlib import cm
-# from pathlib import Path
-import colorcet as cc
-# import xarray as xr
-# import netCDF4 as nc4
-# import filebrowser as fb
-# import rioxarray
-# import h5py
-# import matplotlib.ticker as tkr
 
-# import AirGravQC.gridFiles.graphics as graphics
-# import AirGravQC.utility.utility as util
-# import AirGravQC.gridFiles.read_ers as ers
-# import AirGravQC.whizzFiles.retrieveData as rd
-# import AirGravQC.config as config
-# from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.xdImage import xdImage
@@ -36,7 +20,6 @@ import AirGravQC.gridFiles.gridutility as gut
 # groupName = config.groupName
 # projectName = config.projectName
 
-# GRID REPORTING
 
 def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1):
     """
@@ -76,7 +59,7 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbou
     my_grid, my_region = xarray_to_grid(my_data1, grid_space, method=method, mask_polygon=mask_polygon, 
         mask_pixels=mask_pixels, numneighbours=numneighbours)
 
-    xdImage(my_grid, my_grid.attrs['title'], colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+    xdImage(my_grid, my_grid.attrs['title'], cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=mask_polygon)
 

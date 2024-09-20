@@ -29,6 +29,7 @@ groupName = 'Whizz Version 1.0'
 projectName = 'Unknown Project'
 
 # Just ensuring that the plot titles and labels have a uniform look that is clean and clear.
+import colorcet as cc
 from matplotlib import rc
 rc('figure', max_open_warning=0)
 rc('font',**{'family':'sans-serif'})
@@ -44,3 +45,7 @@ rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
+qc_colormap = cc.m_CET_L9
+
+

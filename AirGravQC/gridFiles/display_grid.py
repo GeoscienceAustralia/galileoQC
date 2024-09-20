@@ -1,15 +1,15 @@
 import numpy as np
-import colorcet as cc
+import AirGravQC.config as config
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
 
     
-def display_grid(gridFile, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
                    hs=True, azdeg=45, ax=None, clipTo3Std = True):
     """
-    Uses `xdImage()` to display the gridded data array in whizzFile. All
-    parameters after the name of the whizzFile are just passed through
+    Uses `xdImage()` to display the gridded data array in gridFile. All
+    parameters after the name of the gridFile are just passed through
     to `xdImage()`.
 
     Parameters

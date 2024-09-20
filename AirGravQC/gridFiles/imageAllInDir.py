@@ -11,7 +11,6 @@ author: Mark Dransfield
 """
 
 from pathlib import Path
-import colorcet as cc
 import AirGravQC.config as config
 from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
 from AirGravQC import xdImage
@@ -48,6 +47,6 @@ def imageAllInDir(path_name):
 
     for f in ersFiles:
         (dxt, _) = gridfile_to_xa(f)
-        xdImage(dxt, str(f.name), colormap=cc.m_CET_R1)
+        xdImage(dxt, str(f.name), colormap=config.qc_colormap)
 
 

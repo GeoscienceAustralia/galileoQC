@@ -1,6 +1,6 @@
 from AirGravQC.gridFiles.xdImage import xdImage
 from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
-import colorcet as cc
+import AirGravQC.config as config
 
 
 def traceImages(file1, file2, file3, plotTitle):
@@ -27,10 +27,5 @@ def traceImages(file1, file2, file3, plotTitle):
     (x2, _) = gridfile_to_xa(file2, bandout=0)
     (x3, _) = gridfile_to_xa(file3, bandout=0)
     trace = x1 + x2 + x3
-    xdImage(trace, plotTitle, colormap=cc.m_CET_L9, cmap_norm='no', hs=False, azdeg=90)
+    xdImage(trace, plotTitle, colormap=config.qc_colormap, cmap_norm='no', hs=False, azdeg=90)
 
-    # n1, e1, z1 = ers.read_ers_image(file1)
-    # n2, e2, z2 = ers.read_ers_image(file2)
-    # n3, e3, z3 = ers.read_ers_image(file3)
-    # trace = z1 + z2 + z3
-    # graphicsShaded(n1, e1, trace, plotTitle,  hs=False, colormap=cc.m_CET_L9, cmap_norm='no', azdeg=90)

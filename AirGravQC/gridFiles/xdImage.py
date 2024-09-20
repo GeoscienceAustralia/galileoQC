@@ -4,7 +4,6 @@
 Display the gridded (raster) data in an xArray DataArray
 """
 import numpy as np
-import colorcet as cc
 
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
@@ -18,7 +17,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std=True, mask_polygon=[]):
     """
@@ -33,7 +32,7 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     mytitle : String
         The figure title.
     colormap : Colormap, optional
-        A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
+        A colour map, eg cc.m_CET_L9. The default is config.qc_colormap.
     cmap_norm : String, optional
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
         (equalization stretch); 'auto'. The default is 'nonorm'.
@@ -95,7 +94,7 @@ def xdImage(data_array, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower', cb_title=cb_title)
 
 
-def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm', 
+def xdsImage(data_set, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=True, azdeg=45, ax=None, clipTo3Std = True, mask_polygon=[]):
     """
@@ -112,7 +111,7 @@ def xdsImage(data_set, mytitle, colormap=cc.m_CET_L9, cmap_norm='nonorm',
     mytitle : String
         The figure title.
     colormap : Colormap, optional
-        A colour map, eg cc.m_CET_L9. The default is cc.m_CET_L9.
+        A colour map, eg cc.m_CET_L9. The default is config.qc_colormap.
     cmap_norm : String, optional
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
         (equlaization stretch); 'auto'. The default is 'nonorm'.
