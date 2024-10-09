@@ -3,9 +3,9 @@ from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
 import AirGravQC.config as config
 
 
-def traceImages(file1, file2, file3, plotTitle):
+def traceImages(file1, file2, file3, plotTitle, units=''):
     """
-    Plots an image of the trace of the three diagonal components of the tensor.
+    Plots an image of the trace of the three diagonal component grids of the tensor.
 
     Parameters
     ----------
@@ -17,6 +17,8 @@ def traceImages(file1, file2, file3, plotTitle):
         A grid file containing the third diagonal tensor component. May be either an `ERS` or `NC` grid file.
     plotTitle : String
         A title for the plot of the trace image.
+    units : String, optional
+        Plotted to the colorbar title. Default is empty string.
 
     Returns
     -------
@@ -27,5 +29,6 @@ def traceImages(file1, file2, file3, plotTitle):
     (x2, _) = gridfile_to_xa(file2, bandout=0)
     (x3, _) = gridfile_to_xa(file3, bandout=0)
     trace = x1 + x2 + x3
+    trace.attrs['units'] = units
     xdImage(trace, plotTitle, colormap=config.qc_colormap, cmap_norm='no', hs=False, azdeg=90)
 

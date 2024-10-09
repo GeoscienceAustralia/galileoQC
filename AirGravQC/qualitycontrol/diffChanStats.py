@@ -21,7 +21,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
 
 
-def diffChanStats(whizzFile, channel1, channel2):
+def diffChanStats(whizzFile, channel1, channel2, lines=[]):
     """
     Generate statistical plots for the difference between two channels across all lines. The plots show
     the min, mean, max and stdev for each channel as a function of line number.
@@ -34,6 +34,8 @@ def diffChanStats(whizzFile, channel1, channel2):
         A channel to be subtracted from.
     channel2 : String
         A channel to subtract.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -44,9 +46,10 @@ def diffChanStats(whizzFile, channel1, channel2):
     with h5py.File(filename, 'r') as f:
         gProject = f[groupName]
         g = gProject['Lines']
-        lines = list(g.keys())
-        numLines = len(g.items())
-        
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)        
         allmean = 0.0
         numsamp = 0
         chMin = np.zeros((numLines,))
@@ -62,7 +65,7 @@ def diffChanStats(whizzFile, channel1, channel2):
         if 'Units' in dd.attrs.keys():
             ylabelstr += ' ' + dd.attrs['Units']
     
-        for line in g.keys():
+        for line in lines:
             # if line != 'CoordinateFrame':
             lineNo[count] = line
             mydata = g[line][channel1][:] - g[line][channel2][:]

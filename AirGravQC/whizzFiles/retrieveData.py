@@ -134,4 +134,53 @@ def getLineXChannel(whizzFile, line, x, channel):
         yData = getLineData(g[line], channel)
     return xData, yData
 
+
+def getChannels(whizzFile):
+    """
+    Returns an array of the channel names in a geoWhizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of a geoWhizz file, including path and extension.
+
+    Returns
+    -------
+    List of strings. The channel names.
+
+    """
+    filename = str(whizzFile)
+        
+    with h5py.File(filename, 'r') as f:
+        
+        whizzHeader = list(f.keys())[0]
+        g = f[whizzHeader]        
+        gLines = g['Lines']
+        lineGroups = list(gLines.values())
+        channelNames = list(lineGroups[0].keys())
+
+    return channelNames
+
+
+def getLines(whizzFile):
+    """
+    Returns an array of the line names in a geoWhizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of a geoWhizz file, including path and extension.
+
+    Returns
+    -------
+    List of strings. The Line numbers.
+
+    """
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        lines = list(g.keys())
+    return lines
+
+
  

@@ -94,7 +94,7 @@ def checkAtmosEffect(whizzFile, atmosCorr, lines=[], GRS80_height=''):
 
 def _atmosEffect(height):
     """
-    Returns the atmospheric gravity correction in um/s/s using Aiken et al (2005), eqn 3.
+    Returns the atmospheric gravity correction in um/s/s using Hinze et al (2005), eqn 3.
 
     Parameters
     ----------

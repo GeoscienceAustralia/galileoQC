@@ -3,7 +3,7 @@ from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
 import AirGravQC.config as config
 
 
-def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
+def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle, units=''):
     """
     Shows an image of the difference between data terrain-corrected
     at density y and the prediction based on un-corrected data and
@@ -26,6 +26,8 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     plotTitle : String
         A title for the plot of the difference between predicted and actual
         data in fileyyy.
+    units : String, optional
+        Plotted to the colorbar title. Default is empty string.
 
     Returns
     -------
@@ -39,5 +41,6 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle):
     tx = g0 - gx
     predy = g0 - yyy / xxx * tx
     predErr = predy - gy
+    predErr.attrs['units'] = units
 
     xdImage(predErr, plotTitle, colormap=config.qc_colormap, cmap_norm='no', hs=False, azdeg=90)

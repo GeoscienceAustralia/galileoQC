@@ -31,7 +31,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
 
 
-def calcDrift(whizzFile, time, gradient):
+def calcDrift(whizzFile, time, gradient, lines=[]):
     """
     NOT USED
     """
@@ -40,8 +40,11 @@ def calcDrift(whizzFile, time, gradient):
     
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
+
+        if lines == []:
+            lines = list(g.keys())
         
-        for line in g.keys():
+        for line in lines:
             t = rd.getLineData(g[line], time).reshape((-1,1)) 
             gamma = rd.getLineData(g[line], gradient)#g[line][gradient]
             
@@ -50,7 +53,7 @@ def calcDrift(whizzFile, time, gradient):
             print('coefficient of determination:', r_sq, 'intercept:', model.intercept_, 'slope:', model.coef_)
 
 
-def checkVertAcc(whizzFile, vertvelocity):
+def checkVertAcc(whizzFile, vertvelocity, lines=[]):
     """
     Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
     data (units of m/s) in the channel called `vertvelocity` in whizzFile. Plots the
@@ -60,6 +63,10 @@ def checkVertAcc(whizzFile, vertvelocity):
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    vertvelocity : 
+        
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -71,11 +78,14 @@ def checkVertAcc(whizzFile, vertvelocity):
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         chStd = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             data = rd.getLineData(g[line], vertvelocity)#g[line]['vertvelocity']
             accel = np.diff(data, n = 1)
             chStd[count] = int(np.std(accel) * 100.0)
@@ -92,7 +102,7 @@ def checkVertAcc(whizzFile, vertvelocity):
             count += 1
 
 
-def checkVertAccStats(whizzFile):
+def checkVertAccStats(whizzFile, lines=[]):
     """
     Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
     data (units of m/s) in the channel called `vertvelocity` in whizzFile. Plots the
@@ -104,6 +114,8 @@ def checkVertAccStats(whizzFile):
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -116,7 +128,10 @@ def checkVertAccStats(whizzFile):
     with h5py.File(filename, 'r') as f:
         g = f[groupName]
 
-        numLines = len(g.items())
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
         chMin = np.zeros((numLines,))
         chMax = np.zeros((numLines,))
         chMean = np.zeros((numLines,))
@@ -124,7 +139,7 @@ def checkVertAccStats(whizzFile):
         lineNo = np.zeros((numLines,))
         count = 0
 
-        for line in g.keys():
+        for line in lines:
             data = g[line]['vertvelocity']
             accel = np.diff(data, n = 1)
             lineNo[count] = line
@@ -168,6 +183,8 @@ def checkStatcor(whizzFile, statcor, flight=''):
         The name of the channel containing the static corrections.
     flight : String, optional
         The name of the channel containing the flight number. The default is to use the line attribute.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -180,11 +197,14 @@ def checkStatcor(whizzFile, statcor, flight=''):
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
 
-        num_lines = len(g.keys())
-        flight_num = np.zeros((num_lines,))
-        static_num = np.zeros((num_lines,))
+        if lines == []:
+            lines = list(g.keys())
+
+        numLines = len(lines)
+        flight_num = np.zeros((numLines,))
+        static_num = np.zeros((numLines,))
         count = 0
-        for line in g.keys():
+        for line in lines:
             linegroup = g[line]
             if flight == '':
                 flight_num[count] = linegroup.attrs['Flight']
@@ -207,7 +227,7 @@ def checkStatcor(whizzFile, statcor, flight=''):
     return
 
 
-def lineStats(whizzFile, channel):
+def lineStats(whizzFile, channel, lines=[]):
     """
     Generate a statistical plot for the channel across all lines. The plot shows
     the min, mean, max and stdev for the channel as a function of line number.
@@ -218,6 +238,8 @@ def lineStats(whizzFile, channel):
         Name of a HDF5 Whizz file, including path and extension.
     channel : String
         The name of the channel to plot.
+    lines : Array{String}, optional
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
     -------
@@ -230,8 +252,10 @@ def lineStats(whizzFile, channel):
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         projName = f[groupName].attrs['ProjectName']
+        if lines == []:
+            lines = list(g.keys())
         
-        numLines = len(g.items())
+        numLines = len(lines)
         chMin = np.zeros((numLines,))
         chMax = np.zeros((numLines,))
         chMean = np.zeros((numLines,))
@@ -239,7 +263,7 @@ def lineStats(whizzFile, channel):
         lineNo = np.zeros((numLines,))
         count = 0
                 
-        for line in g.keys():
+        for line in lines:
             #acqDate = g[line].attrs['Date_Local']
             lineNo[count] = line
             chMin[count] = np.min(g[line][channel])
@@ -295,6 +319,7 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         ax = fig.add_subplot(1,1,1)
             
         # initialise variables
+        numLines = len(flightLines)        
         chMin = np.zeros((numLines,))
         chMax = np.zeros((numLines,))
         chMean = np.zeros((numLines,))

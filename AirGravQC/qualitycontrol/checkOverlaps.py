@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Check for sufficient overlap length for overlapping flight-lines.
+Check for sufficient overlap length for overlapping flight-lines. Relies on PlannedLine
+attribute being present in data. This attribute is set by updateLineAttributes().
 """
 import numpy as np
 import h5py
@@ -59,14 +60,16 @@ def checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag
             if 'PlannedLine' in gMeas[line1].attrs.keys():
                 line1_plan = gMeas[line1].attrs['PlannedLine']
             else:
-                print(f'ERROR. The required PlannedLine attribute cant be found for line {line1}. Aborting.')
+                print(f'ERROR. The required PlannedLine attribute cannot be found for line {line1}. Aborting.')
+                return
 
             for idx2 in range (idx1 + 1, len(lines)):#line2 in gMeas.keys():
                 line2 = lines[idx2]
                 if 'PlannedLine' in gMeas[line2].attrs.keys():
                     line2_plan = gMeas[line2].attrs['PlannedLine']
                 else:
-                    print(f'ERROR. The required PlannedLine attribute cant be found for line {line1}. Aborting.')
+                    print(f'ERROR. The required PlannedLine attribute cannot be found for line {line1}. Aborting.')
+                    return
                 
                 # if the second line isn't the first line but has the same planned line no.
                 if line1 != line2 and line1_plan == line2_plan:
