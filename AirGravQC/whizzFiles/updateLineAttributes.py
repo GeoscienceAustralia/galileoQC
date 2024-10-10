@@ -84,7 +84,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
             print('One planned line updated.')
         elif no_plan:
             print('NO ACTION TAKEN ON LINE_TYPE - no plan file provided.')
-        elif line_type == 'Xcal_nsw' or line_type == 'Xcal_can' or line_type == 'SGL_GA' or line_type == 'SGL_NSW' or line_type == 'NRG':
+        elif line_type in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG']:
             print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
             print(f'Verifying planned line numbers against {planfile_str}.')
 
@@ -95,6 +95,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                 for line in g:
                     gg = g[line]
                     current_line = gg.attrs['LineNumber']
+                    gg.attrs['LineType'] = line_type
                     if line_type == 'Xcal_nsw':
                         if current_line < 8999999.0:
                             gg_planned_line = np.floor(current_line / 100.0) * 10.0
@@ -104,6 +105,11 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                             gg_planned_line = np.floor(current_line / 10000.0)
                             gg.attrs['Segment'] = 0
                             gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                        seconddigit = str(current_line)[1]
+                        if seconddigit == '9':
+                            gg.attrs['LineVariety'] = "Control"
+                        else:
+                            gg.attrs['LineVariety'] = "Traverse"
                     elif line_type == 'Xcal_can':
                         if current_line < 8999999.0:
                             gg_planned_line = np.floor(current_line / 10.0) * 10.0
@@ -113,10 +119,19 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                             gg_planned_line = np.floor(current_line / 10000.0)
                             gg.attrs['Segment'] = 0
                             gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10000.0) * 10000)
+                        seconddigit = str(current_line)[1]
+                        if seconddigit == '9':
+                            gg.attrs['LineVariety'] = "Control"
+                        else:
+                            gg.attrs['LineVariety'] = "Traverse"
                     elif line_type == 'NRG':
                         gg_planned_line = np.floor(current_line / 10.0) * 10.0
                         gg.attrs['Segment'] = 0
                         gg.attrs['ReflightNumber'] = int(current_line - np.floor(current_line / 10.0) * 10)
+                        if current_line > 89999:
+                            gg.attrs['LineVariety'] = "Control"
+                        else:
+                            gg.attrs['LineVariety'] = "Traverse"
                     elif line_type == 'SGL_GA':
                         if current_line < 7000:
                             gg_planned_line = np.floor(current_line * 10.0) / 10.0
@@ -128,14 +143,19 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                             gg_planned_line = np.floor(current_line)
                             gg.attrs['Segment'] = 0
                             gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                        if current_line < 999.9:
+                            gg.attrs['LineVariety'] = "Control"
+                        else:
+                            gg.attrs['LineVariety'] = "Traverse"
                     elif line_type == 'SGL_NSW':
                         if current_line > 1000000:
                             gg_planned_line = np.floor(current_line / 100.0) / 10.0
                         else:
                             gg_planned_line = np.floor(current_line / 100.0) / 10.0
-                    else:
-                        print('ERROR ERROR ROEORE REOER EEROE')
-                        return
+                        if current_line < 999.9:
+                            gg.attrs['LineVariety'] = "Control"
+                        else:
+                            gg.attrs['LineVariety'] = "Traverse"
 
                     # check that gg_planned_line is in plan_file
                     lineInGroup, _ = util.getLineNumberInGroup(pfg, gg_planned_line)
@@ -149,7 +169,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                 if verbose:
                     print('\n')
         else:
-            print('NO ACTION TAKEN ON LINE_TYPE - line_type was neither "Xcal_nsw" or "SGL_GA".')
+            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG'].")
 
     return
 
