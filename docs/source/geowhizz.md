@@ -25,17 +25,18 @@ Starting from the top of the hierarchy, the root group (the data-file) has a gro
 4. AcquirerProjectID. The project or job number or identifier used by the Acquirer. This is usually different to the clients project ID. The geoWhizz file does not store the latter since QC is of data delivered by the Acquirer.
 5. ReportName. The citation details for the acquisition and processing report. Used for final data only.
 
-The root group has two sub-groups: Coordinate Frame and Lines.
+The root group has two sub-groups:
+`CoordinateFrame` and `Lines`.
 
 ## The Coordinate Frame
 
 The Coordinate Frame is a list of attributes that describe the coordinates. For many purposes, QC is of some data as a function of position, fiducial, or time and it is convenient to store the names of the channels containing these reference data. Thus LatitudeChannel is a String attribute containing the name of the channel which stores the latitudes. The following attributes store the obvious channel names:
 
-LatitudeChannel, LongitudeChannel, AltitudeChannel, XChannel, YChannel, TimeChannel, FidChannel.
+`LatitudeChannel`, `LongitudeChannel`, `AltitudeChannel`, `XChannel`, `YChannel`, `TimeChannel`, `FidChannel`.
 
 Additionally, the Coordinate Frame contains the following datum attributes:
 
-GeoDatum, HeightDatum, Projection, UTMZone, TimeDatum.
+`GeoDatum`, `HeightDatum`, `Projection`, `UTMZone`, `TimeDatum`.
 
 It would be good to allow for the use of EPSG codes as well but this has not yet happened. Currently, the datum attributes are not used by any function in AirGravQC but they are reported so that they can be checked against contractual requirements.
 
@@ -43,13 +44,11 @@ It would be good to allow for the use of EPSG codes as well but this has not yet
 
 The Lines Group contains an array of subsidiary line groups, one for each survey line segment.
 
-Each line group has the following attributes:
+Each line group has the following attributes (see [here](#linenumbers-target) for background information):
 
-LineNumber, HasBeenFlown, PlannedLine, Segment, ReflightNumber.
+`LineNumber`, `HasBeenFlown`, `PlannedLine`, `Segment`, `ReflightNumber`.
 
-These require some explanation. An airborne survey is planned as a number of survey lines. When it is flown, any one line might be broken into segments for logistical reasons. Any planned line or line segment might, when flown, fail a QC test and consequently be re-flown. So, for example, planned line 100100 might be divided into say two segments: 100110 and 100120; line 100120 might have an error necessitating a re-flight: line 100121. Different acquisition companies typically have different numbering schemes for these situations, and the schemes might vary for the same acquirer over different surveys.
-
-AirGravQC attempts to track this information via the line group attributes. The PlannedLine attribute is the only crucial one since the aircraft positions are required to follow the planned positions to within certain specified parameters. Consequently AirGravQC needs to know which planned line was being followed for any flown line. The HasBeenFlown parameter is not used.
+The PlannedLine attribute is the most important since the aircraft positions are required to follow the planned positions to within certain specified parameters. Consequently AirGravQC needs to know which planned line was being followed for any flown line. The HasBeenFlown parameter is not used.
 
 Each line group also has an array of data-set groups, one data-set group for each channel of data provided by the acquirer.
 
@@ -57,7 +56,7 @@ Each line group also has an array of data-set groups, one data-set group for eac
 
 A dataset group contains one channel of data for one flown survey line segment. It has the following attributes:
 
-Name, Units, Alias, Description, chan_precision.
+`Name`, `Units`, `Alias`, `Description`, `chan_precision`.
 
 The Name and Units are obvious and are used often. Alias and Description are provided by analogy with other data formats (netCDF4, XArray for example). Finally, the data are typically imported from an ASCII (or possibly UTF-8) file where each number has a generally small precision (the number of digits after the decimal point in the ASCII or UTF representation). This number is recorded in chan_precision so that errors in the data caused by the limited precision can be traced by checking the attribute.
 

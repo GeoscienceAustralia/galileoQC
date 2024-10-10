@@ -124,6 +124,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                             gg_planned_line = np.floor(current_line / 100.0) / 10.0
                     else:
                         print('ERROR ERROR ROEORE REOER EEROE')
+                        return
 
                     # check that gg_planned_line is in plan_file
                     lineInGroup, _ = util.getLineNumberInGroup(pfg, gg_planned_line)

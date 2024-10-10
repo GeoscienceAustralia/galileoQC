@@ -1,4 +1,4 @@
-AirGravQC.whizzFiles.retrieveData
+﻿AirGravQC.whizzFiles.retrieveData
 =================================
 
 .. automodule:: AirGravQC.whizzFiles.retrieveData
@@ -9,7 +9,9 @@ AirGravQC.whizzFiles.retrieveData
    .. autosummary::
    
       getChannelAttrs
+      getChannels
       getLineData
       getLineXChannel
+      getLines
       getWhizzData
    

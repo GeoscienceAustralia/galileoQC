@@ -13,7 +13,6 @@
    checkTCratio
    diff_n_image
    display_grid
-   general_graphics
    graphics
    graphicsShaded
    grid_n_image
