@@ -25,7 +25,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
     then the planned attribute of line is set to planned_line. No segment or reflight
     attribute is set.
 
-    Regardless of the last tw paragraphs, if flight_chan and/or date_chan are non-default,
+    Regardless of the last two paragraphs, if flight_chan and/or date_chan are non-default,
     then the flight and/or date attributes will be set for every line in whizzfile.
 
     Parameters
@@ -37,13 +37,24 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
         which results in no planned_line attributes being written to the observations
         whizz file.
     line_type : TYPE, optional
-        Either 'Xcal_nsw' or 'SGL_GA' or ''. The default is '' which causes
-        the `line`s 'PlannedLine' attridbute to be set to `planned_line`.
+        Either 'Xcal_nsw' or 'SGL_GA' or 'SGL_NSW' or 'NRG' or 'Xcal_can'.
+        The default is '' which causes the `line`s 'PlannedLine' attribute to be set
+        to `planned_line`.
     line : String
         A flightline, e.g. '1000110.0'.
-    planned_line : String
+    planned_line : String, optional
         A flightline, e.g. '1000110.0' in a separate whizzFile containing the
-        planned x,y,z locations of the survey flightlines.
+        planned x,y,z locations of the survey flightlines. Defaults to '0'.
+    flight_chan : String, optional
+        The name of the data channel containing the flight numbers. If provided,
+        the flight numbers will be stored as an attribute of each line group. The
+        default is to not store them.
+    date_chan : String, optional
+        The name of the data channel containing the dates. If provided,
+        the dates will be stored as an attribute of each line group. The
+        default is to not store them.
+    verbose : Bool, optional
+        If False (the default) the output is reduced.
 
     Returns
     -------
