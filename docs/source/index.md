@@ -3,7 +3,7 @@
 **AirGravQC** is a Python library for quality assurance and control of airborne gravity data. It covers both gravimetry and gradiometry from a range of sensor models and was designed for use in QC of data collected under contracts based on the Geoscience Australia Airborne Gravity Deed [^MagDeed], although it is useful for the QC of most airborne gravity projects.
 
 :::{warning}
-This project is still in development. Bugs are likely. Future changes might not be backwards compatible.
+This project is still in development. Bugs are likely. Please try it out, but as an experiment for now!
 :::
 
 ```{toctree}
@@ -12,12 +12,11 @@ This project is still in development. Bugs are likely. Future changes might not 
 about.md
 starting.md
 geowhizz.md
-cookbooks.md
+tutorials/tutorials.md
 methods.md
 deed.md
 modules.md
 lineNumbering.md
-Test_AirGravQC_griddata
 ```
 
 ## Indices and tables

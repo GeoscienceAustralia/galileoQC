@@ -53,7 +53,7 @@ The variables `dx`, `dh`, `px` and `ph` are used throughout the documentation to
 
 Now you are ready to QC the data!
 
-Go to [Methods](#methods-target) and choose the QC methods you need, or go to [Cookbooks](#cookbook-target) and follow along one of the examples.
+Go to [Methods](#methods-target) and choose the QC methods you need, or go to [Tutorials](#tutorials-target) and follow along one of the examples.
 
 [^Jupyter]: <https://jupyter.org>
 

@@ -3,7 +3,7 @@
 
 This section provides a brief description of airborne gravity QC methods using the `AirGravQC` functions.
 
-The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules.md) and examples are available in the [Cookbooks](#cookbook-target).
+The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules.md) and examples are available in the [Tutorials](#tutorials-target).
 
 There are a number of types of different gravity sensor flying airborne gravity surveys on several different types of aircraft. The methods described here have been tested on the following aircraft and gravity sensors:
 
@@ -13,7 +13,7 @@ There are a number of types of different gravity sensor flying airborne gravity 
 
 The acquired data referred to in the following Python function calls are stored in a [geoWhizz](#geowhizz-target) file, `dh`. The planned survey line positions are stored in a different geoWhizz file, `ph`.
 
-A typical work-flow to prepare the data for QC would use the following main steps (using the Canobie project data as an example). More information is provided in the [tutorial](#cookbook-target) and [notebooks](#cookbook-target).
+A typical work-flow to prepare the data for QC would use the following main steps (using the Canobie project data as an example). More information is provided in the [tutorials](#tutorials-target).
 
 ## Prepare data
 
