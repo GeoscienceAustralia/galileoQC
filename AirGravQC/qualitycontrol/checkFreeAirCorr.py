@@ -18,7 +18,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
                     
 
-def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[]):
+def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[], changesign=False):
     """
     Subtracts the free-air correction in the data file from one calculated using
     Hinze et al (2005) and the latitude and height data in the data file.
@@ -39,6 +39,9 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[]):
         default is to read the altitudeChannel field name from the Coordinate Frame.
     lines : Array{String}, optional
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+    changesign : Bool, optional
+        If True, adds the calculated result to the data channel, instead of subtracting.
+        Default False.
 
     Returns
     -------
@@ -83,7 +86,10 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[]):
             cor_data = rd.getLineData(g[line], faCorr)
            
             cal_data = _freeAirCorrection(ht_data, lat_data)
-            err_data = cor_data * unit_scale + cal_data 
+            if changesign:
+                err_data = cor_data * unit_scale + cal_data
+            else:
+                err_data = cor_data * unit_scale - cal_data 
             diffMin[count] = np.min(err_data)
             diffMax[count] = np.max(err_data)
             diffMean[count] = np.mean(err_data)
@@ -131,4 +137,4 @@ def _freeAirCorrection(height, latitude):
     freeAir = -(0.3087691 - 0.0004398 * sinLatSquared) * height
     freeAir += 7.2125E-8 * height * height
     # Hinze et al work in mGal but we want um/s/s so x 10
-    return 10 * freeAir    
+    return 10.0 * freeAir    

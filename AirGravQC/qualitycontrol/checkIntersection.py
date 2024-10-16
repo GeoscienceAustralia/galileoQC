@@ -66,8 +66,14 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
         all_lines = list(g.keys())
         alltravs, allcontrols = controls_lessthan_1000(all_lines)
         if controls == []:
+            # if any lines have line variety set:
+            #     controls = all_lines_with_variety(g, 'controls')
+            # else
             controls = allcontrols
         if travs == []:
+            # if any lines have line variety set:
+            #     travs = all_lines_with_variety(g, 'trav')
+            # else
             lines = alltravs
         else:
             lines = travs
