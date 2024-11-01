@@ -14,7 +14,7 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000):
+def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False):
     """
     Checks the basemag channel in a whizzFile against the specification that
     the peak to peak variation over a set number of samples must not exceed
@@ -37,10 +37,15 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000):
 
     """
     filename = str(whizzFile)
+    report = ''
+
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
+        lines = list(g.keys())
+        numLines = len(lines)
+        numfail = 0
 
-        for line in g.keys():
+        for line in lines:
             dataFail = False
             # plotTitle = line + ' ' + basemag + ' Peak-to-peak'
             data = rd.getLineData(g[line], basemag)
@@ -50,13 +55,14 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000):
                 continue
 
             if _peakToPeak(data) < 2.0 * peak:
-                print(line, ' passed easily.')
+                if verbose:
+                    report += f'{line} passed easily.'
                 continue
             
             if len(data) < nSamples:
                     if _peakToPeak(data) > 2.0 * peak:
                         dataFail = True
-                        print(line, ' FAIL, peak to peak range = ', _peakToPeak(data))
+                        report += f'{line}  FAIL, peak to peak range = {_peakToPeak(data)}'
                         continue
                     else:
                         print(line, ' passed on one segment.')

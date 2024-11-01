@@ -94,7 +94,7 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
     # for label in ax.get_xticklabels(): label.set_fontsize(6)
     # for label in ax.get_yticklabels(): label.set_fontsize(6)
     graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs,
-                   azdeg=azdeg, altdeg=45, blend_mode='alpha', alpha=0.7, colorbar=False, cb_title=cb_title,
+                   azdeg=azdeg, altdeg=45, blend_mode='alpha', alpha=0.7, cb_title=cb_title,
                    extent=(e[0], e[-1], n[0], n[-1]), origin=origin)
     return fig
     

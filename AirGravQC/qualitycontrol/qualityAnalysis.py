@@ -171,7 +171,7 @@ def checkVertAccStats(whizzFile, lines=[]):
     plt.show()
 
 
-def checkStatcor(whizzFile, statcor, flight=''):
+def checkStatcor(whizzFile, statcor, flight='', lines=[]):
     """
     Plots `statcor` vs `flight` as a scatter plot. Used to compare with static gravimeter readings.
     

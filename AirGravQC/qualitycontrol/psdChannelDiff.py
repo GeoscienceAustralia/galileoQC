@@ -84,8 +84,6 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         plt.show()
 
 
-
-
 def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.0, verbose=False):
     """
     Plot the FFT of filchan / rawchan in each flightLine. 
