@@ -16,13 +16,14 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], sin_chans=[]):
+def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], sin_chans=[], xaxis='linenumber'):
     """
     Generate statistical plots for the channels across all lines. The plots show
-    the min, mean, max and stdev for each channel as a function of line number.
+    the min, mean, max and stdev for each channel as a function of line number; and
+    may use either the line number as the x coordinate, or simply the ordinal.
 
-    The statistics can be optionally calculated on the data after first differencing,
-    or mean removal, or both. In the latter case, first differencing is done first.
+    The statistics can be optionally calculated on the data after first taking the sine, or 
+    differencing, or mean removal, or more than one of these in that order.
 
     Parameters
     ----------
@@ -41,6 +42,9 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
     sin_chans : [String], optional.
         An array of names of channels from `allChannels` whose sine
         along each survey line should be calculated before the statistics.
+    xaxis : String, optional
+        If "linenumber" then the x axis variable is line number;
+        if "ordinal" then it is just ordinal.
 
     Returns
     -------
@@ -127,5 +131,5 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
             if remove_sine:
                 titlestr += ')'
             titlestr += ' Stats'
-            plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
+            plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr, xaxis=xaxis)
     return
