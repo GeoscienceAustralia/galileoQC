@@ -228,6 +228,8 @@ def _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X
         if speed[speed < minSafeSpeed].size > 0:
             lineUnsafeSlow = True
             print(f' For at least one reading in L{lineName}, the ground speed was < {minSafeSpeed} (might be unsafe).')
+            if plot_flag:
+                wpl._plot_speed(dist, 'Distance from start of line [m]', speed, minSafeSpeed, max_allowance, plot_title=plot_title)
         
         speed_extreme = 0.0
         num_fids_in_exceedance = 0

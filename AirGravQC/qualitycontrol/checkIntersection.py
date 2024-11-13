@@ -69,7 +69,7 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
         allcontrols, alltravs, anyunknowns = lines_by_variety(g, all_lines)
         print(f'{len(anyunknowns)} lines in database not attributed as traverse or as control.')
         if len(anyunknowns) > 0:
-            print('The line type (control or traverse) can be set by `updateLineAttributes`.)
+            print('The line type (control or traverse) can be set by `updateLineAttributes`.')
         if controls == []:
             # if any lines have line variety set:
             #     controls = all_lines_with_variety(g, 'controls')
