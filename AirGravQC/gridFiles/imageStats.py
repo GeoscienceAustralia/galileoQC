@@ -21,13 +21,17 @@ def imageStats(whizzFile=''):
 
     """
     xa, fileUsed = gridfile_to_xa(whizzFile, bandout=0)
+    if 'units' in xa.attrs:
+        data_units = f" {xa.attrs['units']}"
+    else:
+        data_units = ""
         
     report = f'Statistics for {str(fileUsed.name)}'
     report += f'\n Datum  {xa.attrs["datum"]}; Projection {xa.attrs["projection"]}'
     for coord in xa.coords:
         report += f'\n {coord} from {np.nanmin(xa[coord])} to {np.nanmax(xa[coord])}; {xa[coord].shape[0]} samples at spacing {xa[coord].values[1] - xa[coord].values[0]}'
-    report += f'\n Value from {np.nanmin(xa.values):.2f} to {np.nanmax(xa.values):.2f}; {xa.values.shape[0]} x {xa.values.shape[1]} samples'
-    report += f'\n     Mean = {np.nanmean(xa.values):.2f}, Stdev = {np.nanstd(xa.values):.2f}'
+    report += f'\n Value from {np.nanmin(xa.values):.2f}{data_units} to {np.nanmax(xa.values):.2f}{data_units}; {xa.values.shape[0]} x {xa.values.shape[1]} samples'
+    report += f'\n     Mean = {np.nanmean(xa.values):.2f}{data_units}, Stdev = {np.nanstd(xa.values):.2f}{data_units}'
     report += f'\n     Number of real values = {np.count_nonzero(~np.isnan(xa.values))}, Number of nans = {np.count_nonzero(np.isnan(xa.values))}'
     return report
 
