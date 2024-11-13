@@ -23,11 +23,12 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
-    controls : [String]
-        A list of control flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0'].
+    controls : [String], optional
+        A list of control flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
+        to all flight lines with the `LineVariety` attribute set to "Control".
     travs : [String], optional
         A list of traverse flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
-        to all flight lines in the `whizzFile`.
+        to all flight lines with the `LineVariety` attribute set to "Traverse".
     xChannel : String, optional
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
@@ -64,7 +65,11 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
         if zChannel == '':
             zChannel = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
         all_lines = list(g.keys())
-        alltravs, allcontrols = controls_lessthan_1000(all_lines)
+        # alltravs, allcontrols = controls_lessthan_1000(all_lines)
+        allcontrols, alltravs, anyunknowns = lines_by_variety(g, all_lines)
+        print(f'{len(anyunknowns)} lines in database not attributed as traverse or as control.')
+        if len(anyunknowns) > 0:
+            print('The line type (control or traverse) can be set by `updateLineAttributes`.)
         if controls == []:
             # if any lines have line variety set:
             #     controls = all_lines_with_variety(g, 'controls')
@@ -147,6 +152,43 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
         report = tmpstr + report
     print(report)
     return
+
+
+def lines_by_variety(gLines, all_lines):
+    """
+    Returns lists of control lines, traverse lines and lines not attributed as either
+    from the lines `all_lines` in group `gLines`.
+    
+    Parameters
+    ----------
+    gLines : HDF5 Group
+        The geoWhizz lines group containing the survey line data.
+    all_lines : [String]
+        A list of all flightlines to search through.
+
+    Returns
+    -------
+    controls : [String]
+        A list of control flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0'] with the
+        `LineVariety` attribute set to "Control".
+    traverses : [String]
+        A list of traverse flightlines with the `LineVariety` attribute set to "Traverse".
+    unknowns : [String]
+        A list of flightlines with the `LineVariety` attribute not set to either "Control" or
+        "Traverse".
+
+    """
+    controls = []
+    traverses = []
+    unknowns = []
+    for line in all_lines:
+        if gLines[line].attrs['LineVariety'] == "Control":
+            controls.append(line)
+        elif gLines[line].attrs['LineVariety'] == "Traverse":
+            traverses.append(line)
+        else:
+            unknowns.append(line)
+    return controls, traverses, unknowns
 
 
 def _ccw(x1, y1, x2, y2, x3, y3):
