@@ -204,7 +204,7 @@ def calcMeanTrack(lineGroup, easting, northing):
 
 
 def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', 
-    mask_polygon=[], mask_pixels=1, numneighbours=1):
+    mask_polygon=[], mask_pixels=1, numneighbours=1, hs=True):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
     sorted into two sets of odd and even lines. Each set is gridded and the difference
@@ -293,7 +293,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     #     nSigma=2, clipTo3Std = True)
     xdImage(d_grid, d_grid.attrs['title'], colormap=config.qc_colormap, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std = True)
+        hs=hs, azdeg=45, ax=None, clipTo3Std = True)
 
     gut.report_gridStats(d_grid, mask_polygon=mask_polygon)
 

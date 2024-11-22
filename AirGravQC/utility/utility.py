@@ -343,6 +343,9 @@ def getPlannedLine(gPlan, gLineMeas):
     """
     planLineInPlan = False
     gpline = ''
+    if not 'PlannedLine' in gLineMeas.attrs:
+        print(f'ERROR. No PlannedLine attribute set for line.')
+        return None, None
     plannedLineNo = gLineMeas.attrs['PlannedLine'] # a Float double
     for pline in gPlan.keys():
         if gPlan[pline].attrs['LineNumber'] == plannedLineNo:
