@@ -15,7 +15,9 @@ groupName = config.groupName
 
 
 def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000, diff4Limit = 0.5, plot_flag=False):
-    # TODO: add check for singleValueExceedance()
+    # TODO:
+    # add check for singleValueExceedance()
+    # make the code faster - this is much too slow
     
     filename = str(whizzFile)
     report = ''
@@ -55,7 +57,7 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
                         failedSample = ii
                     
             if diurnalExceeded:
-                report += f'\n  Diurnal for {basemag} at sample number {failedSample} diverges from chord by {bigExtremum:.2f}, exceeding {rangeLimit:.1f} - FAIL'
+                report += f'\n  L {line}: Diurnal for {basemag} at sample number {failedSample} diverges from chord by {bigExtremum:.2f}, exceeding {rangeLimit:.1f} - FAIL'
                 num_failed_lines += 1
                 if plot_flag:
                     fig = plt.figure()
