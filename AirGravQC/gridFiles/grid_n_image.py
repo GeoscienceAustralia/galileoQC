@@ -3,6 +3,8 @@
 """
 Grid and image many channels of data from a `geoWhizz` file.
 """
+import numpy as np
+
 import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
@@ -17,7 +19,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], 
+def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], minClip=np.nan, maxClip=np.nan, 
     gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
@@ -102,6 +104,6 @@ def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan
             continue
         my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method, mask_polygon=mask_polygon, 
             mask_pixels=mask_pixels, numneighbours=numneighbours)
-        xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)
+        xdImage(my_grid, f'{my_grid.attrs["title"]}', minClip=minClip, maxClip=maxClip, gridlines=gridlines, hs=shaded)
         gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
         

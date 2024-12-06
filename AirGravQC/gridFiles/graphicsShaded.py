@@ -6,10 +6,12 @@ Make a shaded image of grid data.
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import h5py
 from pathlib import Path
 import matplotlib.ticker as tkr
 
 import AirGravQC.gridFiles.graphics as graphics
+import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config
 
@@ -19,11 +21,13 @@ projectName = config.projectName
 
 def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-                   hs=True, azdeg=45, ax=None, origin='upper', cb_title=''):
+                   hs=True, azdeg=45, ax=None, origin='upper', cb_title='',
+                   whizzfile=None, e_chan = '', n_chan=''):
     """
     Creates a colour image of a data array, with colour bar and grid-lines. The
     shape of z must be $shape(e) \times shape(n)$. The (e, n, z) typically are the 
-    output of erm.read_ers_image().
+    output of erm.read_ers_image(). If `whizzfile` is provided, then a flight-line
+    map is drawn over the image.
 
     Parameters
     ----------
@@ -61,6 +65,14 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
         {'upper', 'lower'} Place the [0, 0] index of the array in the upper left or lower left corner
         of the Axes. The convention (the default) 'upper' is typically used for
         matrices and images.
+    whizzfile : pathlib Path, optional
+        If provided, the path to the whizz survey file. Default None.
+    e_chan : String, optional
+        The name of the field containing eastings. The default is the name
+        stored in the Coordinates attribute XChannel.
+    n_chan : String, optional
+        The name of the field containing northings. The default is the name
+        stored in the Coordinates attribute YChannel.
 
     Returns
     -------
@@ -96,5 +108,18 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
     graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs,
                    azdeg=azdeg, altdeg=45, blend_mode='alpha', alpha=0.7, cb_title=cb_title,
                    extent=(e[0], e[-1], n[0], n[-1]), origin=origin)
+
+    if not whizzfile == None:
+        with h5py.File(whizzfile, 'r') as f:
+            if e_chan == '':
+                e_chan = f[groupName]['CoordinateFrame'].attrs['XChannel']
+            if n_chan == '':
+                n_chan = f[groupName]['CoordinateFrame'].attrs['YChannel']
+            g = f[groupName]['Lines']
+            for line in list(g.keys()):
+                lX = rd.getLineData(g[line], e_chan)[0:]
+                lY = rd.getLineData(g[line], n_chan)[0:]
+                flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
+
     return fig
     

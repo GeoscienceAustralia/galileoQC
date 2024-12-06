@@ -19,7 +19,8 @@ projectName = config.projectName
 
 def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
-        hs=True, azdeg=45, ax=None, clipTo3Std=True, mask_polygon=[]):
+        hs=True, azdeg=45, ax=None, clipTo3Std=False, mask_polygon=[],
+                   whizzfile=None, e_chan='', n_chan=''):
     """
     Uses `graphicsShaded()` to display the gridded data in data_array. All
     parameters after the name of the whizzFile are just passed through
@@ -91,7 +92,8 @@ def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm'
         data_array = data_array.rename({'E': 'x','N': 'y'})
     
     graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
-                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower', cb_title=cb_title)
+                   cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower', cb_title=cb_title,
+                   whizzfile=whizzfile, e_chan=e_chan, n_chan=n_chan)
 
 
 def xdsImage(data_set, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 

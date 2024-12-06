@@ -5,8 +5,8 @@ from AirGravQC.gridFiles.gridfiles import gridfile_to_xa
 
     
 def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
-                   minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
-                   hs=True, azdeg=45, ax=None, clipTo3Std = True):
+    minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2,
+    hs=True, azdeg=45, ax=None, clipTo3Std = True, whizzfile=None, e_chan='', n_chan=''):
     """
     Uses `xdImage()` to display the gridded data array in gridFile. All
     parameters after the name of the gridFile are just passed through
@@ -24,5 +24,6 @@ def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nono
     """
     (xa, _) = gridfile_to_xa(gridFile, bandout=0)
     xdImage(xa, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
-                       minClip=minClip, maxClip=maxClip, gridlines=True, cb_ticks=cb_ticks, nSigma=nSigma,
-                       hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std)
+        minClip=minClip, maxClip=maxClip, gridlines=True, cb_ticks=cb_ticks, nSigma=nSigma,
+        hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std,
+        whizzfile=whizzfile, e_chan=e_chan, n_chan=n_chan)
