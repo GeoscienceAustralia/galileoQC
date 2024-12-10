@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 import AirGravQC.config as config
 import AirGravQC.utility.utility as util
+from AirGravQC.qualitycontrol.checkIntersection import lines_by_variety
 
 groupName = config.groupName
         
@@ -61,10 +62,19 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
         if zChannel == '':
             zChannel = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
         all_lines = list(g.keys())
-        alltravs, allcontrols = util.controls_lessthan_1000(all_lines)
+        allcontrols, alltravs, anyunknowns = lines_by_variety(g, all_lines)
+        print(f'{len(anyunknowns)} lines in database not attributed as traverse or as control.')
+        if len(anyunknowns) > 0:
+            print('The line type (control or traverse) can be set by `updateLineAttributes`.')
         if controls == []:
+            # if any lines have line variety set:
+            #     controls = all_lines_with_variety(g, 'controls')
+            # else
             controls = allcontrols
         if travs == []:
+            # if any lines have line variety set:
+            #     travs = all_lines_with_variety(g, 'trav')
+            # else
             lines = alltravs
         else:
             lines = travs
