@@ -84,22 +84,26 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         plt.show()
 
 
-def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.0, verbose=False):
+def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.0, shortestPeriod=0.0, verbose=False):
     """
-    Plot the FFT of filchan / rawchan in each flightLine. 
-    
-    ToDo: average the spectrum over many flight lines to achieve a less noisy result.
-    
+    Plot the FFT of filchan / rawchan averaged over the flightLines. 
+        
     Parameters
     ----------
     whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
+    rawchan : String
+        The name of the channel to be the denominator in the gain.
+    filchan : String
+        The name of the channel to be the numerator in the gain.
     flightLines : String List, optional
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
-    rawchan : String
-        The name of a channel.
-    filchan : String
-        The name of a channel.
+    nominalPeriod : Float, optional
+        At this period in seconds, a vertical red line is drawn. Default (0.0) is to not draw the line.
+    shortestPeriod : Float, optional
+        The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
+    verbose : Bool, optional
+        If True, more information is printed. Default is False.
 
     Returns
     -------
@@ -113,6 +117,7 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
         projName = f[groupName].attrs['ProjectName']
         if flightLines == []:
             flightLines = list(g.keys())
+        num_lines = len(flightLines)
         corr_units = g[flightLines[0]][rawchan].attrs['Units']
         if not (g[flightLines[0]][filchan].attrs['Units'] == corr_units):
             print('Error: {rawchan} and {filchan} do not have the same units.')
@@ -154,11 +159,18 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
             if verbose:    
                 print(f'Line {line}; Num samples = {N}; f_sample = {f_sample} Hz; est line length = {63 * N / f_sample} m. period shape {period.shape}')
 
-        perioda = np.mean(period, axis=1)
-        ratioFfta = np.mean(ratioFft , axis=1)
+        if num_lines > 1:
+            perioda = np.mean(period, axis=1)
+            ratioFfta = np.mean(ratioFft , axis=1)
+        else:
+            perioda = period
+            ratioFfta = ratioFft
+            print('Only one flight line in analysis, so results are not reliable.')
         plt.semilogx(perioda, ratioFfta, color='blue', lw=0.3)
     
         plt.ylim([1E-2,1])
+        if shortestPeriod > 0.0:
+            plt.xlim(left=shortestPeriod)
 
         ax.set_yticks([0.5], minor=True)
         ax.yaxis.grid(True, which='major')
