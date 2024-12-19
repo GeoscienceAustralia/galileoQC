@@ -31,70 +31,10 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def updateOddOrEven(whizzFile, lines=[], x='', y='', verbose=False):
-    """
-    Sorts traverse lines as 'odd' or 'even' and writes result as an attribute for each flight-line.
-
-    Parameters
-    ----------
-    whizzFile : Path or String
-        The Path to, or String name of, the whizz file in HDF5 format.
-    lines : String Array, optional
-        List of lines to have their track set. Default all lines.
-    x : String, optional
-        The name of the x (easting) channel in `whizz_file`. Default is to use
-        the `XChannel` attribute.
-    y : String, optional
-        The name of the y (northing) channel in `whizz_file`. Default is to use
-        the `YChannel` attribute.
-    verbose : Bool, optional
-        The verbosity of output. Default False.
-
-    Returns
-    -------
-    Nothing.
-
-    """
-    filename = str(whizzFile)
-    with h5py.File(filename, 'r+') as f:
-        lines_group = f[groupName]['Lines']
-        if lines == []:
-            lines = list(g.keys())
-        if x == '':
-            x = f[groupName]['CoordinateFrame'].attrs['XChannel']
-        if y == '':
-            y = f[groupName]['CoordinateFrame'].attrs['YChannel']
-
-        trav_oddness = True
-        first = True
-
-        for line in lines:
-            linegroup = lines_group[line]
-            if not (linegroup.attrs['LinePurpose'] == 'Traverse'):
-                continue
-
-            if first:
-                first = False
-                linegroup.attrs['OddNotEven'] = trav_oddness
-                lastgroup = linegroup
-
-            trav_spacing = linegroup.attrs['TravSpacing']
-            if approx_spacing(linegroup, lastgroup, trav_spacing):
-                trav_oddness = not trav_oddness
-            elif not approx_spacing(linegroup, lastgroup, 0.0):
-                if verbose:
-                    print(f'Skipped line {line}: spacing to previous inconsistent with {trav_spacing}.')
-                continue
-
-            linegroup.attrs['OddNotEven'] = trav_oddness
-            if verbose:
-                print(f'Line {line}: OddNotEven = {trav_oddness}.')
-
-
 def updateLineTracks(whizzFile, lines=[], x='', y='', trackError=5.0, verbose=False):
     """
     Writes the mean line track direction as an attribute for each flight-line,
-    writes it as a line attribute and sets the `LinePurpose` attribute to 'Control'
+    writes it as a line attribute and sets the `LineVariety` attribute to 'Control'
     or 'Traverse'.
 
     Parameters
@@ -151,20 +91,20 @@ def updateLineTracks(whizzFile, lines=[], x='', y='', trackError=5.0, verbose=Fa
         for line in lines:
             gg = g[line]
             if np.round(gg.attrs['MeanTrack'] - traverseTrack, -1) == 0.0: # refine this test using trackError
-                gg.attrs['LinePurpose'] = 'Traverse'
+                gg.attrs['LineVariety'] = 'Traverse'
             elif np.round(gg.attrs['MeanTrack'] - traverseTrack, -1) == 180.0: # refine this test using trackError
-                gg.attrs['LinePurpose'] = 'Traverse'
+                gg.attrs['LineVariety'] = 'Traverse'
             elif np.round(gg.attrs['MeanTrack'] - controlsTrack, -1) == 0.0:
-                gg.attrs['LinePurpose'] = 'Control'
+                gg.attrs['LineVariety'] = 'Control'
             elif np.round(gg.attrs['MeanTrack'] - controlsTrack, -1) == 180.0:
-                gg.attrs['LinePurpose'] = 'Control'
+                gg.attrs['LineVariety'] = 'Control'
             else:
-                gg.attrs['LinePurpose'] = 'Unknown'
+                gg.attrs['LineVariety'] = 'Unknown'
                 mean_track = gg.attrs['MeanTrack']
                 print(f'Line {line} has unknown line purpose (track = {mean_track:.1f}).')
             if verbose:
-                line_purpose = gg.attrs['LinePurpose']
-                print(f'Line {line}) is {line_purpose} on track {mean_track:.1f}')
+                line_purpose = gg.attrs['LineVariety']
+                print(f'Line {line} is {line_purpose} on track {gg.attrs["MeanTrack"]:.1f}')
 
 
 def calcMeanTrack(lineGroup, easting, northing):
@@ -175,7 +115,7 @@ def calcMeanTrack(lineGroup, easting, northing):
     Parameters
     ----------
     linegroup : HDF5 group
-        A whizzFile line group. Default all lines.
+        A whizzFile line group.
     easting : String
         The name of the x (easting) channel in `linegroup`.
     northing : String
@@ -188,23 +128,32 @@ def calcMeanTrack(lineGroup, easting, northing):
 
     """
 
+    # # calculate the by-sample track direction
+    # dx = np.diff(rd.getLineData(lineGroup, easting))
+    # dy = np.diff(rd.getLineData(lineGroup, northing))
+    # # arctan returns angle north from east and [-pi, pi] range
+    # theta = np.arctan2(dy, dx) * 180.0 / np.pi
+    # # use east from north and [0, 180] range.
+    # track = (90.0 - theta) % 180.0
+
+    # # trim start and end of vector by 5% to remove any residual
+    # # aircraft manoeuvres at start or end of flight-line.
+    # idx1 = int(len(track) / 20.0)
+    # idx2 = len(track) - idx1
+    # return np.mean(track[idx1:idx2])
+
+
     # calculate the by-sample track direction
-    dx = np.diff(rd.getLineData(lineGroup, easting))
-    dy = np.diff(rd.getLineData(lineGroup, northing))
+    dx = np.mean(np.diff(rd.getLineData(lineGroup, easting)))
+    dy = np.mean(np.diff(rd.getLineData(lineGroup, northing)))
     # arctan returns angle north from east and [-pi, pi] range
     theta = np.arctan2(dy, dx) * 180.0 / np.pi
     # use east from north and [0, 180] range.
     track = (90.0 - theta) % 180.0
-
-    # trim start and end of vector by 5% to remove any residual
-    # aircraft manoeuvres at start or end of flight-line.
-    idx1 = int(len(track) / 20.0)
-    idx2 = len(track) - idx1
-    return np.mean(track[idx1:idx2])
+    return track
 
 
-def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', 
-    mask_polygon=[], mask_pixels=1, numneighbours=1, hs=True):
+def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, hs=True):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
     sorted into two sets of odd and even lines. Each set is gridded and the difference
@@ -241,9 +190,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     """
 
     if np.array(oddlines).size == 0 or np.array(evenlines).size == 0:
-        print('ERROR. Please specify the odd and even lines. Automatic sorting of the lines is not yet functional.')
-        # oddlines, evenlines = _getOddEvenLines(whizz_file)
-        return
+        oddlines, evenlines = _getOddEvenLines(str(whizz_file))
 
     # Read data to xarrays.
     even_data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=evenlines, remove_mean=False, diff_one=False)
@@ -298,14 +245,15 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     gut.report_gridStats(d_grid, mask_polygon=mask_polygon)
 
 
-
 def _getOddEvenLines(whizz_file):
     """
     """
 
     filename = str(whizz_file)
     numevens = 0
+    evenlines = []
     numodds = 0
+    oddlines = []
     
     with h5py.File(filename, 'r') as f:
         lines_group = f[groupName]['Lines']
@@ -315,7 +263,7 @@ def _getOddEvenLines(whizz_file):
             # Only want Traverse lines
             lineIsTraverse = False
             try:
-                if lines_group[line].attrs['LinePurpose'] == 'Traverse':
+                if lines_group[line].attrs['LineVariety'] == 'Traverse':
                     lineIsTraverse = True
                 else:
                     continue
@@ -323,5 +271,16 @@ def _getOddEvenLines(whizz_file):
                 continue
 
             # 
+            if "Parity" in lines_group[line].attrs.keys():
+                if lines_group[line].attrs["Parity"]:
+                    oddlines.append(line)
+                    numodds += 1
+                else:
+                    evenlines.append(line)
+                    numevens += 1
+
     print(f'{numevens} even lines, {numodds} odd lines.')
-    return odds, evens
+    return oddlines, evenlines
+
+
+

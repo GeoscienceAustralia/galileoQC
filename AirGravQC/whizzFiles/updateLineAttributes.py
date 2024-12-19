@@ -15,7 +15,7 @@ groupName = config.groupName
 def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_line=0, flight_chan='', date_chan='', verbose=False):
     """
     For each line group, use the line_type field to set the associated planned
-    line number, the segment number, and the reflight number for the line.
+    line number, line variety, segment number, and reflight number for the line.
 
     If a planfile is given, then the line and planned_line parameters are ignored
     and the planned, segment and reflight attributes are set for all lines in

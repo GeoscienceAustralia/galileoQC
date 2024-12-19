@@ -33,6 +33,8 @@ from AirGravQC.whizzFiles.xyzReader import xyzToHDF
 from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
 from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
 from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling, reportChannels)
+from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing
+from AirGravQC.whizzFiles.updateOddOrEven import updateOddOrEven
 
 # 1D Plotting
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines
@@ -55,7 +57,6 @@ from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.oddeven import updateLineTracks
 from AirGravQC.gridFiles.oddeven import oddevenlines
-from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing
 from AirGravQC.gridFiles.imageAllInDir import imageAllInDir
 
 # AGG (Falcon) checks
