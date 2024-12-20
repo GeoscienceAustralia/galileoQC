@@ -87,7 +87,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         elif corr_units == 'gu' or corr_units == 'µm/s/s' or corr_units == 'um/s/s':
             unit_scale = 1.0
         else:
-            print('ERROR - correction units not recognised, expected mGal or µm/s/s (gu)')
+            print(f'ERROR - correction units {corr_units} not recognised, expected mGal or µm/s/s or um/s/s or gu')
             return
 
         if lines == []:
