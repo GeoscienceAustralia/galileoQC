@@ -31,15 +31,24 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def updateOddOrEven(whizzFile, x='', y='', oddlines=[], evenlines=[], planFile='', verbose=False):
+def updateOddOrEven(whizzFile='', x='', y='', oddlines=[], evenlines=[], planFile='', verbose=False):
     """
     Saves the Parity (odd or even) attribute for each traverse line so that odd-even analysis can
     be easily performed.
 
+    If either oddlines or evenlines contain a list of line numbers as text, then
+    they will be flagged as odd or even respectively in `whizzFile`. If they are empty or left as default,
+    and `whizzFile` is an empty string (the default) then the traverse lines in `planFile` will be
+    analysed and set to either odd or even appropriately. If `whizzFile` and `planFile` are both provided,
+    and are valid whizzFiles, then the traverse lines in both files will be set to odd or even according
+    to the algorithm. If there are no oddlines or evenlines, and `planFile` is empty (the default),
+    then an error is reported and no other action is taken.
+
     Parameters
     ----------
-    whizzFile : Path or String
-        The Path to, or String name of, the whizz file in HDF5 format.
+    whizzFile : Path or String, optional
+        The Path to, or String name of, the whizz file in HDF5 format. Default is
+        to not provide a planFile.
     x : String, optional
         The name of the x (easting) channel in `whizz_file`. Default is to use
         the `XChannel` attribute.
@@ -54,10 +63,10 @@ def updateOddOrEven(whizzFile, x='', y='', oddlines=[], evenlines=[], planFile='
         List of lines to have their parity set to False. Default is to calculate the
         parity based on analysis of the `planFile`. Only lines with the Variety attribute
         set to `Traverse` will have their parity set.
-    planFile : Path or String
+    planFile : Path or String, optional
         The Path to, or String name of, the plan file in HDF5 format. This is
         required if parities are to be set by calculation. Default is to not use
-        calculation.
+        calculation. Default is to not provide a planFile.
     verbose : Bool, optional
         The verbosity of output. Default False.
 
@@ -88,7 +97,10 @@ def updateOddOrEven(whizzFile, x='', y='', oddlines=[], evenlines=[], planFile='
                         print(f'Line {line}: Parity = {linegroup.attrs["Parity"]}.')
         return
 
-    elif not planFile == '':
+    elif (not planFile == '') and whizzFile == '':
+        print('Setting parities in plan file.')
+        _set_plan_parities(planFile, x, y, verbose)
+    elif not planFile == '' and not whizzFile == '':
         print('Setting parities in plan file.')
         _set_plan_parities(planFile, x, y, verbose)
         print('Setting parities in observations file.')
