@@ -11,6 +11,7 @@ import pathlib
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config
+from AirGravQC.gridFiles.oddeven import (_getOddEvenLines, _getTravCtrlLines)
 
 groupName = config.groupName
 projectName = config.projectName
@@ -79,6 +80,36 @@ def reportWhizz(whizzFile, line='', channel=''):
             print(f'\nChannel {myChanGroup}')
             for attribute in chanAttrs:
                 print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
+
+
+def reportLines(whizzFile, subset=''):
+    """
+    Prints a short summary of the flight-lines in a HDF5 Whizz file.
+
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+    subset : String, optional
+        One of "controls", "traverses". The default is '' and all lines are listed.
+
+    Returns
+    -------
+    None.
+
+    """
+    filename = str(whizzFile)
+
+    oddlines, evenlines = _getOddEvenLines(whizzFile)
+    travlines, ctrllines = _getTravCtrlLines(whizzFile)
+
+    with h5py.File(filename, 'r') as f:
+        whizzHeader = list(f.keys())[0]
+    print("\n", whizzHeader, "\n")
+    print("Odd Lines:\n", oddlines, "\n")
+    print("Even Lines:\n", evenlines, "\n")
+    print("Traverse Lines:\n", travlines, "\n")
+    print("Control Lines:\n", ctrllines)
 
 
 def reportChannels(whizzFile, channel=''):
@@ -353,9 +384,6 @@ def _lineLength(x, y):
     for ii in range(0, len(x)-1):
         lenOfLine += util.e2norm(x[ii] - x[ii+1], y[ii] - y[ii+1])
     return lenOfLine
-
-
-
 
 
 def whizzAttrExists(group, my_attr):

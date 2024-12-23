@@ -283,4 +283,32 @@ def _getOddEvenLines(whizz_file):
     return oddlines, evenlines
 
 
+def _getTravCtrlLines(whizz_file):
+    """
+    """
+
+    filename = str(whizz_file)
+    numtravs = 0
+    travlines = []
+    numctrls = 0
+    ctrllines = []
+    
+    with h5py.File(filename, 'r') as f:
+        lines_group = f[groupName]['Lines']
+        lines = lines_group.keys()
+        numlines = len(lines)
+        
+        for line in lines:
+            if "LineVariety" in lines_group[line].attrs.keys():
+                if lines_group[line].attrs["LineVariety"] == "Traverse":
+                    travlines.append(line)
+                    numtravs += 1
+                elif lines_group[line].attrs["LineVariety"] == "Control":
+                    ctrllines.append(line)
+                    numctrls += 1
+
+    print(f'{numtravs} traverse lines, {numctrls} control lines, {numlines - numctrls - numtravs} not classified.')
+    return travlines, ctrllines
+
+
 
