@@ -247,6 +247,21 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
 
 def _getOddEvenLines(whizz_file):
     """
+    Returns the flight-lines in `whizz_file` sorted into odd lines and even lines,
+    according to the line attribute `Parity`.
+
+    Parameters
+    ----------
+    whizz_file : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+
+    Returns
+    -------
+    oddlines : list of string
+        The Odd survey lines.
+    evenlines : list of string
+        The Even survey lines.
+
     """
 
     filename = str(whizz_file)
@@ -285,6 +300,21 @@ def _getOddEvenLines(whizz_file):
 
 def _getTravCtrlLines(whizz_file):
     """
+    Returns the flight-lines in `whizz_file` sorted into traverse lines and control lines,
+    according to the line attribute `LineVariety`.
+
+    Parameters
+    ----------
+    whizz_file : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+
+    Returns
+    -------
+    travlines : list of string
+        The Traverse survey lines.
+    ctrllines : list of string
+        The Control survey lines.
+
     """
 
     filename = str(whizz_file)

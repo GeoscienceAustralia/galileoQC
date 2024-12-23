@@ -82,7 +82,7 @@ def reportWhizz(whizzFile, line='', channel=''):
                 print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
 
 
-def reportLines(whizzFile, subset=''):
+def reportLines(whizzFile):
     """
     Prints a short summary of the flight-lines in a HDF5 Whizz file.
 
@@ -90,8 +90,6 @@ def reportLines(whizzFile, subset=''):
     ----------
     whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
-    subset : String, optional
-        One of "controls", "traverses". The default is '' and all lines are listed.
 
     Returns
     -------
