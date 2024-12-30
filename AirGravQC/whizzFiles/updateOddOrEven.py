@@ -135,6 +135,9 @@ def _set_plan_parities(planFile, x='', y='', verbose=False):
                 continue
 
             if first:
+                if _linelength(linegroup, x, y) < 100.0:
+                    print(f'WARNING: line {line} is < 100 m long, skipped.')
+                    continue
                 first = False
                 linegroup.attrs['Parity'] = trav_parity
                 firstgroup = linegroup
@@ -195,6 +198,10 @@ def _approx_spacings(linegroup, firstgroup, trav_spacing, x, y, tolerance=0.2):
 
     # find best straight line fit to flight-line locations
     a, b, c = _line_fit(firstgroup, x, y)
+    if a == 0.0 and b == 0.0:
+        print(f'ERROR - flight-line start and end are the same point!')
+        print(f'Coefficients of straight line fit to flight-line = {a:.1f}, {b:.1f}, {c:.1f}.')
+        return 0.0
     # print(f'{np.arctan(a/b)*180/np.pi:.2f} deg')
 
     dx = rd.getLineData(linegroup, x)
@@ -224,13 +231,24 @@ def _line_fit(linegroup, x, y):
 
     # Crude attempt to avoid points near ends of line where aircraft might
     # have started turning early.
-    i1 = int(len(dx) / 100.0)
-    i2 = len(dx) - i1
-
-    a = dy[i1] - dy[i2]
-    b = dx[i2] - dx[i1]
-    c = dx[i1] * dy[i2] - dx[i2] * dy[i1]
-
+    num_fids = len(dx)
+    if num_fids > 100:
+        i1 = int(len(dx) / 100.0)
+        i2 = len(dx) - i1
+        a = dy[i1] - dy[i2]
+        b = dx[i2] - dx[i1]
+        c = dx[i1] * dy[i2] - dx[i2] * dy[i1]
+    else:
+        a = dy[0] - dy[-1]
+        b = dx[-1] - dx[0]
+        c = dx[0] * dy[-1] - dx[-1] * dy[0]
     return a, b, c
+
+
+def _linelength(linegroup, x, y):
+
+    dx = rd.getLineData(linegroup, x)
+    dy = rd.getLineData(linegroup, y)
+    return util._displacement2(dx[0], dx[-1], dy[0], dy[-1])
 
 
