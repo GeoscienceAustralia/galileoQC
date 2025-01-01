@@ -174,6 +174,10 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     evenlines : Array of String, optional
         An array of line numbers that will constitute the even lines. The default is NOT WORKING! ...to take every
         second traverse (alternates to the oddlines).
+    method : string, optional
+        The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+        "neighbours", "bicubic", and "biharmonic" and the SciPy GridData "linear" method. "neighbours"
+        is much faster if `pykdtree` is installed. Default `neighbours` method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
@@ -236,8 +240,6 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
 
     # Image and report statistics
 
-    # xdImage(d_grid, d_grid.attrs['title'], cmap_norm='nonorm', 
-    #     nSigma=2, clipTo3Std = True)
     xdImage(d_grid, d_grid.attrs['title'], colormap=config.qc_colormap, cmap_norm='nonorm', 
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=hs, azdeg=45, ax=None, clipTo3Std = True)
