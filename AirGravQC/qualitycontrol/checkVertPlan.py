@@ -293,10 +293,10 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
 
 def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn):
 
-    if xm[1] < xm[0]:
-        print(f'line {line}: xm decreasing.')
-    if xM[1] < xM[0]:
-        print(f'line {line}: xM decreasing.')
+    # if xm[1] < xm[0]:
+    #     print(f'line {line}: xm decreasing.')
+    # if xM[1] < xM[0]:
+    #     print(f'line {line}: xM decreasing.')
     fig = plt.figure()
     plot_title = f'Line {line} (plan: {planLine}); Bearing {dirn * 180 / np.pi:.1f} deg E'
     fig.suptitle(plot_title, fontsize=10)
