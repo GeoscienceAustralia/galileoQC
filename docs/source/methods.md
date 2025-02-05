@@ -191,7 +191,7 @@ Four functions provide explicit checks of the corrections applied to the gravime
 
 ### Atmospheric Correction
 
-The atmospheric effect is checked against [^HinzeEtAl], equation (3), using the `checkAtmosEffect()` function.
+The atmospheric effect is checked against [^HinzeEtAl], equation (3), using the `checkAtmosEffect` function.
 
 > $$ \delta g_{atm} = 0.874 - 9.9\times10^{-5} h + 3.56 \times 10^{-9} h^{2}$$
 
@@ -262,7 +262,7 @@ qc.plotLinesOnGroundStns(dh, line,
 
 ## AGG Gradiometry
 
-The primary method for checking AGG data is `diffNoiseVturb()` which plots the error in each complement for each survey line against the mean turbulence experienced by the AGG along the line.	
+The primary method for checking AGG data is `diffNoiseVturb` which plots the error in each complement for each survey line against the mean turbulence experienced by the AGG along the line.	
 
 
 ### AGG Difference Noise
@@ -289,7 +289,7 @@ The FTG is a single-complement, three-axis gradiometer. On each axis, it measure
 
 > $$ \eta = \frac{\Gamma_{uv}^{1} + \Gamma_{uv}^{2} + \Gamma_{uv}^{3}}{\sqrt{3}} $$
 
-The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. The FTG data used in testing did not include a turbulence channel but it did have a vertical velocity channel. This is supplied to `ilsNoiseVturb()` and differenced to form an acceleration channel.
+The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. The FTG data used in testing did not include a turbulence channel but it did have a vertical velocity channel. This is supplied to `ilsNoiseVturb` and differenced to form an acceleration channel.
 
 The Deed specification allows for the in-line sum to be filtered and, currently, this happens behind the scenes in the code.
 
@@ -298,25 +298,27 @@ qc.ilsNoiseVturb(dh, diagComponent1, diagComponent2,
 	diagComponent3, vertvelocity)
 ```
 
-### FTG High frequency noise
+## High frequency noise
 
-There are mechanisms [^SunderlandEtAl] by which gravity gradiometer noise at a frequency higher than the data frequency band can be down-converted to the data frequency band, resulting in errors in the data.
+There are mechanisms [^SunderlandEtAl] by which gravity gradiometer noise at a frequency higher than the data frequency band can be down-converted to the data frequency band, resulting in errors in the data. This can occur in both AGG and FTG systems.
 
-The `checkRawFTG()` function checks for periods of high amplitude, high frequency signal in the raw gradiometer channels. This is not a check mandated by the Deed, but it is useful. It is intended to highlight sections of a survey line where there is excess high-frequency signal which might result in high gradient error.
+The `checkHighFreq` function checks for periods of high amplitude, high frequency signal in the raw gradiometer channels. This is not a check mandated by the Deed, but it is useful. It is intended to highlight sections of a survey line with excess high-frequency signal which might result in high gradient error.
 
-The function checks the standard deviation, in a standard rolling window, of each high-pass filtered gradiometer channel and plots diagnostic figures if the standard deviation exceeds some given noise limit.
+The function checks the standard deviation, in a moving window, of each high-pass filtered gradiometer channel and plots diagnostic figures if the standard deviation exceeds some given noise limit.
 
 Experience suggests that, for an FTG, a standard deviation above about 50 E is significant and a re-flight should be considered for such data.
 
 ```python
-qc.checkRawFTG(
+qc.checkHighFreq(
     whizzFile,
-    lines=[],
     noiseLimit=50,
-    gradients=[],
+    channels=[],
+    cutoffs=[0.15, 3.6],
+    tChannel='',
     vertaccel='',
     vertvelocity='',
     vertdispl='',
+    lines=[],
 )
 ```
 
@@ -329,7 +331,7 @@ There are a number of statistical and plotting checks that are general in nature
 
 Some channels in the data are expected to vary uniformly with sampling along the survey line. Obvious examples are channels containing the date, line number, flight number, project number and so forth which should be constant; and channels containing the time or fiducial.
 
-Errors in these channels are usually trivial and minor but nevertheless require fixing when they occur. `checkConstantSlope()` checks all the requested `fields`.
+Errors in these channels are usually trivial and minor but nevertheless require fixing when they occur. `checkConstantSlope` checks all the requested `fields`.
 
 A common reported fault is when a channel containing the local time of day in seconds past midnight fails to be of constant slope at or very near the value of 86400.0. That value corresponds to midnight and, since the time of day resets to 0.0 at midnight, the slope will dramatically change. The cause is usually that the clock is not set to local time (since the survey flights do not take place at night).
 
@@ -339,7 +341,7 @@ qc.checkConstantSlope(dh, fields=[])
 
 ### Gaps in Data
 
-The Deed sets bounds on the largest permissible gap in certain data channels. With modern data acquisition systems, there ought to be no gaps at all. Consequently, the `checkGaps()` function checks all channels for all survey lines and reports any gaps in data found.
+The Deed sets bounds on the largest permissible gap in certain data channels. With modern data acquisition systems, there ought to be no gaps at all. Consequently, the `checkGaps` function checks all channels for all survey lines and reports any gaps in data found.
 
 ```python
 qc.checkGaps(dh)
@@ -349,7 +351,7 @@ qc.checkGaps(dh)
 
 It is useful to be able to quickly review the statistics of most, or all, channels in the data on a line-by-line basis in order to find any unusual behaviour in the data.
 
-The function `allChanStats()` reports these statistics for all requested channels in the form of an expanded whisker plot.
+The function `allChanStats` reports these statistics for all requested channels in the form of an expanded whisker plot.
 
 The mean, standard deviation and range of every channel are plotted for every line. This summarises a lot of information and one can just run an eye quickly over the plots looking for outliers, and check the vertical scales to ensure that the values are in about the right range.
 
@@ -358,7 +360,7 @@ qc.allChanStats(dh, allChannels=[])
 ```
 
 ```{figure} allChanStats_height.png
-An example plot from `allChanStats()` for the HEIGHT channel. The mean HEIGHT for each survey line is shown by a solid blue square; the vertical blue line indicates +/- 1 standard deviation; and the open blue circles indicate the full range of the data.
+An example plot from `allChanStats` for the HEIGHT channel. The mean HEIGHT for each survey line is shown by a solid blue square; the vertical blue line indicates +/- 1 standard deviation; and the open blue circles indicate the full range of the data.
 ```
 
 ### ERS Header Files
@@ -377,7 +379,7 @@ Most of the QC work is done on a line-by-line basis across the survey data. It i
 
 ### Grid and Image
 
-Errors in the line number, flight number, fiducial, latitude, or any channel at all are possible and can often be easily seen in an image. Accordingly, `grid_n_image()` is provided to interpolate every named channel to a regular grid and image it to the Jupyter-lab notebook.
+Errors in the line number, flight number, fiducial, latitude, or any channel at all are possible and can often be easily seen in an image. Accordingly, `grid_n_image` is provided to interpolate every named channel to a regular grid and image it to the Jupyter-lab notebook.
 
 The grid interpolation can be done by the SciPy griddata `linear` method, or by the Verde `KNeighbors` method. The latter is recommended if the `pykdtree` package is installed because it is much faster.
 
@@ -419,7 +421,7 @@ Removing the mean bearing for each survey line leaves just the variations in air
 
 ### Display Grid
 
-When grids are provided by the acquirer, there is no need to use `grid_n_image()`. Instead, the grids can be simply imaged to the Jupyter-lab notebook by `display_grid()`.
+When grids are provided by the acquirer, there is no need to use `grid_n_image`. Instead, the grids can be simply imaged to the Jupyter-lab notebook by `display_grid`.
 
 ```python
 qc.display_grid(Path(g1), '2205173_Blackall_GD_0p0_Final', azdeg=-40)
