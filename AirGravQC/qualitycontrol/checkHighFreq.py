@@ -71,6 +71,10 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
             time = rd.getLineData(g[line], tChannel)
             time = time - time[0]
             fs = 1.0 / abs((time[1] - time[0]))
+            if fs <= cutoffs[1] / 2.0:
+                print(f'The sampling frequency of {fs:.1f} is too small for the high-pass cutoff frequency of {cutoffs[1]:.1f}.')
+                print(f'\nThe high-pass cutoff frequency needs to be < {fs/2.0:.1f}. Please try again with more suitable cutoff frequencies.')
+                return
             if vertaccel != '':
                 turb = rd.getLineData(g[line], vertaccel)
                 time1 = time
