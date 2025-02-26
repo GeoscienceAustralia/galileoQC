@@ -36,9 +36,12 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
     repeatLines : [String], optional
         A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. 
     x : String, optional
-        The name of the independent variable for the plot. Defaults to the `XChannel`.
+        The name of the independent variable for the analysis. Defaults to whichever of `XChannel`
+        or 'YChannel' has the largest range of values.
+    y : String, optional
+        The name of the independent variable for the analysis. Defaults to the `YChannel`.
     z : String, optional
-        The name of the height variable for the analysis and plot. Defaults to the `XChannel`.
+        The name of the height variable for the analysis and plot. Defaults to the `AltitudeChannel`.
     xOffset : Bool, optional
         If True, map x to x - x[0] before plotting. The default is True.
 
@@ -52,9 +55,11 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
     if not hasattr(whizzFiles, "__len__"):
         print('ERROR - whizzFiles not an array.')
         return
+    if x == '':
+        x = _selectXchannel(whizzFiles[0], repeatLines)
     temp_repeats = repeatLines.copy()
     try:
-        xBase, xData, yData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z, verbose=verbose)
+        xBase, xData, gData, zData, minBigX, maxSmallX, deltaX  = _xBaseInterpolant(whizzFiles, channel, temp_repeats, x, z, verbose=verbose)
     except:
         return
     temp_repeats = repeatLines.copy()
@@ -68,23 +73,18 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
         filename = str(whizzFile)
         with h5py.File(filename, 'r') as f:
             g = f[groupName]['Lines']
-            if x == '':
-                x = f[groupName]['CoordinateFrame'].attrs['XChannel']
             if z == '':
                 z = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
             all_flightLines = list(g.keys())
 
-            # if the channel has an attribute 'Units'
+            # if the channel has an attribute 'Units' 
             dd = g[all_flightLines[0]][channel]
-            chan_y_label = channel
-            if 'Units' in dd.attrs.keys():
-                chan_y_units = dd.attrs['Units']
-                chan_y_label += ' ' + chan_y_units
-            ddz = g[all_flightLines[0]][z]
-            if 'Units' in ddz.attrs.keys():
-                chan_z_units = ddz.attrs['Units']
-            else:
-                chan_z_units = ''
+            chan_g_label = channel
+            chan_g_units = rd.getChannelAttrs(g[all_flightLines[0]], channel)
+            chan_g_label += ' ' + chan_g_units
+
+            chan_z_units = rd.getChannelAttrs(g[all_flightLines[0]], z)
+            chan_x_units = rd.getChannelAttrs(g[all_flightLines[0]], x)
 
             # read the data into the arrays
             for line in all_flightLines:
@@ -93,7 +93,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                     if 'PlannedLine' in g[line].attrs.keys():
                         baseLine = g[line].attrs['PlannedLine']
                     xd = rd.getLineData(g[line], x)
-                    yd = rd.getLineData(g[line], channel)
+                    gd = rd.getLineData(g[line], channel)
                     zd = rd.getLineData(g[line], z)
 
                     # Get the heading TODO: use this to check RMS(mean difference vs heading direction)
@@ -103,9 +103,9 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                         print(f'    Cannot report heading for line {line}.')
 
                     # clean out 'nan's'
-                    good = ~np.isnan(xd + yd + zd)
+                    good = ~np.isnan(xd + gd + zd)
                     xd = xd[good]
-                    yd = yd[good]
+                    gd = gd[good]
                     zd = zd[good]
                     if xd.size < 10:
                         print(f'ERROR - after trimming NaNs, the data vectors in {line} are too short for analysis. Stopping.')
@@ -114,7 +114,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                     # ensure ordered in increasing x
                     if xd[1] < xd[0]:
                         xd = xd[::-1]
-                        yd = yd[::-1]
+                        gd = gd[::-1]
                         zd = zd[::-1]
                     
                     # trim data and store
@@ -123,14 +123,14 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                     keep = keepsml & keepbig
 
                     # interpolate data (last xBase argument is just a dummy)
-                    spl = interpolate.splrep(xd[keep]-xBase[0], yd[keep], k=3, s=0)
-                    yOut = interpolate.splev(xBase-xBase[0], spl)
+                    spl = interpolate.splrep(xd[keep]-xBase[0], gd[keep], k=3, s=0)
+                    gOut = interpolate.splev(xBase-xBase[0], spl)
                     spl = interpolate.splrep(xd[keep]-xBase[0], zd[keep], k=3, s=0)
                     zOut = interpolate.splev(xBase-xBase[0], spl)
                     vec_len = xBase.shape[0]
 
                     xData[lineCount, 0:vec_len] = xBase
-                    yData[lineCount, 0:vec_len] = yOut
+                    gData[lineCount, 0:vec_len] = gOut
                     zData[lineCount, 0:vec_len] = zOut
 
                     lineCount += 1
@@ -138,7 +138,7 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                     temp_repeats.remove(line)
         
     # analyse statistics and report with plots
-    _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, yData, zData, channel, repeatLines, z, chan_z_units, chan_y_label, chan_y_units)#, baseLine=baseLine)
+    _plotRepeatAnalysis(xBase, xOffset, lineCount, xData, gData, zData, channel, repeatLines, z, chan_z_units, chan_g_label, chan_g_units, x, chan_x_units)#, baseLine=baseLine)
             
     return
 
@@ -187,7 +187,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
         data will be interpolated
     xData : numpy 2D array of float
         Returned as NaNs but of the correct size to write the data to. 
-    yData : numpy 2D array of float
+    gData : numpy 2D array of float
         Returned as NaNs but of the correct size to write the data to. 
     zData : numpy 2D array of float
         Returned as NaNs but of the correct size to write the data to. 
@@ -244,19 +244,19 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
     print(f'{linecount} of {nLines} lines analysed, interpolant length set to {nSamples} samples.')
     xData = np.empty((linecount, nSamples))
     xData[:] = np.nan
-    yData = np.empty((linecount, nSamples))
-    yData[:] = np.nan
+    gData = np.empty((linecount, nSamples))
+    gData[:] = np.nan
     zData = np.empty((linecount, nSamples))
     zData[:] = np.nan
     if verbose:
         print(f'  x range = ({maxSmallX:.2f}, {minBigX:.2f}) , deltaX = {deltaX:.2f}.')
-        print(f'  output array shapes: x {xBase.shape}, y {yData.shape}, z {zData.shape}.')
+        print(f'  output array shapes: x {xBase.shape}, y {gData.shape}, z {zData.shape}.')
     print('')
     
-    return xBase, xData, yData, zData, minBigX, maxSmallX, deltaX
+    return xBase, xData, gData, zData, minBigX, maxSmallX, deltaX
 
 
-def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, flightLines, z, chan_z_units, chan_y_label, chan_y_units, baseLine=-1.0):
+def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, gData, zData, channel, flightLines, z, chan_z_units, chan_g_label, chan_g_units, chan_x_label, chan_x_units, baseLine=-1.0):
     xPlot = xBase
     if xOffset:
             xPlot = xPlot - xPlot[0]
@@ -271,15 +271,15 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     ax = fig.add_subplot(2,2,1)
     ax.xaxis.set_major_formatter(thou_format)
     for line in range(0, nLines):
-        y1 = yData[line,:]
-        y1 = y1[np.logical_not(np.isnan(y1))]
+        g1 = gData[line,:]
+        g1 = g1[np.logical_not(np.isnan(g1))]
         x1 = xData[line,:]
         x1 = x1[np.logical_not(np.isnan(x1))]
-        myPlot, = ax.plot(x1, y1, lw=0.5, label=f'Line {flightLines[line]}')
+        myPlot, = ax.plot(x1, g1, lw=0.5, label=f'Line {flightLines[line]}')
             
     ax.legend(fontsize=8)
-    plt.xlabel('x', fontsize = 10)
-    plt.ylabel(chan_y_label, fontsize = 10)        
+    plt.xlabel(f'{chan_x_label} {chan_x_units}', fontsize = 10)
+    plt.ylabel(chan_g_label, fontsize = 10)        
     plotTitle = f'{baseLineStr} Repeat Lines {channel}'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
@@ -297,8 +297,8 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
         myPlot, = ax.plot(x1, z1, lw=0.5, label=f'Line {flightLines[line]}')
         ax.legend(fontsize=8)
             
-    plt.xlabel('x', fontsize = 10)
-    plt.ylabel(f'z {chan_z_units}', fontsize = 10)
+    plt.xlabel(f'{chan_x_label} {chan_x_units}', fontsize = 10)
+    plt.ylabel(f'{z} {chan_z_units}', fontsize = 10)
     plotTitle = f'{baseLineStr} Repeat Lines {z}'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
@@ -308,28 +308,28 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     # plot the y differences and RMS
     ax = fig.add_subplot(2,2,3)
     ax.xaxis.set_major_formatter(thou_format)
-    yMean = np.mean(yData, axis=0)
-    ySum = np.zeros(yMean.shape)
+    gMean = np.mean(gData, axis=0)
+    gSum = np.zeros(gMean.shape)
 
-    if yData.shape[0] > 2:
-        yOverallStd = np.nanmean(np.nanstd(yData, axis=0))
+    if gData.shape[0] > 2:
+        yOverallStd = np.nanmean(np.nanstd(gData, axis=0))
         print('\nSummary Statistics')
-        print(f'All lines: stdev({channel}) = {yOverallStd:.2f} {chan_y_units}')
+        print(f'All lines: stdev({channel}) = {yOverallStd:.2f} {chan_g_units}')
     for line in range(0, nLines):
-        ySum = ySum + yData[line,:] - yMean
-        yStd = np.nanstd(yData[line,:]-yMean)
-        y1 = yData[line,:] - yMean
-        y1 = y1[np.logical_not(np.isnan(y1))]
+        gSum = gSum + gData[line,:] - gMean
+        gStd = np.nanstd(gData[line,:]-gMean)
+        g1 = gData[line,:] - gMean
+        g1 = g1[np.logical_not(np.isnan(g1))]
         x1 = xData[line,:]
         x1 = x1[np.logical_not(np.isnan(x1))]
 
-        myPlot, = ax.plot(x1, y1, lw=0.5, label=f'RMS = {yStd:.1f}')
+        myPlot, = ax.plot(x1, g1, lw=0.5, label=f'RMS = {gStd:.1f}')
         ax.legend(fontsize=8)
-        print(f'    Line {flightLines[line]}: stdev({channel}) = {yStd:.2f} {chan_y_units}')
+        print(f'    Line {flightLines[line]}: stdev({channel}) = {gStd:.2f} {chan_g_units}')
             
-    plt.xlabel('x', fontsize = 10)
-    plt.ylabel(chan_y_label, fontsize = 10)
-    plotTitle = f'Differences to mean and RMS {channel}'
+    plt.xlabel(f'{chan_x_label} {chan_x_units}', fontsize = 10)
+    plt.ylabel(f'$\Delta$ {chan_g_label}', fontsize = 10)
+    plotTitle = f'{channel}: Differences to mean'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(8)
@@ -341,7 +341,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     zMean = np.mean(zData, axis=0)
     zSum = np.zeros(zMean.shape)
 
-    if yData.shape[0] > 2:
+    if gData.shape[0] > 2:
         zOverallStd = np.nanmean(np.nanstd(zData, axis=0))
         print(f'All lines: stdev({z}) = {zOverallStd:.1f} {chan_z_units}')
     for line in range(0, nLines):
@@ -354,12 +354,11 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
 
         myPlot, = ax.plot(x1, z1, lw=0.5, label=f'RMS = {zStd:.2f}')
         ax.legend(fontsize=8)
-        # ax.text(x1[0], z1[0], f'RMS = {zStd:.2f}', fontsize=8)
         print(f'    Line {flightLines[line]}: stdev({z}) = {zStd:.1f} {chan_z_units}')
             
-    plt.xlabel('x', fontsize = 10)
-    # plt.ylabel(f'z {chan_z_units}', fontsize = 10)
-    plotTitle = f'Differences to mean and RMS {z}'
+    plt.xlabel(f'{chan_x_label} {chan_x_units}', fontsize = 10)
+    plt.ylabel(f'$\Delta$ {z} {chan_z_units}', fontsize = 10)
+    plotTitle = f'{z}: Differences to mean'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(8)
@@ -369,4 +368,56 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, yData, zData, channel, fl
     plt.show()
             
     return
+
+
+def _selectXchannel(whizzFile, repeatLines):
+    """
+    For all `repeatLines` found in the `whizzFiles`, set up the data vectors
+    and parameters for interpolations of both `channel` and `z` over `x` to a 
+    single pseudo- flight-line.
+    
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of HDF5 Whizz file, including path and extension.
+    repeatLines : Array of String
+        The flight-lines to be analysed.
+
+    Returns
+    -------
+    x : String
+        The name of the channel to be used as the independent variable.
+
+    """
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+        y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+
+        all_flightLines = list(g.keys())
+        # read the data from the first repeat line into the arrays
+        for line in all_flightLines:
+            if line in repeatLines:
+                xd = rd.getLineData(g[line], x)
+                yd = rd.getLineData(g[line], y)
+                break
+        if np.abs(xd[-1] - xd[0]) > np.abs(yd[-1] - yd[0]):
+            return x
+        else:
+            return y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
