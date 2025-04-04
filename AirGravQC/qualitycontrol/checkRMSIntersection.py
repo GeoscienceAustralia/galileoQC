@@ -14,7 +14,7 @@ from AirGravQC.qualitycontrol.checkIntersection import lines_by_variety
 groupName = config.groupName
         
 
-def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0):
+def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, verbose=False):
     """
     Checks that, for each control line, the RMS difference between the values of the data in `zChannel` at the intersection
     with each traverse line is less than the maximum allowed delta.
@@ -84,33 +84,36 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
         if 'Units' in dd.attrs.keys():
             z_units = dd.attrs['Units']
 
-        for linec in controls:
+        for linetrav in lines:
             num_controls_checked += 1
-            x_ctrl = np.array(g[linec][xChannel])
-            y_ctrl = np.array(g[linec][yChannel])
-            z_ctrl = np.array(g[linec][zChannel])
+            x_trv = np.array(g[linetrav][xChannel])
+            y_trv = np.array(g[linetrav][yChannel])
+            z_trv = np.array(g[linetrav][zChannel])
 
-            bear_ctrl = _calc_bearing(x_ctrl, y_ctrl)
-            (y_ctrl1, x_ctrl1) = util._rotateCoords(x_ctrl-x_ctrl[0], y_ctrl-y_ctrl[0], -bear_ctrl)
+            bear_trv = _calc_bearing(x_trv, y_trv)
+            (y_trv1, x_trv1) = util._rotateCoords(x_trv-x_trv[0], y_trv-y_trv[0], -bear_trv)
             dh = np.array([])
-            for linet in lines:
-                # if linet == linec, then it is a control line, not a traverse.
-                # TODO: compare the PlannedLine for linet and linec rather than the lines themselves,
+            for linectrl in controls:
+                # if linectrl == linetrav, then it is a control line, not a traverse.
+                # TODO: compare the PlannedLine for linectrl and linetrav rather than the lines themselves,
                 #       since we don't want to compare different segments of the same line!
-                if linet == linec:
+                if linectrl == linetrav:
                     continue
-                x_trav = np.array(g[linet][xChannel])
-                y_trav = np.array(g[linet][yChannel])
-                z_trav = np.array(g[linet][zChannel])
-                (y_trav1, x_trav1) = util._rotateCoords(x_trav-x_ctrl[0], y_trav-y_ctrl[0], -bear_ctrl)
-                if _intersect(x_ctrl[0], y_ctrl[0], x_ctrl[-1], y_ctrl[-1], x_trav[0], y_trav[0], x_trav[-1], y_trav[-1]):
-                    dh = np.append(dh, _intersection_height(x_trav1, y_trav1, z_trav, x_ctrl1, y_ctrl1, z_ctrl, bear_ctrl))
+                x_ctr = np.array(g[linectrl][xChannel])
+                y_ctr = np.array(g[linectrl][yChannel])
+                z_ctr = np.array(g[linectrl][zChannel])
+                (y_ctr1, x_ctr1) = util._rotateCoords(x_ctr-x_trv[0], y_ctr-y_trv[0], -bear_trv)
+                if _intersect(x_trv[0], y_trv[0], x_trv[-1], y_trv[-1], x_ctr[0], y_ctr[0], x_ctr[-1], y_ctr[-1]):
+                    dh = np.append(dh, _intersection_height(x_ctr1, y_ctr1, z_ctr, x_trv1, y_trv1, z_trv, bear_trv))
+
+            if len(lines) == 1 and verbose == True:
+                print(dh)
 
             dh_rms = np.nanstd(dh)
             if dh_rms > max_allowed_deltaZ:
                 num_failed_controls += 1
-                bc_deg = bear_ctrl * 180.0 / np.pi
-                report += f'\n  {linec} [bearing={bc_deg:.1f}] intersection {zChannel} RMS difference = {dh_rms:.1f} > {max_allowed_deltaZ:.1f}'
+                bc_deg = bear_trv * 180.0 / np.pi
+                report += f'\n  {linetrav} [bearing={bc_deg:.1f}] intersection {zChannel} RMS difference = {dh_rms:.1f} > {max_allowed_deltaZ:.1f}'
                 if z_units != '':
                     report += ' ' + z_units
                 report += '.'
@@ -154,7 +157,7 @@ def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearing
     ic = ic_arr[0]
 
     # print(it, z_trav[it], ic, z_ctrl[ic])
-    return np.abs(z_trav[it] - z_ctrl[ic])[0]
+    return (z_trav[it] - z_ctrl[ic])[0]
 
 
 def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
