@@ -88,58 +88,56 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
         if 'Units' in dd.attrs.keys():
             z_units = dd.attrs['Units']
 
-        for linec in controls:
-            x_ctrl = np.array(g[linec][xChannel])
-            y_ctrl = np.array(g[linec][yChannel])
-            z_ctrl = np.array(g[linec][zChannel])
+        for line_trav in lines:
+            x_trv = np.array(g[line_trav][xChannel])
+            y_trv = np.array(g[line_trav][yChannel])
+            z_trv = np.array(g[line_trav][zChannel])
 
-            bear_ctrl = _calc_bearing(x_ctrl, y_ctrl)
-            (y_ctrl1, x_ctrl1) = util._rotateCoords(x_ctrl-x_ctrl[0], y_ctrl-y_ctrl[0], -bear_ctrl)
-            for linet in lines:
-                # if linet == linec, then it is a control line, not a traverse.
-                # TODO: compare the PlannedLine for linet and linec rather than the lines themselves,
+            bear_trv = _calc_bearing(x_trv, y_trv)
+            (y_trv1, x_trv1) = util._rotateCoords(x_trv-x_trv[0], y_trv-y_trv[0], -bear_trv)
+            for line_ctrl in controls:
+                # if line_ctrl == line_trav, then it is a control line, not a traverse.
+                # TODO: compare the PlannedLine for line_ctrl and line_trav rather than the lines themselves,
                 #       since we don't want to compare different segments of the same line!
-                if linet == linec:
+                if line_ctrl == line_trav:
                     continue
-                x_trav = np.array(g[linet][xChannel])
-                y_trav = np.array(g[linet][yChannel])
-                z_trav = np.array(g[linet][zChannel])
-                (y_trav1, x_trav1) = util._rotateCoords(x_trav-x_ctrl[0], y_trav-y_ctrl[0], -bear_ctrl)
-                # if _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
-                if _intersect(x_ctrl[0], y_ctrl[0], x_ctrl[-1], y_ctrl[-1], x_trav[0], y_trav[0], x_trav[-1], y_trav[-1]):
+                x_ctl = np.array(g[line_ctrl][xChannel])
+                y_ctl = np.array(g[line_ctrl][yChannel])
+                z_ctl = np.array(g[line_ctrl][zChannel])
+                (y_ctl1, x_ctl1) = util._rotateCoords(x_ctl-x_trv[0], y_ctl-y_trv[0], -bear_trv)
+
+                if _intersect(x_trv[0], y_trv[0], x_trv[-1], y_trv[-1], x_ctl[0], y_ctl[0], x_ctl[-1], y_ctl[-1]):
                     # print(f'bearings: {bearingt}, {bearingt} -- {np.abs(np.cos(bearingc - bearingt))}')
-                    dh = _intersection_height(x_trav1, y_trav1, z_trav, x_ctrl1, y_ctrl1, z_ctrl, bear_ctrl)
+                    dh = _intersection_height(x_ctl1, y_ctl1, z_ctl, x_trv1, y_trv1, z_trv, bear_trv)
                     num_intersections_checked += 1
-                    if dh > max_allowed_deltaZ:
+                    if np.abs(dh) > max_allowed_deltaZ:
                         num_failed_intersections += 1
                         # print(dh)
-                        bc_deg = bear_ctrl * 180.0 / np.pi
-                        report += f'\n  {linet} : {linec} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}'
+                        bc_deg = bear_trv * 180.0 / np.pi
+                        report += f'\n  {line_trav} : {line_ctrl} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}'
                         if z_units != '':
                             report += ' ' + z_units
                         report += '.'
                         data_is_good = False
                         if plot_flag:
                             fig = plt.figure()
-                            fig.suptitle(f'Title {linet}', fontsize=10)
+                            fig.suptitle(f'Title {line_ctrl}', fontsize=10)
                             fig.subplots_adjust(top=0.85)
                             
                             ax = fig.add_subplot(1,2,1)
-                            ax.plot(x_trav, y_trav, x_ctrl, y_ctrl)
-                            plt.ylabel('y_trav', fontsize = 6)
+                            ax.plot(x_ctl, y_ctl, x_ctrl, y_ctrl)
+                            plt.ylabel('y_ctl', fontsize = 6)
                             plt.grid(True)
                             for label in ax.get_xticklabels(): label.set_fontsize(6)
                             for label in ax.get_yticklabels(): label.set_fontsize(6)
 
                             ax = fig.add_subplot(1,2,2)
-                            ax.plot(x_trav1, y_trav1, x_ctrl1, y_ctrl1)
+                            ax.plot(x_ctl1, y_ctl1, x_ctrl1, y_ctrl1)
                             plt.ylabel('y_ctrl', fontsize = 6)
                             plt.grid(True)
                             for label in ax.get_xticklabels(): label.set_fontsize(6)
                             for label in ax.get_yticklabels(): label.set_fontsize(6)
                             plt.show()
-                # else:
-                #     report += f'\n  {linet} : {linec} un-tested since not perpendicular.'
     if data_is_good:
         report += f'All {num_intersections_checked} intersection {zChannel} differences were less than {max_allowed_deltaZ:.1f}'
         if z_units != '':
@@ -201,6 +199,29 @@ def _intersect(cx1, cy1, cx2, cy2, tx1, ty1, tx2, ty2):
 
 def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearingc):
     """
+    Returns the difference in `z` values at the intersection of the traverse and control lines.
+    
+    Parameters
+    ----------
+    x_trav : Numpy 1D array
+        The `x` values of the traverse line.
+    y_trav : Numpy 1D array
+        The `y` values of the traverse line.
+    z_trav : Numpy 1D array
+        The `z` values of the traverse line.
+    x_ctrl : Numpy 1D array
+        The `x` values of the control line.
+    y_ctrl : Numpy 1D array
+        The `y` values of the control line.
+    z_ctrl : Numpy 1D array
+        The `z` values of the control line.
+    bearingc : Float
+        The bearing in radians of the (x_ctrl, y_ctrl) line.
+
+    Returns
+    -------
+    Float: the difference in `z` values at the intersection of the traverse and control lines.
+
     """
 
     y = np.abs(y_trav - _mean_1std(y_ctrl))
@@ -216,7 +237,7 @@ def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearing
     ic = ic_arr[0]
 
     # print(it, z_trav[it], ic, z_ctrl[ic])
-    return np.abs(z_trav[it] - z_ctrl[ic])[0]
+    return (z_trav[it] - z_ctrl[ic])[0]
 
 
 def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
