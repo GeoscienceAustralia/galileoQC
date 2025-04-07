@@ -14,7 +14,7 @@ from AirGravQC.qualitycontrol.checkIntersection import lines_by_variety
 groupName = config.groupName
         
 
-def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, verbose=False):
+def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, divroot2=False, verbose=False):
     """
     Checks that, for each control line, the RMS difference between the values of the data in `zChannel` at the intersection
     with each traverse line is less than the maximum allowed delta.
@@ -41,6 +41,12 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
     max_allowed_deltaZ : Float, optional
         The maximum allowed RMS difference in `zChannel` between the traverse and control lines
         at each intersection point along each control line. Defaults to 10.0.
+    divroot2 : Bool, optional
+        If True, the check is against the RMS difference divided by the square root of 2.
+        Default False.
+    verbose : Bool, optional
+        If True, verbose reporting is given which is annoying if there are many errors.
+        Default False.
 
     Returns
     -------
@@ -50,8 +56,8 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
     data_is_good = True
     report = ''
     filename = str(whizzFile)
-    num_controls_checked = 0
-    num_failed_controls = 0
+    num_travs_checked = 0
+    num_failed_travs = 0
     
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -85,7 +91,7 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
             z_units = dd.attrs['Units']
 
         for linetrav in lines:
-            num_controls_checked += 1
+            num_travs_checked += 1
             x_trv = np.array(g[linetrav][xChannel])
             y_trv = np.array(g[linetrav][yChannel])
             z_trv = np.array(g[linetrav][zChannel])
@@ -110,8 +116,10 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
                 print(dh)
 
             dh_rms = np.nanstd(dh)
+            if divroot2:
+                dh_rms = dh_rms / np.sqrt(2.0)
             if dh_rms > max_allowed_deltaZ:
-                num_failed_controls += 1
+                num_failed_travs += 1
                 bc_deg = bear_trv * 180.0 / np.pi
                 report += f'\n  {linetrav} [bearing={bc_deg:.1f}] intersection {zChannel} RMS difference = {dh_rms:.1f} > {max_allowed_deltaZ:.1f}'
                 if z_units != '':
@@ -119,13 +127,13 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
                 report += '.'
                 data_is_good = False
     if data_is_good:
-        report += f'All {num_controls_checked} control lines had {zChannel} RMS differences less than {max_allowed_deltaZ:.1f}'
+        report += f'All {num_travs_checked} traverse lines had {zChannel} RMS differences less than {max_allowed_deltaZ:.1f}'
         if z_units != '':
             report += ' ' + z_units
         report += '.'
     else:
-        tmpstr = f'Of {num_controls_checked} control lines checked'
-        tmpstr += f', {num_failed_controls} control lines exceeded the '
+        tmpstr = f'Of {num_travs_checked} traverse lines checked'
+        tmpstr += f', {num_failed_travs} traverse lines exceeded the '
         tmpstr += f'{max_allowed_deltaZ} allowed {zChannel} RMS difference.\n'
         report = tmpstr + report
     print(report)
@@ -148,7 +156,7 @@ def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearing
     it_arr = np.where(y == y.min())
     it = it_arr[0]
     if len(it) > 1:
-        print('\nBug in _intersection_height - this intersection height cant be calculated')
+        print('\nBug in _intersection_height - this intersection height cannot be calculated')
         print(it, type(it), len(it))
         return 0.0
 

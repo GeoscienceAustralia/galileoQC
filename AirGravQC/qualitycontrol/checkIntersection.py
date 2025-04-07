@@ -109,12 +109,13 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
                 if _intersect(x_trv[0], y_trv[0], x_trv[-1], y_trv[-1], x_ctl[0], y_ctl[0], x_ctl[-1], y_ctl[-1]):
                     # print(f'bearings: {bearingt}, {bearingt} -- {np.abs(np.cos(bearingc - bearingt))}')
                     dh = _intersection_height(x_ctl1, y_ctl1, z_ctl, x_trv1, y_trv1, z_trv, bear_trv)
+                    abs_dh = np.abs(dh)
                     num_intersections_checked += 1
-                    if np.abs(dh) > max_allowed_deltaZ:
+                    if abs_dh > max_allowed_deltaZ:
                         num_failed_intersections += 1
                         # print(dh)
                         bc_deg = bear_trv * 180.0 / np.pi
-                        report += f'\n  {line_trav} : {line_ctrl} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {dh:.1f} > {max_allowed_deltaZ:.1f}'
+                        report += f'\n  {line_trav} : {line_ctrl} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {abs_dh:.1f} > {max_allowed_deltaZ:.1f}'
                         if z_units != '':
                             report += ' ' + z_units
                         report += '.'
