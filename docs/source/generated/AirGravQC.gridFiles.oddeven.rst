@@ -11,5 +11,4 @@ AirGravQC.gridFiles.oddeven
       calcMeanTrack
       oddevenlines
       updateLineTracks
-      updateOddOrEven
    

@@ -18,6 +18,7 @@
    grid_n_image
    gridfiles
    grids_gmt
+   gridtoERS
    gridutility
    imageAllInDir
    imageStats

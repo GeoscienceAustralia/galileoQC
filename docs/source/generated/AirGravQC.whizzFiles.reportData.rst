@@ -1,4 +1,4 @@
-﻿AirGravQC.whizzFiles.reportData
+AirGravQC.whizzFiles.reportData
 ===============================
 
 .. automodule:: AirGravQC.whizzFiles.reportData
@@ -10,6 +10,7 @@
    
       reportChannels
       reportFlights
+      reportLines
       reportSampling
       reportWhizz
       whizzAttrExists

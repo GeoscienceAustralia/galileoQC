@@ -16,6 +16,7 @@
    retrieveData
    updateLineAttributes
    updateLineSpacing
+   updateOddOrEven
    whizzToXYZ
    xDatasetToXYZ
    xyzReader
