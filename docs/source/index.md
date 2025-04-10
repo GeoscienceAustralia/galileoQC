@@ -26,5 +26,5 @@ lineNumbering.md
 - {ref}`search`
 
 
-[^MagDeed]: See, similarly: J. A. Goodwin. Airborne magnetic and radiometric technical standards. Geoscience Australia, Record 2023(4), 2023.
+[^MagDeed]: See, similarly: J. A. Goodwin. Airborne magnetic and radiometric technical standards. Geoscience Australia, Record 2023(4), 2023. doi: 10.26186/147457.
 

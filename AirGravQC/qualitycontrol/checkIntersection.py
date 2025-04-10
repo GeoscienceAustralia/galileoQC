@@ -201,6 +201,18 @@ def _intersect(cx1, cy1, cx2, cy2, tx1, ty1, tx2, ty2):
 def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearingc):
     """
     Returns the difference in `z` values at the intersection of the traverse and control lines.
+
+    We are given the horizontal positions (x_trav, y_trav) and (x_ctrl, y_ctrl) for sample locations
+    along the traverse and control line respectively, and in coordinates where the nominal control
+    line is parallel to the `x` axis, and the nominal traverse line is parallel to the `y` axis.
+    We find the index, `it`, to the traverse position where `y_trav` is closest to the control line;
+    this must be the closest traverse point to the intersection of the nominal lines. Then we find the
+    index, ic, to the control position where `x_ctrl` is closest to the traverse line; similarly, this
+    is the closest control point to the intersection. The difference in `z` is then 
+         z_trav[it] - z_ctrl[ic]
+    There is no interpolation done. Furthermore, these are not necessarily the nearest neighbours to
+    each other, but rather the points nearest to the intersection of the nominal control and traverse
+    lines.
     
     Parameters
     ----------

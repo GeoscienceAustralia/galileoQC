@@ -338,7 +338,7 @@ A common reported fault is when a channel containing the local time of day in se
 ```python
 qc.checkConstantSlope(dh, fields=[])
 ```
-
+6
 ### Gaps in Data
 
 The Deed sets bounds on the largest permissible gap in certain data channels. With modern data acquisition systems, there ought to be no gaps at all. Consequently, the `checkGaps` function checks all channels for all survey lines and reports any gaps in data found.
@@ -346,6 +346,16 @@ The Deed sets bounds on the largest permissible gap in certain data channels. Wi
 ```python
 qc.checkGaps(dh)
 ```
+
+### Intersection Differences
+
+It is common to check differences in channel values at the intersection between a traverse flight-line and a control flight-line. The usual checks are for the height difference, and a primary gravity or gravity gradient channel. `AirGravQC` provides the `checkRMSIntersection` function for this purpose.
+
+It reports all traverse lines where the RMS difference in `zChannel` over all control line intersections is greater than `max_allowed_deltaZ`. If `divroot2` then the check is against the RMS difference divided by $\sqrt{2}$.
+
+```python
+qc.checkRMSIntersection(dh, zChannel='BouguerGravity', max_allowed_deltaZ=10.0, divroot2=False)
+``` 
 
 ### Channel Statistics
 
