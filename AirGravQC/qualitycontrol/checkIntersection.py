@@ -7,17 +7,22 @@ Check absolute differences at traverse - control line intersections.
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
+import matplotlib.ticker as tkr
 
 import AirGravQC.config as config
 import AirGravQC.utility.utility as util
+import AirGravQC.whizzPlots.whizzPlot as wpl
 
 groupName = config.groupName
         
 
-def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, plot_flag=False):
+def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, mode='RMS', verbose=False, plot_flag=False):
     """
     Checks that the values of the data in `zChannel` at the intersection of traverse and control
-    lines are different by no more than the maximum allowed delta.
+    lines are different by no more than the maximum allowed delta. If `mode` = "value", then each
+    intersection is assessed individually; if `mode` = "RMS", then the check is against the RMS
+    difference along each traverse line, if `mode` = "RMSroot2", then the check along each traverse
+    line is against the RMS difference divided by the square root of 2.
     
     Parameters
     ----------
@@ -41,6 +46,9 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
     max_allowed_deltaZ : Float, optional
         The maximum allowed difference in `zChannel` between the traverse and control lines
         at each intersection point. Defaults to 10.0.
+    verbose : Bool, optional
+        If True, verbose reporting is given which is annoying if there are many errors.
+        Default False.
     plot_flag : Bool, optional
         If True, plot a map of each pair of intersecting lines where the `zChannel`
         values differ by more than `max_allowed_deltaZ`. Default False.
@@ -50,13 +58,31 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
     None
 
     """
+    if mode != 'RMS' and mode != 'RMSroot2' and mode != 'value':
+        print(f'ERROR: mode is set to {mode} but must be one of "RMS", "RMSroot2", or "value".')
+        return
     data_is_good = True
     report = ''
     filename = str(whizzFile)
-    num_intersections_checked = 0
-    num_failed_intersections = 0
+    num_checked = 0
+    num_failed = 0
+    # num_intersections_checked = 0
+    # num_failed_intersections = 0
+    # num_travs_checked = 0
+    # num_failed_travs = 0
+
+    if plot_flag:
+        plot_subtitle = 'Intersection analysis'
+
+        fig = plt.figure(figsize=(8, 6))
+        thou_format = tkr.FuncFormatter(util._space_thou)
+        ax = fig.add_subplot(1,1,1)
+        plotTitle = 'Flight Line Map: '
     
     with h5py.File(filename, 'r') as f:
+        if plot_flag:
+            plotTitle += wpl.make_plot_title(f[groupName])
+
         g = f[groupName]['Lines']
         if xChannel == '':
             xChannel = f[groupName]['CoordinateFrame'].attrs['XChannel']
@@ -64,21 +90,16 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
             yChannel = f[groupName]['CoordinateFrame'].attrs['YChannel']
         if zChannel == '':
             zChannel = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+        if plot_flag:
+            plot_subtitle += f': {zChannel}'
         all_lines = list(g.keys())
-        # alltravs, allcontrols = controls_lessthan_1000(all_lines)
         allcontrols, alltravs, anyunknowns = lines_by_variety(g, all_lines)
         print(f'{len(anyunknowns)} lines in database not attributed as traverse or as control.')
         if len(anyunknowns) > 0:
             print('The line type (control or traverse) can be set by `updateLineAttributes`.')
         if controls == []:
-            # if any lines have line variety set:
-            #     controls = all_lines_with_variety(g, 'controls')
-            # else
             controls = allcontrols
         if travs == []:
-            # if any lines have line variety set:
-            #     travs = all_lines_with_variety(g, 'trav')
-            # else
             lines = alltravs
         else:
             lines = travs
@@ -92,9 +113,13 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
             x_trv = np.array(g[line_trav][xChannel])
             y_trv = np.array(g[line_trav][yChannel])
             z_trv = np.array(g[line_trav][zChannel])
+            trav_name = util._get_lineName(g[line_trav])
+            if plot_flag:
+                travline, = ax.plot(x_trv, y_trv, color='blue', lw=0.6, alpha=0.7)
 
-            bear_trv = _calc_bearing(x_trv, y_trv)
+            bear_trv = util._calc_bearing(x_trv, y_trv)
             (y_trv1, x_trv1) = util._rotateCoords(x_trv-x_trv[0], y_trv-y_trv[0], -bear_trv)
+            deltaheights = np.array([])
             for line_ctrl in controls:
                 # if line_ctrl == line_trav, then it is a control line, not a traverse.
                 # TODO: compare the PlannedLine for line_ctrl and line_trav rather than the lines themselves,
@@ -104,52 +129,85 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
                 x_ctl = np.array(g[line_ctrl][xChannel])
                 y_ctl = np.array(g[line_ctrl][yChannel])
                 z_ctl = np.array(g[line_ctrl][zChannel])
+                ctrl_name = util._get_lineName(g[line_ctrl])
+                if plot_flag:
+                    ctrlline, = ax.plot(x_ctl, y_ctl, color='blue', lw=0.6, alpha=0.7)
+
                 (y_ctl1, x_ctl1) = util._rotateCoords(x_ctl-x_trv[0], y_ctl-y_trv[0], -bear_trv)
 
                 if _intersect(x_trv[0], y_trv[0], x_trv[-1], y_trv[-1], x_ctl[0], y_ctl[0], x_ctl[-1], y_ctl[-1]):
                     # print(f'bearings: {bearingt}, {bearingt} -- {np.abs(np.cos(bearingc - bearingt))}')
-                    dh = _intersection_height(x_ctl1, y_ctl1, z_ctl, x_trv1, y_trv1, z_trv, bear_trv)
-                    abs_dh = np.abs(dh)
-                    num_intersections_checked += 1
-                    if abs_dh > max_allowed_deltaZ:
-                        num_failed_intersections += 1
-                        # print(dh)
-                        bc_deg = bear_trv * 180.0 / np.pi
-                        report += f'\n  {line_trav} : {line_ctrl} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {abs_dh:.1f} > {max_allowed_deltaZ:.1f}'
-                        if z_units != '':
-                            report += ' ' + z_units
-                        report += '.'
-                        data_is_good = False
-                        if plot_flag:
-                            fig = plt.figure()
-                            fig.suptitle(f'Title {line_ctrl}', fontsize=10)
-                            fig.subplots_adjust(top=0.85)
-                            
-                            ax = fig.add_subplot(1,2,1)
-                            ax.plot(x_ctl, y_ctl, x_ctrl, y_ctrl)
-                            plt.ylabel('y_ctl', fontsize = 6)
-                            plt.grid(True)
-                            for label in ax.get_xticklabels(): label.set_fontsize(6)
-                            for label in ax.get_yticklabels(): label.set_fontsize(6)
+                    dh, ipoint = _intersection_height(x_ctl1, y_ctl1, z_ctl, x_trv1, y_trv1, z_trv)
+                    deltaheights = np.append(deltaheights, dh)
+                    if mode == "value":
+                        abs_dh = np.abs(dh)
+                        num_checked += 1
+                        if abs_dh > max_allowed_deltaZ:
+                            num_failed += 1
+                            # print(dh)
+                            bc_deg = bear_trv * 180.0 / np.pi
+                            report += f'\n  {trav_name} : {ctrl_name} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {abs_dh:.1f} > {max_allowed_deltaZ:.1f}'
+                            if z_units != '':
+                                report += ' ' + z_units
+                            report += '.'
+                            if plot_flag:
+                                travpoint, = ax.plot(x_trv[ipoint], y_trv[ipoint], color='red', marker="o", ms=3, alpha=0.9)
+                            data_is_good = False
 
-                            ax = fig.add_subplot(1,2,2)
-                            ax.plot(x_ctl1, y_ctl1, x_ctrl1, y_ctrl1)
-                            plt.ylabel('y_ctrl', fontsize = 6)
-                            plt.grid(True)
-                            for label in ax.get_xticklabels(): label.set_fontsize(6)
-                            for label in ax.get_yticklabels(): label.set_fontsize(6)
-                            plt.show()
+            if mode == "RMS" or mode == "RMSroot2":
+                mode_str = "RMS"
+                dh_rms = np.nanstd(deltaheights)
+                num_checked += 1
+                if mode == "RMSroot2":
+                    dh_rms = dh_rms / np.sqrt(2.0)
+                    mode_str = "RMS/sqrt2"
+                if dh_rms > max_allowed_deltaZ:
+                    num_failed += 1
+                    bc_deg = bear_trv * 180.0 / np.pi
+                    report += f'\n  {trav_name} [bearing={bc_deg:.1f}] intersection {zChannel} {mode_str} difference = {dh_rms:.1f} > {max_allowed_deltaZ:.1f}'
+                    if z_units != '':
+                        report += ' ' + z_units
+                    report += '.'
+                    if plot_flag:
+                        travline, = ax.plot(x_trv, y_trv, color='red', lw=0.8, alpha=0.9)
+                    data_is_good = False
+
     if data_is_good:
-        report += f'All {num_intersections_checked} intersection {zChannel} differences were less than {max_allowed_deltaZ:.1f}'
+        if mode == "RMS" or mode == "RMSroot2":
+            report += f'All {num_checked} traverse lines had {zChannel} {mode_str} differences less than {max_allowed_deltaZ:.1f}'
+        else:
+            report += f'All {num_checked} intersection {zChannel} differences were less than {max_allowed_deltaZ:.1f}'
         if z_units != '':
             report += ' ' + z_units
         report += '.'
     else:
-        tmpstr = f'Of {num_intersections_checked} intersections checked'
-        tmpstr += f', {num_failed_intersections} exceeded the '
-        tmpstr += f'{max_allowed_deltaZ} allowed {zChannel} difference.\n'
+        if mode == "RMS" or mode == "RMSroot2":
+            tmpstr = f'Of {num_checked} traverse lines checked'
+            tmpstr += f', {num_failed} traverse lines exceeded the {max_allowed_deltaZ}'
+            if z_units != '':
+                tmpstr += ' ' + z_units
+            tmpstr += f' allowed {mode_str} difference in {zChannel}.\n'
+        else:
+            tmpstr = f'Of {num_checked} intersections checked'
+            tmpstr += f', {num_failed} exceeded the {max_allowed_deltaZ}'
+            if z_units != '':
+                tmpstr += ' ' + z_units
+            tmpstr += f' allowed absolute difference in {zChannel}.\n'
         report = tmpstr + report
     print(report)
+    if plot_flag:
+        ax.set_aspect('equal')
+        ax.xaxis.set_major_formatter(thou_format)
+        ax.yaxis.set_major_formatter(thou_format)
+        plt.xlabel(f'{xChannel} [m]', fontsize = 10)
+        plt.ylabel(f'{yChannel} [m]', fontsize = 10)
+        plt.suptitle(plotTitle, fontsize = 12)
+        plt.title(plot_subtitle, fontsize = 10)
+        plt.grid(True)
+        for label in ax.get_xticklabels(): label.set_fontsize(8)
+        for label in ax.get_yticklabels(): label.set_fontsize(8)
+        plt.show()
+
     return
 
 
@@ -198,7 +256,7 @@ def _intersect(cx1, cy1, cx2, cy2, tx1, ty1, tx2, ty2):
     return _ccw(cx1, cy1, tx1, ty1, tx2, ty2) != _ccw(cx2, cy2, tx1, ty1, tx2, ty2) and _ccw(cx1, cy1, cx2, cy2, tx1, ty1) != _ccw(cx1, cy1,cx2, cy2, tx2, ty2)
 
 
-def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearingc):
+def _intersection_height(x_ctrl, y_ctrl, z_ctrl, x_trav, y_trav, z_trav):
     """
     Returns the difference in `z` values at the intersection of the traverse and control lines.
 
@@ -228,29 +286,27 @@ def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearing
         The `y` values of the control line.
     z_ctrl : Numpy 1D array
         The `z` values of the control line.
-    bearingc : Float
-        The bearing in radians of the (x_ctrl, y_ctrl) line.
 
     Returns
     -------
     Float: the difference in `z` values at the intersection of the traverse and control lines.
+    Float: the index in the traverse arrays of the point closest to the intersection.
 
     """
 
-    y = np.abs(y_trav - _mean_1std(y_ctrl))
-    it_arr = np.where(y == y.min())
-    it = it_arr[0]
-    if len(it) > 1:
-        print('\nBug in _intersection_height - this intersection height cant be calculated')
-        print(it, type(it), len(it))
-        return 0.0
+    # print(np.std(y_ctrl), np.std(x_ctrl))
+    # print(np.std(y_trav), np.std(x_trav))
 
-    x = np.abs(x_ctrl - x_trav[it])
-    ic_arr = np.where(x == x.min())
-    ic = ic_arr[0]
+    # The data are rotated onto coordinates so that the traverse line is nominally at y=0.
+    # So the control line intersects at y=0; find the index to the point closest to y_ctrl = 0
+    y = np.abs(y_ctrl)
+    ic = np.where(y == y.min())[0]
+    # then the index to the traverse point whose x value is closest to the control lines
+    # x value at that intersection.
+    x = np.abs(x_trav - x_ctrl[ic])
+    it = np.where(x == x.min())[0]
 
-    # print(it, z_trav[it], ic, z_ctrl[ic])
-    return (z_trav[it] - z_ctrl[ic])[0]
+    return (z_trav[it] - z_ctrl[ic])[0], it
 
 
 def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
@@ -265,13 +321,13 @@ def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
 
     # We don't allow shallow angle crossovers (and won't count lines that were supposed to be parallel!).
     min_cosine = 0.1
-    bear_ctrl = _calc_bearing(x_ctrl, y_ctrl)
-    bear_trav = _calc_bearing(x_trav, y_trav)
+    bear_ctrl = util._calc_bearing(x_ctrl, y_ctrl)
+    bear_trav = util._calc_bearing(x_trav, y_trav)
     if np.abs(np.cos(bear_ctrl - bear_trav)) < min_cosine:
         return False
 
     # Find the index to the traverse sample whose y coordinate is closest to the mean control y coordinate
-    y = np.abs(y_trav - _mean_1std(y_ctrl))
+    y = np.abs(y_trav - util._mean_1std(y_ctrl))
     it_arr = np.where(y == y.min())
     if np.size(it_arr):
         itc = it_arr[0]
@@ -283,24 +339,6 @@ def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
         return False
 
     return True
-
-
-def _calc_bearing(x, y):
-    """
-    arctan(mean(diff(x) / mean(diff(y))))
-    """
-    return np.arctan2(_mean_1std(np.diff(x)), _mean_1std(np.diff(y)))
-
-
-def _mean_1std(x):
-    """
-    Calculate the mean of the values in x that fall in the range of +/- stdev(x).
-    This is a simplistic "mean excluding outliers".
-    """
-    mean1 = np.mean(x)
-    std1 = np.std(x)
-    idx = np.argwhere(np.logical_and(x > (mean1 - std1), x < (mean1 + std1)))
-    return np.mean(x[idx])
 
 
 def controls_lessthan_1000(all_lines):

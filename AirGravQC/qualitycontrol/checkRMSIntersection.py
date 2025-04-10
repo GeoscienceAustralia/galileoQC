@@ -53,6 +53,8 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
     None
 
     """
+    print('checkRMSIntersection() has been replaced with checkIntersection(). Please use the latter function with `mode`="RMS" or "RMSroot2".')
+    return
     data_is_good = True
     report = ''
     filename = str(whizzFile)
@@ -96,7 +98,7 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
             y_trv = np.array(g[linetrav][yChannel])
             z_trv = np.array(g[linetrav][zChannel])
 
-            bear_trv = _calc_bearing(x_trv, y_trv)
+            bear_trv = util._calc_bearing(x_trv, y_trv)
             (y_trv1, x_trv1) = util._rotateCoords(x_trv-x_trv[0], y_trv-y_trv[0], -bear_trv)
             dh = np.array([])
             for linectrl in controls:
@@ -152,7 +154,7 @@ def _intersection_height(x_trav, y_trav, z_trav, x_ctrl, y_ctrl, z_ctrl, bearing
     """
     """
 
-    y = np.abs(y_trav - _mean_1std(y_ctrl))
+    y = np.abs(y_trav - num_failed_travs(y_ctrl))
     it_arr = np.where(y == y.min())
     it = it_arr[0]
     if len(it) > 1:
@@ -180,13 +182,13 @@ def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
 
     # We don't allow shallow angle crossovers (and won't count lines that were supposed to be parallel!).
     min_cosine = 0.1
-    bear_ctrl = _calc_bearing(x_ctrl, y_ctrl)
-    bear_trav = _calc_bearing(x_trav, y_trav)
+    bear_ctrl = util._calc_bearing(x_ctrl, y_ctrl)
+    bear_trav = util._calc_bearing(x_trav, y_trav)
     if np.abs(np.cos(bear_ctrl - bear_trav)) < min_cosine:
         return False
 
     # Find the index to the traverse sample whose y coordinate is closest to the mean control y coordinate
-    y = np.abs(y_trav - _mean_1std(y_ctrl))
+    y = np.abs(y_trav - num_failed_travs(y_ctrl))
     it_arr = np.where(y == y.min())
     if np.size(it_arr):
         itc = it_arr[0]
@@ -200,20 +202,4 @@ def _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav):
     return True
 
 
-def _calc_bearing(x, y):
-    """
-    arctan(mean(diff(x) / mean(diff(y))))
-    """
-    return np.arctan2(_mean_1std(np.diff(x)), _mean_1std(np.diff(y)))
-
-
-def _mean_1std(x):
-    """
-    Calculate the mean of the values in x that fall in the range of +/- stdev(x).
-    This is a simplistic "mean excluding outliers".
-    """
-    mean1 = np.mean(x)
-    std1 = np.std(x)
-    idx = np.argwhere(np.logical_and(x > (mean1 - std1), x < (mean1 + std1)))
-    return np.mean(x[idx])
 

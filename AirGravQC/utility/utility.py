@@ -469,3 +469,21 @@ def convertUTMtoGeo(crs_epsg, x_utm, y_utm):
     proj = Transformer.from_crs(mycrs, mycrs.geodetic_crs)
     return proj.transform(x_utm, y_utm)
 
+
+def _mean_1std(x):
+    """
+    Calculate the mean of the values in x that fall in the range of +/- stdev(x).
+    This is a simplistic "mean excluding outliers".
+    """
+    mean1 = np.mean(x)
+    std1 = np.std(x)
+    idx = np.argwhere(np.logical_and(x > (mean1 - std1), x < (mean1 + std1)))
+    return np.mean(x[idx])
+
+
+def _calc_bearing(x, y):
+    """
+    arctan(mean(diff(x) / mean(diff(y))))
+    """
+    return np.arctan2(_mean_1std(np.diff(x)), _mean_1std(np.diff(y)))
+
