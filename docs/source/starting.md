@@ -16,6 +16,24 @@ Then start up a Jupyter-lab notebook. For more information about this, see [^Jup
 
 :::{tip}
 Installation not yet working!
+
+While AirGravQC remains on the GA private repository, it can be installed with the following steps:
+
+Clone the repository using Git:
+
+```bash
+git clone https://github.com/GeoscienceAustralia/AirGravQC.git
+```
+Navigate to the cloned directory:
+
+```bash
+cd AirGravQC
+```
+Install the package via setup.py:
+
+```bash
+sudo python setup.py install
+```
 :::
 
 ## Session Setup

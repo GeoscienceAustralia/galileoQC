@@ -46,6 +46,9 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
     max_allowed_deltaZ : Float, optional
         The maximum allowed difference in `zChannel` between the traverse and control lines
         at each intersection point. Defaults to 10.0.
+    mode : String, optional
+        Must be one of "value", "RMS", or "RMSroot2".
+        Default "RMS".
     verbose : Bool, optional
         If True, verbose reporting is given which is annoying if there are many errors.
         Default False.
