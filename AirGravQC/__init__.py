@@ -28,7 +28,7 @@ from AirGravQC.gridFiles.gridfiles import (gridfile_to_xa)
 from AirGravQC.gridFiles.read_ers import *
 
 # Data management
-# from AirGravQC.whizzFiles.gdfReader import asegToHDF
+from AirGravQC.whizzFiles.gdfReader import asegToHDF
 from AirGravQC.whizzFiles.xyzReader import xyzToHDF
 from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
 from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
