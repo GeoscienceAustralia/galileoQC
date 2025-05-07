@@ -84,7 +84,7 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
             print('One planned line updated.')
         elif no_plan:
             print('NO ACTION TAKEN ON LINE_TYPE - no plan file provided.')
-        elif line_type in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG']:
+        elif line_type in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG', 'SGL_GDF']:
             print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
             print(f'Verifying planned line numbers against {planfile_str}.')
 
@@ -153,6 +153,21 @@ def updateLineAttributes(whizzFile, planfile='', line_type='', line='', planned_
                         else:
                             gg_planned_line = np.floor(current_line / 100.0) / 10.0
                         if current_line < 999.9:
+                            gg.attrs['LineVariety'] = "Control"
+                        else:
+                            gg.attrs['LineVariety'] = "Traverse"
+                    elif line_type == 'SGL_GDF':
+                        if current_line < 7000:
+                            gg_planned_line = np.floor(current_line / 1000.0)
+                            current_segment = int(np.round(10 * (current_line - np.floor(current_line))))
+                            gg.attrs['Segment'] = current_segment
+                            gg.attrs['ReflightNumber'] = int(np.round(100 * (current_line - np.floor(current_line)))
+                                                             - 10 * current_segment)
+                        else:
+                            gg_planned_line = np.floor(current_line / 1000.0)
+                            gg.attrs['Segment'] = 0
+                            gg.attrs['ReflightNumber'] = int(100 * (current_line - np.floor(current_line)))
+                        if current_line < 999999.9:
                             gg.attrs['LineVariety'] = "Control"
                         else:
                             gg.attrs['LineVariety'] = "Traverse"
