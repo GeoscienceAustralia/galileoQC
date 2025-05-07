@@ -64,6 +64,13 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
     None.
 
     """
+    if (east_vel == '')  | (north_vel == ''):
+        mywarning = 'WARNING - no velocity channel names provided. Calculation of the \n'
+        mywarning += 'Eotvos effect will proceed using velocities estimated from \n'
+        mywarning += 'positions. This ignores aircraft heading changes due to cross \n'
+        mywarning += 'winds and thus can be in error by up to about 10,000 um/s/s).\n'
+        print(mywarning)
+
     filename = str(whizzFile)
 
     with h5py.File(filename, 'r') as f:
@@ -84,7 +91,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         corr_units = g[flightLine][eotCorr].attrs['Units']
         if corr_units == 'mGal':
             unit_scale = 10.0
-        elif corr_units == 'gu' or corr_units == 'µm/s/s' or corr_units == 'um/s/s':
+        elif corr_units == 'gu' or corr_units == 'µm/s/s' or corr_units == 'um/s/s' or corr_units == 'um/s2':
             unit_scale = 1.0
         else:
             print(f'ERROR - correction units {corr_units} not recognised, expected mGal or µm/s/s or um/s/s or gu')
@@ -121,7 +128,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
             diffStd[count] = np.std(err_data)
             lineNo[count] = line
             
-            if np.abs(diffMin[count] - diffMax[count]) > 10.0 and plot_flag:
+            if plot_flag > 10.0 and np.abs(diffMin[count] - diffMax[count]):
                 fig = plt.figure()
                 fig.suptitle(f'{projName} L{lineNo[count]}', fontsize=10)
                 fig.subplots_adjust(top=0.85)
