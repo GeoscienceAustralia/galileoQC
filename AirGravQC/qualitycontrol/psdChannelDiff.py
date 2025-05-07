@@ -103,7 +103,7 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
         At this period in seconds, a vertical red line is drawn. Default (0.0) is to not draw the line.
     shortestPeriod : Float, optional
         The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
-    minlinelen : Float, optional
+    minlinelenkm : Float, optional
         Flightlines shorter than this number of kilometres will be ignored in the calculation. Default is None.
     verbose : Bool, optional
         If True, more information is printed. Default is False.
@@ -134,13 +134,13 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
         linelist = []
         for line in flightLines:
             # ignore lines that are too short
-            if not minlinelen is None:
+            if not minlinelenkm is None:
                 x = f[groupName]['CoordinateFrame'].attrs['XChannel']
                 y = f[groupName]['CoordinateFrame'].attrs['YChannel']
                 xPos = rd.getLineData(g[line], x)
                 yPos = rd.getLineData(g[line], y)
                 linelen = util._displacement2(xPos[0], xPos[-1], yPos[0], yPos[-1]) / 1000.0
-                if linelen < minlinelen:
+                if linelen < minlinelenkm:
                     if verbose:
                         print(f'line {line} skipped - too short at {linelen} km.')
                     continue
