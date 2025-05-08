@@ -20,6 +20,7 @@ import AirGravQC.utility.utility as util
 import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.config as config
+from AirGravQC.qualitycontrol.psdChannelDiff import _time_frequency
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
@@ -196,6 +197,9 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     if np.array(oddlines).size == 0 or np.array(evenlines).size == 0:
         oddlines, evenlines = _getOddEvenLines(str(whizz_file))
 
+    if len(oddlines) == 0 or len(evenlines) == 0:
+        print("ERROR - cannot proceed without odd and even lines!")
+        return
     # Read data to xarrays.
     even_data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=evenlines, remove_mean=False, diff_one=False)
     odd_data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=oddlines, remove_mean=False, diff_one=False)
@@ -341,6 +345,101 @@ def _getTravCtrlLines(whizz_file):
 
     print(f'{numtravs} traverse lines, {numctrls} control lines, {numlines - numctrls - numtravs} not classified.')
     return travlines, ctrllines
+
+
+def altsample_grid(whizz_file, channel, filter_length, grid_space, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, hs=True):
+    """
+    Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
+    sorted into two sets of odd and even lines. Each set is gridded and the difference
+    of the grids is imaged, and its RMS value reported as an estimate of the error in
+    the data.
+
+    Parameters
+    ----------
+    whizz_file : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+    channel : String
+        The channel or field name to analyse. Must exist in `whizz_file`.
+    filter_length : Float
+        The length in seconds of the filter applied to channel.
+    grid_space : Float
+        The width of the grid cell to be used in gridding. Recommend: 1/5 - 1/4 line spacing.
+    method : string, optional
+        The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+        "neighbours", "bicubic", and "biharmonic" and the SciPy GridData "linear" method. "neighbours"
+        is much faster if `pykdtree` is installed. Default `neighbours` method.
+    mask_polygon : numpy 2D array, optional
+        If the size of mask_polygon > 0, then data_array will be masked to the area
+        within the polygon defined by it.
+    mask_pixels : Integer, optional
+        If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
+        location will be masked out. Default 1.
+    numneighbours : Integer, optional
+        If method='neighbours', then this is the number of neighbours to average. Default 5.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    filename = str(whizz_file)
+    with h5py.File(filename, 'r') as f:
+        fs = _time_frequency(f[groupName])
+    half_fids = int(0.5 * fs * filter_length)
+    odd_start = int(0.5 * half_fids)
+
+    # Read data to xarrays.
+    data = whizz_to_xarray(whizz_file, channel, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False)
+    odd_data = data.isel(fiducials=slice(odd_start,-1,half_fids))
+    even_data = data.isel(fiducials=slice(0,-1,half_fids))
+
+    # Find the coverage for each gridded data set
+    e_chan = even_data.attrs['x_channel']
+    n_chan = even_data.attrs['y_channel']
+    even_region = [
+                    np.min(even_data[e_chan].values),
+                    np.max(even_data[e_chan].values),
+                    np.min(even_data[n_chan].values),
+                    np.max(even_data[n_chan].values)
+                ]
+    odd_region = [
+                    np.min(odd_data[e_chan].values),
+                    np.max(odd_data[e_chan].values),
+                    np.min(odd_data[n_chan].values),
+                    np.max(odd_data[n_chan].values)
+                ]
+
+    # We are only interested in the statistics over the intersection of the regions.
+    intersectregion = [
+                        max(even_region[0], odd_region[0]),
+                        min(even_region[1], odd_region[1]),
+                        max(even_region[2], odd_region[2]),
+                        min(even_region[3], odd_region[3]),
+                        ]
+                        
+    # Grid and difference the data sets
+    even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion, method=method, 
+        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours)
+    odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion, method=method, 
+        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours)
+    d_grid = even_grid - odd_grid
+
+    # Subtraction does not preserve attributes
+    d_grid.attrs['units'] = even_grid.attrs['units']
+    d_grid.attrs['long_name'] = even_grid.attrs['long_name']
+    d_grid.attrs['title'] = f"Grid difference of alternates : {even_grid.attrs['title']}"
+    d_grid['x'].attrs['orig_name'] = even_grid['x'].attrs['orig_name']
+    d_grid['y'].attrs['orig_name'] = even_grid['y'].attrs['orig_name']
+
+    # Image and report statistics
+
+    xdImage(d_grid, d_grid.attrs['title'], colormap=config.qc_colormap, cmap_norm='nonorm', 
+        minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
+        hs=hs, azdeg=45, ax=None, clipTo3Std = True)
+
+    gut.report_gridStats(d_grid, mask_polygon=mask_polygon)
+
 
 
 
