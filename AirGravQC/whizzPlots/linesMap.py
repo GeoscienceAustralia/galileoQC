@@ -6,9 +6,7 @@ Plot a survey line map.
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
-# import xarray as xr
-# import verde as vd
-# import pooch
+from matplotlib.patches import Polygon
 
 import AirGravQC.config as config
 import AirGravQC.whizzFiles.retrieveData as rd
@@ -19,7 +17,7 @@ import matplotlib.ticker as tkr
 groupName = config.groupName
 
 
-def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines=[], planEast='', planNorth=''):
+def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines=[], planEast='', planNorth='', blockpolygon=[], colourchan='', colourvalue=None):
     """
     Plots a line map of the flown survey over the planned survey lines.
 
@@ -45,6 +43,13 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
     planNorth : String, optional
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
+    blockpolygon : Array of lists of easting, northing, optional
+        If provided, then the polygon is drawn.
+    colourchan : String, optional
+        The name of a channel in the whizzFiles.
+    colourvalue : Float, optional
+        If the colourchan and colourvalue are both provided, then the lines in the map
+        will be coloured when the value of colourchan = colourvalue.
 
     Returns
     -------
@@ -111,11 +116,19 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
                                 lX = rd.getLineData(g[line], easting)[0:]
                                 lY = rd.getLineData(g[line], northing)[0:]
                                 flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
+                                if not (colourchan == '' or colourvalue is None):
+                                    coldata = rd.getLineData(g[line], colourchan)[0:]
+                                    coly = np.ma.masked_where(coldata != colourvalue, lY)
+                                    colline, = ax.plot(lX, coly, color='orange', lw=0.8, alpha=0.9)
                     else:
                         # ... otherwise, show all observed lines.
                         lX = rd.getLineData(g[line], easting)[0:]
                         lY = rd.getLineData(g[line], northing)[0:]
                         flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
+                        if not (colourchan == '' or colourvalue is None):
+                            coldata = rd.getLineData(g[line], colourchan)[0:]
+                            coly = np.ma.masked_where(coldata != colourvalue, lY)
+                            colline, = ax.plot(lX, coly, color='orange', lw=0.8, alpha=0.9)
             
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(thou_format)
@@ -127,4 +140,12 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
     plt.grid(True)
     for label in ax.get_xticklabels(): label.set_fontsize(8)
     for label in ax.get_yticklabels(): label.set_fontsize(8)
+    if len(blockpolygon) > 0:
+        plotsurveyboundary(ax, blockpolygon)
     plt.show()
+
+
+def plotsurveyboundary(ax, blockpolygon):
+    polygon = Polygon(blockpolygon, edgecolor='green', fill=False)
+    ax.add_patch(polygon)  
+    return
