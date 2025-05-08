@@ -35,6 +35,7 @@ from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getCha
 from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling, reportChannels, reportLines)
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing
 from AirGravQC.whizzFiles.updateOddOrEven import updateOddOrEven
+from AirGravQC.gridFiles.gridToNc4 import gridToNc4
 
 # 1D Plotting
 from AirGravQC.whizzPlots.plotChannelsLines import plotChannelsLines
@@ -56,7 +57,7 @@ from AirGravQC.gridFiles.diff_n_image import diff_n_image
 from AirGravQC.gridFiles.xarray_to_grid import xarray_to_grid
 from AirGravQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from AirGravQC.gridFiles.oddeven import updateLineTracks
-from AirGravQC.gridFiles.oddeven import oddevenlines
+from AirGravQC.gridFiles.oddeven import oddevenlines, altsample_grid
 from AirGravQC.gridFiles.imageAllInDir import imageAllInDir
 
 # AGG (Falcon) checks
