@@ -156,5 +156,9 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
             else:
                 my_dataset.attrs['title'] = z_chan
             
-        print(f'    {my_dataset.attrs["title"]}: min = {my_dataset[xr_zchan].data.min()}, max = {my_dataset[xr_zchan].data.max()}.')
+        statsreport = f'    {my_dataset.attrs["title"]}:'
+        statsreport += f' min = {np.nanmin(my_dataset[xr_zchan].data):.3G},'
+        statsreport += f' max = {np.nanmax(my_dataset[xr_zchan].data):.3G},'
+        statsreport += f' mean = {np.nanmean(my_dataset[xr_zchan].data):.3G}.\n'
+        print(statsreport)
     return my_dataset
