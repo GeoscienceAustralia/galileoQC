@@ -11,7 +11,7 @@ import AirGravQC.config as config
 groupName = config.groupName
 
 
-def checkGaps(whizzFile, ignored_chans=[], maxGapSec=0.0, maxNumGaps=0, lines=[]):
+def checkGaps(whizzFile, ignored_chans=[], maxGapSec=0.0, maxNumGaps=0, lines=[], verbose=True):
     """
     Checks every dataset for each channel and each survey line in filePath for
     gaps, and reports all gaps found.
@@ -65,5 +65,6 @@ def checkGaps(whizzFile, ignored_chans=[], maxGapSec=0.0, maxNumGaps=0, lines=[]
                 num_lines_failed += 1
                 report += lineText + '\n'
         print(f'Checking for all gaps in {num_channels} channels on {total_num_lines} lines.')
-        print(report)
         print(f'{num_lines_failed} lines failed.')
+        if verbose:
+            print(report)
