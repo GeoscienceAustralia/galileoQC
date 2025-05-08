@@ -215,7 +215,9 @@ def _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X
     settings += f'allowed {min_allowance:.1f} : '
     settings += f'{max_allowance:.1f} for < {max_allowed_str}.\n'
     print(settings)
-    
+    meanspeed = 0.0
+    numfids = 0.0
+
     for line in lines:
         lineName = util._get_lineName(group[line])
         if title_str == '':
@@ -224,6 +226,9 @@ def _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X
             plot_title = f'{title_str}: {lineName}'
 
         x, y, dist, t, speed = _get_speeddata(group[line], xChannel, yChannel, tChannel, vel_north, vel_east)
+        cleaned_speed = speed[~np.isnan(speed)]
+        meanspeed += np.nansum(cleaned_speed)
+        numfids += len(cleaned_speed)
 
         if speed[speed < minSafeSpeed].size > 0:
             lineUnsafeSlow = True
@@ -306,7 +311,8 @@ def _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X
     print(f' Checked {total_num_lines} lines and {num_exceed_lines} had some short exceedance(s).')
     print(f' {num_failed_lines} lines failed for exceedance > allowed.')
     print(f' Total number of full exceedances = {num_failures}.')
-    print(f'\n{number_exc_known} exceedances known in the database.\n')
+    print(f'\n{number_exc_known} exceedances known in the database.')
+    print(f'\nMean speed over all lines = {meanspeed / numfids:.1f}.\n')
     print(report)
     if plot_flag:
         plt.show()
