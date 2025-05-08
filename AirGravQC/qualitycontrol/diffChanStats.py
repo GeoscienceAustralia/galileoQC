@@ -21,7 +21,7 @@ import AirGravQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
 
 
-def diffChanStats(whizzFile, channel1, channel2, lines=[]):
+def diffChanStats(whizzFile, channel1, channel2, lines=[], verbose=True):
     """
     Generate statistical plots for the difference between two channels across all lines. The plots show
     the min, mean, max and stdev for each channel as a function of line number.
@@ -65,6 +65,8 @@ def diffChanStats(whizzFile, channel1, channel2, lines=[]):
         if 'Units' in dd.attrs.keys():
             ylabelstr += ' ' + dd.attrs['Units']
     
+        report = ''
+
         for line in lines:
             # if line != 'CoordinateFrame':
             lineNo[count] = line
@@ -81,10 +83,12 @@ def diffChanStats(whizzFile, channel1, channel2, lines=[]):
                 chMax[count] = 0.0
                 chMean[count] = 0.0
                 chStd[count] = 0.0
-                print(f'Less than three real values in {lineNo[count]:.2f} for data, no statistics.')
+                report += f'Less than three real values in {lineNo[count]:.2f} for data, no statistics.\n'
             count += 1
 
         print(f'Overall mean difference is {allmean / numsamp :.2f}.')
+        if verbose:
+            print(report)
         figtitle = wpl.make_plot_title(gProject)
         titlestr = channel1 + ' - ' + channel2 + ' Stats'
         plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr)
