@@ -5,6 +5,7 @@ Check that vertical exceedances of the aircraft from planned height are within s
 """
 import numpy as np
 import h5py
+import pathlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
 from scipy import interpolate
@@ -16,13 +17,13 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False):
+def checkVertPlan(planPaths, measPath, *, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False):
     """
     Reports exceedances of actual vertical position from planned vertical positions
     (stored in a plan file) for an airborne survey Whizz database.
 
     The positions (`planX`, `planY`, `planY`) of each planned survey line
-    are read from `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read
+    are read from a `planPath`. The measured positions (`measX`, `measY`, `measZ`) are read
     from `measPath` and the vertical distance of each from the planned line is
     calculated. If this distance exceeds `allowance` for a distance greater than
     `maxDistance`, then an out-of-specification exceedance is reported for that line.
@@ -33,8 +34,8 @@ def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='',
 
     Parameters
     ----------
-    planPath : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension, of survey plan.
+    planPath : array of String or pathlib Path
+        Names of HDF5 Whizz files, including path and extension, of survey plan.
     measPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, of measured data.
     lines : Array{String}, optional
@@ -68,7 +69,16 @@ def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='',
     None.
 
     """
-    planfile = str(planPath)
+    if type(planPaths) is list:
+        if not (type(planPaths[0]) is str or type(planPaths[0]) is pathlib.PosixPath):
+            print("ERROR - the input parameter needs to be a list of planfile names but it is not.")
+            return
+    elif type(planPaths) is pathlib.PosixPath or type(planPaths) is str:
+        planPaths = [planPaths]
+    else:
+        print("ERROR - the first input parameter needs to be a list of planfile names but it is not.")
+        return
+
     measFile = str(measPath)
     if maxDistance > 1.0:
         counting = False
@@ -77,43 +87,47 @@ def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='',
     else:
         print(f'ERROR. Require maxDistance > 1.0 m or maxCounter > 0')
         print(f'  maxDistance = {maxDistance}, maxCounter = {maxCounter}.')
-    
+        return
+
     exceedances_known = False
     this_exc_known = False
     number_exc_known = 0
+    report = ''
 
-    with h5py.File(planfile, 'r') as fp:
-        gPlan = fp[groupName]['Lines']
-        if planX == '':
-            planX = fp[groupName]['CoordinateFrame'].attrs['XChannel']
-        if planY == '':
-            planY = fp[groupName]['CoordinateFrame'].attrs['YChannel']
-        if planZ == '':
-            planZ = fp[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+    with h5py.File(measFile, 'r') as fm:
+        gMeas = fm[groupName]['Lines']
+        if measX == '':
+            measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
+        if measY == '':
+            measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
+        if measZ == '':
+            measZ = fm[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
+        numErrors = int(0)
+        numErrLines = 0
+        num_lines_unplanned = 0
 
-        with h5py.File(measFile, 'r') as fm:
-            gMeas = fm[groupName]['Lines']
-            if measX == '':
-                measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
-            if measY == '':
-                measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
-            if measZ == '':
-                measZ = fm[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
-            numErrors = int(0)
-            numErrLines = 0
-            num_lines_unplanned = 0
-            report = ''
+        if lines == []:
+            lines = gMeas.keys()
 
-            if lines == []:
-                lines = gMeas.keys()
+        for line in lines:
+            line_flagged = False
+            gLineMeas = gMeas[line]
+            planLineInPlan, gpline, planfile = util._get_line_planfiles(planPaths, gLineMeas)
+            # planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
+            with h5py.File(planfile, 'r') as fp:
+                gPlan = fp[groupName]['Lines']
+                # Need to deal with situation where these attributes are not set.
+                # 1. Trap for possibility;
+                # 2. Tell user to run updateCoordinateFrame
+                # 3. End
+                planX = fp[groupName]['CoordinateFrame'].attrs['XChannel']
+                planY = fp[groupName]['CoordinateFrame'].attrs['YChannel']
+                planZ = fp[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
 
-            for line in lines:
-                line_flagged = False
-                gLineMeas = gMeas[line]
-                planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
                 lineName = util._get_lineName(gLineMeas)
 
                 if planLineInPlan:
+                    # print(gPlan, gpline, planX)
                     xP = np.array(gPlan[gpline][planX])
                     yP = np.array(gPlan[gpline][planY])
                     zP = np.array(gPlan[gpline][planZ])
@@ -130,7 +144,7 @@ def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='',
                     # and the planned drape is all NaNs.
                     good = np.logical_not(np.isnan(zP))
                     if zP[good].size == 0:
-                        print(f'Line {line} planned drape is all NaNs; skipping to next line.')
+                        report += f'Line {line} planned drape is all NaNs; skipping to next line.\n'
                         continue
 
                     # make life easier by transforming to a 2D problem
@@ -146,10 +160,11 @@ def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='',
                     
                     # interpolate (xm, zM) onto (xp, zmp)
                     if abs(xm[-1] - xm[0]) < abs(ym[-1] - ym[0]):
-                        print('ERROR - expect xms > yms but this is not so.')
-                    (zmp, zM_trim, xm) = _interpolateVert(xp, zp, xm, zM)
+                        report += 'ERROR - expect xms > yms but this is not so.\n'
+                    (zmp, zM_trim, xm, addreport) = _interpolateVert(xp, zp, xm, zM)
+                    report += addreport
                     if zmp.size == 1 or zM_trim.size == 1 or xm.size == 1:
-                        print(f'    interpolation failed on line {line}.')
+                        report += f'    interpolation failed on line {line}.\n'
                         continue
 
                     # calculate the deviation vector
@@ -206,7 +221,10 @@ def checkVertPlan(planPath, measPath, *, lines=[], planX='', planY='', planZ='',
                     print(f'Line {lineName} not in plan.')
                     num_lines_unplanned += 1
 
-        print(f'\n{num_lines_unplanned} lines not in plan and not checked.\n')
+        if num_lines_unplanned > 0:
+            print(f'\n{num_lines_unplanned} lines not in plan and not checked.\n')
+        else:
+            print(f'\nAll lines in plan and checked.\n')
         print(f'Total number of exceedances = {numErrors} over {numErrLines} erroneous lines.')
         print(f'\n{number_exc_known} exceedances known in the database.\n')
         print(report)
@@ -243,6 +261,7 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
         Synchronised with xnew (by trimming) and returned.
 
     """
+    report = ''
     # clean out 'nan's'
     # good = ~np.isnan(xbase + ybase)
     good = np.logical_not(np.isnan(xbase + ybase))
@@ -254,8 +273,8 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
     xbase = xbase[good]
     ybase = ybase[good]
     if xbase.size < 10:
-        print(f'ERROR - after trimming NaNs, the data vectors are too short for analysis.')
-        return np.array([0]), np.array([0]), np.array([0])
+        report += f'ERROR - after trimming NaNs, the data vectors are too short for analysis.\n'
+        return np.array([0]), np.array([0]), np.array([0]), report
 
     # ensure ordered in increasing x
     if xbase[1] < xbase[0]:
@@ -272,8 +291,8 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
     xbase = xbase[keep]
     ybase = ybase[keep]
     if xbase.size < 10:
-        print(f'ERROR - trimmed planned data are too few. xnew [{xnew[0]:0.1f}:{xnew[-1]:0.1f}]')
-        return np.array([0]), np.array([0]), np.array([0])
+        report += f'ERROR - trimmed planned data are too few. xnew [{xnew[0]:0.1f}:{xnew[-1]:0.1f}]\n'
+        return np.array([0]), np.array([0]), np.array([0]), report
 
     # trim new data and store
     keepsml = xnew < xbase[-1]
@@ -282,13 +301,13 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
     xnew = xnew[keep]
     ynew = ynew[keep]
     if xnew.size < 10:
-        print(f'ERROR - after trimming measured data, the vectors are too short for analysis.')
-        return np.array([0]), np.array([0]), np.array([0])
+        report += f'ERROR - after trimming measured data, the vectors are too short for analysis.\n'
+        return np.array([0]), np.array([0]), np.array([0]), report
 
     spl = interpolate.splrep(xbase, ybase, k=3, s=0)
     yout = interpolate.splev(xnew, spl)
 
-    return yout, ynew, xnew
+    return yout, ynew, xnew, report
 
 
 def _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn):

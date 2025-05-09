@@ -5,6 +5,7 @@ Check that horizontal deviations from the planned aircraft path are within speci
 """
 import numpy as np
 import h5py
+import pathlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 from matplotlib.ticker import StrMethodFormatter
@@ -15,13 +16,13 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, 
+def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, 
     maxCounter=0, maxDistance=0, known='', needConvertToGeodetic=False, crs_epsg=0, plot_flag=False, verbose=False):
     """
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.
     The positions (planX, planY) of the start and end of each planned survey line
-    are read from planPath. The measured positions (measX, measY) are read from
+    are read from a planPath. The measured positions (measX, measY) are read from
     measPath and the perpendicular distance of each from the planned line is
     calculated. If this distance exceeds allowance for maxCounter consecutive
     fiducial, or maxDistance consecutive metres, then an out-of-specification
@@ -29,8 +30,8 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
 
     Parameters
     ----------
-    planPath : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension, with the survey
+    planPaths : array of String or pathlib Path
+        Names of HDF5 Whizz files, including path and extension, with the survey
         positions plan.
     measPath : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension, with the survey
@@ -80,6 +81,16 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
     None.
 
     """
+    if type(planPaths) is list:
+        if not (type(planPaths[0]) is str or type(planPaths[0]) is pathlib.PosixPath):
+            print("ERROR - the input parameter needs to be a list of planfile names but it is not.")
+            return
+    elif type(planPaths) is pathlib.PosixPath or type(planPaths) is str:
+        planPaths = [planPaths]
+    else:
+        print("ERROR - the first input parameter needs to be a list of planfile names but it is not.")
+        return
+
     start_x = 0.0
     end_x = 0.0
     start_y = 0.0
@@ -89,42 +100,42 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
     this_exc_known = False
     number_known = 0
 
-    planfile = str(planPath)
     measFile = str(measPath)
-    
-    with h5py.File(planfile, 'r') as fp:
-        gPlan = fp[groupName]['Lines']
-        if planX == '':
-            planX = fp[groupName]['CoordinateFrame'].attrs['XChannel']
-        if planY == '':
-            planY = fp[groupName]['CoordinateFrame'].attrs['YChannel']
 
-        with h5py.File(measFile, 'r+') as fm:
-            gMeas = fm[groupName]['Lines']
-            if measX == '':
-                measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
-            if measY == '':
-                measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
+    with h5py.File(measFile, 'r+') as fm:
+        gMeas = fm[groupName]['Lines']
+        if measX == '':
+            measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']
+        if measY == '':
+            measY = fm[groupName]['CoordinateFrame'].attrs['YChannel']
 
-            if lines == []:
-                lines = list(gMeas.keys())
+        if lines == []:
+            lines = list(gMeas.keys())
 
-            numLines = len(lines)
+        numLines = len(lines)
 
-            message = ''
-            num_lines_exceeded = 0
-            total_num_excs = 0
-            num_lines_unplanned = 0
+        message = ''
+        num_lines_exceeded = 0
+        total_num_excs = 0
+        num_lines_unplanned = 0
 
-            if needConvertToGeodetic:
-                maxDistance = maxDistance / 110000.0
-                allowance = allowance / 110000.0
-                print('Performing analysis in geographic coordinates. Criteria converted from Cartesian.')
-                print(f'    Criteria: allowance = {allowance:.6f} deg, maxDistance = {maxDistance:.6f} deg.')
+        if needConvertToGeodetic:
+            maxDistance = maxDistance / 110000.0
+            allowance = allowance / 110000.0
+            print('Performing analysis in geographic coordinates. Criteria converted from Cartesian.')
+            print(f'    Criteria: allowance = {allowance:.6f} deg, maxDistance = {maxDistance:.6f} deg.')
 
-            for line in lines:
-                gLineMeas = gMeas[line]
-                planLineInPlan, gpline = util.getPlannedLine(gPlan, gLineMeas)
+        for line in lines:
+            gLineMeas = gMeas[line]
+            planLineInPlan, gpline, planfile = util._get_line_planfiles(planPaths, gLineMeas)
+            with h5py.File(planfile, 'r') as fp:
+                gPlan = fp[groupName]['Lines']
+                # Need to deal with situation where these attributes are not set.
+                # 1. Trap for possibility;
+                # 2. Tell user to run updateCoordinateFrame
+                # 3. End
+                planX = fp[groupName]['CoordinateFrame'].attrs['XChannel']
+                planY = fp[groupName]['CoordinateFrame'].attrs['YChannel']
 
                 lineName = util._get_lineName(gLineMeas)
                 exceedance_in_line = False
@@ -202,7 +213,7 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                                     exceedance_in_line = True
                                 num_fids_in_exceedance = 0
                 else:
-                    print(f'Line {lineName} / {lineName} not in plan.')
+                    message += f'Line {lineName} / {lineName} not in plan.\n'
                     num_lines_unplanned += 1
                 if exceedance_in_line:
                     num_lines_exceeded += 1
@@ -212,13 +223,16 @@ def checkXYPlan(planPath, measPath, lines=[], planX='', planY='', measX='', meas
                         else:
                             _plot_exceeding_line(x, y, yP, xP, yM, xM, measY, measX, allowance, line, lineName, dirn, geoCoords=needConvertToGeodetic)
 
-            message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message # 5 DEC
-            message = f'\n{total_num_excs} horizontal exceedances.\n' + message # 5 DEC
-            message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message # 5 DEC
-            message = f'\n{number_known} exceedances known in the database.\n' + message # 5 DEC
-            print(message)
-            if plot_flag and num_lines_exceeded > 0:
-                plt.show()
+    message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message
+    message = f'\n{total_num_excs} horizontal exceedances.\n' + message
+    if num_lines_unplanned > 0:
+        message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message
+    else:
+        message = f'\nAll lines in plan and checked.\n' + message
+    message = f'\n{number_known} exceedances previously known in the database.\n' + message
+    print(message)
+    if plot_flag and num_lines_exceeded > 0:
+        plt.show()
 
 
 def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn, geoCoords=False):

@@ -10,7 +10,12 @@ Created on Sat Aug 14 20:28:20 2021
 
 # import necessary modules
 import numpy as np
+import h5py
 from scipy.signal import butter, lfilter
+
+import AirGravQC.config as config
+
+groupName = config.groupName
 
 
 def _distance(x, y):
@@ -317,6 +322,21 @@ def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False
         return ils
 
     return _butter_bandpass_filter(ils, lowcut, highcut, fs, order = order)
+
+
+def _get_line_planfiles(planPaths, gLineMeas):
+    """
+    """
+    planLineInPlan = False
+    gpline = ''
+    for planPath in planPaths:
+        planfile = str(planPath)
+        with h5py.File(planfile, 'r') as fp:
+            gPlan = fp[groupName]['Lines']
+            planLineInPlan, gpline = getPlannedLine(gPlan, gLineMeas)
+            if planLineInPlan:
+                break
+    return planLineInPlan, gpline, planfile
 
 
 def getPlannedLine(gPlan, gLineMeas):
