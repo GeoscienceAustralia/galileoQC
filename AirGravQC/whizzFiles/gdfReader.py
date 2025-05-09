@@ -18,7 +18,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FLIGHT', dateChannel='DATE', omitChannels=[]):
+def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIGHT', dateChannel='DATE', omitChannels=[]):
     '''
     Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
     HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
@@ -55,7 +55,7 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
         return
     
     # open GDF, pull out channel names, the units, and the description
-    gdf = aseg.read(str(gdf_datfile), engine="dask", method='fixed-widths')
+    gdf = aseg.read(str(gdf_datfile), engine="dask")#, method='fixed-widths')
     df = gdf.df()
     
     channelNames = gdf.field_names()
@@ -104,23 +104,13 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
                 print(f'Omitted {channelsOut[tempIdx]} in column {tempIdx}.\n')
                 channelsOut.pop(tempIdx)
             
-    print('Channels to be written to geoWhizz file: ')
+    print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
     print(channelsOut)
     
     # now, iterate through GDF collecting line numbers and sizes
     print('\nGetting line numbers ...')
-    flightNumbers = []
-    dates = []
     lineNumbers = df[lineChannel].unique().compute()
     numLines = len(lineNumbers)
-
-    # Get the flight number and date for line attributes.
-    for line in lineNumbers:
-        line_data = df[df[lineChannel] == line].compute()
-        if haveFlights:
-            flightNumbers.append(line_data[flightChannel].values[0])
-        if haveDates:
-            dates.append(line_data[dateChannel].values[0])
 
     print('... done. Ready to create HDF file and transfer data into it.\n')
 
@@ -134,34 +124,21 @@ def asegToHDF(gdf_datfile, whizzFile = '', lineChannel='LINE', flightChannel='FL
         gLines = g.create_group('Lines')
         
         # create all the line groups
-        for ii in range(0, numLines):
+        for current_line in lineNumbers:
             
             # create a line group and metadata
-            current_line = lineNumbers[ii]
             gg = gLines.create_group(f'{current_line}')
             gg.attrs['LineNumber'] = current_line
+            line_data = df[df[lineChannel] == current_line].compute()
+            # Get the flight number and date for line attributes.
             if haveFlights:
-                gg.attrs['Flight'] = flightNumbers[ii]
+                gg.attrs['Flight'] = line_data[flightChannel].values[0]
             if haveDates:
-                gg.attrs['Date_Local'] = dates[ii]
+                gg.attrs['Date_Local'] = line_data[dateChannel].values[0]
 
             # for each line group, create the DataSets with attributes
             for channelName in channelsOut:
-                
-                line_data = df[df[lineChannel] == current_line].compute()
-                my_data = np.array(line_data[channelName].values)
-                
-                # Not used, but could force dtypes.
-                if isinstance(my_data[0], int):
-                    mytype = 'int'
-                elif isinstance(my_data[0], float):
-                    mytype = 'float64'
-                elif isinstance(my_data[0], str):
-                    mytype = 'str'
-                else:
-                    mytype = 'object'
-                # print(my_data.shape, channelName, my_data[0], type(my_data[0]))
-                
+                my_data = np.array(line_data[channelName].values)                
                 dd = gg.create_dataset(channelName, data=my_data, compression="gzip", compression_opts=4) #, dtype='float64'
                 dd.attrs['Name'] = channelName
                 dd.attrs['Alias'] = channelName
