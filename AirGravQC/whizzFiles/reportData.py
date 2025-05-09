@@ -110,7 +110,7 @@ def reportLines(whizzFile):
     print("Control Lines:\n", ctrllines)
 
 
-def reportChannels(whizzFile, channel=''):
+def reportChannels(whizzFile, channel='', verbose=False):
     """
     Prints a short summary of the channel names in a HDF5 Whizz file.
 
@@ -118,7 +118,10 @@ def reportChannels(whizzFile, channel=''):
     ----------
     whizzFile : String or pathlib Path
         Name of a HDF5 Whizz file, including path and extension.
-
+    channel : string, optional
+        If provided, only the details of that channel are given, otherwise all.
+    verbose : Bool, optional
+        If True, print all details, otherwise just the names. Default False.
     Returns
     -------
     None.
@@ -134,19 +137,29 @@ def reportChannels(whizzFile, channel=''):
         lineNames = list(gLines.keys())
         numLines = len(lineNames)
         lineGroups = list(gLines.values())
-        channelNames = list(lineGroups[0].keys())
+        if channel == '':
+            channelNames = list(lineGroups[0].keys())
+        else:
+            channelNames = [channel]
         numChannels = len(channelNames)
         
         print(whizzHeader)
 
-        print(f'\n{numChannels} channels:\n', channelNames)
-        if channel != '':
-                
-            myChanGroup = gLines[lineNames[0]][channel]
-            chanAttrs = list(myChanGroup.attrs)
-            print(f'\nChannel {myChanGroup}')
-            for attribute in chanAttrs:
-                print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
+        if verbose or channel != '':
+            print(f'\033[1m  {"channel":<20} {"units":<14} {"description"}\033[0m')
+            print('--------------------------------------------------')
+            for channel in channelNames:
+                myChanGroup = gLines[lineNames[0]][channel]
+                print(f'  {channel:<20} {myChanGroup.attrs["Units"]:<14} {myChanGroup.attrs["Description"]}')
+
+        else:
+            print(f'\n{numChannels} channels:\n', channelNames)
+            # if channel != '':
+            #     myChanGroup = gLines[lineNames[0]][channel]
+            #     chanAttrs = list(myChanGroup.attrs)
+            #     print(f'\nChannel {myChanGroup}')
+            #     for attribute in chanAttrs:
+            #         print(f'    {attribute}: {myChanGroup.attrs[attribute]}')
 
 
 def reportFlights(whizzFile, flightChannel='', lines=[], detailed=False):
