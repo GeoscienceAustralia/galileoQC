@@ -64,9 +64,16 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     """
 
     if flight_chan != '':
-        _updateFlightAttributes(whizzFile, flight_chan)
+        if  _channelExists(whizzFile, flight_chan):
+            _updateFlightAttributes(whizzFile, flight_chan)
+        else:
+            print('NO ACTION TAKEN ON flight_chan - {flight_chan} not found.')
+
     if date_chan != '':
-        _updateDateAttributes(whizzFile, date_chan)
+        if _channelExists(whizzFile, date_chan):
+            _updateDateAttributes(whizzFile, date_chan)
+        else:
+            print('NO ACTION TAKEN ON date_chan - {date_chan} not found.')
 
     filename = str(whizzFile)
     if planfiles is None:
@@ -238,3 +245,16 @@ def _updateDateAttributes(whizzFile, date_chan):
             gg = g[line]
             this_date = gg[date_chan][0]
             gg.attrs['Date'] = this_date
+
+
+def _channelExists(whizzFile, flight_chan):
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        lines = list(g.keys())
+        for line in lines:
+            gg = g[line]
+            if flight_chan in gg.keys():
+                return True
+            else:
+                return False
