@@ -81,14 +81,18 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
         print('NO ACTION TAKEN ON LINE_TYPE - no plan file provided.')
 
     elif type(planfiles) is list:
-        if not isinstance(planfiles[0], pathlib.PurePath):
-        # if not (type(planfiles[0]) in [str, pathlib.PosixPath, pathlib.WindowsPath]):
-            print("ERROR - the planfiles list needs to be a list of type String or Path but it is not.")
-            return
+        for pfile in planfiles:
+            if isinstance(pfile, pathlib.PurePath):
+                pfile = str(pfile)
+            elif not isinstance(planfiles[0], str):
+                print("ERROR - the planfiles list needs to be a list of type String or Path but it is not.")
+                return
         no_plan = False
-    elif not isinstance(planfiles, pathlib.PurePath):
-    # elif type(planfiles) in [str, pathlib.PosixPath, pathlib.WindowsPath]:
+    elif isinstance(planfiles, str):
         planfiles = [planfiles]
+        no_plan = False
+    elif isinstance(planfiles, pathlib.PurePath):
+        planfiles = [str(planfiles)]
         no_plan = False
     else:
         print("ERROR - the input parameter needs to be a list of planfile names but it is not.")
