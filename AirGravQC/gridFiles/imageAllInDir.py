@@ -19,7 +19,7 @@ from AirGravQC import xdImage
 groupName = config.groupName
 projectName = config.projectName
 
-def imageAllInDir(path_name):
+def imageAllInDir(path_name, max_file_size=256):
     """
     Quick and dirty method to image all the ERS grids in a 
     directory for QC.
@@ -28,7 +28,9 @@ def imageAllInDir(path_name):
     ----------
     path_name : Path
         The Path where the ERS grid files are located.
-
+    max_file_size : int
+        Files with size greater than this number of MB will
+        not be imaged.
     Returns
     -------
     None.
@@ -40,8 +42,10 @@ def imageAllInDir(path_name):
     folderFiles = path_name.iterdir()
     for aFile in folderFiles:
         if aFile.is_file() and (aFile.suffix == '.ERS' or aFile.suffix == '.ers') and (aFile.name[0] != '.'):
-            ersFiles.append(aFile)
-            file_count += 1
+            datfile_size_bytes = aFile.with_suffix('').stat().st_size
+            if (datfile_size_bytes / (1024 * 1024)) < max_file_size:
+                ersFiles.append(aFile)
+                file_count += 1
     print(f'Found {file_count} .ers files ...')
     print(f'in: {str(path_name)}')
 
