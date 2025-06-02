@@ -304,6 +304,50 @@ def _getOddEvenLines(whizz_file):
     return oddlines, evenlines
 
 
+def _getPlannedLines(whizz_file):
+    """
+    Returns the flight-lines in `whizz_file` sorted into those with,
+    and those without, a PlannedLine attribute set.
+
+    Parameters
+    ----------
+    whizz_file : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+
+    Returns
+    -------
+    oddlines : list of string
+        The Odd survey lines.
+    evenlines : list of string
+        The Even survey lines.
+
+    """
+
+    filename = str(whizz_file)
+    numplanned = 0
+    plannedlines = []
+    numunplanned = 0
+    unplannedlines = []
+    
+    with h5py.File(filename, 'r') as f:
+        lines_group = f[groupName]['Lines']
+        lines = lines_group.keys()
+        
+        for line in lines:
+            try:
+                if 'PlannedLine' in lines_group[line].attrs:#.keys():
+                    plannedlines.append(line)
+                    numplanned += 1
+                else:
+                    unplannedlines.append(line)
+                    numunplanned += 1
+            except:
+                continue
+
+    print(f'{numplanned} planned lines, {numunplanned} unplanned lines, total {numplanned + numunplanned}.')
+    return plannedlines, unplannedlines
+
+
 def _getTravCtrlLines(whizz_file):
     """
     Returns the flight-lines in `whizz_file` sorted into traverse lines and control lines,
