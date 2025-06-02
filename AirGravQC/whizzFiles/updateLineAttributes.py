@@ -107,8 +107,8 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
             gg.attrs['PlannedLine'] = planned_line
             print(f'PlannedLine attribute of line {line} set to {planned_line}.')
             return
-        if not line_type in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG', 'SGL_GDF']:
-            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_GDF', 'SGL_NSW', 'NRG'].")
+        if not line_type in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG', 'SGL_GDF', 'SGL_Kauring']:
+            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_GDF', 'SGL_NSW', 'NRG', 'SGL_Kauring'].")
             return
 
         print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
@@ -216,11 +216,19 @@ def _decode_linenumber(current_line, line_type):
         else:
             variety_line = "Traverse"
     elif line_type == 'SGL_GDF':
-        plan_line = np.floor(current_line / 1000.0)
-        remaining = (current_line - plan_line * 1000.0)
-        segment_line = np.floor(remaining / 100.0)
-        reflight_line = int((remaining - 100.0 * segment_line))
+        plan_line = np.floor(current_line / 100.0) / 10.0
+        segment_line = int((plan_line - np.floor(current_line / 1000.0)) * 10)
+        reflight_line = int(current_line - plan_line * 1000.0)
         if current_line < 999999.9:
+            variety_line = "Control"
+        else:
+            variety_line = "Traverse"
+    elif line_type == 'SGL_Kauring':
+        plan_line = np.floor(current_line / 100.0)
+        remaining = (current_line - plan_line * 100.0)
+        segment_line = np.floor(remaining / 10.0)
+        reflight_line = int((remaining - 10.0 * segment_line))
+        if current_line < 99999.9:
             variety_line = "Control"
         else:
             variety_line = "Traverse"
