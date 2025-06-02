@@ -55,7 +55,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     
     # First, check DFN file is ASCII
     if not _ascii_check(gdf_datfile):
-        return
+        return None
     
     # open GDF, pull out channel names, the units, and the description
     gdf = aseg.read(str(gdf_datfile), engine="dask", method='fixed-widths')
@@ -63,7 +63,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     
     channelsOut, channelindices, haveFlights, haveDates = _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels)
     if channelsOut is None:
-        return
+        return None
 
 # get line numbers and numlines [and numrecords[lines]]
     
@@ -72,7 +72,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
 # create and open whizzfile
 # set projectname, create coordframe and lines groups
     with h5py.File(str(whizzFile), 'w') as f:
-        print(f'Write to geoWhizz file:')
+        print(f'Writing to geoWhizz file: {str(whizzFile)}')
         # create all the data structure ready for the datasets
         g = f.create_group(groupName)
         g.attrs['ProjectName'] = projectName
@@ -107,7 +107,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
                     for channum, chan in enumerate(chans):
                         for idx, name in enumerate(names):
                             if name == chan:
-                                mywidth = widths[idx]
+                                mywidth = int(widths[idx])
                                 mytype = pytypes[idx]
                         
                         end += mywidth
@@ -143,6 +143,11 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
                 gg = gLines.create_group(f'{current_line}')
                 gg.attrs['LineNumber'] = current_line
                 gg.attrs['NumberOfFids'] = numrecords[lidx]#my_data[:,1].size
+                # if haveFlights:
+                #     gg.attrs['Flight'] = line_data[flightChannel].values[0]
+                # if haveDates:
+                #     gg.attrs['Date_Local'] = line_data[dateChannel].values[0]
+
                 # ... create the desired DataSets with attributes
                 for channum, channelName in enumerate(channelsOut):
                     if channelName == readchans[channum]:
@@ -157,9 +162,10 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
                         print(readchans)
                         print(channelsOut)
                         print(omitChannels)
-                        return
+                        return None
 
-
+    print('Complete.')
+    return whizzFile
 
 
 def _getlinenumbers(df, lineChannel):
@@ -232,6 +238,7 @@ def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChanne
             
     print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
     print(channelsOut)
+    print(channelindices, haveFlights, haveDates)
 
     return channelsOut, channelindices, haveFlights, haveDates
 
