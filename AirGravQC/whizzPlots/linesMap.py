@@ -17,7 +17,7 @@ import matplotlib.ticker as tkr
 groupName = config.groupName
 
 
-def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines=[], planEast='', planNorth='', blockpolygon=[], colourchan='', colourvalue=None):
+def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanFile='', planLines=[], planEast='', planNorth='', blockpolygon=[], colourchan='', colourvalue=None):
     """
     Plots a line map of the flown survey over the planned survey lines.
 
@@ -105,9 +105,13 @@ def linesMap(whizzFiles=[], easting='', northing='', whizzPlanFile='', planLines
                 if northing == '':
                     northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
                 g = f[groupName]['Lines']
+                if flight_lines == []:
+                    lines_to_plot = list(g.keys())
+                else:
+                    lines_to_plot = flight_lines
                 if not planned_file:
                     plotTitle += wpl.make_plot_title(f[groupName])
-                for line in list(g.keys()):
+                for line in lines_to_plot:
                     if planned_file:
                         if 'PlannedLine' in g[line].attrs.keys(): #whizzAttrExists(g[line], 'PlannedLine'):
                             planned_line = f"{g[line].attrs['PlannedLine']:.3f}" ## AAARGH HACK
