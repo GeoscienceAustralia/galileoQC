@@ -11,7 +11,7 @@ import pathlib
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.utility.utility as util
 import AirGravQC.config as config
-from AirGravQC.gridFiles.oddeven import (_getOddEvenLines, _getTravCtrlLines)
+from AirGravQC.gridFiles.oddeven import (_getOddEvenLines, _getTravCtrlLines, _getPlannedLines)
 
 groupName = config.groupName
 projectName = config.projectName
@@ -100,6 +100,7 @@ def reportLines(whizzFile):
 
     oddlines, evenlines = _getOddEvenLines(whizzFile)
     travlines, ctrllines = _getTravCtrlLines(whizzFile)
+    plandlines, unplandlines = _getPlannedLines(whizzFile)
 
     with h5py.File(filename, 'r') as f:
         whizzHeader = list(f.keys())[0]
