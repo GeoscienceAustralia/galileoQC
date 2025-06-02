@@ -74,7 +74,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
     plot_flag : Bool, optional
         If True, plot exceedances for each failed line.
     verbose : Bool, optional
-        If True, plot exceedances for each failed line.
+        If True, reports details for each failed line.
 
     Returns
     -------
@@ -118,6 +118,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
         num_lines_exceeded = 0
         total_num_excs = 0
         num_lines_unplanned = 0
+        num_lines_checked = 0
 
         if needConvertToGeodetic:
             maxDistance = maxDistance / 110000.0
@@ -127,7 +128,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
 
         for line in lines:
             gLineMeas = gMeas[line]
-            planLineInPlan, gpline, planfile = util._get_line_planfiles(planPaths, gLineMeas)
+            planLineInPlan, gpline, planfile = util._get_line_planfiles(planPaths, gLineMeas, verbose=verbose)
             with h5py.File(planfile, 'r') as fp:
                 gPlan = fp[groupName]['Lines']
                 # Need to deal with situation where these attributes are not set.
@@ -169,6 +170,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
 
                     num_fids_in_exceedance = 0
                     exceedance_in_line = False
+                    num_lines_checked += 1
 
                     for fid in range(0, len(x)):
                         # There is an exceedance ...
@@ -213,7 +215,8 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
                                     exceedance_in_line = True
                                 num_fids_in_exceedance = 0
                 else:
-                    message += f'Line {lineName} / {lineName} not in plan.\n'
+                    if verbose:
+                        message += f'Line {lineName} / {lineName} not in plan.\n'
                     num_lines_unplanned += 1
                 if exceedance_in_line:
                     num_lines_exceeded += 1
@@ -223,7 +226,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
                         else:
                             _plot_exceeding_line(x, y, yP, xP, yM, xM, measY, measX, allowance, line, lineName, dirn, geoCoords=needConvertToGeodetic)
 
-    message = f'\n{num_lines_exceeded} lines with horizontal exceedances.\n' + message
+    message = f'\n{num_lines_checked} lines checked: {num_lines_exceeded} with horizontal exceedances.\n' + message
     message = f'\n{total_num_excs} horizontal exceedances.\n' + message
     if num_lines_unplanned > 0:
         message = f'\n{num_lines_unplanned} lines not in plan and not checked.\n' + message
