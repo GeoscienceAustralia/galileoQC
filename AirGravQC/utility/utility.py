@@ -324,8 +324,10 @@ def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False
     return _butter_bandpass_filter(ils, lowcut, highcut, fs, order = order)
 
 
-def _get_line_planfiles(planPaths, gLineMeas):
+def _get_line_planfiles(planPaths, gLineMeas, verbose=True):
     """
+    verbose : Bool, optional
+        If True, reports details for a failed line.
     """
     planLineInPlan = False
     gpline = ''
@@ -333,13 +335,13 @@ def _get_line_planfiles(planPaths, gLineMeas):
         planfile = str(planPath)
         with h5py.File(planfile, 'r') as fp:
             gPlan = fp[groupName]['Lines']
-            planLineInPlan, gpline = getPlannedLine(gPlan, gLineMeas)
+            planLineInPlan, gpline = getPlannedLine(gPlan, gLineMeas, verbose=verbose)
             if planLineInPlan:
                 break
     return planLineInPlan, gpline, planfile
 
 
-def getPlannedLine(gPlan, gLineMeas):
+def getPlannedLine(gPlan, gLineMeas, verbose=True):
     """
     Given the single line group, `gLineMeas`, for a line in a whizzfile of measured
     data, returns the corresponding line group, 'gpline', from the lines group, 
@@ -353,6 +355,8 @@ def getPlannedLine(gPlan, gLineMeas):
         The ['Lines'] group for all the survey lines in a survey plan file.
     gLineMeas : HDF5 group
         The ['Lines'][line] group for a single survey line in a measured survey file.
+    verbose : Bool, optional
+        If True, reports details for a failed line.
 
     Returns
     -------
@@ -364,7 +368,8 @@ def getPlannedLine(gPlan, gLineMeas):
     planLineInPlan = False
     gpline = ''
     if not 'PlannedLine' in gLineMeas.attrs:
-        print(f'ERROR. No PlannedLine attribute set for line.')
+        if verbose:
+            print(f'ERROR. No PlannedLine attribute set for line.')
         return None, None
     plannedLineNo = gLineMeas.attrs['PlannedLine'] # a Float double
     for pline in gPlan.keys():
