@@ -1,0 +1,42 @@
+DatasetHeader Begin
+	Version		= "7.0"
+	Name		= "FSF_GEE_2p67_final.ERS"
+	LastUpdated	= Thu Mar 03 09:00:40 GMT 2022
+	DataSetType	= ERStorage
+	DataType	= Raster
+	ByteOrder	= LSBFirst
+	CoordinateSpace Begin
+		Datum		= "EPSG:1168"
+		Projection	= "EPSG:7854"
+		CoordinateType	= EN
+		Units		= "METERS"
+		Rotation	= 0:0:0.0
+	CoordinateSpace End
+	RasterInfo Begin
+		CellType	= IEEE4ByteReal
+		NullCellValue     = -1e+032
+		CellInfo Begin
+			Xdimension	= 200
+			Ydimension	= 200
+		CellInfo End
+		NrOfLines	= 381
+		NrOfCellsPerLine	= 301
+		RegistrationCoord Begin
+			Eastings	= 442300
+			Northings	= 7803900
+		RegistrationCoord End
+		RegistrationCellX	= 0
+		RegistrationCellY	= 380
+		NrOfBands	= 1
+		RegionInfo Begin
+			Type		= Polygon
+			RegionName	= "All"
+			SubRegion	= {
+				0	0
+				0	381
+				301	381
+				301	0
+			}
+		RegionInfo End
+	RasterInfo End
+DatasetHeader End

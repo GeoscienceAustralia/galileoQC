@@ -187,23 +187,6 @@ qc.checkSpeeds(dh, nominalSpeed=60., allowance=0.15,
 
 ## Gravimetry
 
-Four functions provide explicit checks of the corrections applied to the gravimeter data which are all required to meet the standards in the referenced publications.
-
-### Atmospheric Correction
-
-The atmospheric effect is checked against [^HinzeEtAl], equation (3), using the `checkAtmosEffect` function.
-
-> $$ \delta g_{atm} = 0.874 - 9.9\times10^{-5} h + 3.56 \times 10^{-9} h^{2}$$
-
-```python
-qc.checkAtmosEffect(dh, 'ATMCOR', GRS80_height='MGA_Z')
-```
-
-```{figure} atmos_check.png
-
-A statistical analysis plot of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (horizontal line) summarise the statistics. In this example, all errors are less than $0.005\mu m s^{-2}$ which can be attributed to the limited precision of the data in a text-based `XYZ` format.
-```
-
 ### Latitude Correction
 
 The latitude correction (normal gravity) in the data is checked against the 1980 Geodetic Reference System ellipsoid using the Somigliana formula for theoretical gravity, $g_{T}$, on this ellipsoid [^HinzeEtAl], equation (2).

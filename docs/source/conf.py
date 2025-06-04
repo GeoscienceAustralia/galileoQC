@@ -24,6 +24,7 @@ author = 'Mark Dransfield'
 version = '0.0.1'
 release = '0.0.1'#importlib.metadata.version('AirGravQC')
 # release = '0.0.0'
+today_fmt = '%d %b %Y' 
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -54,15 +55,17 @@ myst_enable_extensions = [
     'attrs_block'
 ]
 
+myst_footnote_transition = False
+
 source_suffix = {
     '.rst': 'restructuredtext',
     '.ipynb': 'myst-nb',
 }
 
 html_theme_options = {
-    'show_powered_by': 'false',
-    'body_text': 'Black',
-    'font_family': 'Palatino',
+    # 'show_powered_by': 'false',
+    # 'body_text': 'Black',
+    # 'font_family': 'Palatino',
 }
 
 nbsphinx_execute = "auto"
@@ -80,7 +83,7 @@ nbsphinx_kernel_name = "python3"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = "agogo"
 html_static_path = ['_static']
 
 numfig = True

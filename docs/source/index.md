@@ -1,9 +1,9 @@
 # Airborne Gravity Quality Control
 
-**AirGravQC** is a Python library for quality assurance and control of airborne gravity data. It covers both gravimetry and gradiometry from a range of sensor models and was designed for use in QC of data collected under contracts based on the Geoscience Australia Airborne Gravity Deed [^MagDeed], although it is useful for the QC of most airborne gravity projects.
+**AirGravQC** is a Python library for quality assurance and control of airborne gravity[^GravNote] data. It covers both gravimetry and gradiometry from a range of sensor models and was designed for use in QC of data collected under contracts based on the Geoscience Australia Airborne Gravity Deed [^MagDeed]. It has also proved useful in the QC of many other airborne gravity surveys.
 
 :::{warning}
-This project is still in development. Bugs are likely. Please try it out, but as an experiment for now!
+This project is still in development. Bugs are likely. Please do try it out, and please do report any issues on github!
 :::
 
 ```{toctree}
@@ -15,8 +15,8 @@ geowhizz.md
 tutorials/tutorials.md
 methods.md
 deed.md
-modules.md
 lineNumbering.md
+modules.md
 ```
 
 ## Indices and tables
@@ -26,5 +26,6 @@ lineNumbering.md
 - {ref}`search`
 
 
+[^GravNote]: Throughout this documentation, "gravity" is used in a general sense to refer to both the gravity acceleration (measured by a gravimeter) and the gravity gradient field (measured by a gravity gradiometer).
 [^MagDeed]: See, similarly: J. A. Goodwin. Airborne magnetic and radiometric technical standards. Geoscience Australia, Record 2023(4), 2023. doi: 10.26186/147457.
 
