@@ -122,10 +122,18 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
                     keepbig = xd > xBase[0]
                     keep = keepsml & keepbig
 
+                    # old debug code
+                    # print(len(keep), len(xd), len(gd), xBase[0], xd[0], xd[-1])
+                    # fig = plt.figure(figsize=(12,9))
+                    # ax = fig.add_subplot(1,1,1)
+                    # ax.plot(xd[keep]-xBase[0], gd[keep], '.', lw=0.5)
+                    # ax.plot(xBase-xBase[0], range(0, len(xBase)), '.', lw=0.5)
+                    # plt.show()
+
                     # interpolate data (last xBase argument is just a dummy)
-                    spl = interpolate.splrep(xd[keep]-xBase[0], gd[keep], k=3, s=0)
+                    spl = interpolate.splrep(xd[keep]-xBase[0], gd[keep])#, k=3, s=0)
                     gOut = interpolate.splev(xBase-xBase[0], spl)
-                    spl = interpolate.splrep(xd[keep]-xBase[0], zd[keep], k=3, s=0)
+                    spl = interpolate.splrep(xd[keep]-xBase[0], zd[keep])#, k=3, s=0)
                     zOut = interpolate.splev(xBase-xBase[0], spl)
                     vec_len = xBase.shape[0]
 
@@ -237,7 +245,7 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
                     repeatLines.remove(line)
                 
     if minBigX < maxSmallX:
-        print('ERROR: stopping because minBigX ({minBigX}) < maxSmallX ({maxSmallX})')
+        print(f'ERROR: stopping because minBigX ({minBigX}) < maxSmallX ({maxSmallX})')
         return 0.0
     deltaX = (minBigX - maxSmallX) / (nSamples - 1)
     xBase = np.linspace(maxSmallX, minBigX, num=nSamples, endpoint=True)
