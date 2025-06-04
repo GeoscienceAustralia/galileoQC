@@ -48,8 +48,6 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     None.
 
     '''
-
-
     if whizzFile == '':
         whizzFile = gdf_datfile.with_suffix('.hdf5')
     
@@ -61,126 +59,180 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     gdf = aseg.read(str(gdf_datfile), engine="dask", method='fixed-widths')
     df = gdf.df()
     
-    channelsOut, channelindices, haveFlights, haveDates = _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels)
-    if channelsOut is None:
+    channelNames, channelindices, haveFlights, flightIdx, haveDates, dateIdx = _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels)
+    if channelNames is None:
         return None
 
-# get line numbers and numlines [and numrecords[lines]]
-    
-    lineNumbers, numLines, numRecs = _getlinenumbers(df, lineChannel)
+    for channelName in channelNames:
+        if channelName is None:
+            print(f'ERROR - missing channel name in {channelNames}.')
+            return
 
-# create and open whizzfile
-# set projectname, create coordframe and lines groups
-    with h5py.File(str(whizzFile), 'w') as f:
+    chans = gdf.field_names()
+    num_readchans = len(chans) - len(omitChannels)
+    names = [gdf.get_field_definition(chans[i])['name'] for i in range(0, len(chans))]
+    widths = [gdf.get_field_definition(chans[i])['width'] for i in range(0, len(chans))]
+    pytypes = [gdf.get_field_definition(chans[i])['inferred_dtype'] for i in range(0, len(chans))]
+
+    # Calculate the start and end position in each file
+    # record for each channel.
+    starts = np.zeros(len(widths))
+    starts[1:] = np.cumsum(widths[0:-1])
+    starts = np.asarray(starts, dtype=int)
+    ends = np.asarray(starts + np.array(widths), dtype=int)
+    print(f'widths: {widths}')
+    print(f'starts: {starts}')
+    print(f'ends: {ends}')
+
+    # create and open whizzfile
+    # set projectname, create coordframe and lines groups
+    with h5py.File(str(whizzFile), 'w') as wizfid:
         print(f'Writing to geoWhizz file: {str(whizzFile)}')
         # create all the data structure ready for the datasets
-        g = f.create_group(groupName)
+        g = wizfid.create_group(groupName)
         g.attrs['ProjectName'] = projectName
         
         gCoord = g.create_group('CoordinateFrame')
         gLines = g.create_group('Lines')
 
         with open(gdf_datfile, 'r') as datfid:
-            numrecords = numRecs
-            chans = gdf.field_names() # not quite right
-            num_readchans = len(chans) - len(omitChannels)#omit_chans)
-            names = gdf.record_types.df().name.values
-            widths = gdf.record_types.df().width.values
-            pytypes = gdf.record_types.df().inferred_dtype.values
 
-            for lidx, current_line in enumerate(lineNumbers):
+            first_record = True
+            for record in datfid:
+                record_list = extract_from_record(record, starts, ends)
+                line_in_rec = extract_line(record_list, gdf, lineChannel)
+                if first_record:
+                    current_line = line_in_rec
+                    record_lists = []
+                    first_record = False
+                    record_lists.append(record_list)
+                    count = 1
+                    print(f'First: {current_line}')
+                elif current_line == line_in_rec:
+                    record_lists.append(record_list)
+                    count += 1
+                else:
+                    # finalise previous flight-line
+                    print(f'... count = {count}')
+                    gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, record_lists, gdf)
+                    if haveFlights:
+                        gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
+                    if haveDates:
+                        gLine.attrs['Date'] = float(record_lists[0][dateIdx])
 
-                # Get the data for this line for allchannels from .DAT
-                mydata = np.zeros((numrecords[lidx], num_readchans))
-                readchans = [None] * num_readchans
-                reccount = -1
-                for recidx in range(0, numrecords[lidx]):
-                    myrec = datfid.readline()
-                    reccount += 1
-                    start = 0
-                    end = 0
-                    arrayidx = 0
-                    
-                    typefailure_report = ''
-                    typefailure_count = 0
+                    # prepare for next flight-line
+                    current_line = line_in_rec
+                    record_lists = []
+                    record_lists.append(record_list)
+                    print(f'Next: {current_line}')
+                    count = 1
 
-                    for channum, chan in enumerate(chans):
-                        for idx, name in enumerate(names):
-                            if name == chan:
-                                mywidth = int(widths[idx])
-                                mytype = pytypes[idx]
-                        
-                        end += mywidth
-                        extract = myrec[start:end]
-                        start = end
-                        if not chan in channelsOut:#omitChannels:#omit_chans:
-                            continue
-                        try:
-                            if mytype is float:
-                                mydata[reccount, arrayidx] = float(extract)
-                                readchans[arrayidx] = chan
-                                arrayidx += 1
-                            elif mytype is int:
-                                mydata[reccount, arrayidx] = int(extract)
-                                readchans[arrayidx] = chan
-                                arrayidx += 1
-                            elif mytype is str:
-                                mydata[reccount, arrayidx] = 0.0
-                                readchans[arrayidx] = chan
-                                arrayidx += 1
-                            else:
-                                typefailure_count += 1
-                                typefailure_report += f'else - {myrec[0:59]} |{extract}| {reccount}, {channum}\n'
-                                break
-                        except:
-                            typefailure_count += 1
-                            typefailure_report += f'except - {myrec[0:59]} |{extract}| {reccount}, {channum}\n'
-                            break
-                    if typefailure_count > 1:
-                        break               
-
-                # create a line group with metadata in whizzfile, then ...
-                gg = gLines.create_group(f'{current_line}')
-                gg.attrs['LineNumber'] = current_line
-                gg.attrs['NumberOfFids'] = numrecords[lidx]#my_data[:,1].size
-                # if haveFlights:
-                #     gg.attrs['Flight'] = line_data[flightChannel].values[0]
-                # if haveDates:
-                #     gg.attrs['Date_Local'] = line_data[dateChannel].values[0]
-
-                # ... create the desired DataSets with attributes
-                for channum, channelName in enumerate(channelsOut):
-                    if channelName == readchans[channum]:
-                        dd = gg.create_dataset(channelName, data=mydata[:,channum], compression="gzip", compression_opts=4) #, dtype='float64'
-                        dd.attrs['Name'] = channelName
-                        dd.attrs['Alias'] = channelName
-                        fieldDef = gdf.get_field_definition(channelName)
-                        dd.attrs['Units'] = fieldDef['unit'].split(':')[0]
-                        dd.attrs['Description'] = fieldDef['long_name']
-                    else:
-                        print(f'ERROR - {channelName} != {readchans[channum]} in line {current_line}')
-                        print(readchans)
-                        print(channelsOut)
-                        print(omitChannels)
-                        return None
-
+            # finalise last flight-line
+            print(f'... count = {count}')
+            gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, record_lists, gdf)
+            if haveFlights:
+                gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
+            if haveDates:
+                gLine.attrs['Date'] = float(record_lists[0][dateIdx])
+    
     print('Complete.')
     return whizzFile
 
 
-def _getlinenumbers(df, lineChannel):
+def extract_from_record(myrec, starts, ends):
     """
-    Returns the line numbers, number of lines, and number
-    of records in each line, from a pandas dataframe read
-    from an ASEG-GDF2 file.
+    Returns a list of strings, each string being a data element from the record.
     """
-    print('\nGetting line numbers ...')
-    lineNumbers = df[lineChannel].unique().compute()
-    numLines = len(lineNumbers)
-    gby = df.groupby(df[lineChannel])
-    numRecs = gby.count().compute().values[:,0]
-    return lineNumbers, numLines, numRecs
+    return [myrec[starts[i]:ends[i]] for i in range(0,len(starts))]
 
+
+def extract_line(record_list, gdf, lineChannelName):
+    """
+    Returns the line number from the record list as a float.
+    """
+    lineIdx = _getDesiredChannel(gdf, lineChannelName)
+
+    return float(record_list[lineIdx])
+
+
+def save_rec_lists(wizLines, current_line, channelNames, pytypes, record_lists, gdf):
+    """
+    Saves a full flight-line of data in the array of string arrays
+    into the wizfid lines group. Returns the flight-line group.
+    """
+    # print(f'Processing line {current_line}\n')
+
+    # create a line group with metadata in whizzfile, then ...
+    gg = wizLines.create_group(f'{current_line}')
+    gg.attrs['LineNumber'] = current_line
+    gg.attrs['NumberOfFids'] = len(record_lists)
+
+    # create a float np array of size = size(record_lists)
+    mydata = record_list_to_float(record_lists, pytypes)
+
+    # convert str to float and store in mydata
+
+    # ... create the desired DataSets with attributes
+    for chanIdx, channelName in enumerate(channelNames):
+        chanstr = str(channelName)
+        dd = gg.create_dataset(chanstr, data=mydata[:,chanIdx], compression="gzip", compression_opts=4)
+        dd.attrs['Name'] = chanstr
+        dd.attrs['Alias'] = chanstr
+        fieldDef = gdf.get_field_definition(chanstr)
+        dd.attrs['Units'] = fieldDef['unit']#.split(':')[0]
+        dd.attrs['Description'] = fieldDef['long_name']
+
+    return gg
+
+
+def record_list_to_float(record_lists, pytypes):
+    """
+    Convert the 2D string list into a 2D numpy float array.
+    """
+    num_chans = len(record_lists[0])
+    num_recs = len(record_lists)
+    mydata = np.zeros((num_recs, num_chans))
+
+    typefailure_report = ''
+    typefailure_count = 0
+
+    for idx, record_list in enumerate(record_lists):
+        for jdx, item in enumerate(record_list):
+            try:
+                if pytypes[jdx] is float:
+                    mydata[idx, jdx] = float(item)
+                elif pytypes[jdx] is int:
+                    mydata[idx, jdx] = int(item)
+                elif pytypes[jdx] is str:
+                    mydata[idx, jdx] = 0.0
+                else:
+                    typefailure_count += 1
+                    typefailure_report += f'else - |{item}| {idx}, {jdx}\n'
+                    break
+            except:
+                typefailure_count += 1
+                typefailure_report += f'except - |{item}| {idx}, {jdx}\n'
+                break
+        if typefailure_count > 1:
+            break
+
+    return mydata
+
+
+def _getDesiredChannel(gdf, channelName):
+
+    allChannelNames = gdf.field_names()
+    channelindices = list(range(0,len(allChannelNames)))
+
+    # now if index not found - error/warning; else pop off the channelName list
+    chanIdx = _index_containing_substring(allChannelNames, channelName)
+    if chanIdx < 0:
+        print(f'ERROR - column index for channel {channelName} not found.\n')
+        print(allChannelNames)
+        return None
+
+    # print(f'ASEG-GDF2 channel {channelName} found at index {chanIdx}.\n')
+    return chanIdx
 
 
 def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels):
@@ -197,33 +249,34 @@ def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChanne
     lineIdx = _index_containing_substring(channelsOut, lineChannel)
     if lineIdx < 0:
         print(f'ERROR - column index for line channel {lineChannel} not found.\n')
-        return None, None, None, None
-    else:
-        channelsOut.pop(lineIdx)
-        channelindices.pop(lineIdx)
-    foundChannels = lineChannel
+        print(channelsOut)
+        return None, None, None, None, None, None
+    # else:
+        # channelsOut.pop(lineIdx)
+        # channelindices.pop(lineIdx)
+    foundChannels = lineChannel + f' at {lineIdx}'
         
     haveFlights = False
     flightIdx = _index_containing_substring(channelNames, flightChannel)
     if flightIdx < 0:
         print('WARNING - no flight channel found.\n')
     else:
-        channelsOut.pop(flightIdx)
-        channelindices.pop(flightIdx)
+        # channelsOut.pop(flightIdx)
+        # channelindices.pop(flightIdx)
         haveFlights = True
-        foundChannels += ', ' + flightChannel
+        foundChannels += ', ' + flightChannel + f' at {flightIdx}'
         
     haveDates = False
     dateIdx = _index_containing_substring(channelNames, dateChannel)
     if dateIdx < 0:
         print('WARNING - no date channel found.\n')
     else:
-        channelsOut.pop(dateIdx)
-        channelindices.pop(dateIdx)
+        # channelsOut.pop(dateIdx)
+        # channelindices.pop(dateIdx)
         haveDates = True
-        foundChannels += ', ' + dateChannel
+        foundChannels += ', ' + dateChannel + f' at {dateIdx}' 
         
-    print(f'Key channels for line attributes found:\n  {foundChannels}.\n')
+    print(f'Key channels for linegroup attributes found:\n  {foundChannels}.\n')
     
         
     if not omitChannels == []:
@@ -233,146 +286,14 @@ def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChanne
                 print(f'WARNING - {channel} to omit not found.\n')
             else:
                 print(f'Omitted {channelsOut[tempIdx]} in column {tempIdx}.\n')
-                channelsOut.pop(tempIdx)
-                channelindices.pop(tempIdx)
+                # channelsOut.pop(tempIdx)
+                # channelindices.pop(tempIdx)
             
     print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
     print(channelsOut)
     print(channelindices, haveFlights, haveDates)
 
-    return channelsOut, channelindices, haveFlights, haveDates
-
-
-def asegToHDF_old(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIGHT', dateChannel='DATE', omitChannels=[]):
-    '''
-    Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
-    HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
-        https://github.com/kinverarity1/aseg_gdf2
-
-    Parameters
-    ----------
-    gdf_datfile : pathlib.PosixPath
-        The pathlib Path to the input ASEG-GDF2 DAT file.
-    whizzFile : pathlib.PosixPath, optional
-        The pathlib Path to the output Whizz HDF5 file. The default is '' and
-        the output file is then the same as the input file with the extension
-        changed to '.hdf5'.
-    lineChannel : String, optional
-        The name of the ASEG GDF2 channel containing the line numbers, defaults to 'LINE'.
-    flightChannel : String, optional
-        The name of the ASEG GDF2 channel containing the flight numbers, defaults to 'FLIGHT'.
-    dateChannel : String, optional
-        The name of the ASEG GDF2 channel containing the dates, defaults to 'DATE'.
-    omitChannels : [String]
-        An array of channel or field names to omit from the saved geoWhizz HDF5 file.
-
-    Returns
-    -------
-    None.
-
-    '''
-
-    if whizzFile == '':
-        whizzFile = gdf_datfile.with_suffix('.hdf5')
-    
-    # First, check DFN file is ASCII
-    if not _ascii_check(gdf_datfile):
-        return
-    
-    # open GDF, pull out channel names, the units, and the description
-    gdf = aseg.read(str(gdf_datfile), engine="dask", method='fixed-widths')
-    df = gdf.df()
-    
-    channelNames = gdf.field_names()
-    channelsOut = channelNames # these are the channels we will save
-        
-    # next, identify the column containing line numbers etc
-    # we won't save these columns but do want the first value for each line
-    # so re-get the indices.
-
-    # now if index not found - error/warning; else pop off the channelName list
-    lineIdx = _index_containing_substring(channelsOut, lineChannel)
-    if lineIdx < 0:
-        print(f'ERROR - column index for {lineChannel} not found.\n')
-        return
-    else:
-        channelsOut.pop(lineIdx)
-    foundChannels = lineChannel
-        
-    haveFlights = False
-    flightIdx = _index_containing_substring(channelNames, flightChannel)
-    if flightIdx < 0:
-        print('WARNING - no flight channel found.\n')
-    else:
-        channelsOut.pop(flightIdx)
-        haveFlights = True
-        foundChannels += ', ' + flightChannel
-        
-    haveDates = False
-    dateIdx = _index_containing_substring(channelNames, dateChannel)
-    if dateIdx < 0:
-        print('WARNING - no date channel found.\n')
-    else:
-        channelsOut.pop(dateIdx)
-        haveDates = True
-        foundChannels += ', ' + dateChannel
-        
-    print(f'Key channels for line attributes found:\n  {foundChannels}.\n')
-    
-        
-    if not omitChannels == []:
-        for channel in omitChannels:
-            tempIdx = _index_containing_substring(channelsOut, channel.lower())
-            if tempIdx < 0:
-                print(f'WARNING - {channel} to omit not found.\n')
-            else:
-                print(f'Omitted {channelsOut[tempIdx]} in column {tempIdx}.\n')
-                channelsOut.pop(tempIdx)
-            
-    print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
-    print(channelsOut)
-    
-    # now, iterate through GDF collecting line numbers and sizes
-    print('\nGetting line numbers ...')
-    lineNumbers = df[lineChannel].unique().compute()
-    numLines = len(lineNumbers)
-
-    print('... done. Ready to create HDF file and transfer data into it.\n')
-
-    with h5py.File(str(whizzFile), 'w') as f:
-        print(f'Write to geoWhizz file:')
-        # create all the data structure ready for the datasets
-        g = f.create_group(groupName)
-        g.attrs['ProjectName'] = projectName
-        
-        gCoord = g.create_group('CoordinateFrame')
-        gLines = g.create_group('Lines')
-        
-        # create all the line groups
-        for current_line in lineNumbers:
-            
-            # create a line group and metadata
-            gg = gLines.create_group(f'{current_line}')
-            gg.attrs['LineNumber'] = current_line
-            line_data = df[df[lineChannel] == current_line].compute()
-            # Get the flight number and date for line attributes.
-            if haveFlights:
-                gg.attrs['Flight'] = line_data[flightChannel].values[0]
-            if haveDates:
-                gg.attrs['Date_Local'] = line_data[dateChannel].values[0]
-
-            # for each line group, create the DataSets with attributes
-            for channelName in channelsOut:
-                my_data = np.array(line_data[channelName].values)
-                dd = gg.create_dataset(channelName, data=my_data, compression="gzip", compression_opts=4) #, dtype='float64'
-                dd.attrs['Name'] = channelName
-                dd.attrs['Alias'] = channelName
-                fieldDef = gdf.get_field_definition(channelName)
-                dd.attrs['Units'] = fieldDef['unit'].split(':')[0]
-                dd.attrs['Description'] = fieldDef['long_name']
-            gg.attrs['NumberOfFids'] = my_data.size
-
-    return
+    return channelsOut, channelindices, haveFlights, flightIdx, haveDates, dateIdx
 
 
 def _ascii_check(gdf_datfile):
@@ -433,5 +354,8 @@ def _index_containing_substring(the_list, substring):
               return i
     return -1
 
-#
+
+
+
+
 
