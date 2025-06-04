@@ -145,6 +145,7 @@ def reportChannels(whizzFile, channel='', verbose=False):
         numChannels = len(channelNames)
         
         print(whizzHeader)
+        print(f'\n{numChannels} channels:\n')
 
         if verbose or channel != '':
             print(f'\033[1m  {"channel":<20} {"units":<14} {"description"}\033[0m')
