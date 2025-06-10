@@ -85,6 +85,114 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         plt.show()
 
 
+def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinelenkm=None, verbose=False):
+    """
+    Plot the PSD of channel averaged over the flightLines. 
+        
+    Parameters
+    ----------
+    whizzFile : String or pathlib Path
+        Name of a HDF5 Whizz file, including path and extension.
+    channel : String
+        The name of the channel to be analysed.
+    flightLines : String List, optional
+        A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+    shortestPeriod : Float, optional
+        The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
+    minlinelenkm : Float, optional
+        Flightlines shorter than this number of kilometres will be ignored in the calculation. Default is None.
+    verbose : Bool, optional
+        If True, more information is printed. Default is False.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    filename = str(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        g = f[groupName]['Lines']
+        projName = f[groupName].attrs['ProjectName']
+        if flightLines == []:
+            flightLines = list(g.keys())
+        corr_units = g[flightLines[0]][channel].attrs['Units']
+
+        y_label = f'{channel}' #' [{corr_units}]'
+        shortestN = pow(2, 30)
+
+        # It is clearer code if we first count the number of lines and number of samples
+        numlines = 0
+        numsamples = pow(2, 30)
+        linelist = []
+        for line in flightLines:
+            # ignore lines that are too short
+            if not minlinelenkm is None:
+                x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+                y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+                xPos = rd.getLineData(g[line], x)
+                yPos = rd.getLineData(g[line], y)
+                linelen = util._displacement2(xPos[0], xPos[-1], yPos[0], yPos[-1]) / 1000.0
+                if linelen < minlinelenkm:
+                    if verbose:
+                        print(f'line {line} skipped - too short at {linelen} km.')
+                    continue
+
+            # ignore lines where raw and filtered data vectors are not the same length
+            rawdata = rd.getLineData(g[line], channel)
+
+            # count the good lines and find the shortest length
+            numlines += 1
+            linelist.append(line)
+            if rawdata.size < numsamples:
+                numsamples = rawdata.size
+
+        print(f'Of {len(flightLines)} lines in database, {numlines} will be processed.')
+        print(f'The first {numsamples} samples from each line will be used.')
+        if numlines == 1:
+            print('Only one flight line in analysis, so results are not reliable.')
+
+        f_sample = _time_frequency(f[groupName])
+        q = 3  # over-sampling factor
+        N = numsamples
+        w = hann(N)
+
+        # initialise the vectors by analysing the first line
+        firstline = linelist[0]
+
+        rawdata = rd.getLineData(g[firstline], channel)[0:N]
+        freq, Pxx = sig.welch((rawdata - np.mean(rawdata)) * w, nfft=N*q, fs = f_sample)
+        period = 1.0 / freq[1:]
+        sumWelch = Pxx
+
+        for line in linelist[1:]:
+
+            rawdata = rd.getLineData(g[line], channel)[0:N]
+            freq, Pxx = sig.welch((rawdata - np.mean(rawdata)) * w, nfft=N*q, fs = f_sample)
+            sumWelch = sumWelch + Pxx
+            
+            if verbose:    
+                print(f'Line {line}; Num samples = {N}; f_sample = {f_sample} Hz; est line length = {63 * N / f_sample} m. period shape {period.shape}')
+
+    avgWelch = sumWelch / numlines
+
+    fig, ax = plt.subplots()
+
+    ax.loglog(period, avgWelch[1:], color='blue', lw=0.3)
+    
+    if shortestPeriod > 0.0:
+        ax.set_xlim(left=shortestPeriod)
+
+    ax.yaxis.grid(True, which='major')
+    ax.set_xlabel(f'Period [s] at sample rate {f_sample:.2f} Hz', fontsize = 6)
+    ax.set_ylabel(y_label, fontsize = 6)
+    plotTitle = f'{projName} : {y_label}'
+    ax.set_title(plotTitle, fontsize = 8)
+    ax.grid(True)
+    for label in ax.get_xticklabels(): label.set_fontsize(6)
+    for label in ax.get_yticklabels(): label.set_fontsize(6)
+
+
 def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.0, shortestPeriod=0.0, minlinelenkm=None, verbose=False):
     """
     Plot the FFT of filchan / rawchan averaged over the flightLines. 
