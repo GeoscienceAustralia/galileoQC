@@ -56,13 +56,13 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False)
 
             if _peakToPeak(data) < 2.0 * peak:
                 if verbose:
-                    report += f'{line} passed easily.'
+                    report += f'{line} passed easily.\n'
                 continue
             
             if len(data) < nSamples:
                     if _peakToPeak(data) > 2.0 * peak:
                         dataFail = True
-                        report += f'{line}  FAIL, peak to peak range = {_peakToPeak(data)}'
+                        report += f'{line}  FAIL, peak to peak range = {_peakToPeak(data)}\n'
                         continue
                     else:
                         print(line, ' passed on one segment.')
@@ -76,6 +76,8 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False)
                 if dataFail == False:
                     print(line, ' passed on many segments.')
                     continue
+
+    print(report)
     return
             
 
