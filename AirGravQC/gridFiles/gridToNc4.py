@@ -18,9 +18,9 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def gridToNc4(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], 
-    gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, ncFile='', datum='',
-    projection='', skipcontrols=False, controls=[]):
+def gridToNc4(whizz_file, z_chans, grid_space, *, region=[], lines=[], e_chan='', n_chan='', mr_chans=[], 
+    d1_chans=[], gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, 
+    ncFile='', datum='', projection='', skipcontrols=False, controls=[]):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -36,6 +36,9 @@ def gridToNc4(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan=''
         An array of names of channels in `whizz_file` to be interpolated to a regular grid and imaged.
     grid_space : Float
         The distance between grid cell centres in grid distance units.
+    region : Array of float, optional
+        Coordinates of the corners of the bounding rectangle [West, East, South, North].
+        Default uses the minimum and maximum coordinates.
     lines : String Array, optional
         List of lines to be gridded. Default all lines.
     e_chan : String, optional
@@ -85,6 +88,11 @@ def gridToNc4(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan=''
         print('ERROR - the d1_chans argument to grid_n_image should be a list. Check docstring for details.')
         return
 
+    if ncFile.exists():
+        print(f'ERROR - cannot write to {ncFile}; it already exists.')
+        return
+
+
     for z_chan in z_chans:
         remove_mean = False
         diff_one = False
@@ -99,7 +107,7 @@ def gridToNc4(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan=''
             remove_mean=remove_mean, diff_one=diff_one, skipcontrols=skipcontrols, controls=controls)
         if len(my_data.attrs) == 0:
             continue
-        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method, mask_polygon=mask_polygon, 
+        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=region, method=method, mask_polygon=mask_polygon, 
             mask_pixels=mask_pixels, numneighbours=numneighbours)
         # xdImage(my_grid, f'{my_grid.attrs["title"]}', gridlines=gridlines, hs=shaded)
         gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
