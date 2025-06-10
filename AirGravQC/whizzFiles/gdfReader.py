@@ -13,6 +13,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import aseg_gdf2 as aseg
 
 import AirGravQC.config as config
+from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
 
 groupName = config.groupName
 projectName = config.projectName
@@ -20,7 +21,7 @@ projectName = config.projectName
 
 # channel indexing wrong!
 # flights and dates not attributes
-def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIGHT', dateChannel='DATE', omitChannels=[]):
+def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', dateChannel='', omitChannels=[]):
     '''
     Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
     HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
@@ -37,9 +38,9 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     lineChannel : String, optional
         The name of the ASEG GDF2 channel containing the line numbers, defaults to 'LINE'.
     flightChannel : String, optional
-        The name of the ASEG GDF2 channel containing the flight numbers, defaults to 'FLIGHT'.
+        The name of the ASEG GDF2 channel containing the flight numbers, defaults to ''.
     dateChannel : String, optional
-        The name of the ASEG GDF2 channel containing the dates, defaults to 'DATE'.
+        The name of the ASEG GDF2 channel containing the dates, defaults to ''.
     omitChannels : [String]
         An array of channel or field names to omit from the saved geoWhizz HDF5 file.
 
@@ -73,6 +74,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     names = [gdf.get_field_definition(chans[i])['name'] for i in range(0, len(chans))]
     widths = [gdf.get_field_definition(chans[i])['width'] for i in range(0, len(chans))]
     pytypes = [gdf.get_field_definition(chans[i])['inferred_dtype'] for i in range(0, len(chans))]
+    nulls = [gdf.get_field_definition(chans[i])['null'] for i in range(0, len(chans))]
 
     # Calculate the start and end position in each file
     # record for each channel.
@@ -80,9 +82,9 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
     starts[1:] = np.cumsum(widths[0:-1])
     starts = np.asarray(starts, dtype=int)
     ends = np.asarray(starts + np.array(widths), dtype=int)
-    print(f'widths: {widths}')
-    print(f'starts: {starts}')
-    print(f'ends: {ends}')
+    # print(f'widths: {widths}')
+    # print(f'starts: {starts}')
+    # print(f'ends: {ends}')
 
     # create and open whizzfile
     # set projectname, create coordframe and lines groups
@@ -107,14 +109,13 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
                     first_record = False
                     record_lists.append(record_list)
                     count = 1
-                    print(f'First: {current_line}')
                 elif current_line == line_in_rec:
                     record_lists.append(record_list)
                     count += 1
                 else:
                     # finalise previous flight-line
-                    print(f'... count = {count}')
-                    gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, record_lists, gdf)
+                    print(f'L {current_line}... count = {count}')
+                    gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, nulls, record_lists, gdf)
                     if haveFlights:
                         gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
                     if haveDates:
@@ -124,17 +125,17 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='FLIG
                     current_line = line_in_rec
                     record_lists = []
                     record_lists.append(record_list)
-                    print(f'Next: {current_line}')
                     count = 1
 
             # finalise last flight-line
-            print(f'... count = {count}')
-            gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, record_lists, gdf)
+            print(f'L {current_line}... count = {count}')
+            gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, nulls, record_lists, gdf)
             if haveFlights:
                 gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
             if haveDates:
                 gLine.attrs['Date'] = float(record_lists[0][dateIdx])
     
+    updateLineAttributes(whizzFile, flight_chan=flightChannel, date_chan=dateChannel, verbose=False)
     print('Complete.')
     return whizzFile
 
@@ -151,11 +152,14 @@ def extract_line(record_list, gdf, lineChannelName):
     Returns the line number from the record list as a float.
     """
     lineIdx = _getDesiredChannel(gdf, lineChannelName)
+    fieldDef = gdf.get_field_definition(lineChannelName)
+    if fieldDef['inferred_dtype'] is int:
+        return int(record_list[lineIdx])
+    else:
+        return float(record_list[lineIdx])
 
-    return float(record_list[lineIdx])
 
-
-def save_rec_lists(wizLines, current_line, channelNames, pytypes, record_lists, gdf):
+def save_rec_lists(wizLines, current_line, channelNames, pytypes, nulls, record_lists, gdf):
     """
     Saves a full flight-line of data in the array of string arrays
     into the wizfid lines group. Returns the flight-line group.
@@ -168,24 +172,27 @@ def save_rec_lists(wizLines, current_line, channelNames, pytypes, record_lists, 
     gg.attrs['NumberOfFids'] = len(record_lists)
 
     # create a float np array of size = size(record_lists)
-    mydata = record_list_to_float(record_lists, pytypes)
+    mydata = record_list_to_float(record_lists, pytypes, nulls)
 
     # convert str to float and store in mydata
 
     # ... create the desired DataSets with attributes
     for chanIdx, channelName in enumerate(channelNames):
         chanstr = str(channelName)
-        dd = gg.create_dataset(chanstr, data=mydata[:,chanIdx], compression="gzip", compression_opts=4)
+        fieldDef = gdf.get_field_definition(chanstr)
+        if fieldDef['inferred_dtype'] is int:
+            dd = gg.create_dataset(chanstr, data=mydata[:,chanIdx].astype(int), compression="gzip", compression_opts=4)
+        else:
+            dd = gg.create_dataset(chanstr, data=mydata[:,chanIdx], compression="gzip", compression_opts=4)
         dd.attrs['Name'] = chanstr
         dd.attrs['Alias'] = chanstr
-        fieldDef = gdf.get_field_definition(chanstr)
         dd.attrs['Units'] = fieldDef['unit']#.split(':')[0]
         dd.attrs['Description'] = fieldDef['long_name']
 
     return gg
 
 
-def record_list_to_float(record_lists, pytypes):
+def record_list_to_float(record_lists, pytypes, nulls):
     """
     Convert the 2D string list into a 2D numpy float array.
     """
@@ -213,8 +220,13 @@ def record_list_to_float(record_lists, pytypes):
                 typefailure_count += 1
                 typefailure_report += f'except - |{item}| {idx}, {jdx}\n'
                 break
+            if type(nulls[jdx]) is str:
+                if nulls[jdx] in item:
+                    mydata[idx, jdx] = np.nan
+
         if typefailure_count > 1:
             break
+
 
     return mydata
 
@@ -291,7 +303,7 @@ def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChanne
             
     print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
     print(channelsOut)
-    print(channelindices, haveFlights, haveDates)
+    # print(channelindices, haveFlights, haveDates)
 
     return channelsOut, channelindices, haveFlights, flightIdx, haveDates, dateIdx
 
