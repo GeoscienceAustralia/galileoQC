@@ -9,7 +9,7 @@ import matplotlib.ticker as tkr
 import AirGravQC.utility.utility as util
 
 
-def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr, ylabelstr='Line Number', xaxis='linenumber'):
+def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr='Line Number', ylabelstr='', xaxis='linenumber'):
     """
 	Creates a box whisker plot showing the range, standard deviation and mean for each flight-line.
 

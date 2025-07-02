@@ -70,7 +70,7 @@ from AirGravQC.qualitycontrol.checkHighFreq import checkHighFreq
 
 # FTG checks
 from AirGravQC.qualitycontrol.checkFrobenius import checkFrobenius
-from AirGravQC.qualitycontrol.ilsNoiseVturb import ilsNoiseVturb
+from AirGravQC.qualitycontrol.ilsNoiseAnalysis import ilsNoiseAnalysis
 from AirGravQC.qualitycontrol.checkInlineSum import checkInlineSum
 
 
