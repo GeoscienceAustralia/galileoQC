@@ -10,6 +10,7 @@ setup(
     install_requires=[
         'numpy',
         'matplotlib',
+        'gdal',
         'colorcet',
         'filebrowser',
         'gspy',
