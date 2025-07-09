@@ -1,0 +1,31 @@
+from setuptools import setup
+
+setup(
+    name='AirGravQC',
+    version='0.1',
+    description='Quality control for airborne gravity.',
+    author='Mark Dransfield',
+    author_email='dransfield.m@bigpond.com',
+    packages=['AirGravQC'],
+    install_requires=[
+        'numpy',
+        'matplotlib',
+        'colorcet',
+        'filebrowser',
+        'gspy',
+        # 'gmt',
+        'h5py',
+        'ipympl',
+        'matplotlib',
+        'netCDF4',
+        'numpy',
+        'pathlib',
+        'pooch',
+        # 'pygmt',
+        'rioxarray',
+        'scikit-image',
+        'scipy',
+        'verde',
+        'xarray',
+    ],
+)
