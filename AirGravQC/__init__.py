@@ -31,6 +31,7 @@ from AirGravQC.gridFiles.read_ers import *
 from AirGravQC.whizzFiles.gdfReader import asegToHDF
 from AirGravQC.whizzFiles.xyzReader import xyzToHDF
 from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
+from AirGravQC.whizzFiles.updateChannelAttributes import updateChannelAttributes
 from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
 from AirGravQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling, reportChannels, reportLines)
 from AirGravQC.whizzFiles.updateLineSpacing import updateLineSpacing

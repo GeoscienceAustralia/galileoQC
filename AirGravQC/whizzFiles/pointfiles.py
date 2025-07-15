@@ -36,66 +36,6 @@ def _translate_date(decimal_year):
     return decimal_year
 
 
-def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', description='', chan_precision=-1):
-    """
-    Updates the channel attributes for all lines in the geoWhizz HDF5 file. For any
-    attribute, the default is to not change its value.
-
-    Parameters
-    ----------
-    whizzFile : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension.
-    channel : String
-        The name of the channel whose attributes are to be changed.
-    name : String, optional
-        The new name. The default is ''.
-    units : String, optional
-        The new units. The default is ''.
-    alias : String, optional
-        The new alias. The default is ''.
-    description : String, optional
-        The new description. The default is ''.
-    chan_precision : Integer, optional
-        The new chan_precision (number of places after decimal point). The default is -1 (unknown).
-
-    Returns
-    -------
-    None.
-
-    """
-    
-    # In the hdfFile, for all lines, update the attributes of the named channel if,
-    # and only if, the passed attribute is not empty.
-    
-    filename = str(whizzFile)
-
-    with h5py.File(filename, 'r+') as f:
-        # create all the data structure ready for the datasets
-        g = f[groupName]['Lines']
-        changed = False
-        
-        for line in g.keys():
-            dd = g[line][channel] # ToDo: make this case insensitive
-            if name != '':
-                dd.attrs['Name'] = name
-                changed = True
-            if units != '':
-                dd.attrs['Units'] = units
-                changed = True
-            if alias != '':
-                dd.attrs['Alias'] = alias
-                changed = True
-            if description != '':
-                dd.attrs['Description'] = description
-                changed = True
-            if chan_precision > -1:
-                dd.attrs['chan_precision'] = chan_precision
-                changed = True
-        if changed:
-            print(f'Changed channel attribute(s) for {channel} in {whizzFile.name}.')
-    return
-
-
 def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
     """
     Interpolates the data in a grid file onto a new channel, with the same name

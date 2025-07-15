@@ -153,7 +153,6 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     return
 
 
-
 def _decode_linenumber(current_line, line_type):
     if line_type == 'Xcal_nsw':
         if current_line < 8999999.0:
@@ -234,6 +233,7 @@ def _decode_linenumber(current_line, line_type):
             variety_line = "Traverse"
 
     return plan_line, segment_line, reflight_line, variety_line
+
 
 def _updateFlightAttributes(whizzFile, flight_chan):
     filename = str(whizzFile)
