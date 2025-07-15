@@ -96,6 +96,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
         
         gCoord = g.create_group('CoordinateFrame')
         gLines = g.create_group('Lines')
+        flightlines = set() # for uniqueness check.
 
         with open(gdf_datfile, 'r') as datfid:
 
@@ -104,6 +105,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
                 record_list = extract_from_record(record, starts, ends)
                 line_in_rec = extract_line(record_list, gdf, lineChannel)
                 if first_record:
+                    flightlines.add(line_in_rec)
                     current_line = line_in_rec
                     record_lists = []
                     first_record = False
@@ -120,7 +122,12 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
                         gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
                     if haveDates:
                         gLine.attrs['Date'] = float(record_lists[0][dateIdx])
-
+                    
+                    # check next flight-line is unique
+                    if line_in_rec in flightlines:
+                        print(f'ERROR - duplicate flight-line {line_in_rec} in {gdf_datfile}.')
+                        return
+                    flightlines.add(line_in_rec)
                     # prepare for next flight-line
                     current_line = line_in_rec
                     record_lists = []

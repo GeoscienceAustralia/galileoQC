@@ -18,7 +18,6 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-
 def _translate_date(decimal_year):
     """
     Translate decimal year into some useful format TBD. STUB does nothing.

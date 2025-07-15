@@ -71,8 +71,15 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
     num_lines = len(geosoftXYZ)
     lines = np.zeros((num_lines,))
 
+    # get the line numbers from geosoftXYZ, checking each is unique.
+    uniquelines = set()
     for count in range(0, num_lines):
-        lines[count] = geosoftXYZ[count]['line_number']
+        nextline = geosoftXYZ[count]['line_number']
+        if nextline in uniquelines:
+            print(f'ERROR - duplicate flight-line {nextline} in {xyzFileStr}.')
+            return
+        uniquelines.add(nextline)
+        lines[count] = nextline
         
     print('Creating: ', hdfFileStr)
         

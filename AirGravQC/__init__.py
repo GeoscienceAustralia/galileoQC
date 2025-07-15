@@ -20,8 +20,7 @@ References:
 # in the named directories. The user can then do:
 #     import AirGravQC as qc
 #     qc.myfun()
-from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject, 
-    updateChannelAttributes)
+from AirGravQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject)
 from AirGravQC.qualitycontrol.qualityAnalysis import *
 from AirGravQC.whizzPlots.whizzPlot import *
 from AirGravQC.gridFiles.gridfiles import (gridfile_to_xa)
@@ -72,7 +71,6 @@ from AirGravQC.qualitycontrol.checkHighFreq import checkHighFreq
 # FTG checks
 from AirGravQC.qualitycontrol.checkFrobenius import checkFrobenius
 from AirGravQC.qualitycontrol.ilsNoiseAnalysis import ilsNoiseAnalysis
-from AirGravQC.qualitycontrol.checkInlineSum import checkInlineSum
 
 
 # Navigation and position checks
