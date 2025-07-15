@@ -15,7 +15,7 @@ description = "Quality control for airborne gravimetry and gravity gradiometry i
 readme = "README.md"
 requires-python = ">=3.7"
 
-dependencies = ["aseg-gdf2==0.7", "colorcet", "filebrowser", "gspy==0.1.1", "h5py", "ipympl", "matplotlib", "netCDF4", "numpy", "pathlib", "pooch", "pygmt", "rioxarray", "scikit-image", "scipy", "verde", "xarray"]
+dependencies = ["aseg-gdf2==0.7", "colorcet", "filebrowser", "gspy==0.1.1", "h5py", "ipympl", "matplotlib", "netCDF4", "numpy", "pathlib", "pooch", "pygmt", "scikit-image", "scipy", "verde", "xarray"]
 
 # Classifiers have set values - be sure to only use classifier values from the
 # PyPI page here: https://PyPI.org/classifiers/
