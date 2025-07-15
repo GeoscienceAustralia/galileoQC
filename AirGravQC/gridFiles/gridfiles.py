@@ -18,7 +18,7 @@ import colorcet as cc
 import xarray as xr
 import netCDF4 as nc4
 import filebrowser as fb
-import rioxarray
+# import rioxarray
 import h5py
 import matplotlib.ticker as tkr
 
