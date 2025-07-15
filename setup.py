@@ -20,6 +20,7 @@ setup(
         'netCDF4',
         'pathlib',
         'pooch',
+        'pyarrow',
         # 'pygmt',
         # 'rioxarray',
         'scikit-image',
