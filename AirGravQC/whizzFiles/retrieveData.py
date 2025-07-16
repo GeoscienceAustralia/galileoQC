@@ -69,21 +69,23 @@ def getLineData(linegroup, channel):
     return my_data
 
 
-def getChannelAttrs(linegroup, channel):
+def getChannelAttrs(linegroup, channel, myattribute='Units'):
     """
-    Returns the `Units` attribute for the specified channel of
+    Returns the requested attribute for the specified channel of
     data for the given line.
 
     Parameters
     ----------
-    line : HDF5 Group
+    linegroup : HDF5 Group
         A flight-line group.
     channel : String
         The name of a channel in the database, e.g. 'EASTING'.
+    myattribute : String, optional
+        The name of the desired attribute, default 'Units'.
 
     Returns
     -------
-    my_units : String
+    attr_value : String
         The `Units` attribute for channel, empty string if `Units` was not found.
 
     """
@@ -92,9 +94,9 @@ def getChannelAttrs(linegroup, channel):
             # print(f'datachannel {datachannel[0]}; channel {channel}')
             myChanGroup = linegroup[datachannel[0]]
             chanAttrs = list(myChanGroup.attrs)
-            if 'Units' in chanAttrs:
-                my_units = myChanGroup.attrs['Units']
-                return my_units
+            if myattribute in chanAttrs:
+                attr_value = myChanGroup.attrs[myattribute]
+                return attr_value
             break
                 
     return ''

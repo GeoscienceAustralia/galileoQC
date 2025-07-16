@@ -150,9 +150,22 @@ def reportChannels(whizzFile, channel='', verbose=False):
         if verbose or channel != '':
             print(f'\033[1m  {"channel":<20} {"units":<14} {"description"}\033[0m')
             print('--------------------------------------------------')
+            linegroup = gLines[lineNames[0]]
             for channel in channelNames:
-                myChanGroup = gLines[lineNames[0]][channel]
-                print(f'  {channel:<20} {myChanGroup.attrs["Units"]:<14} {myChanGroup.attrs["Description"]}')
+                # myChanGroup = gLines[lineNames[0]][channel]
+                my_units = rd.getChannelAttrs(linegroup, channel, myattribute='Units')
+                my_description = rd.getChannelAttrs(linegroup, channel, myattribute='Description')
+                print(f'  {channel:<20} {my_units:<14} {my_description}')
+                # if my_units == '':
+                #     print(f'  {channel:<20} {my_units:<14} {my_description}')
+                #     ylabelstr = f'{channel}'
+                # else:
+                #     print(f'  {channel:<20} {myChanGroup.attrs["Units"]:<14} {myChanGroup.attrs["Description"]}')
+                #     ylabelstr = f'{channel} [{my_units}]'
+                # first, check Units attr exists!!!! TBD
+                #             my_units = rd.getChannelAttrs(g[lines[0]], channel)
+
+                
 
         else:
             print(f'\n{numChannels} channels:\n', channelNames)
