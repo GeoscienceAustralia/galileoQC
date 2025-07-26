@@ -48,6 +48,7 @@ from AirGravQC.whizzPlots.plotLinesOnGroundStns import plotLinesOnGroundStns
 # 2D Plotting
 from AirGravQC.gridFiles.graphicsShaded import graphicsShaded
 from AirGravQC.gridFiles.grid_n_image import grid_n_image
+from AirGravQC.gridFiles.minc import minc
 from AirGravQC.gridFiles.display_grid import display_grid
 from AirGravQC.gridFiles.imageStats import imageStats
 from AirGravQC.gridFiles.traceImages import traceImages

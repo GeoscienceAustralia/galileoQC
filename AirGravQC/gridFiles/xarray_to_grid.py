@@ -13,12 +13,13 @@ import AirGravQC.gridFiles.read_ers as ers
 import AirGravQC.whizzFiles.retrieveData as rd
 import AirGravQC.gridFiles.gridutility as gut
 import AirGravQC.config as config
+from AirGravQC.gridFiles.minc import minc
 
 groupName = config.groupName
 projectName = config.projectName
 
 
-def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=5):
+def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=5, bdist=None, maxiters=100):
     """
     Interpolates `my_data` onto a regular grid.
 
@@ -33,8 +34,9 @@ def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_pol
         Default uses the minimum and maximum coordinates.
     method : string, optional
         The gridding algorithm to use in interpolating the data. Available are the Verde methods:
-        "neighbours", "bicubic", and "biharmonic" and the SciPy GridData "linear" method. "neighbours"
-        is much faster if `pykdtree` is installed. Default `neighbours` method.
+        "neighbours", "bicubic", and "biharmonic", the pygmi method "minc"," and the SciPy
+        GridData "linear" method. The "neighbours" method is much faster if `pykdtree` is installed.
+        Default "neighbours" method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
@@ -43,6 +45,10 @@ def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_pol
         location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 5.
+    bdist : float, optional
+        If method is "minc", then this is the blanking distance in units of cell. Default None.
+    maxiters : int, optional
+        Maximum number of iterations for the minimum curvature method. Default 100.
 
     Returns
     -------
@@ -63,7 +69,7 @@ def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_pol
 
     if method == 'scipy':
 
-        if region == []:
+        if region is None:
             region = [
                         min(my_data[x_chan].data), 
                         max(my_data[x_chan].data),
@@ -80,6 +86,19 @@ def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_pol
 
         grid.values = griddata(list(zip(my_data[x_chan].data, my_data[y_chan].data)), my_data[z_chan].data, (east, north), method='linear')
 
+    # method is minimum curvature
+    elif method == 'minc':
+        mask_pixels = 0
+        mask_polygon = []
+
+        myvalues, myx, myy = minc(my_data[x_chan].data, my_data[y_chan].data, my_data[z_chan].data, grid_space, extent=region, bdist=bdist,
+                                maxiters=maxiters)
+        X = np.array(myx)
+        Y = np.array(myy)
+        tmpgrid = xr.DataArray(np.zeros((len(X), len(Y))), coords=[X, Y], dims=['x', 'y'])
+        grid = tmpgrid.transpose()
+        grid.values = myvalues[::-1]
+
     # method is one of the Verde methods
     else:
         # 1. Decimate the data along line
@@ -89,7 +108,7 @@ def xarray_to_grid(my_data, grid_space, region=[], method='neighbours', mask_pol
             (my_data[x_chan].data, my_data[y_chan].data), my_data[z_chan].data
         )
         # 2. Define the grid region and coordinates
-        if region == []:
+        if region is None:
             region = vd.get_region([my_data[x_chan], my_data[y_chan]])
             myreg = float(region[0].values), float(region[1].values), float(region[2].values), float(region[3].values)
         else:

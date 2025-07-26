@@ -26,7 +26,11 @@ def report_gridStats(my_grid, mask_polygon=[]):
     """
     if np.array(mask_polygon).size > 0:
         my_grid = maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y')
-    print(f'RMS of result = {my_grid.std().data.item():.2f} {my_grid.attrs["units"]}')
+    if 'units' in my_grid.attrs:
+        print(f'RMS of result = {my_grid.std().data.item():.2f} {my_grid.attrs["units"]}')
+    else:
+        print(f'RMS of result = {my_grid.std().data.item():.2f}')
+    print(f'Array shape = {my_grid.shape}')
 
 
 def maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y'):

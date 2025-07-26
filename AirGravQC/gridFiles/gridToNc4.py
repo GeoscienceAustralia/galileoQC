@@ -18,7 +18,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def gridToNc4(whizz_file, z_chans, grid_space, *, region=[], lines=[], e_chan='', n_chan='', mr_chans=[], 
+def gridToNc4(whizz_file, z_chans, grid_space, *, region=None, lines=[], e_chan='', n_chan='', mr_chans=[], 
     d1_chans=[], gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, 
     ncFile='', datum='', projection='', skipcontrols=False, controls=[]):
     """

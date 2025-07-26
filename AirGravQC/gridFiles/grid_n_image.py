@@ -20,7 +20,7 @@ projectName = config.projectName
 
 
 def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], sh_chans=[], minClip=np.nan, maxClip=np.nan, 
-    gridlines=True, method='neighbours', clipTo3Std=False, mask_polygon=[], mask_pixels=1, numneighbours=1):
+    gridlines=True, method='neighbours', clipTo3Std=False, mask_polygon=[], mask_pixels=1, numneighbours=1, bdist=None, maxiters=100):
     """
     Every channel in `z_chans` from `whizz_file` is interpolated onto a grid and imaged.
     Channels listed in `mr_chans` have the mean value of each survey line subtracted first.
@@ -62,6 +62,10 @@ def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan
         location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 1.
+    bdist : float, optional
+        If method is "minc", then this is the blanking distance in units of cell. Default None.
+    maxiters : int, optional
+        Maximum number of iterations for minc method. The default is 100.
 
     Returns
     -------
@@ -102,8 +106,8 @@ def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan
         my_data = whizz_to_xarray(whizz_file, z_chan, n_chan=n_chan, e_chan=e_chan, lines=lines, remove_mean=remove_mean, diff_one=diff_one)
         if len(my_data.attrs) == 0:
             continue
-        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=[], method=method, mask_polygon=mask_polygon, 
-            mask_pixels=mask_pixels, numneighbours=numneighbours)
+        my_grid, my_region = xarray_to_grid(my_data, grid_space, region=None, method=method, mask_polygon=mask_polygon, 
+            mask_pixels=mask_pixels, numneighbours=numneighbours, bdist=bdist, maxiters=maxiters)
         xdImage(my_grid, f'{my_grid.attrs["title"]}', minClip=minClip, maxClip=maxClip, gridlines=gridlines, hs=shaded, clipTo3Std=clipTo3Std)
         gut.report_gridStats(my_grid, mask_polygon=mask_polygon)
         

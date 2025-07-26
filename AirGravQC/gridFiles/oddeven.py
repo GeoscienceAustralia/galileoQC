@@ -154,7 +154,7 @@ def calcMeanTrack(lineGroup, easting, northing):
     return track
 
 
-def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, hs=True):
+def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, bdist=None, maxiters=100, hs=True):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
     sorted into two sets of odd and even lines. Each set is gridded and the difference
@@ -177,8 +177,8 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         second traverse (alternates to the oddlines).
     method : string, optional
         The gridding algorithm to use in interpolating the data. Available are the Verde methods:
-        "neighbours", "bicubic", and "biharmonic" and the SciPy GridData "linear" method. "neighbours"
-        is much faster if `pykdtree` is installed. Default `neighbours` method.
+        "neighbours", "bicubic", and "biharmonic" as well as "minc" and the SciPy GridData "linear" method.
+        The "neighbours" method is much faster if `pykdtree` is installed. Default `neighbours` method.
     mask_polygon : numpy 2D array, optional
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
@@ -187,7 +187,12 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         location will be masked out. Default 1.
     numneighbours : Integer, optional
         If method='neighbours', then this is the number of neighbours to average. Default 5.
-
+    bdist : float, optional
+        If method is "minc", then this is the blanking distance in units of cell. Default None.
+    maxiters : int, optional
+        Maximum number of iterations for minc method. The default is 100.
+    hs : Bool, optional
+        If True (the default), then the image is hill-shaded.
     Returns
     -------
     None.
@@ -230,9 +235,9 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
                         
     # Grid and difference the data sets
     even_grid, even_region = xarray_to_grid(even_data, grid_space, region=intersectregion, method=method, 
-        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours)
+        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours, bdist=bdist, maxiters=maxiters)
     odd_grid, odd_region = xarray_to_grid(odd_data, grid_space, region=intersectregion, method=method, 
-        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours)
+        mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours, bdist=bdist, maxiters=maxiters)
     d_grid = even_grid - odd_grid
 
     # Subtraction does not preserve attributes
