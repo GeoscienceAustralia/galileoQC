@@ -21,6 +21,11 @@ The tested, and preferred, method of using AirGravQC is via a Jupyter-lab notebo
 *Mark Dransfield*
 > {sub-ref}`today`
 
+## Acknowledgements
+
+Lots of help from various people at GA.
+The minimum curvature code was gratefully copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025.
+
 ## Citing
 
 One day there might be a publication to cite.

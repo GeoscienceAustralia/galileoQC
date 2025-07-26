@@ -88,13 +88,15 @@ def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_p
 
     # method is minimum curvature
     elif method == 'minc':
-        mask_pixels = 0
-        mask_polygon = []
+        # mask_pixels = 0
+        # mask_polygon = []
 
         myvalues, myx, myy = minc(my_data[x_chan].data, my_data[y_chan].data, my_data[z_chan].data, grid_space, extent=region, bdist=bdist,
                                 maxiters=maxiters)
         X = np.array(myx)
         Y = np.array(myy)
+        east, north = np.meshgrid(X, Y)  # 2D grid for masking
+
         tmpgrid = xr.DataArray(np.zeros((len(X), len(Y))), coords=[X, Y], dims=['x', 'y'])
         grid = tmpgrid.transpose()
         grid.values = myvalues[::-1]
