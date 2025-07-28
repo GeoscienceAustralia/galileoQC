@@ -155,3 +155,4 @@ docs/source/generated/AirGravQC.gridFiles.rst
 /examples/.jupyter/desktop-workspaces
 /examples/.jupyter/desktop-workspaces
 /examples/.jupyter/desktop-workspaces
+*.rst
