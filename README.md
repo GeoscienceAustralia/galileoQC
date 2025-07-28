@@ -1,7 +1,20 @@
 # AirGravQC
 AirGravQC is a python package to check the quality of the airborne gravity dataset delivered by suppliers.
 
-**Package Installation and Setup on National Computing infrastructure**
+Installation is known to work using pip:
+
+```
+pip install AirGravQC
+```
+
+AirGravQC is currently in a private repository and not generally available.
+
+More information will be available when the documentation is published. In the meantime, contact Mark Dransfield if help is required.
+
+The following might be helpful to users with access to the **NCIS**.
+
+
+## Package Installation and Setup on National Computing infrastructure
 
 	a. Setting up the python environment in NCI
 

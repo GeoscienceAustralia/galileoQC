@@ -272,12 +272,12 @@ The FTG is a single-complement, three-axis gradiometer. On each axis, it measure
 
 > $$ \eta = \frac{\Gamma_{uv}^{1} + \Gamma_{uv}^{2} + \Gamma_{uv}^{3}}{\sqrt{3}} $$
 
-The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. The FTG data used in testing did not include a turbulence channel but it did have a vertical velocity channel. This is supplied to `ilsNoiseVturb` and differenced to form an acceleration channel.
+The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. The FTG data used in testing did not include a turbulence channel but it did have a vertical velocity channel. This is supplied to `ilsNoiseAnalysis` and differenced to form an acceleration channel.
 
 The Deed specification allows for the in-line sum to be filtered and, currently, this happens behind the scenes in the code.
 
 ```python
-qc.ilsNoiseVturb(dh, diagComponent1, diagComponent2, 
+qc.ilsNoiseAnalysis(dh, diagComponent1, diagComponent2, 
 	diagComponent3, vertvelocity)
 ```
 
