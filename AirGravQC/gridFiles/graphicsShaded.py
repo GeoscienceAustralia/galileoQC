@@ -93,7 +93,7 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
         if "register_cmap" in dir(plt):
             plt.register_cmap('myCmap', colormap)
         elif "colormaps" in dir(ml) and "register" in dir(ml.colormaps):
-            cmaps.register(colormap, 'myCmap')
+            ml.colormaps.register(colormap, 'myCmap')
     
     if ax == None:
         fig, ax = plt.subplots()#figsize=(12,6))
