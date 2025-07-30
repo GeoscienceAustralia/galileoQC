@@ -38,7 +38,8 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
         which results in no planned_line attributes being written to the observations
         whizz file.
     line_type : TYPE, optional
-        Either 'Xcal_nsw' or 'SGL_GA' or 'SGL_NSW' or SGL_GDF' or 'NRG' or 'Xcal_can'.
+        Either 'Xcal_nsw' or 'SGL_GA' or 'SGL_NSW' or SGL_GDF' or 'NRG' or 'Xcal_can'
+        or 'ARK'.
         The default is '' which causes the `line`s 'PlannedLine' attribute to be set
         to `planned_line`.
     line : String
@@ -62,6 +63,7 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     None.
 
     """
+    line_types = ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG', 'ARK', 'SGL_GDF', 'SGL_Kauring']
 
     if flight_chan != '':
         if  _channelExists(whizzFile, flight_chan):
@@ -107,8 +109,8 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
             gg.attrs['PlannedLine'] = planned_line
             print(f'PlannedLine attribute of line {line} set to {planned_line}.')
             return
-        if not line_type in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG', 'SGL_GDF', 'SGL_Kauring']:
-            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_GDF', 'SGL_NSW', 'NRG', 'SGL_Kauring'].")
+        if not line_type in line_types:
+            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in {line_types}.")
             return
 
         print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')
@@ -187,6 +189,14 @@ def _decode_linenumber(current_line, line_type):
         segment_line = 0
         reflight_line = int(current_line - np.floor(current_line / 10.0) * 10)
         if current_line > 89999:
+            variety_line = "Control"
+        else:
+            variety_line = "Traverse"
+    elif line_type == 'ARK':
+        plan_line = np.floor(current_line / 10.0) * 10.0
+        segment_line = 0
+        reflight_line = int(current_line - np.floor(current_line / 10.0) * 10)
+        if current_line > 8999:
             variety_line = "Control"
         else:
             variety_line = "Traverse"
