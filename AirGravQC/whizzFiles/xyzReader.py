@@ -67,6 +67,9 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
 
     # access the data via Geosoft XYZ
     geosoftXYZ = readXYZ(xyzFileStr)
+    if geosoftXYZ is None:
+        print('xyzToHDF stopped. No geosoftXYZ data.')
+        return hdfFilePath
     desiredFieldNames = [*geosoftXYZ[0]]
     num_lines = len(geosoftXYZ)
     lines = np.zeros((num_lines,))
@@ -243,8 +246,11 @@ def readXYZ(filename, verbose=False):
                     else:
                         field_precisions[ii] = len(bits[1])
                 num_channels = len(first_data_rec)
-            else:
+            elif num_lines > 1:
                 continue
+            else:
+                print('ERROR - no "LINE" records found in file, may not be a Geosoft XYZ file.')
+                return None
     fid.close()
     print(f'\n  Found {num_head_recs} header records')
     print(f'  Found {num_lines} lines')
@@ -287,8 +293,11 @@ def readXYZ(filename, verbose=False):
                 current_line = float(file_line.split()[1])
                 line_nos[line_ctr] = f'{current_line:.3f}' # FIX THIS TODO
                 line_ctr += 1
-            else:
+            elif line_ctr > 0:
                 num_fids[line_ctr-1] += 1
+            else:
+                print('ERROR - no "LINE" records found in file, may not be a Geosoft XYZ file.')
+                return None
     fid.close()
 
     # initialise dictionary list
