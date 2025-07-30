@@ -53,6 +53,7 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
     """
     filename = str(whizzFile)
     if channels == []:
+        print('ERROR - no list of channel names received.')
         return
 
     with h5py.File(filename, 'r') as f:
@@ -64,6 +65,7 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
 
         num_subplots = 4
         num_lines = len(list(lines))
+        print(num_lines)
         num_failed_lines = 0
         summary = f'Checked {num_lines} lines; no line had high frequency signal above {noiseLimit}.'
         reportStr = ''
@@ -132,11 +134,12 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
             summary = f'Checked {num_lines} lines; 1 line had high frequency signal above {noiseLimit}.'
         elif num_failed_lines > 1:
             summary = f'Checked {num_lines} lines; {num_failed_lines} lines had high frequency signal above {noiseLimit}.'
-        print(summary)
-        if verbose:
-            print(reportStr)
-        if plot_flag and num_failed_lines > 0:
-            plt.show()
+    print(summary)
+    if verbose:
+        print(reportStr)
+    if plot_flag and num_failed_lines > 0:
+        plt.show()
+    return
 
 
 def _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=np.array([]), y2=np.array([]), bounds=[]):
