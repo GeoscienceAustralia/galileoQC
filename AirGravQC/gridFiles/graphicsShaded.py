@@ -6,6 +6,7 @@ Make a shaded image of grid data.
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import matplotlib as ml
 import h5py
 from pathlib import Path
 import matplotlib.ticker as tkr
@@ -87,8 +88,12 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
         z = np.clip(z, minClip, np.max(z))
     
     # register the supplied colormap for access via its name
+    # Somewhat dodgy if-elif code to cope with matplotlib deprecation
     if not 'myCmap' in plt.colormaps():
-        plt.register_cmap('myCmap', colormap)
+        if "register_cmap" in dir(plt):
+            plt.register_cmap('myCmap', colormap)
+        elif "colormaps" in dir(ml) and "register" in dir(ml.colormaps):
+            cmaps.register(colormap, 'myCmap')
     
     if ax == None:
         fig, ax = plt.subplots()#figsize=(12,6))
