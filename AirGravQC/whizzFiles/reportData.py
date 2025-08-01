@@ -372,9 +372,15 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
         g = f[groupName]['Lines']
         
         if x == '':
-            x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+            if whizzAttrExists(f[groupName]['CoordinateFrame'], 'XChannel'):
+                x = f[groupName]['CoordinateFrame'].attrs['XChannel']
+            else:
+                return None
         if y == '':
-            y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+            if whizzAttrExists(f[groupName]['CoordinateFrame'], 'YChannel'):
+                y = f[groupName]['CoordinateFrame'].attrs['YChannel']
+            else:
+                return None
 
         lineDistance = 0.0
         count = 0
