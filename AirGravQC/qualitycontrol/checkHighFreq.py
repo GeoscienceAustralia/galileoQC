@@ -65,7 +65,6 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
 
         num_subplots = 4
         num_lines = len(list(lines))
-        print(num_lines)
         num_failed_lines = 0
         summary = f'Checked {num_lines} lines; no line had high frequency signal above {noiseLimit}.'
         reportStr = ''
