@@ -117,7 +117,6 @@ def ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, 
             data3 = rd.getLineData(linegroup, diagComponent3)
             ils = util._inLineSum(data1, data2, data3, fs=f_sample, lowcut=lowcut, highcut=highcut, dontfilter=dontfilter)
 
-            ils[count] = np.std(util._inLineSum(data1, data2, data3))
             lineNo[count] = line
             chMin[count] = np.min(ils)
             chMax[count] = np.max(ils)
