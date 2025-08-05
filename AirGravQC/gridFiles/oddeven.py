@@ -240,6 +240,18 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours, bdist=bdist, maxiters=maxiters)
     d_grid = even_grid - odd_grid
 
+    # A common user error is to specify too small a grid cell size leading to lots of NaNs.
+    # It would be better to only count N(NaNs) inside the mask_polygon - another time.
+    isnull = d_grid.isnull()
+    num_nan = isnull.sum()
+    num_nans = num_nan.values.tolist()
+    num_gridcells = d_grid.shape[0] * d_grid.shape[1]
+    if num_gridcells - num_nans < 10:
+        print(f'\nOf {num_gridcells} grid cells, {num_nans} are NaN. A larger grid_space will reduce the number of NaNs.')
+    if d_grid.shape[0] * d_grid.shape[1] == num_nan.values.tolist():
+        print('The difference gid is all NaNs. No image or statistics can be produced.')
+        return
+
     # Subtraction does not preserve attributes
     d_grid.attrs['units'] = even_grid.attrs['units']
     d_grid.attrs['long_name'] = even_grid.attrs['long_name']
