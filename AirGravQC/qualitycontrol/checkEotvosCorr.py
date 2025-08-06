@@ -18,10 +18,10 @@ import AirGravQC.utility.utility as util
 groupName = config.groupName
     
 
-def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height='', time='', east_vel='', north_vel='', lines=[], plot_flag=False):
+def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height='', time='', east_vel='', north_vel='', lines=[], changesign=False, plot_flag=False):
     """
     Subtracts the eotvos correction in the data file from one calculated using
-    Hinze et al (2005) and the latitude and position data in the data file.
+    Jekeli (2016, slide 51) and the latitude and position data in the data file.
     The min, max, mean and standard deviation of the difference is calculated
     for each line and presented in an extended whisker plot.
 
@@ -56,6 +56,9 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
         channels.
     lines : Array{String}, optional
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+    changesign : Bool, optional
+        If True, adds the calculated result to the data channel, instead of subtracting.
+        Default False.
     plot_flag : Bool, optional
         If true, plot details where the difference is large. Summary plot is always done. Default False.
 
@@ -121,7 +124,10 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
                 n_speed = rd.getLineData(g[line], north_vel)
                 e_speed = rd.getLineData(g[line], east_vel)
             cal_data = _eotvosCorrection(e_speed, n_speed, lat_data, ht_data)
-            err_data = cor_data * unit_scale + cal_data
+            if changesign:
+                err_data = cor_data * unit_scale + cal_data
+            else:
+                err_data = cor_data * unit_scale - cal_data 
             diffMin[count] = np.min(err_data)
             diffMax[count] = np.max(err_data)
             diffMean[count] = np.mean(err_data)
