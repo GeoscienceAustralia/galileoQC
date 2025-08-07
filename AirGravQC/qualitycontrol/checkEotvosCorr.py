@@ -119,7 +119,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
             time_data = rd.getLineData(g[line], time)
             cor_data = rd.getLineData(g[line], eotCorr)
             if (east_vel == '')  | (north_vel == ''):
-                (n_speed, e_speed) = _calc_speed(x_data, y_data, time_data)
+                (e_speed, n_speed) = _calc_speed(x_data, y_data, time_data)
             else:
                 n_speed = rd.getLineData(g[line], north_vel)
                 e_speed = rd.getLineData(g[line], east_vel)
