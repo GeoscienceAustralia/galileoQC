@@ -176,6 +176,7 @@ def read_xyz_header(filename):
     print(f'Found {num_head_recs} header records')
     print(f'Found {num_lines} lines')
     print(f'Found {num_channels} fields')
+    print(f'Channel precisions (number of decimal places): {field_precisions}')
     if need_first_data_rec:
         print('Could not find a record without * - so no precisions calculated.')
         with open(filename, 'r') as fid:
@@ -231,8 +232,8 @@ def readXYZ(filename, verbose=False):
         for file_line in fid:
             if num_lines == 0:
                 # Always useful to see the first few records in the file.
-                print('  ', file_line)
-            if file_line[0] == '/':
+                print(file_line)
+            if file_line.lstrip().startswith('/'):
                 num_head_recs += 1
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 num_lines += 1
@@ -246,21 +247,30 @@ def readXYZ(filename, verbose=False):
                     else:
                         field_precisions[ii] = len(bits[1])
                 num_channels = len(first_data_rec)
-            elif num_lines > 1:
+                need_first_data_rec = False
+            elif num_lines > 0:
                 continue
             else:
+                print(f'\n  Found {num_head_recs} header records')
+                print(f'  Found {num_lines} lines')
+                print(f'  Found {num_channels} fields\n')
+                print(f'Channel precisions (number of decimal places): {field_precisions}')
                 print('ERROR - no "LINE" records found in file, may not be a Geosoft XYZ file.')
                 return None
     fid.close()
     print(f'\n  Found {num_head_recs} header records')
     print(f'  Found {num_lines} lines')
     print(f'  Found {num_channels} fields\n')
+    print(f'Channel precisions (number of decimal places): {field_precisions}')
     
     # get channel names
     header_rec = 0
     with open(filename, 'r') as fid:
         for file_line in fid:
-            temp_names = file_line[1:].split()
+            if not file_line.lstrip().startswith('/'):
+                continue
+            file_line_trimmed = file_line.lstrip()[1:] # trim leading spaces and '/'
+            temp_names = file_line_trimmed.split()
             header_rec += 1
             if len(temp_names) == num_channels:
                 channelnames = temp_names
@@ -282,8 +292,8 @@ def readXYZ(filename, verbose=False):
     # get lines, flights and dates
     with open(filename, 'r') as fid:
         for file_line in fid:
-            if file_line[0] == '/':
-                if file_line[1] != '/':  # already got channel names
+            if file_line.lstrip().startswith('/'):
+                if not file_line.lstrip().startswith('//'):  # already got channel names
                     continue
                 elif file_line.lstrip().upper().startswith('//FLIGHT'): # we will get flight number from channel
                     continue
@@ -321,7 +331,7 @@ def readXYZ(filename, verbose=False):
 
     with open(filename, 'r') as fid:
         for file_line in fid:
-            if file_line[0] == '/':
+            if file_line.lstrip().startswith('/'):
                 continue
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
                 current_line = float(file_line.split()[1])
@@ -334,10 +344,9 @@ def readXYZ(filename, verbose=False):
             else:
                 line_str = file_line.split()
                 if len(line_str) != num_channels:
-                    print(line_ctr, fid_ctr)
-                    print(line_str)
-                    print('Number of channel names mis-match to size of data ', len(line_str))
-                    break
+                    if verbose:
+                        print(f'Skipping file record, size of data ({len(line_str)}) mis-match to {num_channels} channels')
+                    continue
                 for ii in range(num_channels):
                     try:
                         geosoftXYZ[line_ctr-1][channelnames[ii]][fid_ctr] = float(line_str[ii])
