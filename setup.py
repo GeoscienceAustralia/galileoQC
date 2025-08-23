@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='AirGravQC',
+    name='pegasusQC',
     version='0.1',
     description='Quality control for airborne gravity.',
     author='Mark Dransfield',
     author_email='dransfield.m@bigpond.com',
-    packages=['AirGravQC'],
+    packages=['pegasusQC'],
     install_requires=[
         'numpy',
         'matplotlib',

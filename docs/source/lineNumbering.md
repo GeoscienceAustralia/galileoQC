@@ -21,6 +21,10 @@ For QC, the most critical requirement is to be able to identify the planned line
 
 The `updateLineAttributes` function recognises several encoding formats for line numbering:
 
+**ARK**
+
+For the Bonaparte ArkEx FTG survey. Details TBD.
+
 **SGL_NSW**
 : Line Number convention "LLLL.SR" :
 

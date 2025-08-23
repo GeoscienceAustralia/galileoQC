@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "AirGravQC"
+name = "pegasusQC"
 version = "0.0.1"
 authors = [
   { name="Mark Helm Dransfield", email="dransfield.m@bigpond.com" },
@@ -39,4 +39,4 @@ classifiers = [
 
 # Can add urls for home page, documentation, issue tracker and source code 
 [project.urls]
-"GitHub" = "https://github.com/GeoscienceAustralia/AirGravQC"
+"GitHub" = "https://github.com/GeoscienceAustralia/pegasusQC"

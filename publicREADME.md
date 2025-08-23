@@ -1,9 +1,9 @@
-# AirGravQC
-AirGravQC is a python package to check the quality of the airborne gravity dataset delivered by suppliers.
+# __pe*ga*susQC__
+__pe*ga*susQC__ is a python package to check the quality of the airborne gravity dataset delivered by suppliers.
 
 ## Dependencies
 
-AirGravQC uses the following packages and has been successfully tested against the version(s) listed.
+__pe*ga*susQC__ uses the following packages and has been successfully tested against the version(s) listed.
 
 	python 3.10
 	colorcet 3.0
@@ -26,37 +26,37 @@ AirGravQC uses the following packages and has been successfully tested against t
 
 	jupyterlab
 
-Running AirGravQC is usually done in jupyterlab and this approach is highly recommended. All testing has been done using the app [JupyterLab Desktop](https://github.com/jupyterlab/jupyterlab-desktop) but the on-line [JupyterLab](https://jupyter.org) should work equally well.
+Running __pe*ga*susQC__ is usually done in jupyterlab and this approach is highly recommended. All testing has been done using the app [JupyterLab Desktop](https://github.com/jupyterlab/jupyterlab-desktop) but the on-line [JupyterLab](https://jupyter.org) should work equally well.
 
-You should ensure you have all of the above installed before installing and running AirGravQC. Further [below](#more-installation-details) are some additional tips that might help in installing the dependencies.
+You should ensure you have all of the above installed before installing and running __pe*ga*susQC__. Further [below](#more-installation-details) are some additional tips that might help in installing the dependencies.
 
 ## Install
 
 These installation instructions are for the /dev version and will need changing for the release version.
 
-First, download the /dev version of AirGravQC from GitHub onto a useful location on your computer. Somewhere in your Documents folder or its equivalent is typical.
+First, download the /dev version of __pe*ga*susQC__ from GitHub onto a useful location on your computer. Somewhere in your Documents folder or its equivalent is typical.
 
 Ensure you have already installed the [dependencies](#dependencies). It is usually best to have first created an environment and have all the dependencies installed there.
 
-Then install AirGravQC. The example has the path to AirGravQC on Bob's computer. Replace this with the equivalent path on your computer. If you want to be able to edit the code, use:
+Then install __pe*ga*susQC__. The example has the path to __pe*ga*susQC__ on Bob's computer. Replace this with the equivalent path on your computer. If you want to be able to edit the code, use:
 
-	python3 -m pip install -e /Users/bob/Documents/GitHub/AirGravQC
+	python3 -m pip install -e /Users/bob/Documents/GitHub/pegasusQC
 
 If not, you can use:
 
-	python3 -m pip install /Users/bob/Documents/GitHub/AirGravQC
+	python3 -m pip install /Users/bob/Documents/GitHub/pegasusQC
 
 Now you can run python from the command line:
 	
 	python3
 
-... and import AirGravQC. If it imports successfully, we are done and can now go to the [JupyterLab workbook](#test).
+... and import __pe*ga*susQC__. If it imports successfully, we are done and can now go to the [JupyterLab workbook](#test).
 	
-	>>> import AirGravQC as qc
+	>>> import pegasusQC as qc
 
 ## More Installation Details
 
-This sections provides some additional hints and help for the installation of the dependencies of AirGravQC. Create and activate your virtual environment first, then install python, then GMT, and then the rest of the dependencies.
+This sections provides some additional hints and help for the installation of the dependencies of __pe*ga*susQC__. Create and activate your virtual environment first, then install python, then GMT, and then the rest of the dependencies.
 
 ### Virtual Environment
 
@@ -104,4 +104,4 @@ Install [JupyterLab Desktop](https://github.com/jupyterlab/jupyterlab-desktop) a
 
 ## Test
 
-Functionality can be tested by running the Jupyter notebook `Test_AirGravQC_overall.ipynb` in the top-level of the AirGravQC installation folder.
+Functionality can be tested by running the Jupyter notebook `Test_pegasusQC_overall.ipynb` in the top-level of the __pe*ga*susQC__ installation folder.

@@ -7,5 +7,5 @@ The links to the API go here.
 	:recursive:
     :toctree: generated
 
-    AirGravQC
+    pegasusQC
 ```

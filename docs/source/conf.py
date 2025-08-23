@@ -10,19 +10,16 @@ import pathlib
 import importlib.metadata
 
 import sys
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'AirGravQC')))
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'AirGravQC')))
 sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
-# sys.path.insert(0, pathlib.Path("/Users/markdransfield/Documents/GitHub/AirGravQC/AirGravQC/qualityAnalysys.py").as_posix())
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'AirGravQC'
+project = 'pegasusQC'
 copyright = '2023, GA'
 author = 'Mark Dransfield'
 version = '0.0.1'
-release = '0.0.1'#importlib.metadata.version('AirGravQC')
+release = '0.0.1'#importlib.metadata.version('pegasusQC')
 # release = '0.0.0'
 today_fmt = '%d %b %Y' 
 

@@ -1,7 +1,7 @@
 (methods-target)=
 # Methods
 
-This section provides a brief description of airborne gravity QC methods using the `AirGravQC` functions.
+This section provides a brief description of airborne gravity QC methods using the __pe*ga*susQC__ functions.
 
 The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules.md) and examples are available in the [Tutorials](#tutorials-target).
 
@@ -19,7 +19,7 @@ A typical work-flow to prepare the data for QC would use the following main step
 
 ### Convert data to `geoWhizz`
 
-All the qc routines for located data rely on those data being stored in a `geoWhizz` HDF5 format file. `AirGravQC` converts data from either `xyz` format or `ASEG-GDF2` format to a `geoWhizz` file. Here is an example for `xyz` input data (the project name is a reference for all the data, and is used in report and plot titles).:
+All the qc routines for located data rely on those data being stored in a `geoWhizz` HDF5 format file. __pe*ga*susQC__ converts data from either `xyz` format or `ASEG-GDF2` format to a `geoWhizz` file. Here is an example for `xyz` input data (the project name is a reference for all the data, and is used in report and plot titles).:
 
 ```python
 qc.xyzToHDF(Path(dx), projectName='Canobie')
@@ -60,7 +60,7 @@ qc.updateLineAttributes(dh, line_type='Xcal_can')
 
 ### Channel meta-data
 
-As with the project meta-data, the channel meta-data must be delivered with the data. Particularly important are the units, some of which are used, and many assumed, by `AirGravQC`. The following command should be run on all data channels which is somewhat tedious (but necessary).
+As with the project meta-data, the channel meta-data must be delivered with the data. Particularly important are the units, some of which are used, and many assumed, by __pe*ga*susQC__. The following command should be run on all data channels which is somewhat tedious (but necessary).
 
 ```python
 qc.updateChannelAttributes(dh, 'ANE_TC_2p67', units='eotvos', 
@@ -332,7 +332,7 @@ qc.checkGaps(dh)
 
 ### Intersection Differences
 
-It is common to check differences in channel values at the intersection between a traverse flight-line and a control flight-line. The usual checks are for the height difference, and a primary gravity or gravity gradient channel. `AirGravQC` provides the `checkRMSIntersection` function for this purpose.
+It is common to check differences in channel values at the intersection between a traverse flight-line and a control flight-line. The usual checks are for the height difference, and a primary gravity or gravity gradient channel. __pe*ga*susQC__ provides the `checkRMSIntersection` function for this purpose.
 
 It reports all traverse lines where the RMS difference in `zChannel` over all control line intersections is greater than `max_allowed_deltaZ`. If `divroot2` then the check is against the RMS difference divided by $\sqrt{2}$.
 

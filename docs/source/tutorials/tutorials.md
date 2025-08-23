@@ -3,11 +3,11 @@
 
 This section provides links to the tutorial notebooks (in Jupyter-lab format).
 
-You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have AirGravQC installed and running.
+You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __pe*ga*susQC__ installed and running.
 
 ## Data Acknowledgements
 
-The tutorials use field data from airborne gravity surveys to demonstrate the use of AirGravQC on real data. Permission to use field data has been kindly given by:
+The tutorials use field data from airborne gravity surveys to demonstrate the use of __pe*ga*susQC__ on real data. Permission to use field data has been kindly given by:
 
 	Stephan Sander (Co-President, Sander Geophysics),
 	Chris van Galder (Chief Geophysicist, Xcalibur Smart Mapping), and
@@ -27,7 +27,7 @@ The Eastern Victoria airborne gravimeter survey was flown by Sander Geophysics i
 
 The Geosoft XYZ data format file is commonly used in geophysics to transmit geophysical survey data in a text-readable form.
 
-We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format elsewhere in the `AirGravQC` documentation.)
+We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format elsewhere in the __pe*ga*susQC__ documentation.)
 
 For three of the example data sets (Eastern Victoria, Canobie, and Vinton Dome), the field data were supplied in Geosoft XYZ format. This tutorial works through the preparation of these XYZ data files as geowhizz HDF5 files for quality control checks.
 

@@ -2,14 +2,14 @@
 
 ## Installation
 
-To use AirGravQC, first install it into your `whizz` environment using pip or conda:
+To use __pe*ga*susQC__, first install it into your `whizz` environment using pip or conda:
 
 ```bash
-(whizz) $ pip install AirGravQC
+(whizz) $ pip install pegasusQC
 ```
 
 ```bash
-(whizz) $ conda install AirGravQC
+(whizz) $ conda install pegasusQC
 ```
 
 Then start up a Jupyter-lab notebook. For more information about this, see [^Jupyter] . The Jupyter-lab app [^JupyterApp] is recommended.
@@ -17,17 +17,17 @@ Then start up a Jupyter-lab notebook. For more information about this, see [^Jup
 :::{tip}
 Installation not yet working!
 
-While AirGravQC remains on the GA private repository, it can be installed with the following steps:
+While __pe*ga*susQC__ remains on the GA private repository, it can be installed with the following steps:
 
 Clone the repository using Git:
 
 ```bash
-git clone https://github.com/GeoscienceAustralia/AirGravQC.git
+git clone https://github.com/GeoscienceAustralia/pegasusQC.git
 ```
 Navigate to the cloned directory:
 
 ```bash
-cd AirGravQC
+cd pegasusQC
 ```
 Install the package via setup.py:
 
@@ -47,17 +47,17 @@ from pathlib import Path # useful for file names
 %matplotlib widget # needed to, for example, zoom into plots
 ```
 
-... then import AirGravQC ... 
+... then import __pe*ga*susQC__ ... 
 
 ```python
-import AirGravQC as qc
+import pegasusQC as qc
 ```
 
 ... and finally set the path to your field and plan data:
 
 ```python
 # Setup the path to the acquired data, ...
-data_root = "/Users/username/Documents/GitHub/AirGravQC/examples/"
+data_root = "/Users/username/Documents/GitHub/pegasusQC/examples/"
 dx = Path(data_root + r'AGG/Canobie/20211130.xyz')
 dh = dx.with_suffix('.hdf5')
 
