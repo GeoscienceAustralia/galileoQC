@@ -116,8 +116,8 @@ def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinele
         projName = f[groupName].attrs['ProjectName']
         if flightLines == []:
             flightLines = list(g.keys())
-        corr_units = g[flightLines[0]][channel].attrs['Units']
 
+        corr_units = rd.getChannelAttrs(g[flightLines[0]], channel)
         y_label = f'{channel}' #' [{corr_units}]'
         shortestN = pow(2, 30)
 
@@ -151,6 +151,9 @@ def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinele
         print(f'The first {numsamples} samples from each line will be used.')
         if numlines == 1:
             print('Only one flight line in analysis, so results are not reliable.')
+        elif numlines < 1:
+            print('WARNING - no lines found. Perhaps try with a shorter min line length.')
+            return
 
         f_sample = _time_frequency(f[groupName])
         q = 3  # over-sampling factor

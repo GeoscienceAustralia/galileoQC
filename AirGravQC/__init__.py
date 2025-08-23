@@ -29,6 +29,7 @@ from AirGravQC.gridFiles.read_ers import *
 # Data management
 from AirGravQC.whizzFiles.gdfReader import asegToHDF
 from AirGravQC.whizzFiles.xyzReader import xyzToHDF
+from AirGravQC.whizzFiles.colReader import colsToHDF
 from AirGravQC.whizzFiles.updateLineAttributes import updateLineAttributes
 from AirGravQC.whizzFiles.updateChannelAttributes import updateChannelAttributes
 from AirGravQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
@@ -90,6 +91,7 @@ from AirGravQC.qualitycontrol.checkHeading import checkHeading
 from AirGravQC.qualitycontrol.checkErsHeaders import checkErsHeaders
 from AirGravQC.qualitycontrol.psdChannelDiff import psdChannelDiff
 from AirGravQC.qualitycontrol.psdChannelDiff import psdChannelGain
+from AirGravQC.qualitycontrol.psdChannelDiff import psdChannel
 from AirGravQC.qualitycontrol.allChanStats import allChanStats
 from AirGravQC.qualitycontrol.diffChanStats import diffChanStats
 from AirGravQC.qualitycontrol.checkGaps import checkGaps
