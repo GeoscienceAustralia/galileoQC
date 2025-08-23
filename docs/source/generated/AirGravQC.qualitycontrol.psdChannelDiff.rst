@@ -8,6 +8,7 @@ AirGravQC.qualitycontrol.psdChannelDiff
 
    .. autosummary::
    
+      psdChannel
       psdChannelDiff
       psdChannelGain
    

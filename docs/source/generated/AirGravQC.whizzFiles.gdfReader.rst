@@ -9,4 +9,8 @@ AirGravQC.whizzFiles.gdfReader
    .. autosummary::
    
       asegToHDF
+      extract_from_record
+      extract_line
+      record_list_to_float
+      save_rec_lists
    

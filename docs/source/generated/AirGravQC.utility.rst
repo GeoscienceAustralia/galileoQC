@@ -1,4 +1,4 @@
-﻿AirGravQC.utility
+AirGravQC.utility
 =================
 
 .. automodule:: AirGravQC.utility

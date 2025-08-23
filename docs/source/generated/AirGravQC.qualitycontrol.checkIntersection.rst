@@ -1,4 +1,4 @@
-﻿AirGravQC.qualitycontrol.checkIntersection
+AirGravQC.qualitycontrol.checkIntersection
 ==========================================
 
 .. automodule:: AirGravQC.qualitycontrol.checkIntersection

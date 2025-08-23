@@ -1,4 +1,4 @@
-﻿AirGravQC.gridFiles
+AirGravQC.gridFiles
 ===================
 
 .. automodule:: AirGravQC.gridFiles
@@ -15,13 +15,14 @@
    display_grid
    graphics
    graphicsShaded
+   gridToNc4
    grid_n_image
    gridfiles
    grids_gmt
-   gridtoERS
    gridutility
    imageAllInDir
    imageStats
+   minc
    oddeven
    read_ers
    traceImages

@@ -10,10 +10,12 @@
    :toctree:
    :recursive:
 
+   colReader
    gdfReader
    pointfiles
    reportData
    retrieveData
+   updateChannelAttributes
    updateLineAttributes
    updateLineSpacing
    updateOddOrEven

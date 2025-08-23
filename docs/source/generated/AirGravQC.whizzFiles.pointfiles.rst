@@ -14,7 +14,6 @@ AirGravQC.whizzFiles.pointfiles
       interpolateGridOntoLine
       interpolateLine
       renameChannels
-      updateChannelAttributes
       updateCoordFrame
       updateProject
    

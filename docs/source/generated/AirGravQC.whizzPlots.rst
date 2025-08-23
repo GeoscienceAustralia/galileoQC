@@ -1,4 +1,4 @@
-﻿AirGravQC.whizzPlots
+AirGravQC.whizzPlots
 ====================
 
 .. automodule:: AirGravQC.whizzPlots

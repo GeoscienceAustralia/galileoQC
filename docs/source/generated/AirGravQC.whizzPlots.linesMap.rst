@@ -9,4 +9,5 @@ AirGravQC.whizzPlots.linesMap
    .. autosummary::
    
       linesMap
+      plotsurveyboundary
    

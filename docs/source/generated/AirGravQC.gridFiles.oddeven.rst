@@ -8,6 +8,7 @@ AirGravQC.gridFiles.oddeven
 
    .. autosummary::
    
+      altsample_grid
       calcMeanTrack
       oddevenlines
       updateLineTracks

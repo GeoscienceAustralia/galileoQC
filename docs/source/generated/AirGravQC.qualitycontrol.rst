@@ -16,6 +16,7 @@
    checkClearance
    checkConstantSlope
    checkDiurnal
+   checkDuplicateLines
    checkEotvosCorr
    checkErsHeaders
    checkFreeAirCorr
@@ -24,7 +25,6 @@
    checkGaps
    checkHeading
    checkHighFreq
-   checkInlineSum
    checkIntersection
    checkLatCorr
    checkLineLengths
@@ -42,6 +42,6 @@
    diffGravVturb
    diffGroundGrid
    diffNoiseVturb
-   ilsNoiseVturb
+   ilsNoiseAnalysis
    psdChannelDiff
    qualityAnalysis

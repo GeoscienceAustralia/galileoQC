@@ -62,12 +62,6 @@ source_suffix = {
     '.ipynb': 'myst-nb',
 }
 
-html_theme_options = {
-    # 'show_powered_by': 'false',
-    # 'body_text': 'Black',
-    # 'font_family': 'Palatino',
-}
-
 nbsphinx_execute = "auto"
 
 nbsphinx_execute_arguments = [
@@ -84,6 +78,15 @@ nbsphinx_kernel_name = "python3"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "agogo"
-html_static_path = ['_static']
+html_static_path = ['static']
+# html_favicon = "static/pegasus_icon.png"
+
+html_theme_options = {
+    # 'logo_only': True,
+    # 'display_version': False,
+    # 'show_powered_by': 'false',
+    # 'body_text': 'Black',
+    # 'font_family': 'Palatino',
+}
 
 numfig = True
