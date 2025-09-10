@@ -14,21 +14,95 @@ import pegasusQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000, diff4Limit = 0.5, plot_flag=False):
-    # TODO:
-    # add check for singleValueExceedance()
-    # make the code faster - this is much too slow
+def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000, xChannel='', yChannel='', tChannel='', 
+    maxDuration=0.0, maxDistance=0.0, plot_flag=False, verbose=False):
+    """
+    Checks the `basemag` data for diurnal exceedances. These occur at any data
+    value whose difference from a chord `nSamples` long is greater than `rangeLimit`.
+
+    If `maxDuration` is greater than 1.0, then that number of seconds
+    will be used instead of `nSamples`. If `maxDuration` is less than 1.0
+    and `maxDistance` is greater than 1.0, then that distance in metres
+    will be used instead of `nSamples`.
+
+    Parameters
+    ----------
+    whizzFile : HDF5 Whizz file pathlib Path
+        The pathlib Path to the Whizz HDF5 file containing the survey line data.
+    basemag : String
+        The name of the channel in whizzFile containing the mag data to be checked.
+    lines : Array{String}, optional
+        Array of line numbers. Default = [], meaning all lines are checked.
+    rangeLimit : Float, optional
+        The maximum allowed deviation from the straight line chord. Default = 5.0 nT
+    nSamples : Integer, optional
+        The number of samples (moving window) over which the test is applied.
+        Default = 3000
+    xChannel : String, optional
+        The name of the geoWhizz field or channel containing the measured x positions. The
+        default is to read the xChannel field name from the Coordinate Frame.
+    yChannel : String, optional
+        The name of the geoWhizz field or channel containing the measured y positions. The
+        default is to read the yChannel field name from the Coordinate Frame.
+    tChannel : String, optional
+        The name of the geoWhizz field or channel containing the measured times. The
+        default is to read the tChannel field name from the Coordinate Frame.
+    maxDuration : Float, optional
+        The time in seconds (moving window) over which the test is applied.
+        The default is to ignore this parameter.
+    maxDistance : Float, optional
+        The distance in metres (moving window) over which the test is applied.
+        The default is to ignore this parameter.
+    plot_flag : Bool, optional
+        If True, all plots are generated.
+    verbose : Bool, optional
+        If True, a more verbose output is provided.
+
+    Returns
+    -------
+    None
+
+    """
     
     filename = str(whizzFile)
     report = ''
     num_failed_lines = 0
+
+    if maxDistance < 1.0 and maxDuration < 1.0:
+        measure = "samples"
+    elif maxDuration > 0.0:
+        measure = "duration"
+    elif maxDistance > 0.0:
+        measure = "distance"
+    else:
+        print('ERROR - problem with nSamples.')
+        return
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
         if lines == []:
             lines = g.keys()
         numLines = len(lines)
+        if measure == "distance":
+            if xChannel == '':
+                xChannel = f[groupName]['CoordinateFrame'].attrs['XChannel']
+            if yChannel == '':
+                yChannel = f[groupName]['CoordinateFrame'].attrs['YChannel']
+        if measure == "duration":
+            if tChannel == '':
+                tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
+            t = rd.getLineData(g[lines[0]], tChannel)
+            nSamples = int(maxDuration / (t[1] - t[0]))
+
         for line in lines:
+            # Wind speed means different lines are at different speeds so
+            # calculate nSamples from duration for each line.
+            if measure == "distance":
+                x_deltas = np.diff(rd.getLineData(gLines[line], xChannel))
+                y_deltas = np.diff(rd.getLineData(gLines[line], yChannel))
+                dd = util._distance(x_deltas, y_deltas)
+                nSamples = int(maxDistance / np.mean(dd))
+
             diurnalExceeded = False
             failedSample = 0
             bigExtremum = 0.0
@@ -45,10 +119,7 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
             for ii in range(nSam, len(data)-nSam):
                 localData = data[ii-nSam:ii+nSam]
                 localSlope = (localData[-1] - localData[0]) / nSamples
-                # deviation = np.zeros(localData.shape)
                 deviation = localData - localSlope * range(0, len(localData)) - localData[0]
-                # for jj in range(0, len(localData)):
-                #     deviation[jj] = localData[jj] - localData[0] - localSlope * jj
                 extremum = np.max(deviation) if np.max(deviation) > -np.min(deviation) else -np.min(deviation)
                 if extremum > rangeLimit:
                     diurnalExceeded = True

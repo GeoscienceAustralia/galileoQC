@@ -21,7 +21,7 @@ projectName = config.projectName
 
 # channel indexing wrong!
 # flights and dates not attributes
-def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', dateChannel='', omitChannels=[]):
+def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', dateChannel='', omitChannels=[], verbose=False):
     '''
     Reads the data from the ASEG-GDF2 survey file and writes it to a new Whizz
     HDF5 survey file. Uses the aseg_gdf2 package by Kent Inverarity at:
@@ -82,9 +82,11 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
     starts[1:] = np.cumsum(widths[0:-1])
     starts = np.asarray(starts, dtype=int)
     ends = np.asarray(starts + np.array(widths), dtype=int)
-    # print(f'widths: {widths}')
-    # print(f'starts: {starts}')
-    # print(f'ends: {ends}')
+    if verbose:
+        print(f'\nwidths: {widths}')
+        print(f'starts: {starts}')
+        print(f'ends: {ends}')
+        print(f'types: {pytypes}\n')
 
     # create and open whizzfile
     # set projectname, create coordframe and lines groups
@@ -232,6 +234,7 @@ def record_list_to_float(record_lists, pytypes, nulls):
                     mydata[idx, jdx] = np.nan
 
         if typefailure_count > 1:
+            print(typefailure_report)
             break
 
 

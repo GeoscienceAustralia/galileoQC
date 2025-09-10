@@ -117,8 +117,12 @@ def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinele
         if flightLines == []:
             flightLines = list(g.keys())
 
+        myscaling = 'density'
         corr_units = rd.getChannelAttrs(g[flightLines[0]], channel)
-        y_label = f'{channel}' #' [{corr_units}]'
+        if myscaling == 'density':
+            y_label = f'{channel} [{corr_units}^2/Hz]'
+        else:
+            y_label = f'{channel} [{corr_units}^2]'
         shortestN = pow(2, 30)
 
         # It is clearer code if we first count the number of lines and number of samples
@@ -167,11 +171,13 @@ def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinele
         freq, Pxx = sig.welch((rawdata - np.mean(rawdata)) * w, nfft=N*q, fs = f_sample)
         period = 1.0 / freq[1:]
         sumWelch = Pxx
+        if verbose:    
+            print(f'Line {line}; Num samples = {N}; f_sample = {f_sample} Hz; est line length = {63 * N / f_sample} m. period shape {period.shape}')
 
         for line in linelist[1:]:
 
             rawdata = rd.getLineData(g[line], channel)[0:N]
-            freq, Pxx = sig.welch((rawdata - np.mean(rawdata)) * w, nfft=N*q, fs = f_sample)
+            freq, Pxx = sig.welch((rawdata - np.mean(rawdata)) * w, nfft=N*q, fs = f_sample, scaling=myscaling)
             sumWelch = sumWelch + Pxx
             
             if verbose:    

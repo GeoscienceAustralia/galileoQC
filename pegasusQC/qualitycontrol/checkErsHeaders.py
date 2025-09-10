@@ -16,7 +16,7 @@ def checkErsHeaders(folderPath=r'\.'):
     Parameters
     ----------
     folderPath : Path, optional
-        The folder or directory containing the .ers files. The default is '\.'.
+        The folder or directory containing the .ers files. The default is backslash dot.
 
     Returns
     -------

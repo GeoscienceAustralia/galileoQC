@@ -74,6 +74,10 @@ from pegasusQC.qualitycontrol.checkHighFreq import checkHighFreq
 from pegasusQC.qualitycontrol.checkFrobenius import checkFrobenius
 from pegasusQC.qualitycontrol.ilsNoiseAnalysis import ilsNoiseAnalysis
 
+# Aeromag checks
+from pegasusQC.qualitycontrol.checkDiurnal import checkDiurnal
+from pegasusQC.qualitycontrol.checkTCDiff4 import checkTCDiff4
+
 
 # Navigation and position checks
 from pegasusQC.qualitycontrol.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
