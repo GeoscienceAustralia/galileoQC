@@ -115,6 +115,14 @@ The following tutorial demonstrates some of the gridding and imaging functions.
 Grid_Imaging.ipynb
 ```
 
+## Aeromagnetics
+
+The following tutorial demonstrates some of the aeromag QC functions.
+
+```{toctree}
+aeromag_analysis.ipynb
+```
+
 [^Pratt2003]: D. A. Pratt. Geophysicists, 2003.The ASEG-GDF2 standard for point located data. In
 https://www.aseg.org.au/public/200/files/ASEG-GDF2-REV4.pdf. Australian Society of Exploration
 

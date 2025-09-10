@@ -19,9 +19,6 @@ dependencies = ["aseg-gdf2==0.7", "colorcet", "filebrowser", "h5py", "ipympl",
 "matplotlib", "netCDF4", "numba", "numpy", "pathlib", "pooch", 'pyarrow', "pyproj", 
 "scikit-image", "scipy", "verde", "xarray"]
 
-# "gspy==0.1.1", 
-# "pygmt", 
-
 # Classifiers have set values - be sure to only use classifier values from the
 # PyPI page here: https://PyPI.org/classifiers/
 classifiers = [

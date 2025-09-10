@@ -9,7 +9,6 @@ __pe*ga*susQC__ uses the following packages and has been successfully tested aga
 	colorcet 3.0
 	filebrowser 1.1
 	gspy 0.1
-	gmt >= 6.3
 	h5py 3.7
 	ipympl 0.9
 	matplotlib 3.5
@@ -17,7 +16,6 @@ __pe*ga*susQC__ uses the following packages and has been successfully tested aga
 	numpy 1.22
 	pathlib 1.0
 	pooch 1.6
-	pygmt 0.8
 	rioxarray 0.11
 	scikit-image 0.19
 	scipy 1.8
@@ -56,7 +54,7 @@ Now you can run python from the command line:
 
 ## More Installation Details
 
-This sections provides some additional hints and help for the installation of the dependencies of __pe*ga*susQC__. Create and activate your virtual environment first, then install python, then GMT, and then the rest of the dependencies.
+This sections provides some additional hints and help for the installation of the dependencies of __pe*ga*susQC__. Create and activate your virtual environment first, then install python, then pip, and then the rest of the dependencies.
 
 ### Virtual Environment
 
@@ -84,15 +82,9 @@ and others best with conda:
 
 	conda install yourdependencypackage
 
-Install GMT:
-
-	conda install gmt
-
-GMT and pygmt may have some installation issues. Help can be had from the [pygmt](https://www.pygmt.org/latest/install.html) installation URL.
-
 Then, since the environment is new, we need to install the following packages (some seem to prefer conda, others prefer pip; this is currently a mystery):
 
-	conda install matplotlib h5py pathlib colorcet xarray netCDF4 rioxarray pygmt scipy pooch verde jupyterlab ipympl
+	conda install matplotlib h5py pathlib colorcet xarray netCDF4 rioxarray scipy pooch verde jupyterlab ipympl
 
 	pip install numpy netCDF4 filebrowser gspy scikit-image
 
