@@ -1,11 +1,11 @@
 # API
 
-The links to the API go here.
+The link to the API is here.
 
 ```{eval-rst}
 .. autosummary::
 	:recursive:
     :toctree: generated
 
-    pegasusQC
+    pegasusQC 
 ```

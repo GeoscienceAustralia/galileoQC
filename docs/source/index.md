@@ -25,6 +25,7 @@ modules.md
 - {ref}`modindex`
 - {ref}`search`
 
+## Notes and references
 
 [^GravNote]: Throughout this documentation, "gravity" is used in a general sense to refer to both the acceleration (measured by a gravimeter) and the gradient (measured by a gravity gradiometer) of the gravity field.
 [^MagDeed]: See, similarly: J. A. Goodwin. Airborne magnetic and radiometric technical standards. Geoscience Australia, Record 2023(4), 2023. doi: 10.26186/147457.

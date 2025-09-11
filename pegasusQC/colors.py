@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Some Geosoft colormaps (and the parula colormap).
+
 Created on Wed Jul 15 17:46:18 2020
 
 @author: markdransfield

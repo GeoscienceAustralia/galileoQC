@@ -1,30 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Set the global constants (defaults for various functions) for pegasusQC:
+
 Created on Sat Aug 14 19:08:29 2021
 
 @author: markdransfield
 
-Set the global constants for pegasusQC:
-
-missingReal = -99999.99
-
-missingInt = -999
-
-missingDate = ""
-
-Set the Whizz version number and default project name:
-
-groupName = 'Whizz Version 1.0'
-
-projectName = 'Unknown Project'
 """
 
 missingReal = -99999.99
 missingInt = -999
 missingDate = ""
 
-# Get Project Name, reference [default: ""], and rest of header info.
+# Set the Whizz version number and default project name.
 groupName = 'Whizz Version 1.0'
 projectName = 'Unknown Project'
 
