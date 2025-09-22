@@ -5,24 +5,6 @@ This section provides links to the tutorial notebooks (in Jupyter-lab format).
 
 You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __pe*ga*susQC__ installed and running.
 
-## Data Acknowledgements
-
-The tutorials use field data from airborne gravity surveys to demonstrate the use of __pe*ga*susQC__ on real data. Permission to use field data has been kindly given by:
-
-	Stephan Sander (Co-President, Sander Geophysics),
-	Chris van Galder (Chief Geophysicist, Xcalibur Smart Mapping), and
-	Colm Murphy (Chief Geoscientist, Bell Geospace)
-
-The data sets used are described in:
-
-The Kauring AirGrav data were collected by Sander Geophysics in 2012 and are available, with report, at [^Kauring2012].
-
-The Canobie Falcon data were collected by Xcalibur Multiphysics in 2021. The data and report are available at [^CanobieRefs].
-
-The Vinton Dome FTG data were supplied by Bell Geospace. The data are described in [^Murphy2004].
-
-The Eastern Victoria airborne gravimeter survey was flown by Sander Geophysics in 2022-25. Details can be found at [^EastVicRefs].
-
 ## Prepare XYZ data
 
 The Geosoft XYZ data format file is commonly used in geophysics to transmit geophysical survey data in a text-readable form.
@@ -122,6 +104,24 @@ The following tutorial demonstrates some of the aeromag QC functions.
 ```{toctree}
 aeromag_analysis.ipynb
 ```
+
+## Data Acknowledgements
+
+The tutorials use field data from airborne gravity surveys to demonstrate the use of __pe*ga*susQC__ on real data. Permission to use field data has been kindly given by:
+
+	Stephan Sander (Co-President, Sander Geophysics),
+	Chris van Galder (Chief Geophysicist, Xcalibur Smart Mapping), and
+	Colm Murphy (Chief Geoscientist, Bell Geospace)
+
+The data sets used are described in:
+
+The Kauring AirGrav data were collected by Sander Geophysics in 2012 and are available, with report, at [^Kauring2012].
+
+The Canobie Falcon data were collected by Xcalibur Multiphysics in 2021. The data and report are available at [^CanobieRefs].
+
+The Vinton Dome FTG data were supplied by Bell Geospace. The data are described in [^Murphy2004].
+
+The Eastern Victoria airborne gravimeter survey was flown by Sander Geophysics in 2022-25. Details can be found at [^EastVicRefs].
 
 ## References
 

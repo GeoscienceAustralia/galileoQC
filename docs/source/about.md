@@ -28,7 +28,10 @@ The minimum curvature code was gratefully copied from PyGMI (https://patrick-col
 
 ## Citing
 
-One day there might be a publication to cite.
+M. H. Dransfield and R. Miller. Python code for quality control of airborne gravimetry and gravity
+gradiometry field data. Preview, 237:78, August 2025.
+
+R. Miller and M. H. Dransfield. Metrics for quality control of airborne gravity gradiometry field data. Preview, 237:91, August 2025.
 
 ## Contributing
 

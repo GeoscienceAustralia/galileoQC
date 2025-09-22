@@ -19,11 +19,11 @@ lineNumbering.md
 modules.md
 ```
 
-## Indices and tables
+<!-- ## Indices and tables
 
 - {ref}`genindex`
 - {ref}`modindex`
-- {ref}`search`
+- {ref}`search` -->
 
 ## Notes and references
 
