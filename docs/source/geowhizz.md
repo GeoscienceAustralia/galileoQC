@@ -7,7 +7,7 @@ The __pe*ga*susQC__ package includes a non-proprietary binary data file format, 
 
 All point-located data must be converted to `geoWhizz` format at the beginning of the QC work-flow because all the QC functions expect it.
 
-There is no intent to widely distribute the `geoWhizz` format or any files in this format. It is provided only to allow very fast data access of large data files during QC. There is at least one effort underway to develop a standard for airborne geophysical survey data files [^GSpy] and it is possible that __pe*ga*susQC__ might, in the future, replace `geoWhizz` with this or some similar format.
+There is no intent to widely distribute the `geoWhizz` format or any files in this format. It is provided only to allow very fast data access of large data files during QC. There is at least one effort underway to develop a standard for airborne geophysical survey data files [^GSpy] and it is possible that __pe*ga*susQC__ might, in the future, replace `geoWhizz` with this or some similar format. The `geoWhizz` file format should be regarded as transitory, and it may change in the future.
 
 A user of __pe*ga*susQC__ will typically receive located line data in one of a variety of industry format files, either proprietary or open. If proprietary, then it is up to the user to transform the data into an open format. __pe*ga*susQC__ supports `XYZ` line format [^XYZ] and `ASEG-GDF2` [^GDF2] format, the latter is with some use of the `aseg-gdf2` [^Kent] package.
 

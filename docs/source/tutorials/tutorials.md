@@ -3,17 +3,19 @@
 
 This section provides links to the tutorial notebooks (in Jupyter-lab format).
 
+The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules-target).
+
 You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __pe*ga*susQC__ installed and running.
 
 ## Prepare XYZ data
 
 The Geosoft XYZ data format file is commonly used in geophysics to transmit geophysical survey data in a text-readable form.
 
-We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format elsewhere in the __pe*ga*susQC__ documentation.)
+We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format [here](#geowhizz-target).)
 
-For three of the example data sets (Eastern Victoria, Canobie, and Vinton Dome), the field data were supplied in Geosoft XYZ format. This tutorial works through the preparation of these XYZ data files as geowhizz HDF5 files for quality control checks.
+For three of the example data sets (Eastern Victoria, Canobie, and Vinton Dome), the field data were supplied in Geosoft XYZ format. This tutorial demonstrates the preparation of these XYZ data files as geowhizz HDF5 files for later use in quality control checks.
 
-The appropriate `Prepare_*` tutorial should be run before running any of the other tutorials that utilise the relevant data. 
+The appropriate `Prepare_*` tutorial should be run before running any of the other tutorials that utilise the relevant data.
 
 ```{toctree}
 Prepare_EastVicData.ipynb
@@ -59,7 +61,8 @@ Odd_Even_Analysis.ipynb
 
 ## Gravimetry Corrections
 
-There are four standard corrections that must be made to airborne gravity data: atmospheric correction, free-air correction, Eotvos correction and latitude correction. In this notebook we check the calculation of these corrections.
+There are four standard corrections that must be made to airborne gravity data: atmospheric correction, free-air correction, Eotvos correction and latitude correction.  These corrections must be made using the modern standard formulae appropriate to airborne gravimetry. The formulae for the atmospheric, free-air and latitude corrections used here were taken from [^Hinze2005] where they appear in units of $mGal$. Here they are modified to be in $\mu ms^{-2}$ but __pe*ga*susQC__ uses the units of the measured data, either $mGal$ or $\mu ms^{-2}$. The Eotvos correction formula was taken from [^Jekeli2016] and also appears in [^Zhao2015].
+
 
 ```{toctree}
 Gravimeter_Corrections.ipynb
@@ -67,7 +70,7 @@ Gravimeter_Corrections.ipynb
 
 ## Falcon Noise Analysis
 
-The primary measure of noise in a Falcon survey is difference noise[^Christensen2015], and its relationship to turbulence. High frequency noise[^Sunderland2022], and demodulation phase analysis are also useful checks for the QC of Falcon airborne survey data.
+The primary measure of noise in a Falcon survey is difference noise[^Dransfield2013], and its relationship to turbulence. High frequency noise[^Sunderland2022] is also a useful check for the QC of Falcon airborne survey data.
 
 ```{toctree}
 Falcon_Noise_Analysis.ipynb
@@ -75,10 +78,28 @@ Falcon_Noise_Analysis.ipynb
 
 ## FTG Noise Analysis
 
-In-line noise[^Murphy2010], and its relationship to turbulence, is the standard noise measure for FTG surveys. High frequency noise[^Sunderland2022] and possibly the Frobenius norm analysis are also useful checks.
+The FTG is a single-complement, three-axis gradiometer. On each axis, it measures ($\Gamma_{xy}^{i}$ and $\Gamma_{uv}^{i}$) relative to that ($i$-th) axis. Theoretically, the sum of the three $\Gamma_{uv}^{i}$ should equal zero and variations from zero reflect error in the measurement. The actual quantity, called the *in-line sum*[^Murphy2010], must be scaled for the number of axes and is expressed as:
+
+> $$ \eta = \frac{\Gamma_{uv}^{1} + \Gamma_{uv}^{2} + \Gamma_{uv}^{3}}{\sqrt{3}} $$
+
+The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. 
+
+In-line noise, and its relationship to turbulence, is the standard noise measure for FTG surveys.
+
+There are mechanisms [^Sunderland2022] by which gravity gradiometer noise at a frequency higher than the data frequency band can be down-converted to the data frequency band, resulting in errors in the data. This can occur in both AGG and FTG systems.
+
+The checkHighFreq function checks for periods of high amplitude, high frequency signal in the raw gradiometer channels. It highlights sections of a survey line with excess high-frequency signal which might result in high gradient error. It is important to know that these erroneous gradients are true acceleration gradients and can be difficult to see by other methods.
 
 ```{toctree}
 FTG_Noise_Analysis.ipynb
+```
+
+## Ground Gravity Comparisons
+
+Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by `plotLinesOnGroundStns`. This code relies heavily on the data collection[^Wynne] in its compiled form[^Uieda].
+
+```{toctree}
+Compare_Gravity.ipynb
 ```
 
 ## Statistical Analyses
@@ -91,7 +112,7 @@ Statistical_Analysis.ipynb
 
 ## Grid Imaging
 
-The following tutorial demonstrates some of the gridding and imaging functions.
+Most of the QC work is done on a line-by-line basis across the survey data. It is also useful to review images of the survey data interpolated to a regular grid because problems or artefacts in the data can be easier to see in an image. The following tutorial demonstrates some of the gridding and imaging functions.
 
 ```{toctree}
 Grid_Imaging.ipynb
@@ -109,19 +130,22 @@ aeromag_analysis.ipynb
 
 The tutorials use field data from airborne gravity surveys to demonstrate the use of __pe*ga*susQC__ on real data. Permission to use field data has been kindly given by:
 
-	Stephan Sander (Co-President, Sander Geophysics),
-	Chris van Galder (Chief Geophysicist, Xcalibur Smart Mapping), and
-	Colm Murphy (Chief Geoscientist, Bell Geospace)
+Stephan Sander (Co-President, Sander Geophysics),
 
-The data sets used are described in:
+Chris van Galder (Chief Geophysicist, Xcalibur Smart Mapping), and
+
+Colm Murphy (Chief Geoscientist, Bell Geospace)
+
 
 The Kauring AirGrav data were collected by Sander Geophysics in 2012 and are available, with report, at [^Kauring2012].
 
-The Canobie Falcon data were collected by Xcalibur Multiphysics in 2021. The data and report are available at [^CanobieRefs].
+The Canobie Falcon field data were collected by Xcalibur Multiphysics in 2021. The final data and report are available at [^CanobieRefs].
 
-The Vinton Dome FTG data were supplied by Bell Geospace. The data are described in [^Murphy2004].
+The Vinton Dome FTG final data were supplied by Bell Geospace. The data are described in [^Murphy2004].
 
-The Eastern Victoria airborne gravimeter survey was flown by Sander Geophysics in 2022-25. Details can be found at [^EastVicRefs].
+The Eastern Victoria airborne gravimeter survey field data were supplied by Sander Geophysics in 2022-25. Details can be found at [^EastVicRefs].
+
+The Bonaparte Gulf FTG data was flown for Beach Energy by ARKeX in 2013 and the final data were downloaded from the Northern Territory GEMIS web-site [^Bonaparte2013].
 
 ## References
 
@@ -138,8 +162,21 @@ https://www.aseg.org.au/public/200/files/ASEG-GDF2-REV4.pdf. Australian Society 
 
 [^Sander_2002]: S. Sander, S. Ferguson, L. Sander, V. Lavoie, and R. B. Charters. Measurement of noise in airborne gravity data using even and odd grids. First Break, 20(8):525–528, 2002.
 
-[^Christensen2015]: A. N. Christensen, M. H. Dransfield, and C. van Galder. Noise and repeatability of airborne gravity gradiometry. First Break, 33:55–63, April 2015.
-
 [^Murphy2010]: C. A. Murphy. Recent developments with Air-FTG®. In R. Lane, editor, Airborne Gravity 2010 - Abstracts from theASEG-PESA Airborne Gravity 2010 Workshop: Published jointly by Geoscience Australia and the Geological Survey of New South Wales, Geoscience Australia Record 2010/23 and GSNSW File GS2010/0457., pages 142–151, June 2010.
 
 [^Sunderland2022]: A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.
+
+[^Bonaparte2013]: https://geoscience.nt.gov.au/gemis/ntgsjspui/handle/1/84581
+
+[^Hinze2005]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Véronneau}, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005.
+
+[^Jekeli2016]: C. Jekeli. Theoretical Fundamentals of Airborne Gravimetry. In Airborne Gravity for Geodesy Summer School, 23-27 May, May 2016 (accessed 23 May 2025 at https://www.ngs.noaa.gov/grav-d/2016SummerSchool/history-fundamentals.shtml).
+
+[^Zhao2015]: L. Zhao, R. Forsberg, M. Wu, A. V. Olesen, K. Zhang, and J. Cao. A flight test of the strapdown airborne gravimeter sga-wz in greenland. Sensors, 15:13258–13269, 2015.
+
+[^Dransfield2013]: M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013.
+
+[^Uieda]: Uieda, L. (2021). Ground gravity data compilation for Australia version 2.0. figshare. https://doi.org/10.6084/m9.figshare.13643837
+
+[^Wynne]: Wynne, P. (2018). NetCDF Ground Gravity Point Surveys Collection (Version 1.0). Commonwealth of Australia (Geoscience Australia). https://doi.org/10.26186/5C1987FA17078
+

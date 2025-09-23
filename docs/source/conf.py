@@ -16,8 +16,8 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'pegasusQC'
-copyright = '2023, GA'
-author = 'Mark Dransfield'
+copyright = '2023, Mark Helm Dransfield'
+author = 'Mark Helm Dransfield'
 version = '0.0.1'
 release = '0.0.1'#importlib.metadata.version('pegasusQC')
 # release = '0.0.0'
@@ -74,13 +74,15 @@ nbsphinx_kernel_name = "python3"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "agogo"
+html_theme = "furo"
 html_static_path = ['static']
+# html_logo = 'static/pegasus_logo.png'
 # html_favicon = "static/pegasus_icon.png"
-
+html_title = "pegasusQC"
 html_theme_options = {
-    # 'logo_only': True,
-    # 'display_version': False,
+    "light_logo": "pegasus_logo_light.png",
+    "dark_logo": "pegasus_logo_dark.png",
+    # "sidebar_hide_name": True,
     # 'show_powered_by': 'false',
     # 'body_text': 'Black',
     # 'font_family': 'Palatino',

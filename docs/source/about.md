@@ -10,21 +10,26 @@ __pe*ga*susQC__ provides functions to:
 - calculate and display the statistics of the collected data;
 - verify the accuracy of the calculated corrections to the gravimetry data;
 - report on the noise characteristics of gradiometry data;
+- report on the quality of aeromagnetic data;
 - interpolate data to regular grids, and image and display those grids;
 - check consistency of supplied data in various forms.
 
 These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. pe*ga*susQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
 
-The tested, and preferred, method of using __pe*ga*susQC__ is via a Jupyter-lab notebook. Some examples are available in [Tutorials](tutorials-target). The notebooks can be used as a template for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
+The tested, and preferred, method of using __pe*ga*susQC__ is via a Jupyter-lab notebook. Some examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
 
-
-*Mark Dransfield*
-> {sub-ref}`today`
+*Mark Dransfield* {sub-ref}`today`
 
 ## Acknowledgements
 
-Lots of help from various people at GA.
+Lots of help from various people at GA, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine.
 The minimum curvature code was gratefully copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025.
+
+## Testing
+
+The __pe*ga*susQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian, Fedora, and Ubuntu. All testing has been done using the JupyterLab Desktop app.
+
+Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.
 
 ## Citing
 
@@ -39,7 +44,8 @@ Once this is properly set up, people are encouraged to contribute.
 
 ## Licence
 
-Whatever GA want.
+```{include} license_copy.txt
+```
 
 ## The Airborne Gravity Deed
 

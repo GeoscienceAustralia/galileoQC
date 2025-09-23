@@ -1,5 +1,5 @@
 """
-A library of geophysical QA/QC functions for line data.
+A library of geophysical QA/QC functions for airborne gravity (and magnetic) survey data.
 
 """
 

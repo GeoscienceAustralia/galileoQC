@@ -67,11 +67,11 @@ px = Path(plan_root + r'AGG/Canobie/902212_1.xyz')
 ph = px.with_suffix('.hdf5')
 ```
 
-The variables `dx`, `dh`, `px` and `ph` are used throughout the documentation to represent the four key data filenames. Of course, you can use any variable names for your projects but it is worth noting these because you will see them often in the documentation.
+The variables `dx`, `dh`, `px` and `ph` are often used to represent the four key data filenames. Of course, you can use any variable names for your projects but it is worth noting these because you will see them occasionally in the documentation.
+
+If you want to see how to use __pe*ga*susQC__, go to [Tutorials](#tutorials-target) and follow along with the examples. You can also download the python tutorial notebooks and example data from github and experiment with the functions yourself.
 
 Now you are ready to QC the data!
-
-Go to [Methods](#methods-target) and choose the QC methods you need, or go to [Tutorials](#tutorials-target) and follow along one of the examples.
 
 [^Jupyter]: <https://jupyter.org>
 

@@ -1,9 +1,9 @@
 (linenumbers-target)=
 # Flight Line Numbering
 
-Airborne geophysical surveys are almost always flown as a series of line segments and each segment is uniquely numbered. The numbering is used in planning, acquisition, processing and QC. The method of numbering the line varies across survey providers but is always designed to encode useful information about each segment.
+Airborne geophysical surveys are almost always flown as a series of line segments with each segment uniquely numbered. The numbering is used in planning, acquisition, processing and QC. The method of numbering the line varies across survey providers but is always designed to encode useful information about each segment.
 
-Surveys flying follows planned lines and the planned lines are also numbered. The segment number always includes the planned line number.
+Survey flying follows planned lines and the planned lines are also numbered. The segment number always includes the planned line number.
 
 Occasionally, a segment, or part of a segment will need to be re-flown because of problems with the data or the aircraft track. This may need doing more than once. The segment number includes a re-flight number to indicate which re-flight it is.
 
@@ -11,36 +11,46 @@ Most survey consist of traverse lines flown parallel to each other, and control 
 
 Some surveys are divided into blocks. This division might be because of spatial separation, because parts of the total area are to be flown in different traverse directions, because part of the survey are to be flown by different aircraft, because lines were added to the survey plan after acquisition had commenced, or for some other reason. The planned and segment numbers might include a numerical code to indicate which block the line is from.
 
-Sometimes a survey area has a hole in the middle. It might be most efficient flying to simply fly the aircraft across the gap but simply to delete the data over the gap. Logistics might mean that the planned line number is the same on both sides of the gap. A segment number might be used to indicate which side of the gap.
+Sometimes a survey area has a hole in the middle. It might be most efficient to simply fly the aircraft across the gap and delete the data over the gap. Logistics might mean that the planned line number is the same on both sides of the gap. Part of the segment number might could be used to indicate which side of the gap it belongs to.
 
-Doubtless there are other pieces of information that might be encoded into the line numbering.
+There may be other pieces of information that are occasionally encoded into the segment numbering.
 
-The airborne geophysics industry has no common approach to encoding information in line numbers so generally, every survey provider will use their own system. Sometimes the method will be different for different surveys flown by the same provider. Even during a single survey, circumstances might lead to a change in line numbering system. Some geophysical software requires that line numbers be integers, and some allows decimal line numbers and this difference leads to differences in survey providers approach to line numbering.
+The airborne geophysics industry has no common approach to encoding information in segment numbers so generally, every survey provider will use their own system. Sometimes the method will be different for different surveys flown by the same provider. Even during a single survey, circumstances might lead to a change in line numbering system. Some geophysical software requires that line numbers be integers, and some allows decimal line numbers and this difference leads to differences in survey providers approach to line numbering.
 
 For QC, the most critical requirement is to be able to identify the planned line, given the flown line segment. It is also useful for some QC functions to be able to identify a segment as a traverse or control line.
 
-The `updateLineAttributes` function recognises several encoding formats for line numbering:
+The `updateLineAttributes` function writes the encoding format as metadata to the whizz file, allowing **pe*ga*susQC** to process the data efficiently for a number of purposes. It recognises several encoding formats for line numbering.
+
+For example, the encoding format can be set to "ARK", causing each line to be identified as either a traverse or a control line, and setting the re-flight number for each line, according to the "ARK" line-numbering scheme. The following function call performs this task for the survey data in `whizzfile`:
+
+```python
+qc.updateLineAttributes(whizzFile, line_type='ARK')
+```
+
+The following line number encoding formats are currently available:
 
 **ARK**
+: Line Number convention "LLLLR" :
 
-For the Bonaparte ArkEx FTG survey. Details TBD.
+- "LLLL" is the planned line number (4 digits for both traverse and control lines). Control lines have the first digit equal to 9.
+- "R" represents the particular occasion (repeat number) that a line/line segment was flown, starting from zero.
 
 **SGL_NSW**
 : Line Number convention "LLLL.SR" :
 
-- 'LLLL' is the planned line number (4 digits: traverse lines, 3 digits: control/tie lines). Test lines have numbers
+- "LLLL" is the planned line number (4 digits: traverse lines, 3 digits: control/tie lines). Test lines have numbers
   greater than 6999.
 - "S" represents the pre-planned segment number of the line. A planned line that is not continuous will have
       separate segments with different segment numbers.
 - "R" represents the particular occasion that a line/line segment was flown, starting from zero.
-      For example, 1245.20 would be the planned segment '2' of the planned line 1245 flown for the first time.
+      For example, 1245.20 would be the planned segment "2" of the planned line 1245 flown for the first time.
       If this line segment were flown as two partial lines, their identifying line numbers would be 1245.20 and 1245.21.
 
 **SGL_GA**
 
 : Line Number convention "LLLL.SR" :
 
-- 'LLLL' is the planned line number (4 digits: traverse lines, 3 digits: control/tie lines). Test lines have numbers
+- "LLLL" is the planned line number (4 digits: traverse lines, 3 digits: control/tie lines). Test lines have numbers
   greater than 6999.
 - "S" represents the preplanned segment number of the line. A planned line that is not continuous will have separate segments with different segment numbers. Segment numbers are used to identify survey blocks.
 - "R" represents the particular occasion that a line/line segment was flown, starting from zero.

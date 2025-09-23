@@ -1,3 +1,3 @@
 """
-A collection of utility functions.
+A collection of utility functions for internal use.
 """

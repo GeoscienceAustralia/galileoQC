@@ -11,11 +11,10 @@ This project is still in development. Bugs are likely. Please do try it out, and
 :hidden:
 about.md
 starting.md
-geowhizz.md
 tutorials/tutorials.md
-methods.md
-deed.md
+geowhizz.md
 lineNumbering.md
+deed.md
 modules.md
 ```
 
