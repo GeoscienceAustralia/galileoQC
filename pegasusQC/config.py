@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Set the global constants (defaults for various functions) for pegasusQC:
+Set the global constants (defaults for various functions) for pegasusQC.
+This file can be edited to change plot fonts and default colormap and
+default project name, for example.
 
 Created on Sat Aug 14 19:08:29 2021
 

@@ -39,7 +39,7 @@ import matplotlib.cm as cm
 from skimage import exposure
 
 # import local modules
-import pegasusQC.colors # definition of new colormaps
+import pegasusQC.gridFiles.colors # definition of new colormaps
 
 #==============================================================================
 # stats_boundaries
