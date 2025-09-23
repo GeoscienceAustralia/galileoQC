@@ -38,8 +38,7 @@ import matplotlib.colors as mcolors
 import matplotlib.cm as cm
 from skimage import exposure
 
-# import local modules
-import pegasusQC.gridFiles.colors # definition of new colormaps
+from pegasusQC.gridFiles import colors # definition of new colormaps
 
 #==============================================================================
 # stats_boundaries
@@ -99,11 +98,18 @@ def load_cmap(name='geosoft'):
     Create and register a color map. The name must be selected from the 
     colormaps available in the local colors module.
     """
+    print(name)
     try:
-        cmList = colors.datad[name]
-        new_cm = mcolors.LinearSegmentedColormap.from_list(name, cmList)
-        plt.register_cmap(cmap=new_cm)
-        return new_cm
+        # Geosoft colormaps need to be built:
+        if name in colors.datad.keys():
+            cmList = colors.datad[name]
+            new_cm = mcolors.LinearSegmentedColormap.from_list(name, cmList)
+            plt.register_cmap(cmap=new_cm)
+            return new_cm
+        # Not a Geosoft colormap, so assume it is already built and just needs registration:
+        else:
+            print(name)
+            plt.register_cmap(cmap=name)
     except:
         raise ValueError('Colormap {} has not been recognised'.format(name))
         

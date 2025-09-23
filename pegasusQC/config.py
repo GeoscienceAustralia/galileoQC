@@ -37,6 +37,6 @@ rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
-qc_colormap = cc.m_CET_L9
+qc_colormap = "cet_linear_bgyw_20_98_c66" # cc.m_CET_L9
 
 

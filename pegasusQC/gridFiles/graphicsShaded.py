@@ -89,11 +89,12 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
     
     # register the supplied colormap for access via its name
     # Somewhat dodgy if-elif code to cope with matplotlib deprecation
-    if not 'myCmap' in plt.colormaps():
-        if "register_cmap" in dir(plt):
-            plt.register_cmap('myCmap', colormap)
-        elif "colormaps" in dir(ml) and "register" in dir(ml.colormaps):
-            ml.colormaps.register(colormap, name='myCmap')
+
+    # if not 'myCmap' in plt.colormaps():
+    #     if "register_cmap" in dir(plt):
+    #         plt.register_cmap('myCmap', colormap)
+    #     elif "colormaps" in dir(ml) and "register" in dir(ml.colormaps):
+    #         ml.colormaps.register(colormap, name='myCmap')
     
     if ax == None:
         fig, ax = plt.subplots()#figsize=(12,6))
@@ -110,7 +111,7 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
     ax.yaxis.set_major_formatter(thou_format)
     # for label in ax.get_xticklabels(): label.set_fontsize(6)
     # for label in ax.get_yticklabels(): label.set_fontsize(6)
-    graphics.imshow_hs(z, ax, cmap='myCmap',  cmap_norm=cmap_norm, hs=hs,
+    graphics.imshow_hs(z, ax, cmap=colormap,  cmap_norm=cmap_norm, hs=hs,
                    azdeg=azdeg, altdeg=45, blend_mode='alpha', alpha=0.7, cb_title=cb_title,
                    extent=(e[0], e[-1], n[0], n[-1]), origin=origin)
 

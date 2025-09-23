@@ -91,7 +91,7 @@ def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm'
     if 'E' in list(data_array.coords):
         data_array = data_array.rename({'E': 'x','N': 'y'})
     
-    graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap, cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
+    graphicsShaded(data_array.x, data_array.y, data_array, mytitle, colormap=colormap, cmap_norm=cmap_norm, minClip=vmin, maxClip=vmax, gridlines=gridlines, 
                    cb_ticks=cb_ticks, nSigma=nSigma, hs=hs, azdeg=azdeg, ax=ax, origin='lower', cb_title=cb_title,
                    whizzfile=whizzfile, e_chan=e_chan, n_chan=n_chan)
 
