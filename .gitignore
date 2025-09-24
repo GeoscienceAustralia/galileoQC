@@ -146,7 +146,6 @@ docs/source/generated
 /docs/jupyter_execute
 /examples/.jupyter/desktop-workspaces
 /examples/.jupyter
-/Smith_Wessel
 /examples/.jupyter/desktop-workspaces
 *.rst
 /dev
