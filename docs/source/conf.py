@@ -18,9 +18,9 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 project = 'pegasusQC'
 copyright = '2023, Mark Helm Dransfield'
 author = 'Mark Helm Dransfield'
-version = '0.0.1'
-release = '0.0.1'#importlib.metadata.version('pegasusQC')
-# release = '0.0.0'
+# version = '0.0.1'
+# release = '0.0.1'
+version = release = importlib.metadata.version('pegasusQC')
 today_fmt = '%d %b %Y' 
 
 # -- General configuration ---------------------------------------------------
