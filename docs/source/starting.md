@@ -1,8 +1,10 @@
 # Getting Started
 
+The __pe*ga*susQC__ package is run from the Jupyter-lab notebook. You should create a working environment (called `whizz` in this documentation) with python3, pip, conda or miniconda
+
 ## Installation
 
-To use __pe*ga*susQC__, first install it into your `whizz` environment using pip or conda:
+To use __pe*ga*susQC__, first install it into your `whizz` environment using pip (conda should work as well but conda installations of __pe*ga*susQC__ are untested):
 
 ```bash
 (whizz) $ pip install pegasusQC
@@ -15,16 +17,14 @@ To use __pe*ga*susQC__, first install it into your `whizz` environment using pip
 Then start up a Jupyter-lab notebook. For more information about this, see [^Jupyter] . The Jupyter-lab app [^JupyterApp] is recommended.
 
 :::{tip}
-Installation not yet working!
-
 While __pe*ga*susQC__ remains on the GA private repository, it can be installed with the following steps:
 
-Clone the repository using Git:
+Clone the repository using Git (or download the zip file from github, and extract the contents):
 
 ```bash
 git clone https://github.com/GeoscienceAustralia/pegasusQC.git
 ```
-Navigate to the cloned directory:
+Navigate to the cloned directory ("pegasusQC" for this example):
 
 ```bash
 cd pegasusQC
@@ -32,7 +32,7 @@ cd pegasusQC
 Install the package via setup.py:
 
 ```bash
-sudo python setup.py install
+pip install .\name_of_directory_containing_setup_py
 ```
 :::
 
@@ -71,7 +71,7 @@ The variables `dx`, `dh`, `px` and `ph` are often used to represent the four key
 
 If you want to see how to use __pe*ga*susQC__, go to [Tutorials](#tutorials-target) and follow along with the examples. You can also download the python tutorial notebooks and example data from github and experiment with the functions yourself.
 
-Now you are ready to QC the data!
+Now you are ready to QC your data!
 
 [^Jupyter]: <https://jupyter.org>
 
