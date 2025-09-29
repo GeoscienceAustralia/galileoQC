@@ -11,7 +11,7 @@ __pe*ga*susQC__ has the following modes of contribution:
 
 ## Code of Conduct
 
-Contributors to this project are expected to act respectfully toward others in accordance with the Code of Conduct.
+Contributors to this project are expected to act respectfully toward others in accordance with the [Code of Conduct](https://github.com/GeoscienceAustralia/pegasusQC/blob/main/CODE_OF_CONDUCT.md).
 
 ## Submitting Bugs
 
@@ -21,7 +21,8 @@ Before submitting a bug, please do the following:
 
 - Perform basic troubleshooting steps:
 	- Make sure you're on the latest version. If you're not on the most recent version, your problem may have been solved already! Upgrading is always the best first step.
-	- Search the issue tracker to make sure it's not a known issue.
+	- [__Search the issue
+      tracker__](https://github.com/GeoscienceAustralia/pegasusQC/issues) to make sure it's not a known issue.
 
 ### What to put in your bug report
 
@@ -36,7 +37,7 @@ Make sure your report gets the attention it deserves: bug reports with missing i
 
 ### Contributor License Agreement
 
-Your contribution will be under our license as per GitHub's terms of service.
+Your contribution will be under our [license](https://github.com/GeoscienceAustralia/pegasusQC?tab=MIT-1-ov-file#readme) as per [GitHub's terms of service](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#6-contributions-under-repository-license).
 
 ### GitHub Commit Access
 
@@ -46,7 +47,7 @@ Commit access is limited to the project team.
 
 - Pull requests may include copyright in the source code header by the contributor if the contribution is significant or the contributor wants to claim copyright on their contribution.
 - All contributors shall be listed on the __pe*ga*susQC__ github repository.
-- Unclaimed copyright, by default, is assigned to the main copyright holders as specified in https://github.com/GeoscienceAustralia/pegasusQC/blob/main/LICENSE
+- Unclaimed copyright, by default, is assigned to the main copyright holders as specified in the [license](https://github.com/GeoscienceAustralia/pegasusQC/blob/main/LICENSE).
 
 ### Version Control Branching
 
@@ -59,16 +60,16 @@ Commit access is limited to the project team.
 
 ### Documentation
 
-- documentation is managed in docs/, in markdown format, with tutorials in Jupyter-lab notebooks
-- Sphinx is used to generate the documentation
+- documentation is managed in docs/, in markdown format, with tutorials in Jupyter-lab notebooks.
+- Sphinx is used to generate the documentation.
 
 ### Code Formatting
 
-Please follow the coding conventions and style used in the __pe*ga*susQC__ repository.
-__pe*ga*susQC__ follows the PEP-8 guidelines
-80 characters
-spaces, not tabs
-__pe*ga*susQC__, or pegasusQC instead of PegasusQC, pegasusqc, etc.
+- Please follow the coding conventions and style used in the __pe*ga*susQC__ repository.
+- __pe*ga*susQC__ follows the PEP-8 guidelines
+- 80 characters
+- spaces, not tabs
+- __pe*ga*susQC__, or pegasusQC instead of PegasusQC, pegasusqc, etc.
 
 ## Suggesting Enhancements
 
