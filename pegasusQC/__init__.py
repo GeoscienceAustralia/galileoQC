@@ -100,4 +100,5 @@ from pegasusQC.qualitycontrol.checkEotvosCorr import checkEotvosCorr
 from pegasusQC.qualitycontrol.checkLatCorr import checkLatCorr
 from pegasusQC.qualitycontrol.checkAtmosEffect import checkAtmosEffect
 
-
+# Data Transforms
+from pegasusQC.transforms.craig_transform import gravity_from_curv
