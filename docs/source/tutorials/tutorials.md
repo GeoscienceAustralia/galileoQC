@@ -21,6 +21,7 @@ The appropriate `Prepare_*` tutorial should be run before running any of the oth
 Prepare_EastVicData.ipynb
 Prepare_VintonDomeData.ipynb
 Prepare_CanobieData.ipynb
+Prepare_AeromagData.ipynb
 ```
 
 ## Prepare ASEG-GDF2 data
@@ -123,7 +124,7 @@ Grid_Imaging.ipynb
 The following tutorial demonstrates some of the aeromag QC functions.
 
 ```{toctree}
-aeromag_analysis.ipynb
+Aeromag_Analysis.ipynb
 ```
 
 ## Data Acknowledgements

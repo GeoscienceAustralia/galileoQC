@@ -128,30 +128,33 @@ def checkTCDiff4(whizzFile, TCDiff4='', rawMag='', lines=[], limit=0.02, nSample
             
             if rangeTooHigh:
                 num_failed_lines += 1
-                report += f'\n  4th difference on line {line} fails.'
+                if verbose:
+                    report += f'\n  4th difference on line {line} fails.'
                 fig = plt.figure()
                 ax = fig.add_subplot(1,1,1)
                 ax.plot(data)
                 plt.title(plotTitle)
                 plt.grid(True)
-                plt.show()
-                report += f'\nLine {line}: exceedances = {numExceedances} > {nSamples} - FAIL'
+                if verbose:
+                    report += f'\nLine {line}: exceedances = {numExceedances} > {nSamples} - FAIL'
               
             elif numExceedances > 0:
-                report += f'\nLine {line}: exceedances = {numExceedances} < {nSamples} - PASS'
+                if verbose:
+                    report += f'\nLine {line}: exceedances = {numExceedances} < {nSamples} - PASS'
                 if plot_flag:
                     fig = plt.figure()
                     ax = fig.add_subplot(1,1,1)
                     ax.plot(data)
                     plt.title(plotTitle)
                     plt.grid(True)
-                    plt.show()
                 
             else:
                 aaa = 1
 
-    print(f'  Checked {numLines} lines, {num_failed_lines} failed.\n')
-    if verbose:
-        print(report)
+    report = f'  Checked {numLines} lines, {num_failed_lines} failed.\n' + report
+    print(report)
+    if plot_flag:
+        plt.show()
+
 
 
