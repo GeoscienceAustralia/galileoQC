@@ -74,7 +74,7 @@ nbsphinx_kernel_name = "python3"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "agogo"#"furo"
+html_theme = "furo"#"agogo"#
 html_static_path = ['static']
 # html_logo = 'static/pegasus_logo.png'
 # html_favicon = "static/pegasus_icon.png"
