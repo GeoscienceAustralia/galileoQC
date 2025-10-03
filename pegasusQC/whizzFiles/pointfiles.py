@@ -150,7 +150,7 @@ def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
            
             fail, numExc = util._failsDeviation(zm - getLineData(g[line], height), 20.0, 13)
             if fail and numExc > 13:
- #           if np.abs(np.max(getLineData(g[line], 'altitude') - zm)) > 20.0:
+                # if np.abs(np.max(getLineData(g[line], 'altitude') - zm)) > 20.0:
                 plotTime = time - time[0]
                 fig = plt.figure()
                 ax1 = fig.add_subplot(2,1,1)

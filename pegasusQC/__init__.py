@@ -66,7 +66,7 @@ from pegasusQC.qualitycontrol.ilsNoiseAnalysis import ilsNoiseAnalysis
 
 # Aeromag checks
 from pegasusQC.qualitycontrol.checkDiurnal import checkDiurnal
-from pegasusQC.qualitycontrol.checkTCDiff4 import checkTCDiff4
+from pegasusQC.qualitycontrol.checkDifference import checkDiff
 
 
 # Navigation and position checks
