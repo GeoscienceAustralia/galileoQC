@@ -16,7 +16,7 @@ To use __pe*ga*susQC__, first install it into your `whizz` environment using pip
 
 Then start up a Jupyter-lab notebook. For more information about this, see [^Jupyter] . The Jupyter-lab app [^JupyterApp] is recommended.
 
-:::{tip}
+:::{note}
 While __pe*ga*susQC__ remains on the GA private repository, it can be installed with the following steps:
 
 Clone the repository using Git (or download the zip file from github, and extract the contents):
