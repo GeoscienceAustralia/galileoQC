@@ -81,7 +81,6 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     if planfiles is None:
         no_plan = True
         print('NO ACTION TAKEN ON LINE_TYPE - no plan file provided.')
-
     elif type(planfiles) is list:
         for pfile in planfiles:
             if isinstance(pfile, pathlib.PurePath):

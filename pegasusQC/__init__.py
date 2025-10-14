@@ -25,6 +25,7 @@ from pegasusQC.whizzFiles.updateChannelAttributes import updateChannelAttributes
 from pegasusQC.whizzFiles.retrieveData import (getWhizzData, getLineData, getChannelAttrs, getLineXChannel)
 from pegasusQC.whizzFiles.reportData import (reportWhizz, reportFlights, reportSampling, reportChannels, reportLines)
 from pegasusQC.whizzFiles.updateLineSpacing import updateLineSpacing
+from pegasusQC.whizzFiles.updateLineVariety import updateLineVariety
 from pegasusQC.whizzFiles.updateOddOrEven import updateOddOrEven
 from pegasusQC.gridFiles.gridToNc4 import gridToNc4
 
