@@ -13,7 +13,7 @@ A library of geophysical QA/QC functions for airborne gravity (and magnetic) sur
 from pegasusQC.whizzFiles.pointfiles import (updateCoordFrame, updateProject)
 from pegasusQC.qualitycontrol.qualityAnalysis import *
 from pegasusQC.whizzPlots.whizzPlot import *
-from pegasusQC.gridFiles.gridfiles import (gridfile_to_xa)
+from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from pegasusQC.gridFiles.read_ers import *
 
 # Data management
