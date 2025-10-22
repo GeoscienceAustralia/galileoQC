@@ -1,3 +1,3 @@
 """
-Transform Gne/Guv to gD.
+Craig transform Gne/Guv to gD.
 """
