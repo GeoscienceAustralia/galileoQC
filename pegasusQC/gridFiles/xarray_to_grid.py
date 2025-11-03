@@ -148,11 +148,10 @@ def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_p
         )
         grid = grid.where(mymask)
 
-
     grid.attrs['units'] = myunits
     grid.attrs['long_name'] = z_chan
     grid.attrs['title'] = my_data.attrs['title']
-    grid['x'].attrs['orig_name'] = x_chan
-    grid['y'].attrs['orig_name'] = y_chan
+    grid.attrs['x_channel'] = x_chan
+    grid.attrs['y_channel'] = y_chan
 
     return grid, region

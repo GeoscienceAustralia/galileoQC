@@ -98,6 +98,8 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
     
     if ax == None:
         fig, ax = plt.subplots()#figsize=(12,6))
+    else:
+        fig = plt.gcf()
     thou_format = tkr.FuncFormatter(util._space_thou)
     fig.suptitle(mytitle)#, fontsize=10)
     fig.subplots_adjust(top=0.85)

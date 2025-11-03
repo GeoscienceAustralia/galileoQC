@@ -103,14 +103,17 @@ def gridfile_to_xa(whizzFile='', bandout=0):
     if whizzFile.suffix.upper() == '.ERS':
         e, n, z, datum, projection = ers.read_ers_image(whizzFile, bandout=bandout)
         xa = xr.DataArray(data=np.flip(z, 0), # DANGER!!!
-                          dims=["N", "E"],
-                          coords={"N": n, "E": e})
-        xa.dropna(dim='N',how='all')
-        xa.dropna(dim='E',how='all')
+                          dims=["y", "x"],
+                          coords={"y": n, "x": e})
+        xa.dropna(dim='y',how='all')
+        xa.dropna(dim='x',how='all')
         fname = whizzFile.with_suffix('').name
-        xa.attrs["long_name"] = fname
-        xa.attrs["datum"] = datum
-        xa.attrs["projection"] = projection
+
+        xa.attrs['x_channel'] = 'E'
+        xa.attrs['y_channel'] = 'N'
+        xa.attrs['long_name'] = fname
+        xa.attrs['datum'] = datum
+        xa.attrs['projection'] = projection
         if datum == 'WGS84' and projection == 'SUTM55':
             xa.rio.write_crs("epsg:32755", inplace=True)
     elif whizzFile.suffix.upper() == '.NC':

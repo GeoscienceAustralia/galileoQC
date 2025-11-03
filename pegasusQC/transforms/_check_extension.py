@@ -22,15 +22,20 @@ def _check_extension(local, regional, pad_cells):
     boolean : True if regional is large enough, else False.
         
     """
-    dx = np.abs(local.x[1] - local.x[0]) * pad_cells
-    dy = np.abs(local.y[1] - local.y[0]) * pad_cells
+    local_x_chan = local.attrs['x_channel']
+    local_y_chan = local.attrs['y_channel']
+    regional_x_chan = regional.attrs['x_channel']
+    regional_y_chan = regional.attrs['y_channel']
+
+    dx = np.abs(local['x'][1] - local['x'][0]) * pad_cells
+    dy = np.abs(local['y'][1] - local['y'][0]) * pad_cells
     
-    max_x =  max(local.x) + dx > max(regional.x)
-    min_x =  min(local.x) - dx < min(regional.x)
-    max_y =  max(local.y) + dy > max(regional.y)
-    min_y =  min(local.y) - dy < min(regional.y)
+    max_x =  max(local['x']) + dx > max(regional['x'])
+    min_x =  min(local['x']) - dx < min(regional['x'])
+    max_y =  max(local['y']) + dy > max(regional['y'])
+    min_y =  min(local['y']) - dy < min(regional['y'])
     
     if max_x or min_x or max_y or min_y:
-        print('Error - regional grid does not extend far enough for padding.')
+        print('\nERROR - regional grid does not extend far enough for padding.')
         return False
     return True

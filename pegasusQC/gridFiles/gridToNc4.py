@@ -89,7 +89,7 @@ def gridToNc4(whizz_file, z_chans, grid_space, *, region=None, lines=[], e_chan=
         print('ERROR - the d1_chans argument to grid_n_image should be a list. Check docstring for details.')
         return
 
-    if ncFile.exists():
+    if ncFile != '' and ncFile.exists():
         print(f'ERROR - cannot write to {ncFile}; it already exists.')
         return
 
@@ -126,7 +126,7 @@ def gridToNc4(whizz_file, z_chans, grid_space, *, region=None, lines=[], e_chan=
             newname = whizz_file.with_suffix('').name + '_' + z_chan
             ncFile = whizz_file.with_name(newname)
             ncFile = ncFile.with_suffix('.nc')
-        print(xd)
+        # print(xd)
         xd.to_netcdf(ncFile)
 
         

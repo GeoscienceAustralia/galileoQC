@@ -43,6 +43,8 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
         The name of the ASEG GDF2 channel containing the dates, defaults to ''.
     omitChannels : [String]
         An array of channel or field names to omit from the saved geoWhizz HDF5 file.
+    verbose : Bool, optional
+        If True, print all details, otherwise mimimal reporting. Default False.
 
     Returns
     -------
@@ -60,7 +62,9 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
     gdf = aseg.read(str(gdf_datfile), engine="dask", method='fixed-widths')
     df = gdf.df()
     
-    channelNames, channelindices, haveFlights, flightIdx, haveDates, dateIdx = _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels)
+    # get the names and indices to the desired channels
+    channelNames, channelindices, haveFlights, flightIdx, haveDates, dateIdx = _getDesiredChannels(
+        gdf, lineChannel, flightChannel, dateChannel, omitChannels, verbose=verbose)
     if channelNames is None:
         return None
 
@@ -69,6 +73,7 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
             print(f'ERROR - missing channel name in {channelNames}.')
             return
 
+    # we need all the channels so we can work out positions
     chans = gdf.field_names()
     num_readchans = len(chans) - len(omitChannels)
     names = [gdf.get_field_definition(chans[i])['name'] for i in range(0, len(chans))]
@@ -118,8 +123,9 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
                     count += 1
                 else:
                     # finalise previous flight-line
-                    print(f'L {current_line}... count = {count}')
-                    gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, nulls, record_lists, gdf)
+                    if verbose:
+                        print(f'L {current_line}... count = {count}')
+                    gLine = save_rec_lists(gLines, current_line, chans, channelindices, pytypes, nulls, record_lists, gdf)
                     if haveFlights:
                         gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
                     if haveDates:
@@ -137,8 +143,9 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
                     count = 1
 
             # finalise last flight-line
-            print(f'L {current_line}... count = {count}')
-            gLine = save_rec_lists(gLines, current_line, channelNames, pytypes, nulls, record_lists, gdf)
+            if verbose:
+                print(f'L {current_line}... count = {count}')
+            gLine = save_rec_lists(gLines, current_line, chans, channelindices, pytypes, nulls, record_lists, gdf)
             if haveFlights:
                 gLine.attrs['FlightNumber'] = int(record_lists[0][flightIdx])
             if haveDates:
@@ -168,7 +175,7 @@ def extract_line(record_list, gdf, lineChannelName):
         return float(record_list[lineIdx])
 
 
-def save_rec_lists(wizLines, current_line, channelNames, pytypes, nulls, record_lists, gdf):
+def save_rec_lists(wizLines, current_line, channelNames, channelindices, pytypes, nulls, record_lists, gdf):
     """
     Saves a full flight-line of data in the array of string arrays
     into the wizfid lines group. Returns the flight-line group.
@@ -186,8 +193,8 @@ def save_rec_lists(wizLines, current_line, channelNames, pytypes, nulls, record_
     # convert str to float and store in mydata
 
     # ... create the desired DataSets with attributes
-    for chanIdx, channelName in enumerate(channelNames):
-        chanstr = str(channelName)
+    for chanIdx in channelindices:
+        chanstr = str(channelNames[chanIdx])
         fieldDef = gdf.get_field_definition(chanstr)
         if fieldDef['inferred_dtype'] is int:
             dd = gg.create_dataset(chanstr, data=mydata[:,chanIdx].astype(int), compression="gzip", compression_opts=4)
@@ -242,7 +249,22 @@ def record_list_to_float(record_lists, pytypes, nulls):
 
 
 def _getDesiredChannel(gdf, channelName):
+    """
+    Returns the column index of `channelName` in ASEG-GDF2 file `gdf`.
 
+    Parameters
+    ----------
+    gdf : GDF2 object
+        The ASEG-GDF pointer to the input ASEG-GDF2 DAT file.
+    channelName : str
+        The name of the channel whose index is to be found.
+
+    Returns
+    -------
+    chanIdx : int
+        The index to channelName in the list of channel names
+
+    """
     allChannelNames = gdf.field_names()
     channelindices = list(range(0,len(allChannelNames)))
 
@@ -253,11 +275,43 @@ def _getDesiredChannel(gdf, channelName):
         print(allChannelNames)
         return None
 
-    # print(f'ASEG-GDF2 channel {channelName} found at index {chanIdx}.\n')
     return chanIdx
 
 
-def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels):
+def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels, verbose=False):
+    """
+    Returns the column indices of desired channels in ASEG-GDF2 file `gdf`.
+
+    Parameters
+    ----------
+    gdf : GDF2 object
+        The ASEG-GDF pointer to the input ASEG-GDF2 DAT file.
+    lineChannel : str
+        The name of the channel containing the flight-line numbers.
+    flightChannel : str
+        The name of the channel contianing the flight numbers.
+    dateChannel : str
+        The name of the channel containing the flight date.
+    omitChannels : list(str)
+        The list of channel names to be omitted when reading `gdf`.
+    verbose : Bool, optional
+        If True, print all details, otherwise miminal details. Default False.
+
+    Returns
+    -------
+    channelsOut : list(str)
+        The channel names from `gdf` to be written to a whizzFile
+    channelindices : list(int)
+        The indices to channels from `gdf` to be written to a whizzFile
+    haveFlights : bool
+        True if `flightChannel` found in the list of channel names
+    flightIdx : int
+        The index to `flightChannel` in the list of channel names
+    haveDates : bool
+        True if `dateChannel` found in the list of channel names
+    dateIdx : int
+        The index to `dateChannel` in the list of channel names
+    """
 
     channelNames = gdf.field_names()
     channelsOut = channelNames # these are the channels we will save
@@ -307,9 +361,10 @@ def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChanne
             if tempIdx < 0:
                 print(f'WARNING - {channel} to omit not found.\n')
             else:
-                print(f'Omitted {channelsOut[tempIdx]} in column {tempIdx}.\n')
-                # channelsOut.pop(tempIdx)
-                # channelindices.pop(tempIdx)
+                if verbose:
+                    print(f'Omitted {channelsOut[tempIdx]} in column {tempIdx}.\n')
+                channelsOut.pop(tempIdx)
+                channelindices.pop(tempIdx)
             
     print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
     print(channelsOut)

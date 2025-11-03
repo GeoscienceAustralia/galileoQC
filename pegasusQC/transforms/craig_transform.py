@@ -10,8 +10,10 @@ from pegasusQC.gridFiles.gridutility import report_gridStats
 
 def craig_transform(
     whizzFile=None, gne_chan=None, guv_chan=None,
-    cell_size=None, unit_scale=1000.0, mask_polygon=None,
-    pad_cells=None, padding_mode="regional", regional_grid_file=None
+    cell_size=None, result_units='um/s/s', mask_polygon=None,
+    pad_cells=None, padding_mode="regional", regional_grid_file=None,
+    regional_grav_units='mGal',
+    numstns=None, firstorder=False
 ):
     """
     Runs the Craig transform on gravity differential curvature data to
@@ -38,9 +40,9 @@ def craig_transform(
         The grid cell size. Recommended as ~1/4 line spacing. Default None in
         which case an "optimum" (?!) number is calculated internally. Generally
         it is better to provide ~1/4 line spacing.
-    unit_scale : Float, optional
-        Conversion factor from nm/s/s to desired gravity units. Default 1000.0
-        giving gravity in um/s/s.
+    result_units : String, optional
+        The gravity units of the final resultant grid. Must be either "mGal" or
+        "gu" or "um/s/s". Default "um/s/s".
     mask_polygon : ?##?, optional
         The polygon of the survey boundary. Final output will be trimmed to
         this polygon if provided. Default None and the output is trimmed to
@@ -55,15 +57,32 @@ def craig_transform(
     regional_grid_file : String, optional
         Name of the ERS file containing the regional grid. Required if
         `padding_mode` == "regional". Default None.
+    regional_grav_units : String, optional
+        The gravity units of the regional grid. Must be either "mGal" or
+        "gu" or "um/s/s". Required if `padding_mode` == "regional".
+        Default "mGal".
+    firstorder : bool, optional
+        If True, include first order Craig correction. Default False.
     """
-    
+    if not whizzFile is None and padding_mode == "regional":
+        if regional_grid_file is None:
+            print('\nERROR - regional padding mode requires a regional grid file to be specified.')
+            return
+        elif regional_grav_units in ("mGal", "mgal"):
+            regional_grav_units = "mGal"
+        elif regional_grav_units in ("gu", "um/s/s"):
+            regional_grav_units = "um/s/s"
+        else:
+            print('\nERROR - regional grid file gravity units not understood.')
+            return
+
     if whizzFile is None:
         cell_size = 10.0
         pad_cells = 256
-        unit_scale = 1000.0
+        result_units='um/s/s'
         padding_mode = "mean"
         
-        n, e, d, Ann, Ane, And, Aee, Aed, Add, Auv, AD = sphereSurvey()
+        n, e, d, Ann, Ane, And, Aee, Aed, Add, Auv, AD = sphereSurvey(numstns)
         # need data in xarray datasets
         Guv_syn = _make_xr(Auv, 'Guv', 'E', n, e)
         Gne_syn = _make_xr(Ane, 'Gne', 'E', n, e)
@@ -73,8 +92,9 @@ def craig_transform(
                  )
         gD_grid_syn, gD_err_syn, Ane_grid = gravity_from_curv(
             Gne_syn, Guv_syn, cell_size=cell_size, altitude=None,
-            unit_scale=unit_scale, mask_polygon=None,
-            pad_cells=pad_cells, padding_mode=padding_mode
+            result_units=result_units, mask_polygon=None,
+            pad_cells=pad_cells, padding_mode=padding_mode,
+            firstorder=False
         )
 
         report_gridStats(gD_err_syn)
@@ -83,8 +103,15 @@ def craig_transform(
         xdImage(gD_grid_syn, 'gD_grid_syn (um/s/s)', hs=False)
         report_gridStats(origD_grid_syn)
         xdImage(origD_grid_syn, 'origD_grid_syn (um/s/s)', hs=False)
+        diff = origD_grid_syn.data[1:-1,1:-1] - gD_grid_syn.data
+        diff_gD = gD_grid_syn.copy()
+        diff_gD.data = diff
+        report_gridStats(diff_gD)
+        xdImage(diff_gD, 'origD_grid_syn-gD_grid_syn (um/s/s)', hs=False)
+
         gD_grid = gD_grid_syn
     else:
+        print('Reading located data from whizz file.')
         Ane = whizz_to_xarray(whizzFile, gne_chan)
         Auv = whizz_to_xarray(whizzFile, guv_chan)
         
@@ -92,20 +119,22 @@ def craig_transform(
         if cell_size is None:
             cell_size = _calc_gridcell_size(whizzFile)
         
-        # 
-        gD_grid, gD_err, Ane_grid = gravity_from_curv(
+        # main calculation
+        gD_grid, gD_err = gravity_from_curv(
             Ane, Auv, cell_size, altitude=None, 
-            unit_scale=unit_scale, mask_polygon=mask_polygon,
+            result_units=result_units, mask_polygon=mask_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode,
-            regional_grid_file=regional_grid_file
+            regional_grid_file=regional_grid_file,
+            regional_grav_units=regional_grav_units,
+            firstorder=firstorder
         )
 
+        # report statistics, and image grids (calculate clipping limits for images)
         im_min = np.nanmin(gD_grid.data)
         im_max = np.nanmax(gD_grid.data)
-        print("im_min: ", im_min, " im_max: ",im_max)
         report_gridStats(gD_grid)
         xdImage(gD_grid, 'gD_grid (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
         report_gridStats(gD_err)
         xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
     
-    return gD_grid, Ane_grid
+    return gD_grid

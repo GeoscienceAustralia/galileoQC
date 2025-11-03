@@ -2,7 +2,7 @@
 import numpy as np
 import xarray as xr
 
-def sphereSurvey():
+def sphereSurvey(numstns=None):
     """
     Creates an airborne survey over 3 point mass sources, calculates all
     gravity acceleration vector and curvature tensor outputs.
@@ -22,12 +22,18 @@ def sphereSurvey():
 
     """
     # survey parameters - note that the loop order below is important.
-    oe = -1000
-    on = -1000
-    de = 10
-    dn = 10
     nn = 201
     ne = 201
+    de = 20
+    dn = 20
+    if numstns is None:
+        de = 20
+        dn = 20
+    else:
+        de = numstns
+        dn = numstns
+    oe = -(divmod(ne,2)[0]) * de
+    on = -(divmod(nn,2)[0]) * dn
     d = -50
 
     xm = np.zeros((nn*ne, 3))
@@ -40,13 +46,21 @@ def sphereSurvey():
 
     # sphere 1 parameters and calculate
 
-    ps = 10
+    ps = 8
     rs = 50
     xs = np.zeros((3))
 
     Ann, Ane, And, Aee, Aed, Add, Auv, AD = sphere(xm, xs, rs, ps)
 
-    return xm[:,0], xm[:,1], xm[:,2], Ann, Ane, And, Aee, Aed, Add, Auv, AD
+    # sphere 2 parameters and calculate
+
+    ps = 4
+    rs = 80
+    xs = np.array((0.0, 230.0, 0.0))
+
+    A2nn, A2ne, A2nd, A2ee, A2ed, A2dd, A2uv, AD2 = sphere(xm, xs, rs, ps)
+
+    return xm[:,0], xm[:,1], xm[:,2], Ann+A2nn, Ane+A2ne, And+A2nd, Aee+A2ee, Aed+A2ed, Add+A2dd, Auv+A2uv, AD+AD2
 
 
 def sphere(xm, xs, rs, ps):

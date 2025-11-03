@@ -5,11 +5,13 @@ from scipy.fftpack import fft2
 import xrft
 
 
-def grav_of_Kurvs(Gne, Guv, mask_polygon=None, nan_mask=None):
+def grav_of_Kurvs(Gne, Guv, firstorder=False, mask_polygon=None, nan_mask=None):
     """
     Apply the Craig Transform to (`Guv` + i `Gne`), mask the resulting grid
     to `mask_region` (NOT IMPLEMENTED),
     and return the real part and imaginary part as two grids.
+
+    Calculation can be to zero-th or first order.
     
     - 2D FFT of Craig function
     - multiply by kernel
@@ -21,10 +23,14 @@ def grav_of_Kurvs(Gne, Guv, mask_polygon=None, nan_mask=None):
         Grid of NE component data in eotvos.
     Guv : xarray 2D DataArray
         Grid of UV component data in eotvos.
+    firstorder : bool, optional
+        If True, include first order Craig correction. Default False.
     mask_polygon : numpy 1D array, optional
         In order [min_x, max_x, min_y, max_y]. If the mask_polygon is given,
         then the output arrays will be masked to the area within the polygon
         defined by it. Default None.
+    nan_mask : numpy 2D mask array, optional
+        blah blah. Default None.
 
     Returns
     -------
@@ -44,7 +50,8 @@ def grav_of_Kurvs(Gne, Guv, mask_polygon=None, nan_mask=None):
     # Next, form the wavenumbers ...
     kx, ky = np.meshgrid(kurv_fft.freq_x, kurv_fft.freq_y)
     k = np.sqrt(kx * kx + ky * ky)
-    print(f'Wavenumber resolution = {kx[0,1] - kx[0,0]}')
+    print(f'Wavenumber resolution = {kx[0,1] - kx[0,0]:.3g}')
+    print(f'Equivalent wavelength = {1.0 / (kx[0,1] - kx[0,0]):.3g} m.')
     
     # ..., find the indices of the wavenumber origin ... 
     ky_null = np.nonzero(kurv_fft.freq_y.values == 0)[0][0]
@@ -58,7 +65,13 @@ def grav_of_Kurvs(Gne, Guv, mask_polygon=None, nan_mask=None):
     
     # Form and apply the Craig transform kernel ...
     craig = 2.0 * k / ((kx - 1j * ky) ** 2.0)
-    hD = craig * kurv_fft
+    if firstorder:
+        tiltangle_deg = 2.0
+        tiltangle_rad = tiltangle_deg / 180.0 * np.pi
+        root2_theta = np.sqrt(2.0) * tiltangle_rad
+        craig -= 2.0 * root2_theta * (1 + 1j) * (ky - kx) * (k ** 2.0) / ((kx - 1j * ky) ** 4.0)
+        print("Making first order tilt correction to transform FROM gravity.")
+    hD = craig * kurv_fft / 2.0 / np.pi
     
     # Then inverse transform, ...
     gD_tr = xrft.idft(hD, detrend='linear', window=True, true_phase=True, true_amplitude=True)

@@ -4,8 +4,11 @@ from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 
 def _pad_mean(grid, pad_cells):
     """
-    The `grid` is mean-corrected and padded by `pad_cells` pixels in all four
-    directions.
+    The `grid` is trimmed, removing all NaNs outside the smallest rectangle
+    containng real values, then interpolation is used to replace NaNs within
+    this rectangle. Then the grid is mean-corrected and padded by `pad_cells`
+    pixels in all four directions. The padded cells are filled with the mean
+    value.
 
     Parameters
     ----------
@@ -19,13 +22,16 @@ def _pad_mean(grid, pad_cells):
     -------
     xarray 2D DataArray
         the expanded, mean-corrected grid.
+    numpy 2D array
+        the expanded, nanmask grid.
         
     """
     # Trim edges of inputs to remove NaNs, 
     grid = _trim_rectangle(grid)
+    nanmask = np.isnan(grid.data)
+    pnanmask = np.pad(nanmask, pad_width=pad_cells, mode='constant', constant_values=np.nan)
 
     # First, fill any holes in the rectangular grid array
-    # print(Gne_grid)
     # rioxarray does this really well but it wants a CRS first
     grid.rio.write_crs(4283, inplace=True)
     grid.rio.write_nodata(np.nan, encoded=True, inplace=True)
@@ -47,4 +53,4 @@ def _pad_mean(grid, pad_cells):
         parr.y.values[-1-i] = parr.y.values[-1-pad_cells] + (pad_cells - i) * dy
 
     # ... so need to mean-correct post-padding
-    return parr - parr.mean()
+    return parr - parr.mean(), pnanmask

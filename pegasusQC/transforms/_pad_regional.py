@@ -5,9 +5,10 @@ from pegasusQC.transforms._pad_mean import _pad_mean
 from pegasusQC.transforms.Kurvs_of_grav import Kurvs_of_grav
 from pegasusQC.transforms._pad_grid_nans import _pad_grid_nans
 from pegasusQC.transforms._grid_match import _grid_match
+from pegasusQC.gridFiles.gridutility import report_gridStats
 
 
-def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid):
+def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False):
     """
     `Gne_grid` and `Guv_grid` are mean-corrected and padded by `pad_cells`
     pixels in all four directions using values calculated from the `regional_grid`.
@@ -30,6 +31,8 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid):
         The resultant grid is thus larger by `2 x pad_cells` in both directions.
     regional_grid : xarray 2D DataArray
         Regional (vertical) gravity grid
+    firstorder : bool, optional
+        If True, include first order Craig correction. Default False.
 
     Returns
     -------
@@ -51,14 +54,28 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid):
     """
     # Check regional grid is big enough
     if not _check_extension(Gne_grid, regional_grid, pad_cells):
-        print(f'WARNING - Regional {regional_grid} too small for padding by {pad_cells}.')
+        print(f'\nWARNING - Regional grid too small for padding by {pad_cells}.')
         print(f'    Using mean padding instead!')
-        Gne_x_grid = _pad_mean(Gne_grid, pad_cells)        
-        Guv_x_grid = _pad_mean(Guv_grid, pad_cells)        
-        return Gne_x_grid, Guv_x_grid, None       
+        Gne_x_grid, data_mask_ne = _pad_mean(Gne_grid, pad_cells)        
+        Guv_x_grid, data_mask_uv = _pad_mean(Guv_grid, pad_cells)        
+        return Gne_x_grid, Guv_x_grid, data_mask_ne
 
     # Transform regional to differential curvatures
-    gne_reg, guv_reg = Kurvs_of_grav(regional_grid)
+    gne_reg, guv_reg = Kurvs_of_grav(regional_grid, firstorder=firstorder)
+
+    print('\nGrid Statistics')
+    print('  Gne regional')
+    report_gridStats(gne_reg)
+    print('  Gne local')
+    report_gridStats(Gne_grid)
+    print('  Guv regional')
+    report_gridStats(guv_reg)
+    print('  Guv local')
+    report_gridStats(Guv_grid)
+    print('\n')
+
+    if _scaling_doubtful(gne_reg, Gne_grid):
+        print('\nWARNING - grid statistical ranges suggest units error.\n')
 
     # Pad-extend local grids
     Gne_padded = _pad_grid_nans(Gne_grid, pad_cells)
@@ -86,4 +103,15 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid):
     tuv = guv_reg_masked + Guv_arith
 
     return tne, tuv, data_mask_ne
+
+
+def _scaling_doubtful(grid1, grid2):
+    range1 = np.abs(grid1.max().data.item() - grid1.min().data.item())
+    range2 = np.abs(grid2.max().data.item() - grid2.min().data.item())
+    if abs(np.log10(range1 / range2)) > 0.5:
+        return True
+
+    return False
+
+    
     
