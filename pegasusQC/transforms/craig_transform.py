@@ -3,13 +3,15 @@ import numpy as np
 from pegasusQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from pegasusQC.transforms.spheretest import (sphereSurvey, _make_xr)
 from pegasusQC.transforms.gravity_from_curv import gravity_from_curv
+from pegasusQC.transforms._calc_gridcell_size import _calc_gridcell_size
 from pegasusQC.gridFiles.xarray_to_grid import xarray_to_grid
 from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.gridFiles.gridutility import report_gridStats
+from pegasusQC.gridFiles.sample_grid_to_line import sample_grid_to_line
 
 
 def craig_transform(
-    whizzFile=None, gne_chan=None, guv_chan=None,
+    whizzFile=None, gne_chan=None, guv_chan=None, gd_chan=None,
     cell_size=None, result_units='um/s/s', mask_polygon=None,
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
     regional_grav_units='mGal',
@@ -32,6 +34,10 @@ def craig_transform(
     guv_chan : String, optional
         The name of the channel in `whizzFile` containing the Guv survey data.
         Default None but must be provided if `whizzfile` is given.
+    gd_chan : String, optional
+        The name of the channel in `whizzFile` to write the gD output to. If the
+        name already exists in the whizzFile, then the new data are NOT written.
+        Default None in which case, the code invents a name.
     altitude_chan : String, optional
         The name of the channel in `whizzFile` containing the altitude data.
         Default None and ignored if provided. Later versions of s/w may use
@@ -121,7 +127,7 @@ def craig_transform(
         
         # main calculation
         gD_grid, gD_err = gravity_from_curv(
-            Ane, Auv, cell_size, altitude=None, 
+            Ane, Auv, cell_size, gd_chan=gd_chan, altitude=None, 
             result_units=result_units, mask_polygon=mask_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode,
             regional_grid_file=regional_grid_file,
@@ -136,5 +142,8 @@ def craig_transform(
         xdImage(gD_grid, 'gD_grid (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
         report_gridStats(gD_err)
         xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
+
+        #
+        sample_grid_to_line(gD_grid, whizzFile)
     
     return gD_grid

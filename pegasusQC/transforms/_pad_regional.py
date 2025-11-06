@@ -6,6 +6,8 @@ from pegasusQC.transforms.Kurvs_of_grav import Kurvs_of_grav
 from pegasusQC.transforms._pad_grid_nans import _pad_grid_nans
 from pegasusQC.transforms._grid_match import _grid_match
 from pegasusQC.gridFiles.gridutility import report_gridStats
+from pegasusQC.gridFiles.xdImage import xdImage
+from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 
 
 def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False):
@@ -87,14 +89,27 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
 
     # get the locations of NaNs in the local data
     data_mask_ne = np.isnan(Gne_padded.data)
-    # plt.imshow(data_mask_ne)
     data_mask_uv = np.isnan(Guv_padded.data)
+
+    # get the locations of not-NaNs in the local data
+    # data_good_ne = not data_mask_ne
+    # data_good_uv = not data_mask_uv
+
+    test_ne = gne_reg_match - Gne_padded
+    print('\n Grid stats Gne regional subtract local')
+    report_gridStats(test_ne)
+    xdImage(_trim_rectangle(test_ne), 'Gne regional subtract local (E)', hs=False)
+
+    test_uv = guv_reg_match - Guv_padded
+    print('\n Grid stats Guv regional subtract local')
+    report_gridStats(test_uv)
+    xdImage(_trim_rectangle(test_uv), 'Guv regional subtract local (E)', hs=False)
 
     # replace nans with zero in local grids for transform
     Gne_arith = Gne_padded.fillna(0.0)
     Guv_arith = Guv_padded.fillna(0.0)
 
-    # zero out regional data on local NaNs
+    # zero out regional data where there are local NaNs
     gne_reg_masked = data_mask_ne * gne_reg_match
     guv_reg_masked = data_mask_uv * guv_reg_match
     
@@ -106,6 +121,22 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
 
 
 def _scaling_doubtful(grid1, grid2):
+    """
+    If the ratio of the ranges (max - min) of the input grids is
+    not nearly 1.0, then the scaling is doubtful.
+    
+    Parameters
+    ----------
+    grid1 : xarray 2D DataArray
+        A grid for comparison.
+    grid2 : xarray 2D DataArray
+        A grid for comparison.
+
+    Returns
+    -------
+    True if abs(log10(ratio of ranges)) > 0.5, else False.
+        
+    """
     range1 = np.abs(grid1.max().data.item() - grid1.min().data.item())
     range2 = np.abs(grid2.max().data.item() - grid2.min().data.item())
     if abs(np.log10(range1 / range2)) > 0.5:

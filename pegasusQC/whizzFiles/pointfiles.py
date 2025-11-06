@@ -4,13 +4,17 @@
 Utility functions to add or update data or metadata.
 """
 # import necessary modules
+
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 from scipy import interpolate
+import xarray
+import pathlib
 
 # import pegasusQC.gridFiles.gridfiles as grd
 import pegasusQC.gridFiles.read_ers as grd
+import pegasusQC.whizzFiles.retrieveData as rd
 import pegasusQC.utility.utility as util
 import pegasusQC.config as config
 
@@ -33,262 +37,6 @@ def _translate_date(decimal_year):
 
     """
     return decimal_year
-
-
-def interpolateGridOntoLine(gridPath, hdfPath, lines=[]):
-    """
-    Interpolates the data in a grid file onto a new channel, with the same name
-    as the gridPath stem, in the geoWhizz HDF5 file. Fills empty channel samples
-    with nans.
-
-    Parameters
-    ----------
-    gridPath : String or pathlib Path
-        Name of a ERMapper file, including path and extension.
-    hdfFile : String or pathlib Path
-        Name of a HDF5 Whizz file, including path and extension.
-
-    Returns
-    -------
-    None.
-
-    """
-    gridFile = str(gridPath)
-    hdfFile = str(hdfPath)
-
-    # retrieve the grid information
-    eg, ng, zg, datum, projection = grd.read_ers_image(gridPath)
-    ng0 = np.min(ng)
-    ngd = np.abs(ng[1] - ng[0])
-    eg0 = np.min(eg)
-    egd = np.abs(eg[1] - eg[0])
-    zg = zg[::-1, :]
-    newChannelName = gridPath.stem
-    
-    print('\nGrid file read for channel ', newChannelName)
-    print(ng0, eg0, ngd, egd)
-        
-    with h5py.File(hdfFile, 'r+') as f:
-        g = f[groupName]['Lines']
-        lineGroups = list(g.values())
-        channelNames = list(lineGroups[0].keys())
-        x = f[groupName]['CoordinateFrame'].attrs['XChannel']
-        y = f[groupName]['CoordinateFrame'].attrs['YChannel']
-        t = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
-        height = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
-        if lines == []:
-            lines = list(g.keys())
-    #TODO: if newChannelName is in channelNames, append '_01' and check again.
-    #TODO: handle x or y or zg = nan  
-        for line in lines:
-            lineNo = line
-            lineText = 'Line ' + lineNo
-            em = getLineData(g[line], x)
-            nm = getLineData(g[line], y)
-            time = getLineData(g[line], t)
-            zm = np.empty(em.shape)
-            zm[:] = np.nan
-            dist = np.empty(em.shape)
-            dist[:] = np.nan
-            sampleSpacing = util.e2norm(em[1]-em[0], nm[1]-nm[0])
-            print(lineText)
-            print('  North min, max ', np.min(nm), np.max(nm), '  East min, max ', np.min(em), np.max(em))
-            
-            # estimate by weighted average about twice per grid cell
-            subRate = int(max(1, int(min(ngd, egd)) / (2 * sampleSpacing)))
-            ttemp = time[0:len(zm):subRate]
-            ztemp = np.empty(ttemp.shape)
-            ztemp[:] = np.nan
-            kz = 0
-            for kk in range(0, len(zm), subRate):
-                ii = int(np.rint((nm[kk] - ng0) / ngd))
-                jj = int(np.rint((em[kk] - eg0) / egd))
-                #print('ii, jj ', ii, jj)
-                
-                if zg[ii, jj] == np.nan:
-                    print('Error - nan in zGrid')
-                    break
-                    continue
-                
-                nCell = 0
-                x = np.zeros((9,))
-                y = np.zeros((9,))
-                z = np.zeros((9,))
-                x[:] = np.nan
-                y[:] = np.nan
-                z[:] = np.nan
-
-                for icount in range(ii-1, ii+1):
-                    if icount < 0:
-                        continue
-                    for jcount in range(jj-1, jj+1):
-                        if jcount < 0:
-                            continue
-                        if zg[icount, jcount] == np.nan:
-                            print('Error - nan in zGrid')
-                            break
-                            continue
-                        x[nCell] = ng[icount]
-                        y[nCell] = eg[jcount]
-                        z[nCell] = zg[icount, jcount] # SWAP???
-                        nCell += 1
-
-                ztemp[kz] = _weightedAverage(x, y, z, em[kk], nm[kk])
-                #print(x, y, z, em[kk], nm[kk], kz, ztemp[kz])                        
-                kz += 1
-                                        
-            print(lineText, ' sampled ', kz, 'of ', len(zm), '. Max value = ', np.nanmax(ztemp))
-            # Now interpolate through gaps by cubic spline
-            (zm, _) = interpolateLine(ttemp, ztemp, time)
-            
-            # and store in line sub-group
-            if newChannelName in g[line]:
-                print('already there')
-            else:
-                dd = g[line].create_dataset(newChannelName, data = zm, compression="gzip", compression_opts=4)
-                dd.attrs['Name'] = newChannelName
-           
-            fail, numExc = util._failsDeviation(zm - getLineData(g[line], height), 20.0, 13)
-            if fail and numExc > 13:
-                # if np.abs(np.max(getLineData(g[line], 'altitude') - zm)) > 20.0:
-                plotTime = time - time[0]
-                fig = plt.figure()
-                ax1 = fig.add_subplot(2,1,1)
-                ax1.plot(plotTime, getLineData(g[line], 'altitude'), plotTime, zm)
-                ax1.set_xlim(plotTime[0], plotTime[-1])
-                plotTitle = f'Line {line}, altitude and planned drape height'
-                plt.title(plotTitle, fontsize = 8)
-                plt.grid(True)
-                for label in ax1.get_xticklabels(): label.set_fontsize(6)
-                for label in ax1.get_yticklabels(): label.set_fontsize(6)
-                
-                ax2 = fig.add_subplot(2,1,2)
-                ax2.plot(plotTime, getLineData(g[line], 'altitude') - zm)
-                ax2.set_xlim(plotTime[0], plotTime[-1])
-                plotTitle = f'Difference'
-                plt.title(plotTitle, fontsize = 8)
-                plt.grid(True)
-                for label in ax2.get_xticklabels(): label.set_fontsize(6)
-                for label in ax2.get_yticklabels(): label.set_fontsize(6)
-            
-                plt.show()
-            
-    print("TODO")
-    
-    # find index of nearest grid cell to sample point at xs
-    # where xo is the origin of the grid and dx is the cell size.
-    # ii = np.rint((xs - xo) / dx).astype(int)
-    return
-
-    
-def interpolateLine(timeIn, dataIn, timeOut, spare=[]):
-    """
-    Interpolates dataIn, sampled at timeIn, onto the samples timeOut.
-    These three input arrays are pre-processed to ensure that timeIn
-    and timeOut are monotonically increasing, whilst keeping dataIn
-    synchronised with timeIn, and spareOut synchronised with timeOut.
-
-    For use interpolating position data (referenced to time or position)
-    along a flown survey line to positions on a planned survey line.
-
-    Parameters
-    ----------
-    timeIn : 1D numpy float array
-        The independent variable of the inputs to be interpolated.
-    dataIn : 1D numpy float array
-        The input dependent variable to be interpolated.
-    timeOut : 1D numpy float array
-        The independent variable to interpolate onto.
-    spare : 1D numpy float array
-        To be kept synchronised with timeOut and returned.
-
-    Returns
-    -------
-    out : 1D numpy float array
-        The values of dataIn interpolated onto timeOut.
-    spareOut : 1D numpy float array
-        To be kept synchronised with timeOut and returned.
-
-    """
-    
-    if False:
-        # timeIn is expected to be a regular fiducial without any NaNs
-        # so just clean up any in dataIn, keeing timeIn synchronised.
-        timeIn2 = timeIn[np.logical_not(np.isnan(dataIn))]
-        dataIn2 = dataIn[np.logical_not(np.isnan(dataIn))]
-        spareOut = spare
-
-        # Very short sets of data are useless.
-        min_length = 100
-        if timeIn2.size < min_length or dataIn2.size < min_length or timeOut.size < min_length:
-            out = np.zeros(timeOut.shape)
-            out[:] = np.nan
-            return out, spare
-        if len(spare) < min_length:
-            spare = []
-
-        # Rarely, but occasionally, the data are not monotonic (e.g. a helicopter can fly backwards).
-        (timeIn_trim, dataIn_trim) = _trim_monotonic(timeIn2, sync=dataIn2)
-        (timeOut_trim, spare_trim) = _trim_monotonic(timeOut, sync=spare)
-        if len(spare) > min_length:
-            spareOut = spare_trim
-
-        # Sometimes measured data extend beyond the end of the planned line, so trim back.
-        timeOut_trim, spare_trim = _trim_ends(timeIn_trim, timeOut_trim, spare_trim)
-        if len(spare) > min_length:
-            spareOut = spare_trim
-
-        spl = interpolate.splrep(timeIn_trim, dataIn_trim, k=3, s=0)
-        out = interpolate.splev(timeOut_trim, spl)
-
-    # clean out 'nan's'
-    good = ~np.isnan(timeIn + dataIn)
-    timeIn = timeIn[good]
-    dataIn = dataIn[good]
-    if timeIn.size < 10:
-        print(f'ERROR - after trimming NaNs, the data vectors are too short for analysis.')
-        return
-
-    # ensure ordered in increasing x
-    if timeIn[1] < timeIn[0]:
-        timeIn = timeIn[::-1]
-        dataIn = dataIn[::-1]
-    if timeOut[1] < timeOut[0]:
-        timeOut = timeOut[::-1]
-        spare = spare[::-1]
-    
-    # trim varying data and store
-    keepsml = timeIn < timeOut[-1]
-    keepbig = timeIn > timeOut[0]
-    keep = keepsml & keepbig
-    timeIn = timeIn[keep]
-    dataIn = dataIn[keep]
-    if timeIn.size < 10:
-        print(f'ERROR - after trimming measured data, the vectors are too short for analysis.')
-        return
-
-    # trim base data and store
-    keepsml = timeOut < timeIn[-1]
-    keepbig = timeOut > timeIn[0]
-    keep = keepsml & keepbig
-    timeOut = timeOut[keep]
-    spare = spare[keep]
-    if timeOut.size < 10:
-        print(f'ERROR - after trimming plan data, the vectors are too short for analysis.')
-        return
-
-    spl = interpolate.splrep(timeIn, dataIn, k=3, s=0)
-    out = interpolate.splev(timeOut, spl)
-
-    # print(timeOut.shape, out.shape, timeIn.shape, dataIn.shape, spare.shape)
-
-    # vec_len = len(timeOut) - 1
-    # plt.plot(timeOut, out, 'g', timeIn, dataIn, 'b', timeOut, spare, 'm')
-
-    # xData[0:vec_len] = timeOut[1:]
-    # yData[0:vec_len] = out[1:]
-
-    return out, spare, timeOut
 
 
 def _trim_ends(x0, x1, y1):
@@ -363,26 +111,6 @@ def _trim_monotonic(data_in, sync=[]):
     else:
         sync_out = []
     return data_trim, sync_out
-
-
-def _invDist(x, y):
-    """
-    Returns the inverse of `distance(x,y)`
-    """
-    return 1.0 / util.e2norm(x, y)
-
-
-def _weightedAverage(x, y, z, xo, yo):
-    x = x[np.logical_not(np.isnan(z))]
-    y = y[np.logical_not(np.isnan(z))]
-    z = z[np.logical_not(np.isnan(z))]
-    dx = x - xo
-    dy = y - yo
-    weight = np.zeros(x.shape)
-    for ii in range(0, len(x)):
-        weight[ii] = _invDist(dx[ii], dy[ii])
-    
-    return np.average(z, weights = weight)
 
 
 def updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName=''):

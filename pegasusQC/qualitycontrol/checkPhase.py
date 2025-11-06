@@ -87,7 +87,7 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
             time = np.arange(dt[0], dt[-1], 0.1)
 
             # Now interpolate through gaps by cubic spline
-            xcorrInt = _interpolateCorr(dt, xcorr, time)#  gw.interpolateLine(dt, xcorr, time, time)
+            xcorrInt = _interpolateCorr(dt, xcorr, time)
             recovered_time_shift2 = time[xcorrInt.argmax()]
             if verbose:
                 print(f'Line {line}: Recovered time shift = {recovered_time_shift2 / fs:.1f} sec.')

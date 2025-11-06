@@ -28,10 +28,12 @@ def report_gridStats(my_grid, mask_polygon=[]):
         my_grid = maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y')
     if 'units' in my_grid.attrs:
         print(f'RMS of result = {my_grid.std().data.item():.2f} {my_grid.attrs["units"]}')
+        print(f'mean of result = {my_grid.mean().data.item():.2f} {my_grid.attrs["units"]}')
         print(f'min of result = {my_grid.min().data.item():.2f} {my_grid.attrs["units"]}')
         print(f'max of result = {my_grid.max().data.item():.2f} {my_grid.attrs["units"]}')
     else:
         print(f'RMS of result = {my_grid.std().data.item():.2f}')
+        print(f'mean of result = {my_grid.mean().data.item():.2f}')
         print(f'min of result = {my_grid.min().data.item():.2f}')
         print(f'max of result = {my_grid.max().data.item():.2f}')
     print(f'Array shape = {my_grid.shape}')

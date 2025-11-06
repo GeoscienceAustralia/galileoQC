@@ -8,14 +8,16 @@ from pegasusQC.transforms._pad_grids import _pad_grids
 from pegasusQC.transforms.grav_of_Kurvs import grav_of_Kurvs
 
 
-def gravity_from_curv(Ane, Auv, cell_size, altitude=None,
-                      result_units='um/s/s', 
-                      mask_polygon=None,
-                      pad_cells=None,
-                      padding_mode='regional',
-                      regional_grid_file=None,
-                      regional_grav_units='mGal',
-                      firstorder=False
+def gravity_from_curv(Ane, Auv, cell_size,
+                    gd_chan=None,
+                    altitude=None,
+                    result_units='um/s/s', 
+                    mask_polygon=None,
+                    pad_cells=None,
+                    padding_mode='regional',
+                    regional_grid_file=None,
+                    regional_grav_units='mGal',
+                    firstorder=False
 ):
     """
     Calculates the vertical gravity, gD, from the differential curvature
@@ -32,6 +34,10 @@ def gravity_from_curv(Ane, Auv, cell_size, altitude=None,
         dimensioned by fiducial.
     cell_size : float
         the cell size for gridding.
+    gd_chan : String, optional
+        The name of the channel in `whizzFile` to write the gD output to. If the
+        name already exists in the whizzFile, then the new data are NOT written.
+        Default None in which case, the code invents a name.
     altitude : xarray 1D DataSet, optional
         Airborne survey line-based DataSet of the altitude dimensioned
         by fiducial. These must be referenced to a fixed datum (not
@@ -96,7 +102,7 @@ def gravity_from_curv(Ane, Auv, cell_size, altitude=None,
                                      'z_channel': regional_grid_file,
                                      'units': regional_grav_units
                                      })
-        input_mask_pixels = 2
+        input_mask_pixels = 3
     elif mode == 'constant':
         regional_grid = None
         input_mask_pixels = 5
@@ -176,6 +182,21 @@ def gravity_from_curv(Ane, Auv, cell_size, altitude=None,
         gD_grid.attrs['units'] = 'um/s/s'
         gD_err = gD_err / 1000.0
         gD_err.attrs['units'] = 'um/s/s'
+
+    # ..., and store attributes
+    if gd_chan is None:
+        gd_chan = 'gD_craig'
+    imag_chan = f'{gd_chan}_imag'
+
+    gD_grid.attrs['x_channel'] = e_chan
+    gD_grid.attrs['y_channel'] = n_chan
+    gD_grid.attrs['long_name'] = gd_chan
+    gD_grid.attrs['title'] = 'gD via Craig transform'
+
+    gD_err.attrs['x_channel'] = e_chan
+    gD_err.attrs['y_channel'] = n_chan
+    gD_err.attrs['long_name'] = imag_chan
+    gD_err.attrs['title'] = 'gD imaginary part'
 
     return gD_grid, gD_err
     

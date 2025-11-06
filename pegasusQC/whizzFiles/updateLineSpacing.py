@@ -90,14 +90,18 @@ def updateLineSpacing(whizzFile, trav_spacing=None, ctrl_spacing=None, x='', y='
         for i,line in enumerate(lines):
             # print(line)
             gg = g[line]
-            if gg.attrs['LineVariety'] == 'Traverse':
-                travs[i,0], travs[i,1], travs_rotated = _calcLineEqn(gg, x, y, orig_x, orig_y)
-                numtravs += 1
-            elif gg.attrs['LineVariety'] == 'Control':
-                ctrls[i,0], ctrls[i,1], ctrls_rotated = _calcLineEqn(gg, x, y, orig_x, orig_y)
-                numctrls += 1
+            if 'LineVariety' in gg.attrs:
+                if gg.attrs['LineVariety'] == 'Traverse':
+                    travs[i,0], travs[i,1], travs_rotated = _calcLineEqn(gg, x, y, orig_x, orig_y)
+                    numtravs += 1
+                elif gg.attrs['LineVariety'] == 'Control':
+                    ctrls[i,0], ctrls[i,1], ctrls_rotated = _calcLineEqn(gg, x, y, orig_x, orig_y)
+                    numctrls += 1
+                else:
+                    print(f'Warning - line {line} ignored. It is not a traverse or a control.')
+                    print(f'    need to run updateLineAttributes with `line_type` set.')
             else:
-                print(f'Warning - line {line} ignored. It is not a traverse or a control.')
+                print(f'Warning - line {line} ignored since it has no LineVariety attribute.')
                 print(f'    need to run updateLineAttributes with `line_type` set.')
                     
         if numtravs > 0:
