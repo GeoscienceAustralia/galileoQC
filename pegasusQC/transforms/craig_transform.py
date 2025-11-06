@@ -124,6 +124,9 @@ def craig_transform(
         # Calculate the cell size while we know the whizz_file name
         if cell_size is None:
             cell_size = _calc_gridcell_size(whizzFile)
+            if cell_size is None:
+                print('ERROR - could not calculate cell size, please enter explicitly.')
+                return None
         
         # main calculation
         gD_grid, gD_err = gravity_from_curv(
