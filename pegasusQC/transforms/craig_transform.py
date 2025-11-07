@@ -37,7 +37,7 @@ def craig_transform(
     gd_chan : String, optional
         The name of the channel in `whizzFile` to write the gD output to. If the
         name already exists in the whizzFile, then the new data are NOT written.
-        Default None in which case, the code invents a name.
+        Default None in which case, the new data are NOT written.
     altitude_chan : String, optional
         The name of the channel in `whizzFile` containing the altitude data.
         Default None and ignored if provided. Later versions of s/w may use
@@ -146,7 +146,8 @@ def craig_transform(
         report_gridStats(gD_err)
         xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
 
-        #
-        sample_grid_to_line(gD_grid, whizzFile)
+        # Sample the result back into the whizzFile database.
+        if not gd_chan is None:
+            sample_grid_to_line(gD_grid, whizzFile)
     
     return gD_grid

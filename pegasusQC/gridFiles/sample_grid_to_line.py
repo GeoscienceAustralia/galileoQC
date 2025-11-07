@@ -71,7 +71,7 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
         eg = grid.x.data
         ng = grid.y.data
         zg = np.transpose(grid_fill.data)
-        #TODO: if newChannelName is in channelNames, append '_01' and check again.
+
         if 'name' in grid.attrs:
             newChannelName = grid.attrs['name']
         elif 'Name' in grid.attrs:

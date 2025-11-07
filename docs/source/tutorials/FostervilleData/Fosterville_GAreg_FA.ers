@@ -1,0 +1,29 @@
+DatasetHeader Begin
+	Version	= "6.0"
+	Name	= "Gravmap2019-grid-grv_fa.ers"
+	DataSetType	= ERStorage
+	DataType	= Raster
+	ByteOrder	= LSBFirst
+	CoordinateSpace Begin
+		Datum	= "GDA94"
+		Projection	= "GEODETIC"
+		CoordinateType	= EN
+		Units	= "METERS"
+		Rotation	= 0:0:0.0
+	CoordinateSpace End
+	RasterInfo Begin
+		CellType	= IEEE4ByteReal
+		NrOfLines	= 347
+		NrOfCellsPerLine	= 304
+		NrOfBands	= 1
+		CellInfo Begin
+			Xdimension	= 0.004
+			Ydimension	= 0.004
+		CellInfo End
+		RegistrationCoord Begin
+			Eastings	= 143.928
+			Northings	= -35.796
+		RegistrationCoord End
+		NullCellValue	= -999999
+	RasterInfo End
+DatasetHeader End
