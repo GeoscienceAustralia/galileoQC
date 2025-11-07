@@ -255,11 +255,17 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         return
 
     # Subtraction does not preserve attributes
-    d_grid.attrs['units'] = even_grid.attrs['units']
-    d_grid.attrs['long_name'] = even_grid.attrs['long_name']
-    d_grid.attrs['title'] = f"even minus odd : {even_grid.attrs['title']}"
-    d_grid['x'].attrs['orig_name'] = even_grid['x'].attrs['orig_name']
-    d_grid['y'].attrs['orig_name'] = even_grid['y'].attrs['orig_name']
+    for attribute in ['units', 'long_name', 'title']:
+        if attribute in even_grid.attrs:
+            d_grid.attrs[attribute] = even_grid.attrs[attribute]
+
+    # d_grid.attrs['units'] = even_grid.attrs['units']
+    # d_grid.attrs['long_name'] = even_grid.attrs['long_name']
+    # d_grid.attrs['title'] = f"even minus odd : {even_grid.attrs['title']}"
+    if 'orig_name' in even_grid['x'].attrs:
+        d_grid['x'].attrs['orig_name'] = even_grid['x'].attrs['orig_name']
+    if 'orig_name' in even_grid['y'].attrs:
+        d_grid['y'].attrs['orig_name'] = even_grid['y'].attrs['orig_name']
 
     # Image and report statistics
 

@@ -68,6 +68,7 @@ nbsphinx_execute_arguments = [
 
 nbsphinx_kernel_name = "python3"
 
+nb_execution_timeout = 180
 
 # html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
@@ -80,8 +81,8 @@ html_static_path = ['static']
 # html_favicon = "static/pegasus_icon.png"
 html_title = "pegasusQC"
 html_theme_options = {
-    "light_logo": "pegasus_logo_light.png",
-    "dark_logo": "pegasus_logo_dark.png",
+    # "light_logo": "pegasus_logo_light.png",
+    # "dark_logo": "pegasus_logo_dark.png",
     # "sidebar_hide_name": True,
     # 'show_powered_by': 'false',
     # 'body_text': 'Black',
