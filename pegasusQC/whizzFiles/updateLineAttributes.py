@@ -109,7 +109,7 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
             print(f'PlannedLine attribute of line {line} set to {planned_line}.')
             return
         if not line_type in line_types:
-            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in {line_types}.")
+            print(f"NO ACTION TAKEN ON LINE_TYPE - line_type {line_type} not in:\n {line_types}.")
             return
 
         print(f'\nSetting Line attributes for {whizzFile.name} according to the {line_type} scheme.')

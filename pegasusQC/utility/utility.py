@@ -12,6 +12,8 @@ Created on Sat Aug 14 20:28:20 2021
 import numpy as np
 import h5py
 from scipy.signal import butter, lfilter
+import textwrap
+
 
 import pegasusQC.config as config
 
@@ -511,4 +513,27 @@ def _calc_bearing(x, y):
     arctan(mean(diff(x) / mean(diff(y))))
     """
     return np.arctan2(_mean_1std(np.diff(x)), _mean_1std(np.diff(y)))
+
+
+def _print_wrappedlist(mylist, width=70):
+    """
+    Prints a list of strings, wrapping the output
+    to `width` characters per line.
+
+    Parameters
+    ----------
+    mylist : list(str).
+    A list of strings to be printed.
+
+    width : int, optional
+    The wrapping width, default 70 characters.
+
+    Returns
+    -------
+    None
+
+    """
+    mystr = f'{mylist}'
+    wrapped = textwrap.fill(mystr, width=width)
+    print(wrapped)
 

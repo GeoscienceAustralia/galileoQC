@@ -65,7 +65,7 @@ def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_p
     if 'units' in my_data[z_chan].attrs:
         if len(my_data[z_chan].attrs['units']) > 0 and not my_data[z_chan].attrs['units'].isspace():
             myunits = my_data[z_chan].attrs['units']
-    print(f'Processing (x, y, z) = ({x_chan}, {y_chan}, {z_chan}). {z_chan} in {myunits}.')
+    print(f'Processing (x, y, z) = ({x_chan}, {y_chan}, {z_chan}).\n {z_chan} in {myunits}.')
 
     if method == 'scipy':
 

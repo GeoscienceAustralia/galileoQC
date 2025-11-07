@@ -176,7 +176,8 @@ def read_xyz_header(filename):
     print(f'Found {num_head_recs} header records')
     print(f'Found {num_lines} lines')
     print(f'Found {num_channels} fields')
-    print(f'Channel precisions (number of decimal places): {field_precisions}')
+    print(f'Channel precisions (number of decimal places):')
+    util._print_wrappedlist(f'{field_precisions}')
     if need_first_data_rec:
         print('Could not find a record without * - so no precisions calculated.')
         with open(filename, 'r') as fid:
@@ -232,7 +233,8 @@ def readXYZ(filename, verbose=False):
         for file_line in fid:
             if num_lines == 0:
                 # Always useful to see the first few records in the file.
-                print(file_line)
+                util._print_wrappedlist(file_line)
+                # print(file_line)
             if file_line.lstrip().startswith('/'):
                 num_head_recs += 1
             elif file_line.lstrip().upper().startswith('LINE') or file_line.lstrip().upper().startswith('TIE'):
@@ -254,14 +256,16 @@ def readXYZ(filename, verbose=False):
                 print(f'\n  Found {num_head_recs} header records')
                 print(f'  Found {num_lines} lines')
                 print(f'  Found {num_channels} fields\n')
-                print(f'Channel precisions (number of decimal places): {field_precisions}')
+                print(f'Channel precisions (number of decimal places):')
+                util._print_wrappedlist(f'{field_precisions}')
                 print('ERROR - no "LINE" records found in file, may not be a Geosoft XYZ file.')
                 return None
     fid.close()
     print(f'\n  Found {num_head_recs} header records')
     print(f'  Found {num_lines} lines')
     print(f'  Found {num_channels} fields\n')
-    print(f'Channel precisions (number of decimal places): {field_precisions}')
+    print(f'Channel precisions (number of decimal places):')
+    util._print_wrappedlist(f'{field_precisions}')
     
     # get channel names
     header_rec = 0

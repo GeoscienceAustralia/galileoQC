@@ -14,6 +14,7 @@ import aseg_gdf2 as aseg
 
 import pegasusQC.config as config
 from pegasusQC.whizzFiles.updateLineAttributes import updateLineAttributes
+import pegasusQC.utility.utility as util
 
 groupName = config.groupName
 projectName = config.projectName
@@ -367,7 +368,7 @@ def _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChanne
                 channelindices.pop(tempIdx)
             
     print(f'{len(channelsOut)} channels to be written to geoWhizz file: ')
-    print(channelsOut)
+    util._print_wrappedlist(channelsOut)
     # print(channelindices, haveFlights, haveDates)
 
     return channelsOut, channelindices, haveFlights, flightIdx, haveDates, dateIdx

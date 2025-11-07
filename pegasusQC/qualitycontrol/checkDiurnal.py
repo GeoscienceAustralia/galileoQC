@@ -128,7 +128,8 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
                         failedSample = ii
                     
             if diurnalExceeded:
-                report += f'\n  L {line}: Diurnal for {basemag} at sample number {failedSample} diverges from chord by {bigExtremum:.2f}, exceeding {rangeLimit:.1f} - FAIL'
+                report += f'\n  L {line}: Diurnal for {basemag} at sample number {failedSample} diverges from chord by {bigExtremum:.2f},'
+                report += f'\n  exceeding {rangeLimit:.1f} - FAIL'
                 num_failed_lines += 1
                 if plot_flag:
                     fig = plt.figure()

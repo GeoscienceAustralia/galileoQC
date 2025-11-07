@@ -121,7 +121,7 @@ Grid_Imaging.ipynb
 
 ## Craig transform
 
-The Craig transform method transforms differential curvature components $G_{UV}$ and $G_{NE}$ into vertical gravity. This is useful because there are often regional or other gravity data that cover part or all of the survey area with which the transformed gravity data can be compared. The following tutorial demonstrates the use of the Craig transform.
+The Craig transform method transforms differential curvature components $G_{UV}$ and $G_{NE}$ into vertical gravity[^Dransfield2019]. This is useful because there are often regional or other gravity data that cover part or all of the survey area with which the transformed gravity data can be compared. The following tutorial demonstrates the use of the Craig transform.
 
 ```{toctree}
 Craig_transform_Gne_Guv.ipynb
@@ -184,6 +184,8 @@ https://www.aseg.org.au/public/200/files/ASEG-GDF2-REV4.pdf. Australian Society 
 [^Zhao2015]: L. Zhao, R. Forsberg, M. Wu, A. V. Olesen, K. Zhang, and J. Cao. A flight test of the strapdown airborne gravimeter sga-wz in greenland. Sensors, 15:13258–13269, 2015.
 
 [^Dransfield2013]: M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013.
+
+[^Dransfield2019]: M. H. Dransfield and T. Chen. Heli-borne gravity gradiometry in rugged terrain. Geophysical Prospecting, 67(6):1626–1636, July 2019.
 
 [^Uieda]: Uieda, L. (2021). Ground gravity data compilation for Australia version 2.0. figshare. https://doi.org/10.6084/m9.figshare.13643837
 

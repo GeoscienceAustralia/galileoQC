@@ -187,13 +187,13 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
         report += '.'
     else:
         if mode == "RMS" or mode == "RMSroot2":
-            tmpstr = f'Of {num_checked} traverse lines checked'
-            tmpstr += f', {num_failed} traverse lines exceeded the {max_allowed_deltaZ}'
+            tmpstr = f'{num_checked} traverse lines checked,'
+            tmpstr += f', {num_failed} exceeded the {max_allowed_deltaZ}'
             if z_units != '':
                 tmpstr += ' ' + z_units
             tmpstr += f' allowed {mode_str} difference in {zChannel}.\n'
         else:
-            tmpstr = f'Of {num_checked} intersections checked'
+            tmpstr = f'{num_checked} intersections checked,'
             tmpstr += f', {num_failed} exceeded the {max_allowed_deltaZ}'
             if z_units != '':
                 tmpstr += ' ' + z_units

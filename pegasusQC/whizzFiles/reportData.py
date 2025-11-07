@@ -68,9 +68,11 @@ def reportWhizz(whizzFile, line='', channel=''):
                 print(f'    {attribute}: {myLineGroup.attrs[attribute]}')
         else:
             _ = _distanceFlown(whizzFile)
-            print(f'\n{numLines} lines:\n', lineNames)
+            print(f'\n{numLines} lines:')
+        util._print_wrappedlist(lineNames)
 
-        print(f'\n{numChannels} channels:\n', channelNames)
+        print(f'\n{numChannels} channels:')
+        util._print_wrappedlist(channelNames)
         if channel != '':
             if line == '':
                 line = lineNames[0]
@@ -104,11 +106,15 @@ def reportLines(whizzFile):
 
     with h5py.File(filename, 'r') as f:
         whizzHeader = list(f.keys())[0]
-    print("\n", whizzHeader, "\n")
-    print("Odd Lines:\n", oddlines, "\n")
-    print("Even Lines:\n", evenlines, "\n")
-    print("Traverse Lines:\n", travlines, "\n")
-    print("Control Lines:\n", ctrllines)
+    print("\n", whizzHeader)
+    print("\nOdd Lines:")
+    util._print_wrappedlist(oddlines)
+    print("\nEven Lines:")
+    util._print_wrappedlist(evenlines)
+    print("\nTraverse Lines:")
+    util._print_wrappedlist(travlines)
+    print("\nControl Lines:")
+    util._print_wrappedlist(ctrllines)
 
 
 def reportChannels(whizzFile, channel='', verbose=False):
@@ -168,7 +174,8 @@ def reportChannels(whizzFile, channel='', verbose=False):
                 
 
         else:
-            print(f'\n{numChannels} channels:\n', channelNames)
+            print(f'\n{numChannels} channels:')
+            util._print_wrappedlist(channelNames)
             # if channel != '':
             #     myChanGroup = gLines[lineNames[0]][channel]
             #     chanAttrs = list(myChanGroup.attrs)
@@ -423,7 +430,6 @@ def whizzAttrExists(group, my_attr):
     True if `my_attr` is an attribute of the HDF5 `group`.
     """
     return my_attr in group.attrs.keys()
-
 
 
 
