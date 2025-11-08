@@ -21,6 +21,7 @@ setup(
         'pooch',
         'pyarrow',
         'pyproj',
+        'rioxarray',
         'scikit-image',
         'scipy',
         'verde',
