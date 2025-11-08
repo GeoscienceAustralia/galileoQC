@@ -134,6 +134,9 @@ dmypy.json
 *.nc
 *.DS_Store
 *.gdb
+
+# ... except Fosterville
+!Foster_craig.hdf5
 examples/.jupyter/desktop-workspaces/default-37a8.jupyterlab-workspace
 /examples/.jupyter
 *.jupyterlab-workspace
