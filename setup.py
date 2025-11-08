@@ -26,5 +26,6 @@ setup(
         'scipy',
         'verde',
         'xarray',
+        'xrft',
     ],
 )
