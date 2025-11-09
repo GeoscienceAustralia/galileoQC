@@ -22,6 +22,7 @@ The tested, and preferred, method of using __pe*ga*susQC__ is via a Jupyter-lab 
 
 :::{note}
 __pe*ga*susQC__ is at early stage of development and will keep improving in the future. The commonly used functions in the API should be quite stable, but minor utilities could change in the next version. If you find any bugs or would like to request any enhancements, please raise an issue on GitHub.
+:::
 
 ## Acknowledgements
 

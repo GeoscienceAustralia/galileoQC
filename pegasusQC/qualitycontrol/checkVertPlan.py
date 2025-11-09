@@ -72,10 +72,10 @@ def checkVertPlan(planPaths, measPath, *, lines=[], planX='', planY='', planZ=''
 
     """
     if type(planPaths) is list:
-        if not (type(planPaths[0]) is str or type(planPaths[0]) is pathlib.PurePath):
+        if not isinstance(planPaths[0], (str, pathlib.PurePath)):
             print("ERROR - the input parameter needs to be a list of planfile names but it is not.")
             return
-    elif type(planPaths) is pathlib.PurePath or type(planPaths) is str:
+    elif isinstance(planPaths, (pathlib.PurePath, str)):
         planPaths = [planPaths]
     else:
         print("ERROR - the first input parameter needs to be a list of planfile names but it is not.")
