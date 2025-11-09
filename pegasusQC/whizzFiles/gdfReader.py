@@ -30,9 +30,9 @@ def asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', d
 
     Parameters
     ----------
-    gdf_datfile : pathlib.PosixPath
+    gdf_datfile : pathlib.PurePath
         The pathlib Path to the input ASEG-GDF2 DAT file.
-    whizzFile : pathlib.PosixPath, optional
+    whizzFile : pathlib.PurePath, optional
         The pathlib Path to the output Whizz HDF5 file. The default is '' and
         the output file is then the same as the input file with the extension
         changed to '.hdf5'.

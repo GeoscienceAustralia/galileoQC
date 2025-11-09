@@ -21,9 +21,9 @@ def colsToHDF(col_datfile, lineColumn, dateColumn, latColumn, lonColumn, dumstr=
 
     Parameters
     ----------
-    col_datfile : pathlib.PosixPath
+    col_datfile : pathlib.PurePath
         The pathlib Path to the input ASCII data file.
-    whizzFile : pathlib.PosixPath, optional
+    whizzFile : pathlib.PurePath, optional
         The pathlib Path to the output Whizz HDF5 file. The default is '' and
         the output file is then the same as the input file with the extension
         changed to '.hdf5'.
@@ -32,7 +32,7 @@ def colsToHDF(col_datfile, lineColumn, dateColumn, latColumn, lonColumn, dumstr=
 
     Returns
     -------
-    whizzFile : pathlib.PosixPath
+    whizzFile : pathlib.PurePath
         The name of the created whizz file.
 
     '''
