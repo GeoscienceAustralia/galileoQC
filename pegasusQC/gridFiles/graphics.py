@@ -36,6 +36,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.cm as cm
+import matplotlib as mpl
 from skimage import exposure
 
 from pegasusQC.gridFiles import colors # definition of new colormaps
@@ -99,20 +100,23 @@ def load_cmap(name='geosoft'):
     colormaps available in the local colors module.
     """
     print(name)
+    # Geosoft colormaps need to be built:
+    if name in colors.datad.keys():
+        cmList = colors.datad[name]
+        new_cm = mcolors.LinearSegmentedColormap.from_list(name, cmList)
+    # Not a Geosoft colormap, so assume it is already built and just needs registration:
+    else:
+        new_cm = name
     try:
-        # Geosoft colormaps need to be built:
-        if name in colors.datad.keys():
-            cmList = colors.datad[name]
-            new_cm = mcolors.LinearSegmentedColormap.from_list(name, cmList)
-            plt.register_cmap(cmap=new_cm)
-            return new_cm
-        # Not a Geosoft colormap, so assume it is already built and just needs registration:
-        else:
-            print(name)
-            plt.register_cmap(cmap=name)
+        plt.register_cmap(cmap=new_cm)
     except:
-        raise ValueError('Colormap {} has not been recognised'.format(name))
-        
+        try:
+            mpl.colormaps.register(cmap=new_cm)
+        except:
+            raise ValueError(f'Colormap {name} has not been recognised.')
+
+    return new_cm
+
 #==============================================================================
 # autolevels
 #==============================================================================
