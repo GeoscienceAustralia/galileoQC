@@ -135,8 +135,10 @@ dmypy.json
 *.DS_Store
 *.gdb
 
-# ... except Fosterville
+# ... except Fosterville and Telfer
 !Foster_craig.hdf5
+!Telfer_craig.hdf5
+
 examples/.jupyter/desktop-workspaces/default-37a8.jupyterlab-workspace
 /examples/.jupyter
 *.jupyterlab-workspace
