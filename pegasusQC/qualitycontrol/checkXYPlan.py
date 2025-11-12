@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that horizontal deviations from the planned aircraft path are within specification.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import h5py
 import pathlib

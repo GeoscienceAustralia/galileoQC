@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Utility functions to add or update data or metadata.
+Utility functions to add or update channel metadata.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 # import necessary modules
 import h5py
 import pegasusQC.config as config

@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Check for sufficient overlap length for overlapping flight-lines. Relies on PlannedLine
-attribute being present in data. This attribute is set by updateLineAttributes().
+Check for sufficient overlap length for overlapping flight-lines.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
@@ -21,6 +24,9 @@ def checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag
     """
     For every line in the file whizzFile, calculate the overlap with each other
     line that has the same prefix. Plot a map. Report overlaps.
+
+    Relies on PlannedLine attribute being present in data. This attribute is
+    set by updateLineAttributes().
 
     Parameters
     ----------

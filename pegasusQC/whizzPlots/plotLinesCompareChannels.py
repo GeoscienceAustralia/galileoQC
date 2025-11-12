@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 For each flight-line, plot the given channels.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py

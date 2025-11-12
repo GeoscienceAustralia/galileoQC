@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Interpolate one grid to the positions of another.
+Author: Mark Helm Dransfield
+Created: Oct 2025
+License: CC BY-SA
+"""
+
 from scipy.interpolate import RegularGridInterpolator
 import numpy as np
 import xarray as xr

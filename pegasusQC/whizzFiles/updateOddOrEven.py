@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Set line group attribute Parity for each line.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm

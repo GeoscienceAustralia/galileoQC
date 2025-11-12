@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 A collection of possibly useful plot functions, not in common use.
-
-Created on Sat Aug 14 18:21:15 2021
-
-@author: markdransfield
+Author: Mark Helm Dransfield
+Created: Sat Aug 14 18:21:15 2021
+License: CC BY-SA
 """
 
 import numpy as np

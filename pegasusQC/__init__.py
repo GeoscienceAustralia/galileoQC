@@ -1,6 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 A library of geophysical QA/QC functions for airborne gravity (and magnetic) survey data.
-
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
 
 # __version__ = "0.0.0"

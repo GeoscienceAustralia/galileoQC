@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Import columnar table ASCII data and write to `geoWhizz` format.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import h5py
 from pathlib import Path

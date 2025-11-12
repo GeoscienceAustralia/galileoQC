@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Calculate number of cells by which to pad.
+Author: Mark Helm Dransfield
+Created: Oct 2025
+License: CC BY-SA
+"""
+
 
 
 def _calc_padcells(grid):

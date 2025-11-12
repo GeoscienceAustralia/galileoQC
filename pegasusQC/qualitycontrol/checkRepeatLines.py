@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check statistics of repeat flight-lines.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt

@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Rarely used but possibly useful grid functions.
-"""
-"""
-Created on Sat Jul 18 16:43:31 2020
-
-author: Mark Dransfield
-
+Reads a grid file into xarray DataSet.
+Author: Mark Helm Dransfield
+Created: Sat Jul 18 16:43:31 2020
+License: CC BY-SA
 """
 
 import numpy as np

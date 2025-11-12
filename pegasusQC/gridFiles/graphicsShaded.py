@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Make a shaded image of grid data.
+Author: Mark Helm Dransfield
+Created: Oct 2025
+License: CC BY-SA
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm

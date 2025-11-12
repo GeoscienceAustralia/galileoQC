@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Update the line-spacing info for the CoordinateFrame group in a `geoWhizz` file.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import numpy as np
 from pathlib import Path
 import h5py

@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Perform odd-even analysis of a channel of data in a `whizz_file`.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm

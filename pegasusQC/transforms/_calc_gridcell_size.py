@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Calculate a sensible gridding cell size.
+Author: Mark Helm Dransfield
+Created: Oct 2025
+License: CC BY-SA
+"""
+
 import numpy as np
 from pathlib import Path
 import xarray as xr

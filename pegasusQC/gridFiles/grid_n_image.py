@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Grid and image many channels of data from a `geoWhizz` file.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 
 import pegasusQC.utility.utility as util

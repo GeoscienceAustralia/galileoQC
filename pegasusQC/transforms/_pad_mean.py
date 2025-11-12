@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Pad a grid with mean values.
+Author: Mark Helm Dransfield
+Created: Oct 2025
+License: CC BY-SA
+"""
+
 import numpy as np
 
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle

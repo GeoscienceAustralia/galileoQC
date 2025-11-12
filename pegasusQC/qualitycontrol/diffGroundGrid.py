@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Display airborne and ground gravity data along a flight-line.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
 
 import numpy as np

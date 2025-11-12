@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
-Created on Sat Aug 14 20:28:20 2021
-
-@author: markdransfield
-
+A collection of utility functions for internal use.
+Author: Mark Helm Dransfield
+Created: Sat Aug 14 20:28:20 2021
+License: CC BY-SA
 """
 
 # import necessary modules

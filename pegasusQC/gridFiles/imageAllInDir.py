@@ -2,12 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Image all ERS grids in directory.
-"""
-"""
-Created on Sat Jul 18 16:43:31 2020
-
-author: Mark Dransfield
-
+Author: Mark Helm Dransfield
+Created: Sat Jul 18 16:43:31 2020
+License: CC BY-SA
 """
 
 from pathlib import Path

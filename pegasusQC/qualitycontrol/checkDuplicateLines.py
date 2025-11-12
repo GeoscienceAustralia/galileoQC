@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Check whizzFile for duplicate flight-lines.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
+"""
+
 def checkDuplicateLines(whizzFile):
     """
     Check the flight-lines in whizzfile and report any duplicate group names.

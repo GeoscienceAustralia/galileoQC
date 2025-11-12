@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Utility functions to sample gridded data onto a located line whizzFile.
+Sample gridded data onto a located line whizzFile.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 # import necessary modules
 
 import numpy as np

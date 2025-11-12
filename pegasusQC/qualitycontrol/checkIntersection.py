@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check absolute differences at traverse - control line intersections.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 # import necessary modules
 import numpy as np
 import h5py

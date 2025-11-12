@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot a statistical analysis.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 

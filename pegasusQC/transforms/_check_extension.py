@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Check that a grid is large enough for regional padding.
+Author: Mark Helm Dransfield
+Created: Oct 2025
+License: CC BY-SA
+"""
+
 import numpy as np
 
 

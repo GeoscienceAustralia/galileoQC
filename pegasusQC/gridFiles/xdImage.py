@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Display the gridded (raster) data in an xArray DataArray
+Display the gridded (raster) data in an xArray DataArray.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 
 import pegasusQC.utility.utility as util

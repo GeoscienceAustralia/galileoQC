@@ -2,14 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Some Geosoft colormaps (and the parula colormap).
-
-Created on Wed Jul 15 17:46:18 2020
-
-@author: markdransfield
+Copied: Wed Jul 15 17:46:18 2020 by Mark Helm Dransfield.
+@author: Joseph Barraud, Geophysics Labs, http://geophysicslabs.com
 """
 
-
-# -*- coding: utf-8 -*-
 """
 Definition of two colormaps: clra_128 and clrb_128 from Geosoft and parula from Matlab.
 See http://www.geosoft.com/media/uploads/resources/technical-notes/colourtables.pdf

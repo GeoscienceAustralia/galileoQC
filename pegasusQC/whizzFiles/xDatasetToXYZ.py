@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Write an `xArray` DataSet to a `geoWhizz` file. A STUB - DON'T USE!
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import numpy as np
 from pathlib import Path
 import pathlib

@@ -2,17 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 A collection of possibly useful QC functions.
+Author: Mark Helm Dransfield
+Created: Sat Aug 14 20:28:20 2021
+License: CC BY-SA
 """
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Aug 14 20:28:20 2021
 
-@author: markdransfield
-
-Utility functions, rarely used.
-"""
-# import necessary modules
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt

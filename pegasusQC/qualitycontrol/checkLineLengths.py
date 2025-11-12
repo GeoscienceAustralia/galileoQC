@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the flight-lines are of the required minimum length.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import h5py
 

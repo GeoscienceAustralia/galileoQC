@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Image a grid from file to display.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
+"""
+
 import numpy as np
 import pegasusQC.config as config
 from pegasusQC.gridFiles.xdImage import xdImage

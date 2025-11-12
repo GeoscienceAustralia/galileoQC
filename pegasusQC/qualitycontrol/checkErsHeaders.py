@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the ERS headers for grid files are consistent.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 
 import pegasusQC.gridFiles.read_ers as ers

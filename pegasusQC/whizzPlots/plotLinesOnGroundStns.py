@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot flight-line location over scatter plot of Australian ground gravity data.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py

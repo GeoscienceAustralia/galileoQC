@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Generate statistical plots for the difference between two channels.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt

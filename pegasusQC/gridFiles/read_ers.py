@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Read from an ermapper grid into numpy arrays.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 from pathlib import Path
 

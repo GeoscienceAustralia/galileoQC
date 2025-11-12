@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Interpolate point-located data from a 1-D to a 2-D xArray DataArray.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import numpy as np
 import xarray as xr
 import verde as vd

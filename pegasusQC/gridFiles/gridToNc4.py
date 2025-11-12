@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grid and image many channels of data from a `geoWhizz` file.
+Grid many channels of data from a `geoWhizz` file and write to netcdf4.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
 """
+
 import xarray as xr
 import pegasusQC.utility.utility as util
 import pegasusQC.gridFiles.read_ers as ers

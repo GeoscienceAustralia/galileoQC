@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Statistics from a grid file.
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
+"""
+
 import numpy as np
 from pegasusQC.gridFiles.gridfiles import gridfile_to_xa
 

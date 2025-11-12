@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Image the sum of three grids (trace of a tensor).
+Author: Mark Helm Dransfield
+Created: ca 2023
+License: CC BY-SA
+"""
+
 from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.gridFiles.gridfiles import gridfile_to_xa
 import pegasusQC.config as config
