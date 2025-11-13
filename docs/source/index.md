@@ -7,7 +7,7 @@ This project is still in development. Bugs are likely. Please do try it out, and
 :::
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 3
 :hidden:
 about.md
 starting.md

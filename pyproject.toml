@@ -15,6 +15,8 @@ description = "Quality control for airborne gravimetry and gravity gradiometry i
 readme = "README.md"
 requires-python = ">=3.7"
 
+license = "CC-BY-SA-4.0"
+
 dependencies = ["aseg-gdf2==0.7", "colorcet", "filebrowser", "h5py", "ipympl", 
 "matplotlib", "netCDF4", "numba", "numpy", "pathlib", "pooch", 'pyarrow', "pyproj", 
 "rioxarray", "scikit-image", "scipy", "verde", "xarray", "xrft"]
@@ -30,7 +32,6 @@ classifiers = [
 
     "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3",
-    # "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 

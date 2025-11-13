@@ -1,44 +1,28 @@
 # Getting Started
 
-The __pe*ga*susQC__ package is run from the Jupyter-lab notebook. You should create a working environment (called `whizz` in this documentation) with python3, pip, conda or miniconda
+The __pe*ga*susQC__ package is run from a Jupyterlab notebook. You should create a virtual working environment (called `whizz` in this documentation) with python venv.
 
 ## Installation
 
-To use __pe*ga*susQC__, first install it into your `whizz` environment using pip (conda should work as well but conda installations of __pe*ga*susQC__ are untested):
+To use __pe*ga*susQC__, first install it into your `whizz` environment using pip (conda installations of __pe*ga*susQC__ are untested):
 
 ```bash
 (whizz) $ pip install pegasusQC
 ```
 
-```bash
-(whizz) $ conda install pegasusQC
+Then start up a jupyterlab notebook. For more information about this, see [^Jupyter] . The Jupyterlab-Desktop app [^JupyterApp] also works.
+
+For more details see [Install Details](#installs-target).
+
+```{toctree}
+:maxdepth: 2
+:hidden:
+install_details.md
 ```
-
-Then start up a Jupyter-lab notebook. For more information about this, see [^Jupyter] . The Jupyter-lab app [^JupyterApp] is recommended.
-
-:::{note}
-While __pe*ga*susQC__ remains on the GA private repository, it can be installed with the following steps:
-
-Clone the repository using Git (or download the zip file from github, and extract the contents):
-
-```bash
-git clone https://github.com/GeoscienceAustralia/pegasusQC.git
-```
-Navigate to the cloned directory ("pegasusQC" for this example):
-
-```bash
-cd pegasusQC
-```
-Install the package via setup.py:
-
-```bash
-pip install .\name_of_directory_containing_setup_py
-```
-:::
 
 ## Session Setup
 
-In a Jupyter-lab notebook, set up your session with the following commands.
+In a jupyterlab notebook, set up your session with the following commands.
 
 Firstly import the necessary Python packages ...
 

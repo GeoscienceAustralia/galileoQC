@@ -8,7 +8,7 @@ The documentation is detailed and contains tutorials in Jupyter-lab notebooks.
 
 For installations on PCs running Win10, Win11, macos, Debian, Fedora, or Ubuntu.
 
-It is recommended that a MiniConda environment be set up for pe*ga*susQC with the current versions of python and pip.
+It is recommended that a virtual environment be set up for pe*ga*susQC with the current versions of python and pip.
 
 Installation is known to work using pip:
 

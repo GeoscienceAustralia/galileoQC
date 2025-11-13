@@ -26,12 +26,11 @@ __pe*ga*susQC__ is at early stage of development and will keep improving in the 
 
 ## Acknowledgements
 
-Lots of help from various people at GA, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine.
-The minimum curvature code was gratefully copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025.
+A massive amount of help, encouragement and support from many people at Geoscience Australia, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine. The minimum curvature code was copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025 and the graphical imaging code from graphics (https://github.com/jobar8/graphics) sometime in 2020. Grateful thanks to the authors of those codes as well as all the contributors to all the packages used.
 
 ## Testing
 
-The __pe*ga*susQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian, Fedora, and Ubuntu. All testing has been done using the JupyterLab Desktop app.
+The __pe*ga*susQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using the JupyterLab Desktop app.
 
 Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.
 
@@ -48,7 +47,14 @@ Once this is properly set up, people are encouraged to contribute.
 
 ## Licence
 
-```{include} license_copy.txt
+Creative Commons Attribution-ShareAlike 4.0 International
+
+This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, even for commercial purposes. If others remix, adapt, or build upon the material, they must license the modified material under identical terms. The full text is in [License](license-target).
+
+```{toctree}
+:maxdepth: 2
+:hidden:
+license.md
 ```
 
 ## The Airborne Gravity Deed
