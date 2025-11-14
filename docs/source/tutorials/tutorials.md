@@ -52,6 +52,14 @@ An important analysis tool in airborne geophysics generally is intersection anal
 Intersection_Analysis.ipynb
 ```
 
+## Repeat Line Analysis
+
+Another important analysis tool in airborne gravimetry in particular is repeat line analysis which analyses the repeatability in some channel of data over a series of flight-lines flown over the same planned line.
+
+```{toctree}
+CheckRepeats_Analysis.ipynb
+```
+
 ## Odd - Even Analysis
 
 For surveys where the flight-lines are more closely spaced than the low-pass filter wavelength, odd-even grid analysis ([^Sander_2002]) is useful for assessing the noise in gravimeter data.
