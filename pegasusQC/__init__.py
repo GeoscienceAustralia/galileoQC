@@ -80,7 +80,6 @@ from pegasusQC.qualitycontrol.checkDifference import checkDiff
 # Navigation and position checks
 from pegasusQC.qualitycontrol.checkClearance import (checkSafeClearance, checkClearance, checkDrape)
 from pegasusQC.qualitycontrol.checkIntersection import checkIntersection
-from pegasusQC.qualitycontrol.checkRMSIntersection import checkRMSIntersection
 from pegasusQC.qualitycontrol.checkSpeeds import checkSpeeds
 from pegasusQC.qualitycontrol.checkOverlaps import checkOverlaps
 from pegasusQC.qualitycontrol.checkXYPlan import checkXYPlan
