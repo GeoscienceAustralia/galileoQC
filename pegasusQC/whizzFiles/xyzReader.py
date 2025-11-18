@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Write the contents of an `XYZ` file to a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -27,22 +30,33 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
     Parameters
     ----------
     xyzFilePath : pathlib Path
+
         The pathlib Path to the Geosoft XYZ file.
+
     hdfFilePath : pathlib Path, optional
+
         The pathlib Path to the Whizz HDF5 file to be created. The default is ''
         leaving the Whizz file to have the same path as the input file but with
         a ".HDF5" extension.
+
     projectName : String, optional
+
         The name of the survey or project. The default is ''.
+
     line_scale : float, optional
+
         All line numbers in the XYZ file are multiplied by line_scale before
         writing to the HDF5 file.
+
     verbose : Bool, optional
+
         If False (the default) the output is reduced.
 
     Returns
     -------
-    None.
+    hdfFilePath : pathlib Path
+
+        The pathlib Path to the newly created Whizz HDF5 file.
 
     """
         
@@ -142,6 +156,7 @@ def read_xyz_header(filename):
     Parameters
     ----------
     xyzFilePath : String
+
         The name of the Geosoft XYZ file.
 
     Returns

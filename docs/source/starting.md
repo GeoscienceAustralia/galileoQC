@@ -4,7 +4,7 @@ The __pe*ga*susQC__ package is run from a Jupyterlab notebook. You should create
 
 ## Installation
 
-To use __pe*ga*susQC__, first install it into your `whizz` environment using pip (conda installations of __pe*ga*susQC__ are untested):
+To use __pe*ga*susQC__, first install it into your `whizz` environment using pip (conda installations of __pe*ga*susQC__ can work but conda has not been tested as fully as pip):
 
 ```bash
 (whizz) $ pip install pegasusQC
@@ -12,7 +12,7 @@ To use __pe*ga*susQC__, first install it into your `whizz` environment using pip
 
 Then start up a jupyterlab notebook. For more information about this, see [^Jupyter] . The Jupyterlab-Desktop app [^JupyterApp] also works.
 
-For more details see [Install Details](#installs-target).
+For more information on installation see [Install Details](#installs-target).
 
 ```{toctree}
 :maxdepth: 2
@@ -37,17 +37,17 @@ from pathlib import Path # useful for file names
 import pegasusQC as qc
 ```
 
-... and finally set the path to your field and plan data:
+... and finally set the path to your field and plan data. This might look something like this:
 
 ```python
 # Setup the path to the acquired data, ...
-data_root = "/Users/username/Documents/GitHub/pegasusQC/examples/"
-dx = Path(data_root + r'AGG/Canobie/20211130.xyz')
+data_root = r'.source/tutorials/'
+dx = Path(data_root + r'CanobieData/Canobie.xyz')
 dh = dx.with_suffix('.hdf5')
 
 # ..., and plan data.
 plan_root = data_root
-px = Path(plan_root + r'AGG/Canobie/902212_1.xyz')
+px = Path(plan_root + r'CanobieData/CanobiePlan.xyz')
 ph = px.with_suffix('.hdf5')
 ```
 
@@ -62,11 +62,9 @@ Now you are ready to QC your data!
 [^JupyterApp]: <https://github.com/jupyterlab/jupyterlab-desktop>
 
 
-## Package Installation and Setup on National Computing infrastructure
+## Installation on NCI Australia
 
-Finally, some users might want to install __pe*ga*susQC__ on the **NCIS**. The following notes might prove useful.
-
-	a. Setting up the python environment in NCI
+Finally, some users might want to install __pe*ga*susQC__ on their **NCI** (National Computational InfraStructure) environment. The following notes might prove useful. WARNING - some of the following information might be out of date.
 
 Using the instructions in this [link](https://opus.nci.org.au/display/Help/3.3+Using+a+custom+Python+virtual+environment+in+JupyterLab), set up a `python3` environment in your specific location. Due to memory/space limitations for each user, it is suggested that you make this custom python environment in your project directory in NCI. The environment will have a folder with the same name in your working directory after it is built:
 
@@ -79,7 +77,7 @@ For the QAQC python scripts, we need to install these extra `python3` packages w
 - &nbsp; Filebrowser
 - &nbsp; Matplotlib(version 3.6.2) 
 
-In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages shoud be placed in `site_packages` available in your python environment.
+In addition to the above packages, two customised scripts called `graphics.py` and `colors.py` can be downloaded from [here](https://github.com/jobar8/graphics). These packages should be placed in `site_packages` available in your python environment.
 
 Also make sure that you have all the following packages as well - if anything missing:
 

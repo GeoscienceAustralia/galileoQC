@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot the values of a channel for each survey flight-line.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -32,14 +35,23 @@ def plotChannelsLines(whizzFile, channels, flightLines, x='', mean_remove=False,
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : String
+
         The name of the channel or field to plot.
+
     flightLines : [String]
+
         A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0'] .
+
     x : String
+
         The name of the independent variable for the plot.
+
     xOffset : Bool, optional
+
         If True, map x to x - x[0] before plotting. The default is True.
 
     Returns

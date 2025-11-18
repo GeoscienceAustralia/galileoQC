@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 A collection of possibly useful plot functions, not in common use.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Aug 14 18:21:15 2021
+
 License: CC BY-SA
 """
 
@@ -34,16 +37,27 @@ def plotWsLineChannel(whizzFile1, flightLine1, channel1,
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightLine : String
+
         A flightline, e.g. '1000110.0'.
+
     channel : String
+
         The name of the channel or field to plot.
+
     x : String, optional
+
         The name of the independent variable for the plot. The default is ''.
+
     plotTitle : String, optional
+
         A title for the plot. The default is '' in which case the title will be Project Line Channel.
+
     xOffset : Bool, optional
+
         If True, map x to x - x[0] before plotting. The default is True.
 
     Returns
@@ -104,6 +118,9 @@ def plotWsLineChannel(whizzFile1, flightLine1, channel1,
     
     
 def _subplotCompare(ax, x1, y1, x2, y2, c1, c2, xLabel, yLabel, plotTitle):
+    """
+    A subplot for plotWsLineChannel.
+    """
     line1, = ax.plot(x1, y1, color='blue', lw=0.6, label=c1)
     line2, = ax.plot(x2, y2, color='green', lw=0.6, label=c2)
     ax.set_xlabel(xLabel, fontsize = 8)
@@ -117,6 +134,9 @@ def _subplotCompare(ax, x1, y1, x2, y2, c1, c2, xLabel, yLabel, plotTitle):
 
 
 def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
+    """
+    Get the positions (x,y,z) and channel data for a flight-line in a whizzFile.
+    """
     filename = str(whizzFile)
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
@@ -153,12 +173,19 @@ def plot_xcohere(whizzFile, flightLine, xchannel, ychannel):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightLine : String
+
         A flightline, e.g. '1000110.0'.
+
     xchannel : String
+
         The name of the first channel or field to analyse.
+
     ychannel : String
+
         The name of the second channel or field to analyse.
 
     Returns
@@ -199,11 +226,13 @@ def make_plot_title(group):
     Parameters
     ----------
     group : HDF5 Group
+
         Name of a HDF5 group that contains `ProjectName` and `BlockID` attributes.
 
     Returns
     -------
     plotTitle : String
+
         The plot title.
 
     """
@@ -222,13 +251,20 @@ def specificLinesMap(whizzFile, lines, easting='', northing=''):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         The name of a HDF5 Whizz file, including path and extension.
+
     lines : Array of String
+
         The lines to plot to the map
+
     easting : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute XChannel.
+
     northing : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
 
@@ -283,11 +319,16 @@ def statusMap(planFile='', planEast='', planNorth='', plotTitle=''):
     Parameters
     ----------
     planFile : Path
+
         The name of a HDF5 Whizz file, including path and extension, containg the plan.
+
     easting : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute XChannel.
+
     northing : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
 
@@ -344,14 +385,23 @@ def _plot_speed(t, t_label, speed, min_speed=54, max_speed=66, plot_title=''):
     Parameters
     ----------
     t : TYPE
+
         Time (sec) data vector.
+
     speed : TYPE
+
         The speed data vector.
+
     min_speed : TYPE, optional
+
         DESCRIPTION. The default is 54.
+
     max_speed : TYPE, optional
+
         DESCRIPTION. The default is 66.
+
     plot_title : TYPE, optional
+
         DESCRIPTION. The default is ''.
 
     Returns
@@ -377,6 +427,9 @@ def _plot_speed(t, t_label, speed, min_speed=54, max_speed=66, plot_title=''):
 
    
 def _plotcheckSafeClearance(projName, line, distance, clearance_chan='', altitude_chan='', terrain_chan='', alt=[], dtm=[], clearance=[]):
+    """
+    Creates a safe clearance plot.
+    """
     fig = plt.figure()
 
     ax = fig.add_subplot(2,1,1)

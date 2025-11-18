@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Apply the Craig Transform to (`Guv` + i `Gne`).
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -29,23 +32,35 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, mask_polygon=None, nan_mask=None):
     Parameters
     ----------
     Gne : xarray 2D DataArray
+
         Grid of NE component data in eotvos.
+
     Guv : xarray 2D DataArray
+
         Grid of UV component data in eotvos.
+
     firstorder : bool, optional
+
         If True, include first order Craig correction. Default False.
+
     mask_polygon : numpy 1D array, optional
+
         In order [min_x, max_x, min_y, max_y]. If the mask_polygon is given,
         then the output arrays will be masked to the area within the polygon
         defined by it. Default None.
+
     nan_mask : numpy 2D mask array, optional
+
         blah blah. Default None.
 
     Returns
     -------
     gD_result : xarray 2D DataArray
+
         the calculated (real part of the) down component of gravity
+
     gD_err : xarray 2D DataArray
+
         the calculated imaginary part of the down component of gravity
         
     """

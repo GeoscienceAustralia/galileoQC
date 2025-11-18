@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Image a grid from file to display.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -24,6 +27,7 @@ def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nono
     Parameters
     ----------
     gridFile : TYPE
+
         May be either an `ERS` or `NC` grid file. The default is ''.
 
     Returns

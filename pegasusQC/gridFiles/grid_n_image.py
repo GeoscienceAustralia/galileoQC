@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Grid and image many channels of data from a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -33,47 +36,78 @@ def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan
     Parameters
     ----------
     whizzFile : Path or String
+
         The Path to, or String name of, the whizz file in HDF5 format.
+
     z_chans : [String]
+
         An array of names of channels in `whizz_file` to be interpolated to a regular grid and imaged.
+
     grid_space : Float
+
         The distance between grid cell centres in grid distance units.
+
     lines : String Array, optional
+
         List of lines to be gridded. Default all lines.
+
     e_chan : String, optional
+
         The name of the x (easting) channel in `whizz_file`. Default is to use
         the `XChannel` attribute.
+
     n_chan : String, optional
+
         The name of the y (northing) channel in `whizz_file`. Default is to use
         the `YChannel` attribute.
+
     mr_chans : [String]
+
         An array of names of channels from `z_chans` whose mean along each survey line should be subtracted before gridding and imaging.
+
     d1_chans : [String]
+
         An array of names of channels from `z_chans` whose first difference along each survey line should be gridded and imaged.
+
     sh_chans : [String]
+
         An array of names of channels from `z_chans` whose imaged grid will be shaded.
+
     gridlines : Bool, optional
+
         If True (the default), then grid lines are drawn on the image, else not.
+
     method : string, optional
+
         The gridding algorithm to use in interpolating the data. Available is the Verde nearest
         neighbour method - "neighbours" and the SciPy GridData "linear" method. "neighbours" is
         much faster if `pykdtree` is installed. Default `neighbours` method.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+
     mask_pixels : Integer, optional
+
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
         location will be masked out. Default 1.
+
     numneighbours : Integer, optional
+
         If method='neighbours', then this is the number of neighbours to average. Default 1.
+
     bdist : float, optional
+
         If method is "minc", then this is the blanking distance in units of cell. Default None.
+
     maxiters : int, optional
+
         Maximum number of iterations for minc method. The default is 100.
 
     Returns
     -------
-    Nothing.
+    None.
 
     """
     # I changed the order of the inputs, so now I need to give feedback to users.

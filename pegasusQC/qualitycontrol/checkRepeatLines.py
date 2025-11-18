@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check statistics of repeat flight-lines.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -34,19 +37,32 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
     Parameters
     ----------
     whizzFiles : array of HDF5 Whizz file pathlib Paths
+
         The pathlib Paths to the Whizz HDF5 files containing the survey repeat line data.
+
     channel : String
+
         The name of the channel or field to analyse and plot. Usually a gravity channel.
+
     repeatLines : [String], optional
+
         A list of flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. 
+
     x : String, optional
+
         The name of the independent variable for the analysis. Defaults to whichever of `XChannel`
         or 'YChannel' has the largest range of values.
+
     y : String, optional
+
         The name of the independent variable for the analysis. Defaults to the `YChannel`.
+
     z : String, optional
+
         The name of the height variable for the analysis and plot. Defaults to the `AltitudeChannel`.
+
     xOffset : Bool, optional
+
         If True, map x to x - x[0] before plotting. The default is True.
 
     Returns
@@ -178,16 +194,25 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
     Parameters
     ----------
     whizzFiles : Array of String or pathlib Path
+
         Names of HDF5 Whizz files, including path and extension.
+
     channel : String
+
         The name of the channel which forms the first dependent variable.
         Its start, end and length after removal of NaNs and dummies is required.
+
     repeatLines : Array of String
+
         The flight-lines to be analysed.
+
     x : String, optional
+
         The name of the channel containing the `x` data to form the independent
         variable. Defaults to the `XChannel` attribute of each whizzFile.
+
     z : String, optional
+
         The name of the channel containing the altitude data which form the
         second dependent variable. Defaults to the `AltitudeChannel` attribute
         of each whizzFile.
@@ -195,19 +220,32 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
     Returns
     -------
     xBase : numpy 1D array of float
+
         The uniformly sampled `x` locations onto which all `z` and `channel` 
         data will be interpolated
+
     xData : numpy 2D array of float
+
         Returned as NaNs but of the correct size to write the data to. 
+
     gData : numpy 2D array of float
+
         Returned as NaNs but of the correct size to write the data to. 
+
     zData : numpy 2D array of float
+
         Returned as NaNs but of the correct size to write the data to. 
+
     minBigX : Float
+
         For all flight-lines, the minimum of the largest value of `x`.
+
     maxSmallX : Float
+
         For all flight-lines, the maximum of the smallest value of `x`.
+
     deltaX : Float
+
         The sampling spacing of the interpolant, `x`.
 
     """
@@ -391,13 +429,17 @@ def _selectXchannel(whizzFile, repeatLines):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of HDF5 Whizz file, including path and extension.
+
     repeatLines : Array of String
+
         The flight-lines to be analysed.
 
     Returns
     -------
     x : String
+
         The name of the channel to be used as the independent variable.
 
     """

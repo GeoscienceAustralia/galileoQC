@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check whizzFile for duplicate flight-lines.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -14,6 +17,7 @@ def checkDuplicateLines(whizzFile):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
 
     Returns

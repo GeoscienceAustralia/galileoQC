@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the calculation of the latitude (normal) correction.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -32,16 +35,25 @@ def checkLatCorr(whizzFile, latCorr, latitude='', lines=[], changeSign=False):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     latCorr : String
+
         The name of the geoWhizz field or channel containing the latitude correction
         (sometimes called "normal gravity").
+
     latitude : String, optional
+
         The name of the geoWhizz field or channel containing the latitude. The
         default is to read the latitude field name from the Coordinate Frame.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     changeSign : Bool, optional
+
         Occasionally the `latCorr` channel is the latitude effect, which has the opposite
         sign to the latitude correction. If changeSign = True, then `-latCorr` is used.
         Default False.
@@ -122,12 +134,15 @@ def _normalGravity(latitude):
 
     Parameters
     ----------
-    latitude (Float) : latitude in degrees (N pos, S neg).
-    
+    latitude : float
+
+        latitude in degrees (N pos, S neg).
 
     Returns
     -------
-    latitude correction (Float) : ellipsoid theoretical gravity in um/s/s.
+    latitude_correction : float
+
+        ellipsoid theoretical gravity in um/s/s.
 
     """
     

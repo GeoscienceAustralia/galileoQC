@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that the fourth difference of the magnetics is within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -38,41 +41,68 @@ def checkDiff(whizzFile, diff_chan='', raw_chan='',
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     diff_chan : String, optional
+
         The name of the channel in whizzFile containing the differenced mag data.
         Default is '', in which case raw_chan is used.
+
     raw_chan : String, optional
+
         The name of the channel in whizzFile containing the raw magnetic data data.
         Default is ''; if both raw_chan and diff_chan are '', then an error is reported.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     tChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured times. The
         default is to read the tChannel field name from the Coordinate Frame.
+
     limit : Float, optional
+
         The maximum allowed peak to peak variation. Default = 0.02
+
     nSamples : Integer, optional
+
         The number of samples (moving window) over which the test is applied.
         Default = 3000
+
     maxDuration : Float, optional
+
         The time in seconds (moving window) over which the test is applied.
         The default is to ignore this parameter.
+
     maxDistance : Float, optional
+
         The distance in metres (moving window) over which the test is applied.
         The default is to ignore this parameter.
+
     num_diff : Int, optional
+
         The number of differences to apply to `raw_chan` if used. The most common
         values are 4 or 8. Default 4.
+
     plot_flag : Bool, optional
+
         If True, all plots are generated.
+
     verbose : Bool, optional
+
         If True, a more verbose output is provided.
 
     Returns

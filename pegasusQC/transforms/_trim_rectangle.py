@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Trim a grid along each edge.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 

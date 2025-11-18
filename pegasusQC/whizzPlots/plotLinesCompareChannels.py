@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 For each flight-line, plot the given channels.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -31,16 +34,27 @@ def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, 
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightLine : List of String
+
         A list of flight-lines, e.g. ['1000110.0', '1000110.0'].
+
     x : String
+
         The name of the independent variable for the plot.
+
     channels : List of String
+
         The names of the channels or fields to plot.
+
     xOffset : Bool, optional
+
         If True, map x to x - x[0] before plotting. The default is True.
+
     mean_remove : Bool, optional
+
         If True, the y data will have their means subtracted before plotting. The default is False.
 
     Returns

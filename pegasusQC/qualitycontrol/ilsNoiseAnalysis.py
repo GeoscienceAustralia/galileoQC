@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Report the FTG in-line sum noise.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -34,35 +37,62 @@ def ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, 
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     diagComponent1 : String
+
         The name of the channel containing the first tensor diagonal (in-line) component.
+
     diagComponent2 : String
+
         The name of the channel containing the second tensor diagonal (in-line) component.
+
     diagComponent3 : String
+
         The name of the channel containing the third tensor diagonal (in-line) component.
+
     noiseSpec : Float, optional
+
         The noise specification (largest allowed in-line sum for any flight line). Default 17.0 E.
+
     vertaccel : String, optional
+
         The name of the channel containing the vertical velocity field. Default ''.
+
     vertvelocity : String, optional
+
         The name of the channel containing the vertical velocity field. Default ''.
+
     vertdispl : String, optional
+
         The name of the channel containing the vertical velocity field. Default ''.
+
     lines : String list, optional
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     labelLines : Bool, optional
+
         if True, label (with the line number) all points on the plot where the
         line failed the specification. Default False
+
     lowcut : Float, optional
+
         The low-pass frequency in Hz of the Butterworth filter applied if
         dontfilter == False. Default 0.03 Hz.
+
     highcut : Float, optional
+
         The high-pass frequency in Hz of the Butterworth filter applied if
         dontfilter == False. Default 0.1 Hz.
+
     dontfilter : Bool, optional
+
         If True, do not filter the data before calculating the in-line sum. Default True.
+
     verbose : Bool, optional
+
         If True, provide verbose printed reporting. Default False
 
     Returns

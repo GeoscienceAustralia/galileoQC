@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Calculate and plot statistics for channels against flight-lines.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -32,21 +35,34 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
     Parameters
     ----------
     whizzFile : String or pathlib Path.
+
         Name of a HDF5 Whizz file, including path and extension.
+
     allChannels : [String], optional.
+
         A list of the channels or fields to plot. Default is all in whizzFile.
+
     lines : String list, optional.
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     d1_chans : [String], optional.
+
         An array of names of channels from `allChannels` whose first difference
         along each survey line should be calculated before the statistics.
+
     mr_chans : [String], optional.
+
         An array of names of channels from `allChannels` whose mean along each
         survey line should be subtracted before calculating statistics.
+
     sin_chans : [String], optional.
+
         An array of names of channels from `allChannels` whose sine
         along each survey line should be calculated before the statistics.
+
     xaxis : String, optional
+
         If "linenumber" then the x axis variable is line number;
         if "ordinal" then it is just ordinal.
 

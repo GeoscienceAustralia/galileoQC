@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot a survey line map.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -28,30 +31,49 @@ def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanF
     Parameters
     ----------
     whizzFiles : Array of String or pathlib Path
+
         Each element is the name of a HDF5 Whizz file, including path and extension.
+
     easting : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute XChannel.
+
     northing : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
+
     whizzPlanFile : String or pathlib Path
+
         The name of a HDF5 Whizz file, including path and extension.
+
     planLines : Array of String
+
         Each element is the name of a survey line in whizzPlanFile, flown lines will
         only be plotted if their planned line number is in this list. Default [] ignores
         this limit.
+
     planEast : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute XChannel.
+
     planNorth : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute YChannel.
+
     blockpolygon : Array of lists of easting, northing, optional
+
         If provided, then the polygon is drawn.
+
     colourchan : String, optional
+
         The name of a channel in the whizzFiles.
+
     colourvalue : Float, optional
+
         If the colourchan and colourvalue are both provided, then the lines in the map
         will be coloured when the value of colourchan = colourvalue.
 
@@ -154,6 +176,9 @@ def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanF
 
 
 def plotsurveyboundary(ax, blockpolygon):
+    """
+    Plot the boundary line of a polygon to the axis.
+    """
     polygon = Polygon(blockpolygon, edgecolor='green', fill=False)
     ax.add_patch(polygon)  
     return

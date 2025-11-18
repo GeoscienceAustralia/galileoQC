@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Read from an ermapper grid into numpy arrays.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -15,6 +18,7 @@ def read_ers_image(ersFile, bandout=0):
     Read eastings, northings, value from an ermapper grid into numpy arrays.
 
     Can only handle a restricted range of ERMapper images. In particular:
+
        DataSetType = ERStorage
 
        DataType = Raster
@@ -26,23 +30,35 @@ def read_ers_image(ersFile, bandout=0):
     Parameters
     ----------
     ersFile : String or Path
+
         The name of the ERMapper file, including the `.ers` extension.
+
     bandout : Int, optional
+
         The band. The default is 0, which gives the same result as 1.
 
     Returns
     -------
     1D numpy array
+
         Eastings - vector containing coordinates of MIDPOINT of each
         pixel in an image row.
+
     1D numpy array
+
         Northings - vector containing coordinates of MIDPOINT of each
         pixel in an image row.
+
     2D numpy array
+
         The grid values at (e,n).
+
     String
+
         The geographic datum as read from `ersFile`.
+
     String
+
         The geographic projection as read from `ersFile`.
 
     """
@@ -125,14 +141,17 @@ def read_ers_header(imagefile):
     Parameters
     ----------
     imagefile : string
+
         Name of ERMAPPER header file.
 
     Returns
     -------
     flag : Bool
+
         True if operation was successful.
 
     headerdict : dictionary
+
         Contains ncells (scalar number of image pixels in easting direction),
         nrows (scalar number of image pixels in northing direction), 
         nbands (number of bands in image),
@@ -178,13 +197,17 @@ def _parse_header(imagefile, verbose=False):
     Parameters
     ----------
     imagefile : String
+
         The name of the ERMapper header file to read.
+
     verbose : Bool, optional
+
         If True, then prints out details. Default = False.
 
     Returns
     -------
     headerdict : Dictionary
+
         Contains the metadata read from the header file.
 
     """
@@ -348,11 +371,13 @@ def _translate_value(rawvalue):
     Parameters
     ----------
     rawvalue : TYPE
+
         DESCRIPTION.
 
     Returns
     -------
     list
+
         DESCRIPTION.
 
     """
@@ -398,10 +423,15 @@ def write_ers_image(imagefile, zz, nullcell=-1.0E32):
     Parameters
     ----------
     imagefile : String
+
         The name of the image file (includes path, but NOT the .ers suffix).
+
     zz : 2D Numpy Array
+
         The array to be written to the image file.
+
     nullcell : Float
+
         The value of any null cells (replaces any nans with this).
 
     Returns
@@ -435,8 +465,11 @@ def write_ers_header(imagefile, headerdict):
     Parameters
     ----------
     imagefile : String
+
         The name of the image file (includes path, but NOT the .ers suffix).
+
     headerdict : Dictionary
+
         As returned by _parse_header(imagefile).
 
     Returns

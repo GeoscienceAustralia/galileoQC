@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 A collection of utility functions for internal use.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Aug 14 20:28:20 2021
+
 License: CC BY-SA
 """
 
@@ -31,13 +34,17 @@ def _length(x, y):
     Parameters
     ----------
     x : numpy Float array
+
         DESCRIPTION.
+
     y : numpy Float array
+
         DESCRIPTION.
 
     Returns
     -------
     numpy Float array
+
         DESCRIPTION.
 
     """
@@ -51,17 +58,26 @@ def _displacement2(x0, x1, y0, y1):
     Parameters
     ----------
     x0 : TYPE
+
         DESCRIPTION.
+
     x1 : TYPE
+
         DESCRIPTION.
+
     y0 : TYPE
+
         DESCRIPTION.
+
     y1 : TYPE
+
         DESCRIPTION.
+
 
     Returns
     -------
     TYPE
+
         DESCRIPTION.
 
     """
@@ -75,19 +91,29 @@ def _butter_bandpass(lowcut, highcut, fs, order=5):
     Parameters
     ----------
     lowcut : Float
+
         The lowpass cutoff frequency or wavenumber.
+
     highcut : Float
+
         The highpass cutoff frequency or wavenumber.
+
     fs : Float
+
         The sample frequency or wavenumber.
+
     order : Integer, optional
+
         The filter order. Default 5.
 
     Returns
     -------
     b : Float
+
         DESCRIPTION.
+
     a : Float
+
         DESCRIPTION.
 
     """
@@ -106,19 +132,29 @@ def _butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     Parameters
     ----------
     data : Numpy 1D array
+
         The input data.
+
     lowcut : Float
+
         The lowpass cutoff frequency or wavenumber.
+
     highcut : Float
+
         The highpass cutoff frequency or wavenumber.
+
     fs : Float
+
         The sample frequency or wavenumber.
+
     order : Integer, optional
+
         The filter order. Default 5.
 
     Returns
     -------
     Numpy 1D array
+
         The output data.
 
     """
@@ -134,8 +170,11 @@ def _space_thou(x, pos):
     Parameters
     ----------
     x : 
+
         tick label.
+
     y : 
+
         tick position.
 
     Returns
@@ -160,11 +199,13 @@ def _get_lineName(linegroup):
     Parameters
     ----------
     linegroup : HDF5 group
+
         The subgroup containing the line.
 
     Returns
     -------
     lineName : String
+
         The line number and flight number formatted like LLLL.LL:FFF.
 
     """
@@ -189,17 +230,25 @@ def _rotateCoords(x, y, angle):
     Parameters
     ----------
     x : numpy Float 1D array
+
         DESCRIPTION.
+
     y : numpy Float 1D array
+
         DESCRIPTION.
+
     angle : Float
+
         Angle in radians by which coordinates are to be rotated.
 
     Returns
     -------
     xr : numpy Float 1D array
+
         DESCRIPTION.
+
     yr : numpy Float 1D array
+
         DESCRIPTION.
 
     """
@@ -217,12 +266,19 @@ def _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDist
     Parameters
     ----------
     num_fids_in_exceedance : Integer
+
         DESCRIPTION.
+
     len_exceedance : Float
+
         DESCRIPTION.
+
     maxCounter : Integer
+
         DESCRIPTION.
+
     maxDistance : Float
+
         DESCRIPTION.
 
     Returns
@@ -249,17 +305,25 @@ def _failsDeviation(data, limit, nSamples):
     Parameters
     ----------
     data : Numpy 1D Float array
+
         The data to be checked.
+
     limit : Float
+
         The limit, assumed > 0.
+
     nSamples : Float
+
         Maximum allowed number of deviations allowed.
 
     Returns
     -------
     Bool
+
         True if the data failed.
+
     Float
+
         The number of exceedances (regardless of whether consecutive).
     
     """
@@ -297,21 +361,33 @@ def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False
     Parameters
     ----------
     il1 : numpy 1D array
+
         The first in-line component data.
+
     il2 : numpy 1D array
+
         The second in-line component data.
+
     il3 : numpy 1D array
+
         The third in-line component data.
+
     fs : Float
+
         The sample frequency.
+
     lowcut : Float
+
         The low-pass frequency in Hz of the filter.
+
     highcut : Float
+
         The high-pass frequency in Hz of the filter.
 
     Returns
     -------
     numpy 1D array
+
         The filtered in-line sum.
 
     """
@@ -328,6 +404,7 @@ def _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False
 def _get_line_planfiles(planPaths, gLineMeas, verbose=True):
     """
     verbose : Bool, optional
+
         If True, reports details for a failed line.
     """
     planLineInPlan = False
@@ -353,17 +430,25 @@ def getPlannedLine(gPlan, gLineMeas, verbose=True):
     Parameters
     ----------
     gPlan : HDF5 group
+
         The ['Lines'] group for all the survey lines in a survey plan file.
+
     gLineMeas : HDF5 group
+
         The ['Lines'][line] group for a single survey line in a measured survey file.
+
     verbose : Bool, optional
+
         If True, reports details for a failed line.
 
     Returns
     -------
     planLineInPlan : Bool
+
         True if `gpline` found.
+
     gpline : HDF5 group
+
         The desired line group in the plan lines group.
     """
     planLineInPlan = False
@@ -392,15 +477,21 @@ def getLineNumberInGroup(linesgroup, lineNumber):
     Parameters
     ----------
     linesgroup : HDF5 group
+
         The ['Lines'] group for all the survey lines in a whizzfile.
+
     lineNumber : HDF5 group
+
         The ['Lines'][line] group for a single survey line in a whizzfile.
 
     Returns
     -------
     lineInGroup : Bool
+
         True if `gpline` found.
+
     gpline : HDF5 group
+
         The desired line group in the plan lines group.
     """
     lineInGroup = False
@@ -428,6 +519,7 @@ def controls_lessthan_1000(all_lines):
     Parameters
     ----------
     all_lines : list of strings
+
         The line numbers to be separated.
 
     Returns
@@ -453,6 +545,7 @@ def controls_nineteen(all_lines):
     Parameters
     ----------
     all_lines : list of strings
+
         The line numbers to be separated.
 
     Returns
@@ -477,10 +570,15 @@ def convertUTMtoGeo(crs_epsg, x_utm, y_utm):
     Parameters
     ----------
     crs_epsg : Integer
+
         The common datum CRS EPSG code.
+
     x_utm : Float
+
         The projected x or easting.
+
     y_utm : Float
+
         The projected y or northing.
 
     Returns
@@ -522,10 +620,12 @@ def _print_wrappedlist(mylist, width=70):
     Parameters
     ----------
     mylist : list(str).
-    A list of strings to be printed.
+
+        A list of strings to be printed.
 
     width : int, optional
-    The wrapping width, default 70 characters.
+
+        The wrapping width, default 70 characters.
 
     Returns
     -------

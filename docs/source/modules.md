@@ -1,12 +1,11 @@
 (modules-target)=
 # API
 
-The link to the API is here.
+This page contains auto-generated API reference documentation.
 
 ```{eval-rst}
-.. autosummary::
-	:recursive:
-    :toctree: generated
+.. toctree::
+   :maxdepth: 2
 
-    pegasusQC 
+   apidocs/index
 ```

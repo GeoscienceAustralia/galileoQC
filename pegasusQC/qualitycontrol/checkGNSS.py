@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check GNSS statistics are within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -24,25 +27,44 @@ def checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, ma
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     num_sats : String
+
         Name of the channel containing the number of satellites visible for
         each measurement.
+
     pdop : String
+
         Name of the channel containing the PDOP for each measurement.
+
     vdop : String
+
         Name of the channel containing the VDOP for each measurement.
+
     hdop : String
+
         Name of the channel containing the HDOP for each measurement.
+
     nsats_min : Integer, optional
+
         The minimum number of satellites required, default 4.
+
     max_pdop : Integer, optional
+
         The maximum PDOP allowed, default 6
+
     max_vdop : Integer, optional
+
         The maximum VDOP allowed, default 6
+
     max_hdop : Integer, optional
+
         The maximum HDOP allowed, default 6
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns

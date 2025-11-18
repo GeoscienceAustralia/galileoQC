@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that aircraft ground speed is within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -49,35 +52,58 @@ def checkSpeeds(whizzFile, lines=[], xChannel='', yChannel='', tChannel='', vel_
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     tChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured times. The
         default is to read the tChannel field name from the Coordinate Frame.
+
     nominalSpeed : Float, optional
+
         The specified ground speed in m/s. The default is 60.0.
+
     maxDuration : Float, optional
+
         The time in seconds over which the speed estimate is determined.
         The default is 13.3.
+
     maxDistance : Float, optional
+
         The distance in metres over which the speed estimate is determined.
         The default is 1000.0.
+
     allowance : Float, optional
+
         The magnitude, relative to the nominalSpeed, of the range of allowed
         speeds. The default is to use `allowed_range` or, failing that, 0.1 (i.e. +/- 10% of nominal).
+
     allowed_range : [Float], optional
+
         The minimum and maximum allowed speeds as an array, `[min_allowed, max_allowed]`. The
         default is to use `allowance`.
+
     minSafeSpeed : Float, optional
+
         The minimum allowed instantaneous safe speed in m/s. The default is 42.0.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line. Default False.
 
     Returns
@@ -143,38 +169,67 @@ def _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X
     Parameters
     ----------
     group : HDF5 Group
+
         The Whizz line group containing the survey line data.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     maxDuration : Float, optional
+
         The time in seconds over which the speed estimate is determined.
         The default is 0.0.
+
     maxDistance : Float, optional
+
         The distance in metres over which the speed estimate is determined.
         The default is 0.0.
+
     xChannel : String, optional
+
         The field in the line containing X positions. The default is 'X'.
+
     yChannel : String, optional
+
         The field in the line containing Y positions. The default is 'Y'.
+
     tChannel : String, optional
+
         The field in the line containing sample times. The default is 'time'.
+
     vel_north : String, optional
+
         The field in the line containing velocity north. The default is ''.
+
     vel_east : String, optional
+
         The field in the line containing velocity east. The default is ''.
+
     nominalSpeed : Float, optional
+
         The specified ground speed in m/s. The default is 60.0.
+
     allowance : Float, optional
+
         The magnitude, relative to the nominalSpeed, of the range of allowed
         speeds. The default is 0.1 (i.e. +/- 10% of nominal).
+
     allowed_range : [Float], optional
+
         The minimum and maximum allowed speeds as an array, `[min_allowed, max_allowed]`. The
         default is to use `allowance`.
+
     minSafeSpeed : Float, optional
+
         The minimum allowed instantaneous safe speed in m/s. The default is 42.0.
+
     title_str : String, optional
+
         A title string for the plots. Default ''.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line. Default False.
 
     Returns

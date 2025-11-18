@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the ERS headers for grid files are consistent.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -20,6 +23,7 @@ def checkErsHeaders(folderPath=r'\.'):
     Parameters
     ----------
     folderPath : Path, optional
+
         The folder or directory containing the .ers files. The default is backslash dot.
 
     Returns
@@ -80,31 +84,53 @@ def _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes,
     Parameters
     ----------
     ncells : Integer
+
         DESCRIPTION.
+
     nrows : Integer
+
         DESCRIPTION.
+
     nbands : Integer
+
         DESCRIPTION.
+
     nullcell : Integer
+
         DESCRIPTION.
+
     precision : Integer
+
         DESCRIPTION.
+
     headerbytes : Integer
+
         DESCRIPTION.
+
     originalnullcell : Integer
+
         DESCRIPTION.
+
     byteorder : Integer
+
         DESCRIPTION.
+
     datum : Integer
+
         DESCRIPTION.
+
     projection : Integer
+
         DESCRIPTION.
 
     Returns
     -------
     allOk : Bool
+
         True if no errors found, else False.
+
     reportStr : String
+
         A report listing all errors found.
 
     """

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check for sufficient overlap length for overlapping flight-lines.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -31,14 +34,23 @@ def checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, to be checked.
+
     min_overlap : Float, optional
+
         The minimum overlap distance in km, default 7.6 km.
+
     lines : String list, optional.
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     verbose : Bool, optional
+
         If True, report status of all overlaps, else only report errors. Default False.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line.
 
     Returns

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Pad a grid with regional data.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -34,20 +37,30 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
     Parameters
     ----------
     Gne_grid : xarray 2D DataArray
+
         Gne grid to be expanded.
+
     Guv_grid : xarray 2D DataArray
+
         Guv grid to be expanded.
+
     pad_cells : int
+
         Number of cells to add to the grid along each of the four sides.
         The resultant grid is thus larger by `2 x pad_cells` in both directions.
+
     regional_grid : xarray 2D DataArray
+
         Regional (vertical) gravity grid
+
     firstorder : bool, optional
+
         If True, include first order Craig correction. Default False.
 
     Returns
     -------
     Gne_x_grid, Guv_x_grid : (xarray 2D DataArray, xarray 2D DataArray)
+
         the expanded grids.
         
     """
@@ -137,8 +150,11 @@ def _scaling_doubtful(grid1, grid2):
     Parameters
     ----------
     grid1 : xarray 2D DataArray
+
         A grid for comparison.
+
     grid2 : xarray 2D DataArray
+
         A grid for comparison.
 
     Returns

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Create a synthetic data set for testing.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -26,7 +29,9 @@ def sphereSurvey(numstns=None):
 
     Returns
     -------
-    n, e, d, Ann, Ane, And, Aee, Aed, Add, Auv, AD : a list of numpy 1D arrays
+    n, e, d, Ann, Ane, And, Aee, Aed, Add, Auv, AD : 
+
+        a list of numpy 1D arrays
 
     """
     # survey parameters - note that the loop order below is important.
@@ -82,18 +87,27 @@ def sphere(xm, xs, rs, ps):
     Parameters
     ----------
     xm : numpy 2D array
+
         The NED coordinates of the synthetic survey measurement
         points in metres. Array size is [n,3] for `n` measurements.
+
     xs : numpy 1D array
+
         The NED coordinates of the centre of the sphere in metres.
+
     rs : str
+
         The radius of the sphere in metres.
+
     ps : float
+
         The density of the sphere in gm/cc (== tonnes per cubic metre).
 
     Returns
     -------
     Gnn, Gne, Gnd, Gee, Ged, Gdd, Guv, gD : a list of numpy 1D arrays
+
+        gravity gradients and vertical acceleration.
 
     """
 
@@ -143,25 +157,39 @@ def _make_xr(data, name, units, n, e, n_chan='northing', e_chan='easting'):
     Parameters
     ----------
     data : numpy 1D array
+
         Airborne survey line-based data.
+
     name : str
+
         Name of the `data`.
+
     units : str
+
         Name of the units of the `data`.
+
     n : numpy 1D array
+
         The northings (or 'y' coordinates) for the `data`. Must be in metres.
+
     e : numpy 1D array
+
         The eastings (or 'x' coordinates) for the `data`. Must be in metres.
+
     n_chan : str, optional
+
         The name to be given to the `n` data, usually 'northing' or 'y'.
         Default 'northing'.
+
     e_chan : str, optional
+
         The name to be given to the `e` data, usually 'easting' or 'x'.
         Default 'easting'.
 
     Returns
     -------
     ds : xarray 1D DataSet
+
         DataSet containing the provided data, dimensioned by fiducial.
 
     """

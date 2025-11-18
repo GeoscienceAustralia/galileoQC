@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Image the grid of the difference between two channels.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Jul 18 16:43:31 2020
+
 License: CC BY-SA
 """
 
@@ -14,9 +17,6 @@ from pegasusQC.gridFiles.xarray_to_grid import xarray_to_grid
 from pegasusQC.gridFiles.xdImage import xdImage
 import pegasusQC.gridFiles.gridutility as gut
 
-# groupName = config.groupName
-# projectName = config.projectName
-
 
 def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1):
     """
@@ -25,25 +25,38 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbou
     Parameters
     ----------
     whizzFile : Path or String
+
         The Path to, or String name of, the whizz file in HDF5 format.
+
     channel1 : String
+
         A name of a channel in `whizz_file`.
+
     channel2 : String
+
         A name of a channel in `whizz_file`.
+
     grid_space : Float
+
         The distance between grid cell centres in grid distance units.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+
     mask_pixels : Integer, optional
+
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
         location will be masked out. Default 1.
+
     numneighbours : Integer, optional
+
         If method='neighbours', then this is the number of neighbours to average. Default 5.
 
     Returns
     -------
-    Nothing.
+    None.
 
     """
     print(f'Gridding and imaging {channel1} - {channel2}.')

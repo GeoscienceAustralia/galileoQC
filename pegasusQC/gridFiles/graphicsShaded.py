@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Make a shaded image of grid data.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -24,10 +27,12 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
+def graphicsShaded(
+    e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
                    minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
                    hs=True, azdeg=45, ax=None, origin='upper', cb_title='',
-                   whizzfile=None, e_chan = '', n_chan=''):
+                   whizzfile=None, e_chan = '', n_chan=''
+):
     """
     Creates a colour image of a data array, with colour bar and grid-lines. The
     shape of z must be $shape(e) \times shape(n)$. The (e, n, z) typically are the 
@@ -36,46 +41,81 @@ def graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='non
 
     Parameters
     ----------
-    e : np.array(Float, 1D
+    e : np.array(Float, 1D)
+
         The easting vector.
+
     n : np.array(Float, 1D)
+
         The northing vector.
+
     z : np.array(Float, 2D)
+
         The data to be imaged (referenced to the easting and northing positions).
+
     mytitle : String
+
         The figure title.
+
     colormap : Colormap, optional
+
         A colour map, eg cc.m_CET_L9. The default is config.qc_colormap.
+
     cmap_norm : String, optional
+
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
         (equlaization stretch); 'auto'. The default is 'nonorm'.
+
     minClip : Float, optional
+
         z -> z < minClip : minClip: z. The default is np.nan - no clipping.
+
     maxClip : Float, optional
+
         z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+
     gridlines : Bool, optional
+
         If True (the default), then grid lines are drawn on the image, else not.
+
     cb_ticks : TYPE, optional
+
         DESCRIPTION. The default is 'stats'.
+
     nSigma : Float, optional
+
         Not currently used. The default is 2.
+
     hs : Bool, optional
+
         hill-shading. The default is True.
+
     azdeg: Float, optional
+
         The shading azimuth in degrees from north, defaults to 45 deg.
+
     ax : Axis, optional
+
         The Matplotlib figure axis to be plotted to. Default None, in which case a new
         figure is made.
+
     origin : String, optional
+
         {'upper', 'lower'} Place the [0, 0] index of the array in the upper left or lower left corner
         of the Axes. The convention (the default) 'upper' is typically used for
         matrices and images.
+
     whizzfile : pathlib Path, optional
+
         If provided, the path to the whizz survey file. Default None.
+
     e_chan : String, optional
+
         The name of the field containing eastings. The default is the name
         stored in the Coordinates attribute XChannel.
+
     n_chan : String, optional
+
         The name of the field containing northings. The default is the name
         stored in the Coordinates attribute YChannel.
 

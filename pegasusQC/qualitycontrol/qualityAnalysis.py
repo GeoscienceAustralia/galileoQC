@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 A collection of possibly useful QC functions.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Aug 14 20:28:20 2021
+
 License: CC BY-SA
 """
 
@@ -56,10 +59,13 @@ def checkVertAcc(whizzFile, vertvelocity, lines=[]):
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     vertvelocity : 
         
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
@@ -107,8 +113,11 @@ def checkVertAccStats(whizzFile, lines=[]):
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
@@ -172,12 +181,19 @@ def checkStatcor(whizzFile, statcor, flight='', lines=[]):
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     statcor : String
+
         The name of the channel containing the static corrections.
+
     flight : String, optional
+
         The name of the channel containing the flight number. The default is to use the line attribute.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
@@ -229,10 +245,15 @@ def lineStats(whizzFile, channel, lines=[]):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : String
+
         The name of the channel to plot.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns
@@ -283,12 +304,19 @@ def statsChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightLines : String List, optional
+
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+
     channel1 : String
+
         The name of a channel.
+
     channel2 : String
+
         The name of a channel.
 
     Returns

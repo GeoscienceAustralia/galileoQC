@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check aircraft ground clearances.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -35,25 +38,40 @@ def checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', al
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     minimumAllowedClearance : Float
+
         The planned clearance between above the terrain in metres.
+
     clearance_chan : String, optional
+
         The name of the terrain clearance field in the Lines group
         of the Whizz HDF5 file.
+
     altitude_chan : String, optional
+
         The name of the absolute altitude or height field in the Lines group
         of the Whizz HDF5 file.
+
     terrain_chan : String, optional
+
         The name of the absolute terrain or DTM height field in the Lines group
         of the Whizz HDF5 file.
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     plot_flag : Bool, optional
+
         If True, plot a map of each pair of intersecting lines where the `zChannel`
         values differ by more than `max_allowed_deltaZ`. Default False.
 
@@ -125,25 +143,40 @@ def checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     clearance_chan : String, optional
+
         The name of the terrain clearance field in the Lines group
         of the Whizz HDF5 file.
+
     altitude_chan : String, optional
+
         The name of the absolute altitude or height field in the Lines group
         of the Whizz HDF5 file.
+
     terrain_chan : String, optional
+
         The name of the absolute terrain or DTM height field in the Lines group
         of the Whizz HDF5 file.
+
     nominalClearance : Float
+
         The planned clearance between above the terrain in metres.
+
     allowance : Float, optional
+
         The absolute maximum deviation allowed from the planned clearance in
         metres. The default is 20.0.
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
 
@@ -230,20 +263,33 @@ def checkDrape(whizzFile, altitude, drapeChannel, warningClearance = 20.0, xChan
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     altitude : String
+
         The name of the geoWhizz field or channel containing the measured altitudes.
+
     drapeChannel : String
+
         The name of the geoWhizz field or channel containing the measured drape heights.
+
     warningClearance : Float, optional
+
         DESCRIPTION. The default is 20.0.
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     plot_flag : Bool, optional
+
         If True, plot a map of each pair of intersecting lines where the `zChannel`
         values differ by more than `max_allowed_deltaZ`. Default False.
 

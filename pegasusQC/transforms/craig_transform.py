@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Craig transform Gne/Guv to gD.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -34,50 +37,80 @@ def craig_transform(
     Parameters
     ----------
     whizzFile : Path or String, optional
+
         The Path to, or String name of, the whizz file in HDF5 format.
         Default None, in which case the transform is performed on internally
         generated synthetic data.
+
     gne_chan : String, optional
+
         The name of the channel in `whizzFile` containing the Gne survey data.
         Default None but must be provided if `whizzfile` is given.
+
     guv_chan : String, optional
+
         The name of the channel in `whizzFile` containing the Guv survey data.
         Default None but must be provided if `whizzfile` is given.
+
     gd_chan : String, optional
+
         The name of the channel in `whizzFile` to write the gD output to. If the
         name already exists in the whizzFile, then the new data are NOT written.
         Default None in which case, the new data are NOT written.
+
     altitude_chan : String, optional
+
         The name of the channel in `whizzFile` containing the altitude data.
         Default None and ignored if provided. Later versions of s/w may use
         this input.
+
     cell_size : float, optional
+
         The grid cell size. Recommended as ~1/4 line spacing. Default None in
         which case an "optimum" (?!) number is calculated internally. Generally
         it is better to provide ~1/4 line spacing.
+
     result_units : String, optional
+
         The gravity units of the final resultant grid. Must be either "mGal" or
         "gu" or "um/s/s". Default "um/s/s".
+
     mask_polygon : ?##?, optional
+
         The polygon of the survey boundary. Final output will be trimmed to
         this polygon if provided. Default None and the output is trimmed to
         the smallest rectangle containing all the input curvature data.
+
     pad_cells : int, optional
+
         The number of grid cells to pad the data. Default None in which case
         an optimum number is calculated internally.
+
     padding_mode : String, optional
+
         The method to be used in filling padding around the grid before DFT.
         Choices are "mean" and "regional". Default is "regional" which requires
         that `regional_grid_file` is provided.
+
     regional_grid_file : String, optional
+
         Name of the ERS file containing the regional grid. Required if
         `padding_mode` == "regional". Default None.
+
     regional_grav_units : String, optional
+
         The gravity units of the regional grid. Must be either "mGal" or
         "gu" or "um/s/s". Required if `padding_mode` == "regional".
         Default "mGal".
+
     firstorder : bool, optional
+
         If True, include first order Craig correction. Default False.
+
+    RETURNS
+    ----------
+    None:
+    
     """
     if not whizzFile is None and padding_mode == "regional":
         if regional_grid_file is None:

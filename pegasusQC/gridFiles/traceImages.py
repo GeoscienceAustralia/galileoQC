@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Image the sum of three grids (trace of a tensor).
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -19,14 +22,23 @@ def traceImages(file1, file2, file3, plotTitle, units=''):
     Parameters
     ----------
     file1 : String
+
         A grid file containing the first diagonal tensor component. May be either an `ERS` or `NC` grid file.
+
     file2 : String
+
         A grid file containing the second diagonal tensor component. May be either an `ERS` or `NC` grid file.
+
     file3 : String
+
         A grid file containing the third diagonal tensor component. May be either an `ERS` or `NC` grid file.
+
     plotTitle : String
+
         A title for the plot of the trace image.
+
     units : String, optional
+
         Plotted to the colorbar title. Default is empty string.
 
     Returns

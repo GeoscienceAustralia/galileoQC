@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Update the metadata for a `line group` in a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -36,30 +39,45 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz observations file, including path and extension.
+
     planfiles : Either String or pathlib Path of list of same, optional
+
         Name of HDF5 Whizz plan file(s), including path and extension. Default is None
         which results in no planned_line attributes being written to the observations
         whizz file.
+
     line_type : TYPE, optional
+
         Either 'Xcal_nsw' or 'SGL_GA' or 'SGL_NSW' or SGL_GDF' or 'NRG' or 'Xcal_can'
         or 'ARK'.
         The default is '' which causes the `line`s 'PlannedLine' attribute to be set
         to `planned_line`.
+
     line : String
+
         A flightline, e.g. '1000110.0'.
+
     planned_line : String, optional
+
         A flightline, e.g. '1000110.0' in a separate whizzFile containing the
         planned x,y,z locations of the survey flightlines. Defaults to '0'.
+
     flight_chan : String, optional
+
         The name of the data channel containing the flight numbers. If provided,
         the flight numbers will be stored as an attribute of each line group. The
         default is to not store them.
+
     date_chan : String, optional
+
         The name of the data channel containing the dates. If provided,
         the dates will be stored as an attribute of each line group. The
         default is to not store them.
+
     verbose : Bool, optional
+
         If False (the default) the output is reduced.
 
     Returns

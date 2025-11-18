@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that horizontal deviations from the planned aircraft path are within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -35,49 +38,78 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', mea
     Parameters
     ----------
     planPaths : array of String or pathlib Path
+
         Names of HDF5 Whizz files, including path and extension, with the survey
         positions plan.
+
     measPath : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, with the survey
         measured data.
+
     lines : String list, optional.
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     planX : String, optional
+
         The name of the geoWhizz field or channel containing the planned x position. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     planY : String, optional
+
         The name of the geoWhizz field or channel containing the planned y position. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     measX : String, optional
+
         The name of the geoWhizz field or channel containing the measured x position. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     measY : String, optional
+
         The name of the geoWhizz field or channel containing the measured y position. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     allowance : Float, optional
+
         The allowed horizontal distance for the measured line from the planned
         line. If any portion of a measured line is further than this from the
         planned position for more than the maximum allowed number of fids or the
         maximum allowed distance, then the line fails. The default is 200.0.
+
     maxCounter : Int, optional
+
         The maximum number of consecutive fids for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 14.
+
     maxDistance : Float, optional
+
         The maximum number of consecutive metres for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 0.
+
     known : String, optional
+
         If present, the name of the channel containing the "known error" flag.
         This is reported against any error so that known errors can be distinguished
         from unknown errors.
+
     needConvertToGeodetic : Bool, optional
+
         If True, convert plan coordinates to geographic coordinates to match measured coordinates.
+
     crs_epsg : pyproj crs, optional
+
         Ideally an EPSG integer code, eg 7854. Default 0, must be a real code if needConvertToGeodetic.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line.
+
     verbose : Bool, optional
+
         If True, reports details for each failed line.
 
     Returns
@@ -249,18 +281,31 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
     Parameters
     ----------
     x : TYPE
+
         DESCRIPTION.
+
     y : TYPE
+
         DESCRIPTION.
+
     allowance : TYPE
+
         DESCRIPTION.
+
     line : TYPE
+
         DESCRIPTION.
+
     planLine : TYPE
+
         DESCRIPTION.
+
     dirn : TYPE
+
         DESCRIPTION.
+
     geoCoords : Bool, optional
+
         If True, provide 5 decimal places on axis labelling, else 0.
 
     Returns

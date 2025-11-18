@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Statistics from a grid file.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -21,12 +24,15 @@ def imageStats(whizzFile=''):
     Parameters
     ----------
     whizzFile : Path, optional
+
         The Path to the grid file in either ERS or NC format. Default is '' in
         which case a file browser allows the user to select the grid file.
 
     Returns
     -------
-    report (String) : the statistical summary report.
+    report (String) :
+
+        the statistical summary report.
 
     """
     xa, fileUsed = gridfile_to_xa(whizzFile, bandout=0)

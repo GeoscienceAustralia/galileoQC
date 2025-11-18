@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 A library of geophysical QA/QC functions for airborne gravity (and magnetic) survey data.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Calculates the differential curvatures of gravity.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -20,10 +23,15 @@ def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
     Parameters
     ----------
     gravity : xarray 2D DataArray
+
         Grid to be transformed.
+
     firstorder : bool, optional
+
         If True, include first order Craig correction. Default False.
+
     scale : float
+
         After the transform is complete, the output grids are
         multiplied by scale. Usually, the input is gravity in
         mGal or um/s/s and the desired outputs are gradients
@@ -32,6 +40,7 @@ def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
     Returns
     -------
     gne, guv : list(xarray 2D DataArray)
+
         The differential curvatures of gravity.
         
     """

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Report the Falcon difference noise between A and B complement data.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -27,17 +30,28 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     turbulence : String
+
         The name of the channel containing the turbulence field.
+
     aD : String
+
         The name of the channel containing the A complement gravity data.
+
     bD : String
+
         The name of the channel containing the B complement gravity data.
+
     error_spec : Float, optional
+
         The value above which the difference noise is excessive and is
         reported. Default 5.0.
+
     low_cut : Float, optional
+
         The low frequency cut-off frequency (in Hz) for the band-pass filtering
         applied before differencing. Default 0.001 (ie 1 mHz).
 

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Utility functions to add or update channel metadata.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -23,18 +26,31 @@ def updateChannelAttributes(whizzFile, channel, name='', units='', alias='', des
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : String
+
         The name of the channel whose attributes are to be changed.
+
     name : String, optional
+
         The new name. The default is ''.
+
     units : String, optional
+
         The new units. The default is ''.
+
     alias : String, optional
+
         The new alias. The default is ''.
+
     description : String, optional
+
         The new description. The default is ''.
+
     chan_precision : Integer, optional
+
         The new chan_precision (number of places after decimal point). The default is -1 (unknown).
 
     Returns

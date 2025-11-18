@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check data gaps are within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -23,12 +26,19 @@ def checkGaps(whizzFile, ignored_chans=[], maxGapSec=0.0, maxNumGaps=0, lines=[]
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     maxGapSec :  Float, optional
+
         The largest allowed gap measured in seconds. Default 0.0
+
     maxNumGaps : Integer, optional
+
         The maximum number of gaps allowed on any survey line. Default 0
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns

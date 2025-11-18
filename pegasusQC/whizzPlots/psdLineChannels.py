@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Power spectral density plot of channels in a flight-line.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -27,14 +30,23 @@ def psdLineChannels(whizzFile, flightLine, channels, time='', plotTitle = ''):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightLine : String
+
         A flightline, e.g. '1000110.0'.
+
     channels : String Array
+
         The names of the channels to plot.
+
     time : String, optional
+
         The name of the channel containing the time data. Defaults to 'TimeChannel'.
+
     plotTitle : String, optional
+
         A title for the plot. The default is '' in which case the title will be Project Line Channel.
 
     Returns

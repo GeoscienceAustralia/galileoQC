@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that a grid is large enough for regional padding.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -19,16 +22,23 @@ def _check_extension(local, regional, pad_cells):
     Parameters
     ----------
     local : xarray 2D DataArray
+
         Grid to be expanded.
+
     regional : xarray 2D DataArray
+
         The grid whose data will be used in the expansion.
+
     pad_cells : int, optional
+
         Number of cells to add to the grid along each of the four sides.
         The resultant grid is thus larger by `2 x pad_cells` in both directions.
 
     Returns
     -------
-    boolean : True if regional is large enough, else False.
+    boolean : 
+
+        True if regional is large enough, else False.
         
     """
     local_x_chan = local.attrs['x_channel']

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Update the metadata for a `line group` in a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -26,10 +29,15 @@ def updateLineVariety(whizzFile, trav_lines=[], ctrl_lines=[]):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz observations file, including path and extension.
+
     trav_lines : Array{str}, optional
+
         Array of traverse line numbers as strings. Default = [], and no action taken.
+
     ctrl_lines : Array{str}, optional
+
         Array of control line numbers as strings. Default = [], and no action taken.
 
     Returns

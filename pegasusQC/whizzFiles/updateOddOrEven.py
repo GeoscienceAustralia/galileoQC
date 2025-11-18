@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Set line group attribute Parity for each line.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -51,27 +54,40 @@ def updateOddOrEven(whizzFile='', x='', y='', oddlines=[], evenlines=[], planFil
     Parameters
     ----------
     whizzFile : Path or String, optional
+
         The Path to, or String name of, the whizz file in HDF5 format. Default is
         to not provide a planFile.
+
     x : String, optional
+
         The name of the x (easting) channel in `whizz_file`. Default is to use
         the `XChannel` attribute.
+
     y : String, optional
+
         The name of the y (northing) channel in `whizz_file`. Default is to use
         the `YChannel` attribute.
+
     oddlines : String Array, optional
+
         List of lines to have their parity set to True. Default is to calculate the
         parity based on analysis of the `planFile`. Only lines with the Variety attribute
         set to `Traverse` will have their parity set.
+
     evenlines : String Array, optional
+
         List of lines to have their parity set to False. Default is to calculate the
         parity based on analysis of the `planFile`. Only lines with the Variety attribute
         set to `Traverse` will have their parity set.
+
     planFile : Path or String, optional
+
         The Path to, or String name of, the plan file in HDF5 format. This is
         required if parities are to be set by calculation. Default is to not use
         calculation. Default is to not provide a planFile.
+
     verbose : Bool, optional
+
         The verbosity of output. Default False.
 
     Returns

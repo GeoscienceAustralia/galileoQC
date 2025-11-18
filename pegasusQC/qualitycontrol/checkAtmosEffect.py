@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check atmospheric gravity effect calculation.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -31,13 +34,20 @@ def checkAtmosEffect(whizzFile, atmosCorr, lines=[], GRS80_height=''):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     atmosCorr : String
+
         The name of the geoWhizz field or channel containing the atmospheric correction. These
         data must be in units of 'gu', 'µm/s/s', 'um/s/s' or 'um/s2'.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     GRS80_height : String, optional
+
         The name of the geoWhizz field or channel containing the GRS80_height. The
         default is to read the altitudeChannel field name from the Coordinate Frame.
 
@@ -103,7 +113,9 @@ def _atmosEffect(height):
 
     Parameters
     ----------
-    height (Float) : the height in metres above the GRS80 ellipsoid; optional, default 0.0.
+    height : Float
+
+        the height in metres above the GRS80 ellipsoid; optional, default 0.0.
 
 
     Returns

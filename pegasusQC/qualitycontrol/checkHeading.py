@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check aircraft heading is within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -28,27 +31,44 @@ def checkHeading(whizzFile, nominalHeadings=[], headingchan='', x='', y='', tole
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     nominalHeadings : [Float], optional
+
         The desired headings in degrees from north. The default is to check against the mean heading.
+
     headingchan : String, optional
+
         The name of the geoWhizz channel containing the headings. The
         default is to calculate the heading from the x and y channels.
+
     x : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     y : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     tolerance : Float, optional
+
         Headings within +/- tolerance degrees of nominalHeading are ok.
+
     known : String, optional
+
         If present, the name of the channel containing the "known error" flag.
         This is reported against any error so that known errors can be distinguished
         from unknown errors.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line.
 
     Returns

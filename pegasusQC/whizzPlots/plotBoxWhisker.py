@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot a statistical analysis.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -20,24 +23,43 @@ def plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlab
     Parameters
     ----------
     chMin : Numpy array
+
         Contains the minimum value of some channel for all lines.
+
     chMax : Numpy array
+
         Contains the maximum value of some channel for all lines.
+
     chMean : Numpy array
+
         Contains the mean value of some channel for all lines.
+
     chStd : Numpy array
+
         Contains the standard deviation value of some channel for all lines.
+
     lineNo : Numpy array
+
         Contains line numbers.
+
     figtitle : String
+
         Contains figure title.
+
     titlestr : String
+
         Contains plot title.
+
     xlabelstr : String
+
         Contains x label.
+
     ylabelstr : String, optional
+
         Contains y label. Defaults to 'Line Number'.
+
     xaxis : String, optional
+
         If "linenumber" then the x axis variable is line number;
         if "ordinal" then it is just ordinal.
 

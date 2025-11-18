@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the calculation of the Eotvos correction.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -32,38 +35,61 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     eotCorr : String
+
         The name of the geoWhizz field or channel containing the eotvos correction.
+
     latitude : String, optional
+
         The name of the geoWhizz field or channel containing the latitude. The
         default is to read the latitude field name from the Coordinate Frame.
+
     x : String, optional
+
         The name of the geoWhizz field or channel containing the x position. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     y : String, optional
+
         The name of the geoWhizz field or channel containing the y position. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     GRS80_height : String, optional
+
         The name of the geoWhizz field or channel containing the GRS80_height. The
         default is to read the altitudeChannel field name from the Coordinate Frame.
+
     time : String, optional
+
         The name of the geoWhizz field or channel containing the time. The
         default is to read the timeChannel field name from the Coordinate Frame.
+
     east_vel : String, optional
+
         The name of the geoWhizz field or channel containing the velocity in the
         east direction. The default ('') is to calculate this from the x and time
         channels.
+
     north_vel : String, optional
+
         The name of the geoWhizz field or channel containing the velocity in the
         north direction. The default ('') is to calculate this from the y and time
         channels.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     changesign : Bool, optional
+
         If True, adds the calculated result to the data channel, instead of subtracting.
         Default False.
+
     plot_flag : Bool, optional
+
         If true, plot details where the difference is large. Summary plot is always done. Default False.
 
     Returns
@@ -165,17 +191,25 @@ def _calc_speed(e, n, t):
     Parameters
     ----------
     e : Numpy 1D array
+
         The easting data.
+
     n : Numpy 1D array
+
         The northing data.
+
     t : Numpy 1D array
+
         The time data.
 
     Returns
     -------
     e_speed : Numpy 1D array
+
         The velocity in the east direction.
+
     n_speed : Numpy 1D array
+
         The velocity in the north direction.
 
     """
@@ -195,17 +229,27 @@ def _eotvosCorrection(eSpeed, nSpeed, latitude, height=0):
 
     Parameters
     ----------
-    eSpeed (Float) : the aircraft speed in the East direction in m/s/s.
+    eSpeed : float
+
+        the aircraft speed in the East direction in m/s/s.
     
-    nSpeed (Float) : the aircraft speed in the North direction in m/s/s.
+    nSpeed : float
+
+        the aircraft speed in the North direction in m/s/s.
     
-    latitude (Float) : latitude in degrees (N pos, S neg).
+    latitude : float
+
+        latitude in degrees (N pos, S neg).
     
-    height (Float) : the height in metres above the GRS80 ellipsoid; optional, default 0.0.
+    height : float
+
+        the height in metres above the GRS80 ellipsoid; optional, default 0.0.
 
     Returns
     -------
-    eotvos (Float) : the eotvos correction for gravity in um/s/s.
+    eotvos : float
+
+        the eotvos correction for gravity in um/s/s.
 
     """
     

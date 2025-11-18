@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Image all ERS grids in directory.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Jul 18 16:43:31 2020
+
 License: CC BY-SA
 """
 
@@ -24,10 +27,14 @@ def imageAllInDir(path_name, max_file_size=256):
     Parameters
     ----------
     path_name : Path
+
         The Path where the ERS grid files are located.
+
     max_file_size : int
+
         Files with size greater than this number of MB will
         not be imaged.
+
     Returns
     -------
     None.

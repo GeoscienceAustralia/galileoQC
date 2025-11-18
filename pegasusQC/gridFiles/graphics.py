@@ -66,6 +66,7 @@ def makeColormap(table, name='CustomMap'):
     Parameters
     ----------
     table : a sequence of RGB tuples.
+
         Values need to be between 0 and 1.
     """
     if np.any(table > 1):
@@ -166,10 +167,15 @@ def equalizeColormap(cmap, bins, cdf, name='EqualizedMap'):
     Parameters
     ----------
     cmap : string or colormap object
+
         Input colormap to remap.
+
     bins : array
+
         Centers of bins.
+
     cdf : array
+
         Values of cumulative distribution function.
     """
     
@@ -248,16 +254,22 @@ def alpha_blend(rgb, intensity, alpha = 0.7):
     Parameters
     ----------
     rgb : ndarray
+
         An MxNx3 RGB array of floats ranging from 0 to 1 (color image).
+
     intensity : ndarray
+
         An MxNx1 array of floats ranging from 0 to 1 (grayscale image).
+
     alpha : float
+
         This controls the transparency of the rgb image. 1.0 is fully opaque 
         while 0.0 is fully transparent.
         
     Returns
     -------
     rgb : ndarray
+
         An MxNx3 RGB array representing the combined images.
 
     """
@@ -278,13 +290,20 @@ def imshow_hs(data, ax=None, cmap='geosoft', cmap_norm='equalize', hs=True,
     Parameters
     ----------
     data : 2D array
+
         Grid to plot. Arrays with NaNs and masked arrays are supported.
+
     ax : matplotlib axes instance
+
         This indicates where to draw the figure. Create new figure if absent.
+
     cmap : string
+
         Name of the colormap to use to display the array. The default 'geosoft' is
         the blue to pink clra colormap from Geosoft Oasis Montaj.
+
     cmap_norm : string
+
         Type of normalisation of the colormap. 
         Possible values are:
 
@@ -300,46 +319,78 @@ def imshow_hs(data, ax=None, cmap='geosoft', cmap_norm='equalize', hs=True,
         darker and the bright colours become brighter. Two extra parameters control 
         the amount of clipping at the extremes: minPercent (default to 10%) and
         maxPercent (default to 90%)
+
     hs : boolean
+
         If True, the array is displayed in colours over a grey hillshaded version
         of the data.
+
     zf : number
+
         Vertical exaggeration (Z factor) for hillshading.
+
     azdeg : number
+
         The azimuth (0-360, degrees clockwise from North) of the light source.
+
     altdeg : number
+
         The altitude (0-90, degrees up from horizontal) of the light source.
+
     dx : number, optional
+
         cell size in the x direction
+
     dy : number, optional
+
         cell size in the y direction
+
     fraction : number
+
         Increases or decreases the contrast of the hillshade. 
+
     blend_mode :  {'alpha', 'hsv', 'overlay', 'soft'} 
+
         The type of blending used to combine the colormapped data values with the 
         illumination intensity. Default is 'alpha' and the effect is controlled
         by the alpha parameter.
+
     alpha : float
+
         Controls the transparency of the data overlaid over the hillshade.
         1.0 is fully opaque while 0.0 is fully transparent.
+
     contours : Boolean
+
         If True, adds contours to the map. The number of calculated contours is 
         defined by `levels`.
+
     levels : integer
+
         The number of contour levels (for when `contours == True`).
+
     colorbar : Boolean
+
         If True, draw a colorbar on the right-hand side of the map. The colorbar
         shows the distribution of colors, as modified by the normalization algorithm.
+
     cb_contours : Boolean
+
         Add lines corresponding to contours on the colorbar.
+
     cb_ticks : string
+
         If left as default ('linear') the ticks and labels on the colorbar are 
         spaced linearly in the standard way. Otherwise (any other keyword, for example
         'stats'), the mean and two ticks at + and - nSigma*(standard deviation) 
         are shown instead.
+
     nSigma : integer (default is 1)
+
         Size of the interval to show between ticks on the colorbar.
+
     kwargs : other optional arguments
+
         Can be used to pass other arguments to imshow, such as 'origin' and 'extent'.
         
     Notes
@@ -454,12 +505,19 @@ def saveMap(outfile, fig=None, orig_size=None, dpi=100):
     Parameters
     ----------
     outfile : String
+
         Path to output file.
+
     fig : Matplotlib figure instance
+
         Figure you want to save as the image
+
     orig_size : tuple
+
         width, height of the original image used to maintain aspect ratio.
+
     dpi : integer
+
         image resolution.
     """
     if fig==None:

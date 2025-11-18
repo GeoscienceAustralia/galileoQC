@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the required channels have a constant slope with fiducial.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -23,10 +26,15 @@ def checkConstantSlope(whizzFile, *, lines=[], channels=[]):
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     channels : String List
+
         List of channel names from the database to be checked.
 
     Returns

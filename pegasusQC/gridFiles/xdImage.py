@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Display the gridded (raster) data in an xArray DataArray.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -33,35 +36,62 @@ def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm'
     Parameters
     ----------
     data_array : 2D xarray
+
         The data to be imaged.
+
     mytitle : String
+
         The figure title.
+
     colormap : Colormap, optional
+
         A colour map, eg cc.m_CET_L9. The default is config.qc_colormap.
+
     cmap_norm : String, optional
+
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
         (equalization stretch); 'auto'. The default is 'nonorm'.
+
     minClip : Float, optional
+
         z -> z < minClip : minClip: z. The default is np.nan - no clipping.
+
     maxClip : Float, optional
+
         z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+
     gridlines : Bool, optional
+
         If True (the default), then grid lines are drawn on the image, else not.
+
     cb_ticks : TYPE, optional
+
         DESCRIPTION. The default is 'stats'.
+
     nSigma : TYPE, optional
+
         Not currently used. The default is 2.
+
     hs : Bool, optional
+
         hill-shading. The default is True.
+
     azdeg: Float, optional
+
         The shading azimuth in degrees from north, defaults to 45 deg.
+
     ax : Axis, optional
+
         The Matplotlib figure axis to be plotted to. Default None, in which case a new
         figure is made.
+
     clipTo3Std : Boolean, optional
+
         If True (the default), the data are clipped to +/- 3 standard deviations from
         the mean before imaging. This over-rides minClip and maxClip.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
 
@@ -113,33 +143,58 @@ def xdsImage(data_set, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm',
     Parameters
     ----------
     data_set : 2D xarray dataset
+
         The first dataArray in dataSet will be imaged.
+
     mytitle : String
+
         The figure title.
+
     colormap : Colormap, optional
+
         A colour map, eg cc.m_CET_L9. The default is config.qc_colormap.
+
     cmap_norm : String, optional
+
         Must be one of 'nonorm' (no normalisation, ie linear stretch); 'equalize'
         (equlaization stretch); 'auto'. The default is 'nonorm'.
+
     minClip : Float, optional
+
         z -> z < minClip : minClip: z. The default is np.nan - no clipping.
+
     maxClip : Float, optional
+
         z -> z > maxClip : maxClip: z. The default is np.nan - no clipping.
+
     cb_ticks : TYPE, optional
+
         DESCRIPTION. The default is 'stats'.
+
     nSigma : TYPE, optional
+
         Not currently used. The default is 2.
+
     hs : Bool, optional
+
         hill-shading. The default is True.
+
     azdeg: Float, optional
+
         The shading azimuth in degrees from north, defaults to 45 deg.
+
     ax : Axis, optional
+
         The Matplotlib figure axis to be plotted to. Default None, in which case a new
         figure is made.
+
     clipTo3Std : Boolean, optional
+
         If True (the default), the data are clipped to +/- 3 standard deviations from
         the mean before imaging. This over-rides minClip and maxClip.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
 

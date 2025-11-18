@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Interpolate one grid to the positions of another.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -22,13 +25,18 @@ def _grid_match(local, regional):
     Parameters
     ----------
     local : xarray 2D DataArray
+
         Grid containing the reference locations (x,y).
+
     regional : xarray 2D DataArray
+
         Grid to be interpolated onto (x,y).
 
     Returns
     -------
-    xarray 2D DataArray : Interpolated, mean-corrected grid.
+    xarray 2D DataArray : 
+
+        Interpolated, mean-corrected grid.
         
     """
     interp = RegularGridInterpolator((regional.y.values,regional.x.values),

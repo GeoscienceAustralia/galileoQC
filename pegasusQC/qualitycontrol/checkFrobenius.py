@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Checks the FTG Frobenius norm against a specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -31,10 +34,15 @@ def checkFrobenius(whizzFile,
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, to be checked.
+
     noiselimit : Float
+
         The maximum allowable in-line noise on a line.
+
     lines : String list, optional.
+
         The line numbers to be checked. Default is all lines in the whizzFile.
 
     Returns
@@ -75,27 +83,43 @@ def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0, plot_fla
     Parameters
     ----------
     Txx : numpy 1D array
+
         The xx component of the gravity gradient in ENU coordinates.
+
     Txy : numpy 1D array
+
         The xy component of the gravity gradient in ENU coordinates.
+
     Txz : numpy 1D array
+
         The xz component of the gravity gradient in ENU coordinates.
+
     Tyy : numpy 1D array
+
         The yy component of the gravity gradient in ENU coordinates.
+
     Tyz : numpy 1D array
+
         The yz component of the gravity gradient in ENU coordinates.
+
     Tzz : numpy 1D array
+
         The zz component of the gravity gradient in ENU coordinates.
+
     line : String, optional.
+
         The line number containing the above data, just used for
         reporting. Default ''.
+
     noiselimit : Float, optional.
+
         The maximum allowed standard deviation of the Frobenius norm.
         Default 30.0 E.
 
     Returns
     -------
-    Float
+    std_frob : float
+
         The standard deviation of the Frobenius norm of the gravity gradient.
 
     """
@@ -173,31 +197,53 @@ def _FTGTransform(il1, il2, il3, cr1, cr2, cr3):
     Parameters
     ----------
     il1 : numpy 1D array
+
         The first in-line component data.
+
     il2 : numpy 1D array
+
         The second in-line component data.
+
     il3 : numpy 1D array
+
         The third in-line component data.
+
     cr1 : numpy 1D array
+
         The first cross component data.
+
     cr2 : numpy 1D array
+
         The second cross component data.
+
     cr3 : numpy 1D array
+
         The third cross component data.
 
     Returns
     -------
     Txx : numpy 1D array
+
         The xx component of the gravity gradient in ENU coordinates.
+
     Txy : numpy 1D array
+
         The xy component of the gravity gradient in ENU coordinates.
+
     Txz : numpy 1D array
+
         The xz component of the gravity gradient in ENU coordinates.
+
     Tyy : numpy 1D array
+
         The yy component of the gravity gradient in ENU coordinates.
+
     Tyz : numpy 1D array
+
         The yz component of the gravity gradient in ENU coordinates.
+
     Tzz : numpy 1D array
+
         The zz component of the gravity gradient in ENU coordinates.
 
     """

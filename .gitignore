@@ -148,6 +148,8 @@ docs/source/.DS_Store
 docs/.DS_Store
 docs/source/generated
 /docs/source/generated
+docs/source/apidocs
+/docs/source/apidocs
 /docs/jupyter_execute
 /examples/.jupyter/desktop-workspaces
 /examples/.jupyter

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check RMS differences at traverse - control line intersections.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -26,29 +29,46 @@ def checkRMSIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     controls : [String]
+
         A list of control flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
         to all flight lines with value < 1000.
+
     travs : [String], optional
+
         A list of traverse flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
         to all flight lines in the `whizzFile` with value > 999.
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     zChannel : String, optional
+
         The name of the geoWhizz field or channel containing the data to be tested. The
         default is to read the AltitudeChannel field name from the Coordinate Frame.
+
     max_allowed_deltaZ : Float, optional
+
         The maximum allowed RMS difference in `zChannel` between the traverse and control lines
         at each intersection point along each control line. Defaults to 10.0.
+
     divroot2 : Bool, optional
+
         If True, the check is against the RMS difference divided by the square root of 2.
         Default False.
+
     verbose : Bool, optional
+
         If True, verbose reporting is given which is annoying if there are many errors.
         Default False.
 

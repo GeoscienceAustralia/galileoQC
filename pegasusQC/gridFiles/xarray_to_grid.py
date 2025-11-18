@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Interpolate point-located data from a 1-D to a 2-D xArray DataArray.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -30,35 +33,55 @@ def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_p
     Parameters
     ----------
     my_data : xArray Dataset
+
         Contains x, y, and z data dimensioned by fiducial.
+
     grid_space : Float
+
         The distance between grid cell centres in grid distance units.
+
     region : Array of float, optional
+
         Coordinates of the corners of the bounding rectangle [West, East, South, North].
         Default uses the minimum and maximum coordinates.
+
     method : string, optional
+
         The gridding algorithm to use in interpolating the data. Available are the Verde methods:
         "neighbours", "bicubic", and "biharmonic", the pygmi method "minc"," and the SciPy
         GridData "linear" method. The "neighbours" method is much faster if `pykdtree` is installed.
         Default "neighbours" method.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+
     mask_pixels : Integer, optional
+
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
         location will be masked out. Default 1.
+
     numneighbours : Integer, optional
+
         If method='neighbours', then this is the number of neighbours to average. Default 5.
+
     bdist : float, optional
+
         If method is "minc", then this is the blanking distance in units of cell. Default None.
+
     maxiters : int, optional
+
         Maximum number of iterations for the minimum curvature method. Default 100.
 
     Returns
     -------
     grid : xArray DataArray
+
         Contains the gridded data.
+
     region : tuple
+
         Four floating point values for xmin, xmax, ymin, ymax.
 
     """

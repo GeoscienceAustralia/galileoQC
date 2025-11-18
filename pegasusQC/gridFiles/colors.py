@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Some Geosoft colormaps (and the parula colormap).
+
 Copied: Wed Jul 15 17:46:18 2020 by Mark Helm Dransfield.
+
 @author: Joseph Barraud, Geophysics Labs, http://geophysicslabs.com
 """
 

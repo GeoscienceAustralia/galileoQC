@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Generate statistical plots for the difference between two channels.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -33,12 +36,19 @@ def diffChanStats(whizzFile, channel1, channel2, lines=[], verbose=True):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel1 : String
+
         A channel to be subtracted from.
+
     channel2 : String
+
         A channel to subtract.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns

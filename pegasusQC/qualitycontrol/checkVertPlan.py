@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that vertical exceedances of the aircraft from planned height are within specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -39,35 +42,58 @@ def checkVertPlan(planPaths, measPath, *, lines=[], planX='', planY='', planZ=''
     Parameters
     ----------
     planPath : array of String or pathlib Path
+
         Names of HDF5 Whizz files, including path and extension, of survey plan.
+
     measPath : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, of measured data.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     planX : String, optional
+
         The name of the geoWhizz field or channel containing the planned x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     planY : String, optional
+
         The name of the geoWhizz field or channel containing the planned y positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     measX : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     measY : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     allowance : Float, optional
+
         The maximum allowed deviation in height. The default is 30.0.
+
     maxCounter : Int, optional
+
         The maximum number of consecutive fids for which an exceedance
         greater than allowance is permitted. The default is 13.
+
     maxDistance : Float, optional
+
         The maximum number of consecutive metres for which an exceedance
         greater than allowance is permitted. If 0, then `maxCounter` is
         used instead of `maxDistance`. The default is 0.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line.
+
     verbose : Bool, optional
+
         If True, reports details for each failed line.
 
     Returns
@@ -251,19 +277,29 @@ def _interpolateVert(xbase, ybase, xnew, ynew):
     Parameters
     ----------
     xbase : 1D numpy float array
+
         The independent variable of the inputs to be interpolated.
+
     ybase : 1D numpy float array
+
         The input dependent variable to be interpolated.
+
     xnew : 1D numpy float array
+
         The independent variable to interpolate onto.
+
     ynew : 1D numpy float array
+
         To be kept synchronised with xnew and returned.
 
     Returns
     -------
     yout : 1D numpy float array
+
         The values of ybase interpolated onto xnew.
+
     ynew : 1D numpy float array
+
         Synchronised with xnew (by trimming) and returned.
 
     """

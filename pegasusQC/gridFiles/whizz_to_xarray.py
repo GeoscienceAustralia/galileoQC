@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Read a channel of data from a `geoWhizz` file and return as a 1-D xArray DataArray.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -27,31 +30,49 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
     Parameters
     ----------
     whizzFile : Path or String
+
         The Path to, or String name of, the whizz file in HDF5 format.
+
     z_chan : String
+
         The name of the channel in `whizz_file` to be imaged.
+
     n_chan : String, optional
+
         The name of the channel in `whizz_file` containing the northings (y).
         Default "" causes the name of the "YChannel" in `whizz_file` to be used.
+
     e_chan : String, optional
+
         The name of the channel in `whizz_file` containing the eastings (x).
         Default "" causes the name of the "XChannel" in `whizz_file` to be used.
+
     lines : String list, optional
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     remove_mean : Bool, optional
+
         If True, the mean is subtracted from each survey line of data before
         writing to `my_dataset`. Default False.
+
     diff_one : Bool, optional
+
         If True, the first difference along each survey line of data is
         written to `my_dataset`. Default False.
+
     skipcontrols : Bool, optional
+
         If True, control lines are excluded. Default False.
+
     controls : String list, optional
+
         The line numbers to be skipped if skipcontrols=True. Default is empty.
 
     Returns
     -------
     my_dataset : xArray Dataset
+
         Contains the data. If `whizz_to_xarray()` is unable to return data,
         it returns an empty xArray Dataset (test with `len(aa.attrs) == 0`).
 

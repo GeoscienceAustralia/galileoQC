@@ -27,13 +27,31 @@ today_fmt = '%d %b %Y'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
+    # 'sphinx.ext.autodoc',
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
     'myst_nb',
+    'autodoc2',
 ]
+
+# Napoleon settings
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+
+# autodoc2 settings
+autodoc2_packages = [
+    {
+        "path": "../../pegasusQC",
+        "auto_mode": True,
+    },
+]
+autodoc2_skip_module_regexes = [r'^_.*'] # This regex matches any name that starts with an underscore
+autodoc2_render_plugin = "myst"
+
+# myst settings
+myst_enable_extensions = ["fieldlist"]
 
 templates_path = ['_templates']
 
@@ -59,34 +77,39 @@ source_suffix = {
     '.ipynb': 'myst-nb',
 }
 
+# jupyter notebook settings
 nbsphinx_execute = "auto"
-
 nbsphinx_execute_arguments = [
     "--InlineBackend.figure_formats={'png2x'}",
     "--InlineBackend.rc=figure.dpi=96",
 ]
-
 nbsphinx_kernel_name = "python3"
-
 nb_execution_timeout = 180
-
-# html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-html_theme = "agogo"#"furo"#
-html_static_path = ['static']
-# html_logo = 'static/pegasus_logo.png'
-# html_favicon = "static/pegasus_icon.png"
-html_title = "pegasusQC"
+import furo
+html_theme = "furo"
 html_theme_options = {
-    # "light_logo": "pegasus_logo_light.png",
-    # "dark_logo": "pegasus_logo_dark.png",
-    # "sidebar_hide_name": True,
-    # 'show_powered_by': 'false',
-    # 'body_text': 'Black',
-    # 'font_family': 'Palatino',
+    "light_logo": "pegasus_logo_light.png",
+    "dark_logo": "pegasus_logo_dark.png",
+    "sidebar_hide_name": False,
 }
 
 numfig = True
+html_title = "pegasusQC"
+html_static_path = ['static']
+
+# html_logo = 'static/pegasus_logo.png'
+# html_favicon = "static/pegasus_icon.png"
+
+# html_theme = "alabaster"
+# html_theme_options = {
+#     'logo': 'pegasus_logo_light.png',
+#     'logo_name': 'true',
+#     'description': 'Quality control for airborne gravity surveys.',
+#     'fixed_sidebar': 'true',
+#     'show_relbars': 'true',
+#     'show_relbar_top': 'false',
+# }
+

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Report and plot the Falcon gravity gradient difference noise.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -25,37 +28,58 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     turbulence : String
+
         The name of the channel containing the turbulence field.
+
     lines : String list, optional
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     aNE : String
+
         The name of the channel containing the A_NE field. If '', then the
         eNE and eUV channels are used, otherwise, the aNE, aUV, bNE
         and bUV channels are used.
+
     aUV : String
+
         The name of the channel containing the A_UV field. If '', then the
         eNE and eUV channels are used, otherwise, the aNE, aUV, bNE
         and bUV channels are used.
+
     bNE : String
+
         The name of the channel containing the B_NE field. If '', then the
         eNE and eUV channels are used, otherwise, the aNE, aUV, bNE
         and bUV channels are used.
+
     bUV : String
+
         The name of the channel containing the B_UV field. If '', then the
         eNE and eUV channels are used, otherwise, the aNE, aUV, bNE
         and bUV channels are used.
+
     eNE : String, optional
+
         The name of the channel containing the NE difference error. If '',
         then the aNE, aUV, bNE and bUV channels are used.
+
     eUV : String
+
         The name of the channel containing the UV difference error. If '',
         then the aNE, aUV, bNE and bUV channels are used.
+
     error_spec : Float, optional
+
         The value above which the difference noise is excessive and is reported.
         Default 5.0.
+
     labelLines : Bool, optional
+
         if True, label (with the line number) all points on the plot where the
         line failed the specification. Defaults to False
 

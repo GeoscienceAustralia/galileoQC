@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check base station magnetometer values for excess variation.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -27,12 +30,19 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False)
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     basemag : String
+
         The name of the channel in whizzFile containing the basemag data.
+
     peak : Float
+
         The maximum allowed peak to peak variation.
+
     nSamples : Integer
+
         The number of samples (moving window) over which the test is applied.
 
     Returns

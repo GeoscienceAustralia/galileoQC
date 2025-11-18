@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Pad a grid with mean values.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -22,16 +25,22 @@ def _pad_mean(grid, pad_cells):
     Parameters
     ----------
     grid : xarray 2D DataArray
+
         Grid to be expanded.
+
     pad_cells : int, optional
+
         Number of cells to add to the grid along each of the four sides.
         The resultant grid is thus larger by `2 x pad_cells` in both directions.
 
     Returns
     -------
     xarray 2D DataArray
+
         the expanded, mean-corrected grid.
+
     numpy 2D array
+
         the expanded, nanmask grid.
         
     """

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Rarely used but possibly useful grid functions.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Jul 18 16:43:31 2020
+
 License: CC BY-SA
 """
 
@@ -48,17 +51,25 @@ def subtractImages(imagefile1, imagefile2, scale=1.0, band1=0, band2=0):
     Parameters
     ----------
     imagefile1 : Path
+
         The Path to the first grid file, must have extension `ers` or `nc`.
+
     imagefile2 : Path
+
         The Path to the second grid file, must have extension `ers` or `nc`.
+
     scale : (Float, optional)
+
         imagefile2 is multiplied by scale before subtraction. Default 1.0.
 
     Returns
     -------
     flag : Bool
+
         True if operation was successful.
+
     x : xarray
+
         The difference if both span the same coordinates, otherwise the first.
 
     """
@@ -81,13 +92,17 @@ def gridfile_to_xr(whizzFile='', bandout=0):
     Parameters
     ----------
     whizzFile : Path
+
         The Path to the grid file, must have extension `ers` or `nc`.
+
     bandout : Int, optional
+
         The band to be read if the grid file is `ERS`. The default is 0.
 
     Returns
     -------
     xd : xarray Dataset
+
         The data from `whizzFile`.
 
     """
@@ -124,13 +139,17 @@ def gridfile_to_xa(whizzFile='', bandout=0):
     Parameters
     ----------
     whizzFile : Path
+
         The Path to the grid file, must have extension `ers` or `nc`.
+
     bandout : Int, optional
+
         The band to be read if the grid file is `ERS`. The default is 0.
 
     Returns
     -------
     xd : xarray Dataset
+
         The data from `whizzFile`.
 
     """
@@ -165,18 +184,29 @@ def ers_to_netcdf4(ersFile='', ncFile='', datum='', projection='', long_name='',
     Parameters
     ----------
     ersFile : pathlib Path, optional
+
         The ERS grid file to be converted. The default is ''. If '', then file browser allows
         the user to select the file.
+
     ncFile : pathlib Path, optional
+
         The NC file to be written. The default is ''. if '', then the name of the ERS file is
         used, with the 'NC' extension.
+
     datum : Str, optional
+
         The geographic datum. The default is ''. If '', it is read from the ERS file.
+
     projection : Str, optional
+
         The geographic projection. The default is ''. If '', it is read from the ERS file.
+
     long_name : Str, optional
+
         The NC Dataset long_name attr. The default is ''. If '', then the ERS filename is used.
+
     units : Str, optional
+
         The units of the Dataarray values. The default is ''.
 
     Returns
@@ -210,15 +240,24 @@ def update_grid(whizzFile='', datum='', projection='', long_name='', units=''):
     Parameters
     ----------
     whizzFile : String or Path, optional
+
         The name of the netCDF4 grid file, including the `.nc` extension. Defaults to
         putting up a filebrowser dialog so the user can select a file.
+
     datum : String, optional
+
         The geographic datum. The default is ''.
+
     projection : String, optional
+
         The geographic projection. The default is ''.
+
     long_name : String, optional
+
         A descriptive name for the grid. The default is ''.
+
     units : String, optional
+
         The units of the grid `z` field. The default is ''.
 
     Returns
@@ -250,6 +289,7 @@ def cmap_exists(name):
     Parameters
     ----------
     name : Colormap instance
+
         The name of the Colormap.
 
     Returns
@@ -273,18 +313,31 @@ def graphicsTernary(e, n, red, green, blue, mytitle):
     Parameters
     ----------
     e : np.array(Float, 1D)
+
         The easting vector.
+
     n : np.array(Float, 1D)
+
         The northing vector.
+
     z : np.array(Float, 2D)
+
         The data to be imaged (referenced to the easting and northing positions).
+
     red : np.array(Float, 2D)
+
         The data for the red channel.
+
     green : np.array(Float, 2D)
+
         The data for the green channel.
+
     blue : np.array(Float, 2D)
+
         The data for the blue channel.
+
     mytitle : String
+
         The title for the image plot.
 
     Returns
@@ -320,11 +373,13 @@ def _histEqual(img):
     Parameters
     ----------
     img : 2D image array
+
         DESCRIPTION.
 
     Returns
     -------
     2D image array
+    
         DESCRIPTION.
 
     """

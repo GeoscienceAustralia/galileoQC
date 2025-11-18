@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Reads a grid file into xarray DataSet.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Jul 18 16:43:31 2020
+
 License: CC BY-SA
 """
 
@@ -41,13 +44,17 @@ def gridfile_to_xr(whizzFile='', bandout=0):
     Parameters
     ----------
     whizzFile : Path
+
         The Path to the grid file, must have extension `ers` or `nc`.
+
     bandout : Int, optional
+
         The band to be read if the grid file is `ERS`. The default is 0.
 
     Returns
     -------
     xd : xarray Dataset
+
         The data from `whizzFile`.
 
     """
@@ -84,13 +91,17 @@ def gridfile_to_xa(whizzFile='', bandout=0):
     Parameters
     ----------
     whizzFile : Path
+
         The Path to the grid file, must have extension `ers` or `nc`.
+
     bandout : Int, optional
+
         The band to be read if the grid file is `ERS`. The default is 0.
 
     Returns
     -------
     xd : xarray Dataset
+
         The data from `whizzFile`.
 
     """

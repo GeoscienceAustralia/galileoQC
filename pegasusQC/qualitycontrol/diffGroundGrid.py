@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Display airborne and ground gravity data along a flight-line.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -29,16 +32,25 @@ def diffGroundGrid(whizzFile, whizzChannel, whizzLine, gridPath, plot_title='Gro
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     whizzChannel : String
+
         Name of the channel of line data to be compared.
+
     whizzLine : String
+
         The identifier (eg '10030.0') for the line from which the
         whizzChannel data are taken for comparison.
+
     gridPath : Path
+
         The path (PathLib) to the ERS gridfile from which data is
         to be extracted for comparison.
+
     plot_title : String, optional
+
         A title for the plot. Default is 'Ground & Airborne Comparison'.
 
     Returns

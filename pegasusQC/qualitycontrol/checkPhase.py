@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Report the phase shift required to match two channels.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -29,21 +32,36 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
     Parameters
     ----------
     whizzFile : String
+
         The name of a geoWhizz HDF5 file.
+
     channel1 : String
+
         The name of the first channel.
+
     channel2 : String
+
         The name of the second channel.
+
     tChannel : String, optional
+
         The name of the time channel. The default, '', uses the 'TimeChannel' in
         the whizzFile attributes.
+
     tolerance : Float, optional
+
         The maximum allowed phase shift (in seconds if time data are available, else in number of samples).
+
     lines : String list, optional.
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     verbose : Bool, optional
+
         If True, report status of all lines, else only report errors. Default False.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line.
     
     Returns
@@ -123,15 +141,21 @@ def _interpolateCorr(xbase, ybase, xnew):
     Parameters
     ----------
     xbase : 1D numpy float array
+
         The independent variable of the inputs to be interpolated.
+
     ybase : 1D numpy float array
+
         The dependent variable of the inputs to be interpolated.
+
     xnew : 1D numpy float array
+
         The independent variable to interpolate onto.
 
     Returns
     -------
     out : 1D numpy float array
+
         The values of ybase interpolated onto xnew.
 
     """

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check for spikes in the data (not recommended).
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -21,12 +24,19 @@ def checkSpikes(whizzFile, channels=[], lines=[], numStd = 8.0, window=0, verbos
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     channels : String List
+
         List of field names from the database to be checked.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     numStd : Float, optional
+
         maximum allowed number of standard deviations allowed. The default is 8.0.
 
     Returns

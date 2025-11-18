@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Pad two grids preparatory to FFT.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -22,23 +25,35 @@ def _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=N
     Parameters
     ----------
     Gne_grid : xarray 2D DataArray
+
         Gne grid to be expanded.
+
     Guv_grid : xarray 2D DataArray
+
         Guv grid to be expanded.
+
     pad_cells : int, optional
+
         Number of cells to add to the grid along each of the four sides.
         The resultant grid is thus larger by `2 x pad_cells` in both directions.
+
     mode : str, optional
+
         Plan is to have several modes but right now, this parameter is ignored
         and the xarray "mean" padding mode is used.
+
     regional_grid : xarray 2D DataArray, optional
+
         The regional grid. Required if `padding_mode` == "regional". Default None.
+
     firstorder : bool, optional
+
         If True, include first order Craig correction. Default False.
 
     Returns
     -------
     grid : xarray 2D DataArray
+
         the expanded, mean-corrected grid.
         
     """

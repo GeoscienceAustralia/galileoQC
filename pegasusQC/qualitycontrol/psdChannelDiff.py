@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot power spectral density of the difference between two channels.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -30,12 +33,19 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightLines : String List, optional
+
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+
     channel1 : String
+
         The name of a channel.
+
     channel2 : String
+
         The name of a channel.
 
     Returns
@@ -96,16 +106,27 @@ def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinele
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : String
+
         The name of the channel to be analysed.
+
     flightLines : String List, optional
+
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+
     shortestPeriod : Float, optional
+
         The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
+
     minlinelenkm : Float, optional
+
         Flightlines shorter than this number of kilometres will be ignored in the calculation. Default is None.
+
     verbose : Bool, optional
+
         If True, more information is printed. Default is False.
 
     Returns
@@ -213,20 +234,35 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     rawchan : String
+
         The name of the channel to be the denominator in the gain.
+
     filchan : String
+
         The name of the channel to be the numerator in the gain.
+
     flightLines : String List, optional
+
         A list of flightline, e.g. ['1000110.0']. Default is all lines in whizzFile.
+
     nominalPeriod : Float, optional
+
         At this period in seconds, a vertical red line is drawn. Default (0.0) is to not draw the line.
+
     shortestPeriod : Float, optional
+
         The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
+
     minlinelenkm : Float, optional
+
         Flightlines shorter than this number of kilometres will be ignored in the calculation. Default is None.
+
     verbose : Bool, optional
+
         If True, more information is printed. Default is False.
 
     Returns
@@ -388,6 +424,7 @@ def _period_to_dist(p):
     Parameters
     ----------
     p : Float
+
         The period in seconds.
 
     Returns
@@ -408,6 +445,7 @@ def _dist_to_period(x):
     Parameters
     ----------
     x : Float
+    
         The distance in metres.
 
     Returns
@@ -429,6 +467,7 @@ def _time_frequency(group):
     Parameters
     ----------
     group : HDF5 group
+
         Must be the project group (top level of hierarchy in whizz File).
 
     Returns
@@ -452,8 +491,11 @@ def _mean_line_speed(group, line):
     Parameters
     ----------
     group : HDF5 group
+
         Must be the project group (top level of hierarchy in whizz File).
+
     line : String
+
         The line identifier.
 
     Returns

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the free-air correction calculation.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -32,18 +35,29 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[], 
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     faCorr : String
+
         The name of the geoWhizz field or channel containing the free-air correction.
+
     latitude : String, optional
+
         The name of the geoWhizz field or channel containing the latitude. The
         default is to read the latitude field name from the Coordinate Frame.
+
     GRS80_height : String, optional
+
         The name of the geoWhizz field or channel containing the GRS80_height. The
         default is to read the altitudeChannel field name from the Coordinate Frame.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
+
     changesign : Bool, optional
+
         If True, adds the calculated result to the data channel, instead of subtracting.
         Default False.
 
@@ -126,13 +140,19 @@ def _freeAirCorrection(height, latitude):
     
     Parameters
     ----------
-    height (Float) : the height in metres above the GRS80 ellipsoid; optional, default 0.0.
+    height : float
 
-    latitude (Float) : latitude in degrees (N pos, S neg).
+        the height in metres above the GRS80 ellipsoid; optional, default 0.0.
+
+    latitude : float
+
+        latitude in degrees (N pos, S neg).
 
     Returns
     -------
-    free-air gravity correction in um/s/s.
+    freeAir : float
+
+        free-air gravity correction in um/s/s.
 
     """
     

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Sample gridded data onto a located line whizzFile.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -17,7 +20,6 @@ import xarray
 import pathlib
 from scipy.interpolate import RegularGridInterpolator
 
-# import pegasusQC.gridFiles.gridfiles as grd
 import pegasusQC.gridFiles.read_ers as grd
 import pegasusQC.whizzFiles.retrieveData as rd
 import pegasusQC.utility.utility as util
@@ -36,10 +38,15 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
     Parameters
     ----------
     grid : String or pathlib Path
+
         Name of a ERMapper file, including path and extension.
+
     hdfPath : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns

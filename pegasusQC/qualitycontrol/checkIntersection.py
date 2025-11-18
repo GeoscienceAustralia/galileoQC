@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check absolute differences at traverse - control line intersections.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -31,32 +34,51 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     controls : [String], optional
+
         A list of control flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
         to all flight lines with the `LineVariety` attribute set to "Control".
+
     travs : [String], optional
+
         A list of traverse flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0']. Defaults
         to all flight lines with the `LineVariety` attribute set to "Traverse".
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     zChannel : String, optional
+
         The name of the geoWhizz field or channel containing the data to be tested. The
         default is to read the AltitudeChannel field name from the Coordinate Frame.
+
     max_allowed_deltaZ : Float, optional
+
         The maximum allowed difference in `zChannel` between the traverse and control lines
         at each intersection point. Defaults to 10.0.
+
     mode : String, optional
+
         Must be one of "value", "RMS", or "RMSroot2".
         Default "RMS".
+
     verbose : Bool, optional
+
         If True, verbose reporting is given which is annoying if there are many errors.
         Default False.
+
     plot_flag : Bool, optional
+
         If True, plot a map of each pair of intersecting lines where the `zChannel`
         values differ by more than `max_allowed_deltaZ`. Default False.
 
@@ -228,18 +250,26 @@ def lines_by_variety(gLines, all_lines):
     Parameters
     ----------
     gLines : HDF5 Group
+
         The geoWhizz lines group containing the survey line data.
+
     all_lines : [String]
+
         A list of all flightlines to search through.
 
     Returns
     -------
     controls : [String]
+
         A list of control flightlines, e.g. ['1000110.0', '1000210.0', '1000310.0'] with the
         `LineVariety` attribute set to "Control".
+
     traverses : [String]
+
         A list of traverse flightlines with the `LineVariety` attribute set to "Traverse".
+
     unknowns : [String]
+
         A list of flightlines with the `LineVariety` attribute not set to either "Control" or
         "Traverse".
 
@@ -284,22 +314,38 @@ def _intersection_height(x_ctrl, y_ctrl, z_ctrl, x_trav, y_trav, z_trav):
     Parameters
     ----------
     x_trav : Numpy 1D array
+
         The `x` values of the traverse line.
+
     y_trav : Numpy 1D array
+
         The `y` values of the traverse line.
+
     z_trav : Numpy 1D array
+
         The `z` values of the traverse line.
+
     x_ctrl : Numpy 1D array
+
         The `x` values of the control line.
+
     y_ctrl : Numpy 1D array
+
         The `y` values of the control line.
+
     z_ctrl : Numpy 1D array
+
         The `z` values of the control line.
 
     Returns
     -------
-    Float: the difference in `z` values at the intersection of the traverse and control lines.
-    Float: the index in the traverse arrays of the point closest to the intersection.
+    zdif : float
+
+        the difference in `z` values at the intersection of the traverse and control lines.
+
+    idx : float
+
+        the index in the traverse arrays of the point closest to the intersection.
 
     """
 

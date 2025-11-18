@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Calculates the vertical gravity from the differential curvatures.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -36,53 +39,79 @@ def gravity_from_curv(Ane, Auv, cell_size,
     Parameters
     ----------
     Ane : xarray 1D DataSet
+
         Airborne survey line-based DataSet of the Gne component
         dimensioned by fiducial.
+
     Auv : xarray 1D DataSet
+
         Airborne survey line-based DataSet of the Guv component
         dimensioned by fiducial.
+
     cell_size : float
+
         the cell size for gridding.
+
     gd_chan : String, optional
+
         The name of the channel in `whizzFile` to write the gD output to. If the
         name already exists in the whizzFile, then the new data are NOT written.
         Default None in which case, the code invents a name.
+
     altitude : xarray 1D DataSet, optional
+
         Airborne survey line-based DataSet of the altitude dimensioned
         by fiducial. These must be referenced to a fixed datum (not
         the varying ground surface). Default None in which case the Gne
         and Guv data are assumed at constant altitude.
         If given, altitude is not used. TBD
+
     result_units : String, optional
+
         The gravity units of the final resultant grid. Must be either "mGal" or
         "gu" or "um/s/s". Default "um/s/s".
+
     mask_polygon : numpy 1D array, optional
+
         In order [min_x, max_x, min_y, max_y]. If the mask_polygon is given,
         then the output arrays will be masked to the area within the polygon
         defined by it. Default None.
+
     pad_cells : int, optional
+
         The number of grid cells to pad the data. Default None in which case
         an optimum number is calculated internally.
+
     padding_mode : String, optional
+
         The method to be used in filling padding around the grid before DFT.
         Choices are "mean" and "regional". Default is "regional" which requires
         that `regional_grid_file` is provided.
+
     regional_grid_file : String, optional
+
         Name of the ERS file containing the regional grid. Required if
         `padding_mode` == "regional". Default None.
+
     regional_grav_units : String, optional
+
         The gravity units of the regional grid. Must be either "mGal" or
         "gu" or "um/s/s". Required if `padding_mode` == "regional".
         Default "mGal".
+
     firstorder : bool, optional
+
         If True, include first order Craig correction. Default False.
         
 
     Returns
     -------
     gD : xarray 2D DataArray
+
         Grid of vertical gravity, gD.
+
     gD_err : xarray 2D DataArray
+
         Grid of the imaginary component output of the Craig transform.
         Useful for error estimation.
 

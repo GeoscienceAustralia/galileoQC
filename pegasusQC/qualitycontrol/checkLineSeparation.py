@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check that separation between flight-lines meets specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -31,36 +34,57 @@ def checkLineSeparation(whizzfile, nominalsep, measX='', measY='', allowance=200
     Parameters
     ----------
     whizzfile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, with the survey
         measured data.
+
     nominalsep : Float
+
         The nominal (planned) line separation in metres.
+
     measX : String, optional
+
         The name of the geoWhizz field or channel containing the measured x position. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     measY : String, optional
+
         The name of the geoWhizz field or channel containing the measured y position. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     allowance : Float, optional
+
         The allowed horizontal separation of a survey line from its neighbours in metres.
         The default is 200.0.
+
     maxDistance : Float, optional
+
         The maximum number of consecutive metres for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 1000.0.
+
     maxFiducials : Int, optional
+
         The maximum number of consecutive fids for which an exceedance
         greater than allowance is permitted. If 0, then the constraint is
         ignored. The default is 0.
+
     known : String, optional
+
         If present, the name of the channel containing the "known error" flag.
         This is reported against any error so that known errors can be distinguished
         from unknown errors.
+
     lines : String list, optional.
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line. Default False.
+
     verbose : Bool, optional
+
         If True, verbose reporting is given which is annoying if there are many errors.
         Default False.
 

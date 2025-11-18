@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Update the line-spacing info for the CoordinateFrame group in a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -34,23 +37,35 @@ def updateLineSpacing(whizzFile, trav_spacing=None, ctrl_spacing=None, x='', y='
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     trav_spacing : Float, optional
+
         The traverse line spacing. Default None is calculate the TraverseSpacing attribute.
+
     ctrl_spacing : Float, optional
+
         The control line spacing. Default None is calculate the ControlSpacing attribute.
+
     x : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     y : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     lines : Array{str}, optional
+
         Array of line numbers as strings. Default = [], and computation is over all lines.
 
     Returns
     -------
     trav_spacing, ctrl_spacing : list(float)
+
         The calculated traverse line and control line spacings.
 
     """
@@ -147,19 +162,29 @@ def _calcLineEqn(gg, x, y, orig_x, orig_y):
     Parameters
     ----------
     gg : HDF5 group
+
         The line group pointing to the flight-line data.
+
     x : numpy 1D float array
+
         The x coordinates of the points on the flight-line.
+
     y : numpy 1D float array
+
         The y coordinates of the points on the flight-line.
+
     orig_x : float
+
         Constant to subtract from all x data (to avoid very large numbers).
+
     orig_y : float
+
         Constant to subtract from all y data (to avoid very large numbers).
 
     Returns
     -------
     m, c, flag : (float, float, bool)
+
         The calculated slope and intersection. The flag is true if the
         x and y data were swapped before the calculation.
 
@@ -188,11 +213,13 @@ def _calcSpacingStats(data):
     Parameters
     ----------
     data : numpy 1D float array
+
         The axis intersections calculated by `_calcLineEqn`.
 
     Returns
     -------
     data_dc_mean, data_dc_stdv : list(float)
+
         The calculated mean and standard deviation.
 
     """
@@ -234,16 +261,22 @@ def _calcTrueSpacing(spacing, data, rotated):
     Parameters
     ----------
     spacing : float
+
         The estimated, projected flight-line spacing.
+
     data : numpy 1D float array
+
         The line slopes for each flight-line calculated by `_calcLineEqn`.
+
     rotated : bool
+
         Flag to indicate if  the x and y data were swapped before the
         slope was calculated (returned by `_calcLineEqn`).
 
     Returns
     -------
     true_spacing : float
+
         The calculated true flight-line spacing.
 
     """    # remove the nans

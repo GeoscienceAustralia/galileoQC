@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Perform odd-even analysis of a channel of data in a `whizz_file`.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -14,7 +17,6 @@ from pathlib import Path
 import xarray as xr
 import netCDF4 as nc4
 import filebrowser as fb
-# import rioxarray
 import h5py
 import matplotlib.ticker as tkr
 import collections
@@ -45,24 +47,35 @@ def updateLineTracks(whizzFile, lines=[], x='', y='', trackError=5.0, verbose=Fa
     Parameters
     ----------
     whizzFile : Path or String
+
         The Path to, or String name of, the whizz file in HDF5 format.
+
     lines : String Array, optional
+
         List of lines to have their track set. Default all lines.
+
     x : String, optional
+
         The name of the x (easting) channel in `whizz_file`. Default is to use
         the `XChannel` attribute.
+
     y : String, optional
+
         The name of the y (northing) channel in `whizz_file`. Default is to use
         the `YChannel` attribute.
+
     trackError : Float, optional IGNORED FOR NOW!
+
         Any track with +/- trackError degrees of another track is assumed to
         have the same nominal direction. Default is 5.0 degrees.
+
     verbose : Bool, optional
+
         The verbosity of output. Default False.
 
     Returns
     -------
-    Nothing.
+    None.
 
     """
     filename = str(whizzFile)
@@ -120,15 +133,21 @@ def calcMeanTrack(lineGroup, easting, northing):
     Parameters
     ----------
     linegroup : HDF5 group
+
         A whizzFile line group.
+
     easting : String
+
         The name of the x (easting) channel in `linegroup`.
+
     northing : String
+
         The name of the y (northing) channel in `linegroup`.
 
     Returns
     -------
     track : float
+
         The mean aircraft track angle east of north in [0, 180] degrees.
 
     """
@@ -170,35 +189,59 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     Parameters
     ----------
     whizz_file : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : String
+
         The channel or field name to analyse. Must exist in `whizz_file`.
+
     grid_space : Float
+
         The width of the grid cell to be used in gridding. Recommend: 1/5 - 1/4 line spacing.
+
     oddlines : Array of String, optional
+
         An array of line numbers that will constitute the odd lines. The default is NOT WORKING! ...to take the first,
         and then every second traverse thereafter.
+
     evenlines : Array of String, optional
+
         An array of line numbers that will constitute the even lines. The default is NOT WORKING! ...to take every
         second traverse (alternates to the oddlines).
+
     method : string, optional
+
         The gridding algorithm to use in interpolating the data. Available are the Verde methods:
         "neighbours", "bicubic", and "biharmonic" as well as "minc" and the SciPy GridData "linear" method.
         The "neighbours" method is much faster if `pykdtree` is installed. Default `neighbours` method.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+
     mask_pixels : Integer, optional
+
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
         location will be masked out. Default 1.
+
     numneighbours : Integer, optional
+
         If method='neighbours', then this is the number of neighbours to average. Default 5.
+
     bdist : float, optional
+
         If method is "minc", then this is the blanking distance in units of cell. Default None.
+
     maxiters : int, optional
+
         Maximum number of iterations for minc method. The default is 100.
+
     hs : Bool, optional
+
         If True (the default), then the image is hill-shaded.
+
     Returns
     -------
     None.
@@ -285,13 +328,17 @@ def _getOddEvenLines(whizz_file):
     Parameters
     ----------
     whizz_file : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
 
     Returns
     -------
     oddlines : list of string
+
         The Odd survey lines.
+
     evenlines : list of string
+
         The Even survey lines.
 
     """
@@ -338,13 +385,17 @@ def _getPlannedLines(whizz_file):
     Parameters
     ----------
     whizz_file : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
 
     Returns
     -------
     oddlines : list of string
+
         The Odd survey lines.
+
     evenlines : list of string
+
         The Even survey lines.
 
     """
@@ -382,13 +433,17 @@ def _getTravCtrlLines(whizz_file):
     Parameters
     ----------
     whizz_file : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
 
     Returns
     -------
     travlines : list of string
+
         The Traverse survey lines.
+
     ctrllines : list of string
+
         The Control survey lines.
 
     """
@@ -427,24 +482,39 @@ def altsample_grid(whizz_file, channel, filter_length, grid_space, method='neigh
     Parameters
     ----------
     whizz_file : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : String
+
         The channel or field name to analyse. Must exist in `whizz_file`.
+
     filter_length : Float
+
         The length in seconds of the filter applied to channel.
+
     grid_space : Float
+
         The width of the grid cell to be used in gridding. Recommend: 1/5 - 1/4 line spacing.
+
     method : string, optional
+
         The gridding algorithm to use in interpolating the data. Available are the Verde methods:
         "neighbours", "bicubic", and "biharmonic" and the SciPy GridData "linear" method. "neighbours"
         is much faster if `pykdtree` is installed. Default `neighbours` method.
+
     mask_polygon : numpy 2D array, optional
+
         If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
+
     mask_pixels : Integer, optional
+
         If mask_pixels > 0, then all pixels further than `mask_pixels * grid_space` from a data
         location will be masked out. Default 1.
+
     numneighbours : Integer, optional
+
         If method='neighbours', then this is the number of neighbours to average. Default 5.
 
     Returns

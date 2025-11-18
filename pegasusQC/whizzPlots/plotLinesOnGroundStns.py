@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Plot flight-line location over scatter plot of Australian ground gravity data.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -27,21 +30,37 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     Parameters
     ----------
     whizzFile : Path
+
         Each element is the name of a HDF5 Whizz file, including path and extension.
+
     line : String
+
         Line identifier for line whose location is to be plotted.
+
     minlon : Float, optional
+
         Minimum longitude of data to be extracted. Defaults to -360 deg.
+
     maxlon : Float, optional
+
         Maximum longitude of data to be extracted.
+
     minlat : Float, optional
+
         Minimum latitude of data to be extracted.
+
     maxlat : Float, optional
+
         Maximum latitude of data to be extracted.
+
     min_reliability : Float, optional
+
         Only stations with reliability > `min_reliability` will be plotted. Default 0.
+
     fig_title : String, optional
+
         The figure title.
+
 
     Returns
     -------

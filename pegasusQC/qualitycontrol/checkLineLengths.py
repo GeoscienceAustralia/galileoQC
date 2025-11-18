@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check the flight-lines are of the required minimum length.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -24,16 +27,25 @@ def checkLineLengths(whizzFile, min_len=50.0, measX='', measY='', lines=[]):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, to be checked.
+
     min_len : TYPE, optional
+
         The minimum allowed line length in km. The default is 50.0.
+
     measX : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     measY : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     lines : Array{String}, optional
+
         Array of line numbers as strings. Default = [], meaning all lines are checked.
 
     Returns

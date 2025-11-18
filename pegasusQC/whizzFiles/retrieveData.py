@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Retrieve data from a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -23,15 +26,21 @@ def getWhizzData(whizzFile, line, channel):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     line : String
+
         A flightline, e.g. '1000110.0'.
+
     channel : String
+
         The (case-sensitive) name of a channel in the database, e.g. 'EASTING'.
 
     Returns
     -------
     my_data : numpy array
+
         The requested data.
 
     """
@@ -52,13 +61,17 @@ def getLineData(linegroup, channel):
     Parameters
     ----------
     linegroup : HDF5 Group
+
         A flight-line group.
+
     channel : String
+
         The name of a channel in the database, e.g. 'EASTING'.
 
     Returns
     -------
     my_data : numpy array
+
         The requested data.
 
     """
@@ -81,10 +94,15 @@ def getChannelAttrs(linegroup, channel, myattribute='Units'):
     Parameters
     ----------
     linegroup : HDF5 Group
+
         A flight-line group.
+
     channel : String
+
         The name of a channel in the database, e.g. 'EASTING'.
+
     myattribute : String, optional
+
         The name of the desired attribute, default 'Units'.
 
     Returns
@@ -117,19 +135,29 @@ def getLineXChannel(whizzFile, line, x, channel):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     line : String
+
         A flightline, e.g. '1000110.0'.
+
     x : String
+
         The name of the x variable.
+
     channel : String
+
         The name of the channel.
 
     Returns
     -------
     xData : numpy 1D array
+
         A numpy array of data, float32 or float64.
+
     yData : numpy 1D array
+
         A numpy array of data, float32 or float64.
 
     """
@@ -148,6 +176,7 @@ def getChannels(whizzFile):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a geoWhizz file, including path and extension.
 
     Returns
@@ -175,6 +204,7 @@ def getLines(whizzFile):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a geoWhizz file, including path and extension.
 
     Returns

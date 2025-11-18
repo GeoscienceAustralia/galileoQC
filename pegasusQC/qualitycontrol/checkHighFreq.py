@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check for excess high frequency signal in gravity gradiometer data.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -29,25 +32,44 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension, to be checked.
+
     noiselimit : Float
+
         The maximum allowable high frequency noise on a line.
+
     cutoffs : Array of Float, optional
+
         The low pass, and high pass, cutoff frequencies that define "HighFreq".
         Recommended values: AGG - [0.15, 3.6], FTG - [0.1, 0.48]. Default AGG.
+
     channels : Array[String]
+
         An array of channel names containing the gradient component data.
+
     vertaccel : String, optional
+
         The name of the channel containing the vertical velocity field. Default ''.
+
     vertvelocity : String, optional
+
         The name of the channel containing the vertical velocity field. Default ''.
+
     vertdispl : String, optional
+
         The name of the channel containing the vertical velocity field. Default ''.
+
     lines : String list, optional
+
         The line numbers to be checked. Default is all lines in the whizzFile.
+
     verbose : Bool, optional
+
         If True, report status of all overlaps, else only report errors. Default False.
+
     plot_flag : Bool, optional
+
         If True, plot exceedances for each failed line.
 
     Returns

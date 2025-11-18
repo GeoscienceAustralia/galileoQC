@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Calculate a sensible gridding cell size.
+
 Author: Mark Helm Dransfield
+
 Created: Oct 2025
+
 License: CC BY-SA
 """
 
@@ -29,11 +32,13 @@ def _calc_gridcell_size(whizzFile):
     Parameters
     ----------
     whizzFile : Path or String
+
         The Path to, or String name of, the whizz file in HDF5 format.
 
     Returns
     -------
     cell_size : float
+
         the recommended cell size for gridding.
         
     """

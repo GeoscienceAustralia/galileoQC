@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Write the contents of a `geoWhizz` file to `XYZ` format.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -27,19 +30,30 @@ def whizzToXYZ(whizzfilePath, chans, wids, precisions, xyzFilePath='', verbose=F
     Parameters
     ----------
     whizzfilePath : pathlib Path
+
         The pathlib Path to the Whizz HDF5 file to be read.
+
     chans : string array
+
         Array of the channels names (which must be in whizzfilePath) to be
         written to xyzFilePath.
+
     wids : number array
+
         Array of the widths (number of characters) of the formatted output channels.
+
     precisions : number array
+
         Array of the precisions (number after decimal point) of the formatted output channels.
+
     xyzFilePath : pathlib Path
+
         The pathlib Path to the output Geosoft XYZ file. The default is ''
         leaving the XYZ file to have the same path as the input file but with
         a ".xyz" extension.
+
     verbose : Bool, optional
+
         If False (the default) the output is reduced.
 
     Returns

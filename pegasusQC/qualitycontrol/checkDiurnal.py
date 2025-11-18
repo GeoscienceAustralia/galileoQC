@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check magnetic diurnal data against specification.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -32,34 +35,57 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
     Parameters
     ----------
     whizzFile : HDF5 Whizz file pathlib Path
+
         The pathlib Path to the Whizz HDF5 file containing the survey line data.
+
     basemag : String
+
         The name of the channel in whizzFile containing the mag data to be checked.
+
     lines : Array{String}, optional
+
         Array of line numbers. Default = [], meaning all lines are checked.
+
     rangeLimit : Float, optional
+
         The maximum allowed deviation from the straight line chord. Default = 5.0 nT
+
     nSamples : Integer, optional
+
         The number of samples (moving window) over which the test is applied.
         Default = 3000
+
     xChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured x positions. The
         default is to read the xChannel field name from the Coordinate Frame.
+
     yChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured y positions. The
         default is to read the yChannel field name from the Coordinate Frame.
+
     tChannel : String, optional
+
         The name of the geoWhizz field or channel containing the measured times. The
         default is to read the tChannel field name from the Coordinate Frame.
+
     maxDuration : Float, optional
+
         The time in seconds (moving window) over which the test is applied.
         The default is to ignore this parameter.
+
     maxDistance : Float, optional
+
         The distance in metres (moving window) over which the test is applied.
         The default is to ignore this parameter.
+
     plot_flag : Bool, optional
+
         If True, all plots are generated.
+
     verbose : Bool, optional
+
         If True, a more verbose output is provided.
 
     Returns

@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Summarise contents of a `geoWhizz` file.
+
 Author: Mark Helm Dransfield
+
 Created: 2023
+
 License: CC BY-SA
 """
 
@@ -27,10 +30,15 @@ def reportWhizz(whizzFile, line='', channel=''):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     line : String, optional
+
         The line number, formatted as a string, to report in detail. The default is '' and no line details.
+
     channel : String, optional
+
         The channel or field name to report in detail. The default is '' and no channel details.
 
     Returns
@@ -95,6 +103,7 @@ def reportLines(whizzFile):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
 
     Returns
@@ -128,11 +137,17 @@ def reportChannels(whizzFile, channel='', verbose=False):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     channel : string, optional
+
         If provided, only the details of that channel are given, otherwise all.
+
     verbose : Bool, optional
+
         If True, print all details, otherwise just the names. Default False.
+
     Returns
     -------
     None.
@@ -195,21 +210,24 @@ def reportFlights(whizzFile, flightChannel='', lines=[], detailed=False):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     flightChannel : String, optional
+
         The name of the channel containing the flight numbers. The default is '' (get the channel name from attributes).
+
     lines : String Array, optional
+
         The array of line numbers, each formatted as a string, to report. The default is [] and all lines.
+
     detailed : Bool, optional
+
         If true, report the line numbers flown in each flight. The default is False.
 
     Returns
     -------
     None.
-                gg = gLines[line]
-                    gg.attrs['Flight'] = this_flight
-
-            latitude = f[groupName]['CoordinateFrame'].attrs['LatitudeChannel']
 
     """
     filename = str(whizzFile)
@@ -285,16 +303,23 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     timeChannel : String, optional
+
         The name of the channel containing the time data.  The default is '' which
         causes the channel stored in the CoordinateFram groups TimeChannel attribute 
         to be used.
+
     xChannel : String, optional
+
         The name of the channel containing the x data.  The default is '' which
         causes the channel stored in the CoordinateFram groups XChannel attribute 
         to be used.
+
     yChannel : String, optional
+
         The name of the channel containing the y data.  The default is '' which
         causes the channel stored in the CoordinateFram groups YChannel attribute 
         to be used.
@@ -302,6 +327,7 @@ def reportSampling(whizzFile, timeChannel='', xChannel='', yChannel=''):
     Returns
     -------
     None.
+
     """
     filename = str(whizzFile)
         
@@ -356,24 +382,34 @@ def _distanceFlown(whizzFile, x = '', y = '', lines=[]):
     Parameters
     ----------
     whizzFile : String or pathlib Path
+
         Name of a HDF5 Whizz file, including path and extension.
+
     x : String, optional
+
         The name of the channel of X positions (in metres). The default is '' which
         causes the channel stored in the CoordinateFram groups XChannel attribute 
         to be used.
+
     y : String, optional
+
         The name of the channel of Y positions (in metres). The default is '' which
         causes the channel stored in the CoordinateFram groups YChannel attribute 
         to be used.
+        
     lines : array of strings, optional
+
         An array of line identifiers whose total distance will be returned.
         Default all lines in whizzFile.
 
     Returns
     -------
     count : Integer
+
         The total number of lines in the file.
+
     Float
+
         The total distance in km flown over all lines in the survey.
 
     """
@@ -414,13 +450,19 @@ def _lineLength(x, y):
 
     Parameters
     ----------
-    x (numpy 1D array): a 1D array of x positions (units metres).
+    x : numpy 1D array
 
-    y (numpy 1D array): a 1D array of y positions (units metres).
+        a 1D array of x positions (units metres).
+
+    y : numpy 1D array
+
+        a 1D array of y positions (units metres).
 
     Returns
     -------
-    lenOfLine (Float) : the length of the line in metres.
+    lenOfLine : Float
+
+        the length of the line in metres.
 
     """
     lenOfLine = 0.0

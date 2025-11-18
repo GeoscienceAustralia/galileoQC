@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 Check terrain correction density.
+
 Author: Mark Helm Dransfield
+
 Created: ca 2023
+
 License: CC BY-SA
 """
 
@@ -23,19 +26,32 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle, units=''):
     Parameters
     ----------
     file000 : String
+
         Name of the file containing the data before terrain correction. May be either an `ERS` or `NC` grid file.
+
     filexxx : String
+
         Name of the file containing the data after xpxx terrain correction. May be either an `ERS` or `NC` grid file.
+
     xxx : Float
+
         The density used in the filexxx terrain correction.
+
     fileyyy : String
+
         Name of the file containing the data after ypyy terrain correction. May be either an `ERS` or `NC` grid file.
+
     yyy : Float
+
         The density used in the fileyyy terrain correction.
+
     plotTitle : String
+
         A title for the plot of the difference between predicted and actual
         data in fileyyy.
+
     units : String, optional
+
         Plotted to the colorbar title. Default is empty string.
 
     Returns
