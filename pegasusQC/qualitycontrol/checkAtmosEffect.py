@@ -113,10 +113,9 @@ def _atmosEffect(height):
 
     Parameters
     ----------
-    height : Float
+    height : float
 
         the height in metres above the GRS80 ellipsoid; optional, default 0.0.
-
 
     Returns
     -------

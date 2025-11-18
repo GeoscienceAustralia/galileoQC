@@ -21,7 +21,9 @@ import pegasusQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False):
+def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, lines=[],
+    verbose=False
+):
     """
     Checks the basemag channel in a whizzFile against the specification that
     the peak to peak variation over a set number of samples must not exceed
@@ -45,6 +47,14 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False)
 
         The number of samples (moving window) over which the test is applied.
 
+    lines : Array{String}, optional
+
+        Array of line numbers as strings. Default = [], meaning all lines are checked.
+
+    verbose : Bool, optional
+
+        If True, reports details for each passing line.
+
     Returns
     -------
     None
@@ -55,7 +65,8 @@ def checkBasemag(whizzFile, basemag, peak = 0.5, nSamples = 3000, verbose=False)
 
     with h5py.File(filename, 'r') as f:
         g = f[groupName]['Lines']
-        lines = list(g.keys())
+        if lines == []:
+            lines = list(g.keys())
         numLines = len(lines)
         numfail = 0
 

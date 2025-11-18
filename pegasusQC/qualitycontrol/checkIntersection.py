@@ -23,7 +23,9 @@ import pegasusQC.whizzPlots.whizzPlot as wpl
 groupName = config.groupName
         
 
-def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, mode='RMS', verbose=False, plot_flag=False):
+def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='',
+    max_allowed_deltaZ=10.0, mode='RMS', verbose=False, plot_flag=False
+):
     """
     Checks that the values of the data in `zChannel` at the intersection of traverse and control
     lines are different by no more than the maximum allowed delta. If `mode` = "value", then each
@@ -177,7 +179,8 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
                             num_failed += 1
                             # print(dh)
                             bc_deg = bear_trv * 180.0 / np.pi
-                            report += f'\n  {trav_name} : {ctrl_name} [track = {bc_deg:.1f} deg N] intersection {zChannel} difference = {abs_dh:.1f} > {max_allowed_deltaZ:.1f}'
+                            report += f'\n  {trav_name} : {ctrl_name} [track = {bc_deg:.1f} deg N] intersection'
+                            report += f' {zChannel} difference = {abs_dh:.1f} > {max_allowed_deltaZ:.1f}'
                             if z_units != '':
                                 report += ' ' + z_units
                             report += '.'
@@ -195,7 +198,8 @@ def checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel=''
                 if dh_rms > max_allowed_deltaZ:
                     num_failed += 1
                     bc_deg = bear_trv * 180.0 / np.pi
-                    report += f'\n  {trav_name} [bearing={bc_deg:.1f}] intersection {zChannel} {mode_str} difference = {dh_rms:.1f} > {max_allowed_deltaZ:.1f}'
+                    report += f'\n  {trav_name} [bearing={bc_deg:.1f}] intersection {zChannel} {mode_str}'
+                    report += f' difference = {dh_rms:.1f} > {max_allowed_deltaZ:.1f}'
                     if z_units != '':
                         report += ' ' + z_units
                     report += '.'

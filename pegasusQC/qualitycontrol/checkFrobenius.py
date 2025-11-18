@@ -25,7 +25,8 @@ groupName = config.groupName
 def checkFrobenius(whizzFile, 
     il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', 
     cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', 
-    noiselimit=30.0, lines=[], verbose=True, plot_flag=False):
+    noiselimit=30.0, lines=[], verbose=True, plot_flag=False
+):
     """
     Reports the noise for each line in lines from filename (a whizz file)
     which exceeds noiseLimit. Here the noise is calculated by `_FTGeigen` as

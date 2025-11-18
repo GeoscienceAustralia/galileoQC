@@ -81,7 +81,7 @@ def getLineData(linegroup, channel):
             # print(f'datachannel {datachannel[0]}; channel {channel}')
             my_data = np.array(linegroup[datachannel[0]])
     if np.array(my_data.size) == 0:
-        print(f'ERROR - {channel} not found.')
+        print(f'ERROR - channel "{channel}" not found.')
 
     return my_data
 

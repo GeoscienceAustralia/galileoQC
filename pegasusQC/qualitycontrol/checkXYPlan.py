@@ -23,8 +23,11 @@ import pegasusQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, 
-    maxCounter=0, maxDistance=0, known='', needConvertToGeodetic=False, crs_epsg=0, plot_flag=False, verbose=False):
+def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='',
+    measX='', measY='', allowance=200.0, maxCounter=0, maxDistance=0,
+    known='', needConvertToGeodetic=False, crs_epsg=0,
+    plot_flag=False, verbose=False
+):
     """
     Reports exceedances of actual horizontal position from planned horizontal
     positions for an airborne survey Whizz database.

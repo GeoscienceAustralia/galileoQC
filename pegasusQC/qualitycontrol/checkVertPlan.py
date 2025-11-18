@@ -24,7 +24,10 @@ import pegasusQC.utility.utility as util
 groupName = config.groupName
 
 
-def checkVertPlan(planPaths, measPath, *, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False, verbose=False):
+def checkVertPlan(planPaths, measPath, *, lines=[], planX='', planY='', planZ='', 
+    measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, 
+    known='', plot_flag=False, verbose=False
+):
     """
     Reports exceedances of actual vertical position from planned vertical positions
     (stored in a plan file) for an airborne survey Whizz database.
