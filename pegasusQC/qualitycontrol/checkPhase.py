@@ -18,8 +18,10 @@ import matplotlib.pyplot as plt
 
 import pegasusQC.config as config
 import pegasusQC.whizzFiles.retrieveData as rd
+import pegasusQC.utility.utility as util
 
 groupName = config.groupName
+
 
 def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=[], verbose=False, plot_flag=False):
     """
@@ -77,9 +79,9 @@ def checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=
         numLines = len(lines)
         offsets = np.zeros((numLines,))
         count = 0
-        # TODO: trap case where tChannel does not exist and report "number of samples"
         if tChannel == '':
-            tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
+            tChannel = util._getCoordFrameAttr(f[groupName], 'TimeChannel')
+            # tChannel = f[groupName]['CoordinateFrame'].attrs['TimeChannel']
 
         for line in lines:
             print(f'analysing {line} of {numLines}.')

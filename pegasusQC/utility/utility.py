@@ -22,6 +22,49 @@ import pegasusQC.config as config
 groupName = config.groupName
 
 
+def _getCoordFrameAttr(whizz_group, attr_name):
+    """
+    If it exists, returns the information corresponding to the given
+    attribute name from the CoordinateFrame sub-group os a whizz file.
+    Otherwise ERROR.
+
+    Parameters
+    ----------
+    whizz_group : HDF5 group
+
+        The group in a whizz file with name `groupName`. All subgroups 
+        in a whizz file are subgroups of this main group.
+
+    attr_name : str
+
+        The name of the desired attribute.
+
+    Returns
+    -------
+    name of channel : str
+
+    Example
+    -------
+
+    Suppose one wants the name of the channel containing the standard time
+    field. Then the call would be:
+
+        time_chan = _getCoordFrameAttr(whizz_group, 'TimeChannel')
+
+    With this information, one could extract time data for the flight-line,
+    `line`, from the LinesGroup `g`, with:
+
+        time = getLineData(g[line], time_chan)
+
+    """
+    try:
+        chan_name = whizz_group['CoordinateFrame'].attrs[attr_name]
+    except:
+        print(f'ERROR - attribute {attr_name} not found in whizz file Coordinate Frame.')
+        chan_name = None
+    return chan_name
+
+
 def _distance(x, y):
     return np.sqrt(x * x + y * y)
 
