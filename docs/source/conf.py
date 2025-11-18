@@ -88,7 +88,6 @@ nb_execution_timeout = 180
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-import furo
 html_theme = "furo"
 html_theme_options = {
     "light_logo": "pegasus_logo_light.png",
