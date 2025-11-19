@@ -251,34 +251,7 @@ def updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='',
         if changed:
             print(f'Changed CoordFrame attribute(s) for {whizzFile.name}.')
  
-    
-def renameChannels(nchannels, chanNames):
-    """
-    Any channel named 'x' is renamed 'X'.
 
-    Redundant function since the use of `XChannel` metadata.
-
-    Parameters
-    ----------
-    nchannels : Int
-        The number of channels.
-    chanNames : [String]
-        Array of channel names.
-
-    Returns
-    -------
-    chanNames : [String]
-        Array of renamed channel names.
-
-    """
-    
-    for ii in range(0, nchannels): # TODO: expand this to cover a large range of possibilities
-        if chanNames[ii] == 'x':
-            chanNames[ii] = 'X'
-            
-    return chanNames
-
-    
 def addWhizzToWhizz(inputWhizzFile, outputWhizzFile, lines=[]):
     """
     Adds all the ['Lines'] sub-groups (with all they contain) from `inputWhizzFile` to the
