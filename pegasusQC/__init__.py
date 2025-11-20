@@ -10,8 +10,6 @@ Created: 2023
 License: CC BY-SA
 """
 
-# __version__ = "0.0.0"
-
 # Make it easy for user to call any function `myfun` as `aqc.myfun`.
 # These lines access all functions and classes in all .py files
 # in the named directories. The user can then do:

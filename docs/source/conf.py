@@ -16,11 +16,11 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'pegasusQC'
-copyright = '2023, Mark Helm Dransfield'
+copyright = '2025, Geoscience Australia'
 author = 'Mark Helm Dransfield'
-version = '0.0.1'
-release = '0.0.1'
-# version = release = importlib.metadata.version('pegasusQC')
+# version = '0.0.2'
+# release = '0.0.2'
+version = release = importlib.metadata.version('pegasusQC')
 today_fmt = '%d %b %Y' 
 
 # -- General configuration ---------------------------------------------------
@@ -93,6 +93,7 @@ html_theme_options = {
     "light_logo": "pegasus_logo_light.png",
     "dark_logo": "pegasus_logo_dark.png",
     "sidebar_hide_name": False,
+    "version_selector": True,
 }
 
 numfig = True
