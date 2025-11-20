@@ -88,24 +88,32 @@ nb_execution_timeout = 180
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-html_theme = "furo"
-html_theme_options = {
-    "light_logo": "pegasus_logo_light.png",
-    "dark_logo": "pegasus_logo_dark.png",
-    "sidebar_hide_name": False,
-    "version_selector": True,
-}
+
+if False:
+    html_theme = "furo"
+    html_theme_options = {
+        "light_logo": "pegasus_logo_light.png",
+        "dark_logo": "pegasus_logo_dark.png",
+        "sidebar_hide_name": False,
+        "version_selector": True,
+    }
+
+if True:
+    html_theme = "alabaster"
+    html_theme_options = {
+        'logo': './pegasus_logo_light.png',
+        'logo_name': True,
+        'description': 'Quality control for airborne gravity surveys.',
+        'fixed_sidebar': 'true',
+        'show_relbars': 'true',
+        'show_relbar_top': 'false',
+    }
 
 numfig = True
 html_title = "pegasusQC"
 html_static_path = ['static']
 
-# html_logo = 'static/pegasus_logo.png'
-# html_favicon = "static/pegasus_icon.png"
-
-# html_theme = "alabaster"
 # html_theme_options = {
-#     'logo': 'pegasus_logo_light.png',
 #     'logo_name': 'true',
 #     'description': 'Quality control for airborne gravity surveys.',
 #     'fixed_sidebar': 'true',
