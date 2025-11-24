@@ -132,7 +132,7 @@ Grid_Imaging.ipynb
 The Craig transform method transforms differential curvature components $G_{UV}$ and $G_{NE}$ into vertical gravity[^Dransfield2019]. This is useful because there are often regional or other gravity data that cover part or all of the survey area with which the transformed gravity data can be compared. The following tutorial demonstrates the use of the Craig transform.
 
 ```{toctree}
-Craig_transform_Gne_Guv.ipynb
+Craig_transform.ipynb
 ```
 
 ## Aeromagnetics
