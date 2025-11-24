@@ -164,7 +164,8 @@ def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_p
         my_grid = my_grid.squeeze('variable')
         grid = my_grid.rename({'easting': 'x','northing': 'y'})
 
-    if np.array(mask_polygon).size > 0:
+    # smallest polygon is a triangle with vertex array size = 6
+    if np.array(mask_polygon).size > 5:
         grid = gut.maskGridByPolygon(grid, mask_polygon, x_chan='x', y_chan='y')
 
     if mask_pixels > 0:

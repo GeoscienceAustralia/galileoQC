@@ -79,7 +79,8 @@ def maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y'):
 
     mask_polygon : numpy 2D array, optional
 
-        If the size of mask_polygon > 0, then data_array will be masked to the area
+        The polygon vertices, as an array, sequence of pairs. For example, mask_polygon = [(0, 0),
+        (1, 1), (2,2)]. If the size of mask_polygon > 0, then data_array will be masked to the area
         within the polygon defined by it.
 
     Returns

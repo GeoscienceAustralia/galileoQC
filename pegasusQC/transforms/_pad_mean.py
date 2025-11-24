@@ -41,13 +41,13 @@ def _pad_mean(grid, pad_cells):
 
     numpy 2D array
 
-        the expanded, nanmask grid.
+        the expanded, nan_mask grid.
         
     """
     # Trim edges of inputs to remove NaNs, 
     grid = _trim_rectangle(grid)
-    nanmask = np.isnan(grid.data)
-    pnanmask = np.pad(nanmask, pad_width=pad_cells, mode='constant', constant_values=np.nan)
+    nan_mask = np.isnan(grid.data)
+    pnanmask = np.pad(nan_mask, pad_width=pad_cells, mode='constant', constant_values=np.nan)
 
     # First, fill any holes in the rectangular grid array
     # rioxarray does this really well but it wants a CRS first

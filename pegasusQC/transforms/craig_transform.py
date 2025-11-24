@@ -24,7 +24,7 @@ from pegasusQC.gridFiles.sample_grid_to_line import sample_grid_to_line
 
 def craig_transform(
     whizzFile=None, gne_chan=None, guv_chan=None, gd_chan=None,
-    cell_size=None, result_units='um/s/s', mask_polygon=None,
+    cell_size=None, result_units='um/s/s', survey_polygon=None,
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
     regional_grav_units='mGal',
     numstns=None, firstorder=False
@@ -75,11 +75,12 @@ def craig_transform(
         The gravity units of the final resultant grid. Must be either "mGal" or
         "gu" or "um/s/s". Default "um/s/s".
 
-    mask_polygon : ?##?, optional
+    survey_polygon : numpy 2D array, optional
 
-        The polygon of the survey boundary. Final output will be trimmed to
-        this polygon if provided. Default None and the output is trimmed to
-        the smallest rectangle containing all the input curvature data.
+        The polygon vertices of the survey boundary, as an array or sequence of (x,y)
+        pairs, in either clockwise or counter-clockwise order around the boundary.
+        For example, survey_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
+        trimmed to this polygon if provided. Default None.
 
     pad_cells : int, optional
 
@@ -173,7 +174,7 @@ def craig_transform(
         # main calculation
         gD_grid, gD_err = gravity_from_curv(
             Ane, Auv, cell_size, gd_chan=gd_chan, altitude=None, 
-            result_units=result_units, mask_polygon=mask_polygon,
+            result_units=result_units, survey_polygon=survey_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode,
             regional_grid_file=regional_grid_file,
             regional_grav_units=regional_grav_units,

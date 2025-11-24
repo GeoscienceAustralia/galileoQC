@@ -87,7 +87,7 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
     # Transform regional to differential curvatures
     gne_reg, guv_reg = Kurvs_of_grav(regional_grid, firstorder=firstorder)
 
-    print('\nGrid Statistics')
+    print('\nInitial Grid Statistics')
     print('  Gne regional')
     report_gridStats(gne_reg)
     print('  Gne local')
@@ -113,17 +113,16 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
     data_mask_ne = np.isnan(Gne_padded.data)
     data_mask_uv = np.isnan(Guv_padded.data)
 
-    # get the locations of not-NaNs in the local data
-    # data_good_ne = not data_mask_ne
-    # data_good_uv = not data_mask_uv
-
     test_ne = gne_reg_match - Gne_padded
-    print('\n Grid stats Gne regional subtract local')
+    print('\n Grid stats: regional subtract local.')
+    print(' Ideally, the mean should be close to 0 (abs value < 1),')
+    print(' and the range should be roughly symmetrical.')
+    print('\n   Gne')
     report_gridStats(test_ne)
     xdImage(_trim_rectangle(test_ne), 'Gne regional subtract local (E)', hs=False)
 
     test_uv = guv_reg_match - Guv_padded
-    print('\n Grid stats Guv regional subtract local')
+    print('\n   Guv')
     report_gridStats(test_uv)
     xdImage(_trim_rectangle(test_uv), 'Guv regional subtract local (E)', hs=False)
 

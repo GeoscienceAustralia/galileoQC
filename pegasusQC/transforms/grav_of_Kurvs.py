@@ -11,13 +11,16 @@ License: CC BY-SA
 """
 
 import numpy as np
+import matplotlib.path as mpltPath
+
 from pegasusQC.gridFiles.gridutility import report_gridStats
-# import pegasusQC.gridFiles.gridutility as gut
+from pegasusQC.transforms._trim_rectangle import _trim_rectangle
+import pegasusQC.gridFiles.gridutility as gut
 from scipy.fftpack import fft2
 import xrft
 
 
-def grav_of_Kurvs(Gne, Guv, firstorder=False, mask_polygon=None, nan_mask=None):
+def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None):
     """
     Apply the Craig Transform to (`Guv` + i `Gne`), mask the resulting grid
     to `mask_region` (NOT IMPLEMENTED),
@@ -43,11 +46,12 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, mask_polygon=None, nan_mask=None):
 
         If True, include first order Craig correction. Default False.
 
-    mask_polygon : numpy 1D array, optional
+    survey_polygon : numpy 1D array, optional
 
-        In order [min_x, max_x, min_y, max_y]. If the mask_polygon is given,
-        then the output arrays will be masked to the area within the polygon
-        defined by it. Default None.
+        The polygon vertices of the survey boundary, as an array or sequence of (x,y)
+        pairs, in either clockwise or counter-clockwise order around the boundary.
+        For example, survey_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
+        trimmed to this polygon if provided. Default None.
 
     nan_mask : numpy 2D mask array, optional
 
@@ -104,20 +108,21 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, mask_polygon=None, nan_mask=None):
     gD_im = gD_tr.imag
     gD_re = gD_tr.real
 
-    # ... replace NaNs and remove padding, ...
+    # ... replace NaNs, ...
     if not nan_mask is None:
-        gD_im_2 = gD_im.where(~nan_mask, other=np.nan)
-        gD_re_2 = gD_re.where(~nan_mask, other=np.nan)
+        gD_im = gD_im.where(~nan_mask, other=np.nan)
+        gD_re = gD_re.where(~nan_mask, other=np.nan)
+    # ... mask to survey boundary polygon, ...
+    if not survey_polygon is None:
+        x_chan = 'x'
+        y_chan = 'y'
+        gD_err = gut.maskGridByPolygon(gD_im, survey_polygon, x_chan=x_chan, y_chan=y_chan)
+        x_chan = 'x'
+        y_chan = 'y'
+        gD_result = gut.maskGridByPolygon(gD_re, survey_polygon, x_chan=x_chan, y_chan=y_chan)
     else:
-        gD_im_2 = gD_im
-        gD_re_2 = gD_re
-    # plt.imshow(gD_tr.real)
-    # plt.imshow(gD_tr_2.real)
-    if not mask_polygon is None:
-        gD_err = gD_im_2.sel(x=slice(mask_polygon[0], mask_polygon[1]), y=slice(mask_polygon[2], mask_polygon[3]))
-        gD_result = gD_re_2.sel(x=slice(mask_polygon[0], mask_polygon[1]), y=slice(mask_polygon[2], mask_polygon[3]))
-    else:
-        gD_err = gD_im_2
-        gD_result = gD_re_2
-    
-    return gD_result, gD_err
+        gD_err = gD_im
+        gD_result = gD_re
+    # ...,  and trim to smallest cardinal rectangle.
+
+    return _trim_rectangle(gD_result), _trim_rectangle(gD_err)

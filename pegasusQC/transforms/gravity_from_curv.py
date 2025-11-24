@@ -24,7 +24,7 @@ def gravity_from_curv(Ane, Auv, cell_size,
                     gd_chan=None,
                     altitude=None,
                     result_units='um/s/s', 
-                    mask_polygon=None,
+                    survey_polygon=None,
                     pad_cells=None,
                     padding_mode='regional',
                     regional_grid_file=None,
@@ -71,11 +71,12 @@ def gravity_from_curv(Ane, Auv, cell_size,
         The gravity units of the final resultant grid. Must be either "mGal" or
         "gu" or "um/s/s". Default "um/s/s".
 
-    mask_polygon : numpy 1D array, optional
+    survey_polygon : numpy 1D array, optional
 
-        In order [min_x, max_x, min_y, max_y]. If the mask_polygon is given,
-        then the output arrays will be masked to the area within the polygon
-        defined by it. Default None.
+        The polygon vertices of the survey boundary, as an array or sequence of (x,y)
+        pairs, in either clockwise or counter-clockwise order around the boundary.
+        For example, survey_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
+        trimmed to this polygon if provided. Default None.
 
     pad_cells : int, optional
 
@@ -182,16 +183,18 @@ def gravity_from_curv(Ane, Auv, cell_size,
     
     # Grid the data in common region
     print('\nInterpolating the local curvature gradients to grids.')
-    Ane_grid, Ane_region = xarray_to_grid(Ane, cell_size, region=intersectregion,
-                                             method='minc', mask_polygon=[], 
-                                             mask_pixels=input_mask_pixels, 
-                                             numneighbours=5, bdist=None, maxiters=100
-                 )
-    Auv_grid, Auv_region = xarray_to_grid(Auv, cell_size, region=intersectregion,
-                                             method='minc',mask_polygon=[], 
-                                             mask_pixels=input_mask_pixels, 
-                                             numneighbours=5, bdist=None, maxiters=100
-                 )
+    Ane_grid, Ane_region = xarray_to_grid(
+        Ane, cell_size, region=intersectregion,
+        method='minc', mask_polygon=survey_polygon, 
+        mask_pixels=input_mask_pixels, 
+        numneighbours=5, bdist=None, maxiters=100
+        )
+    Auv_grid, Auv_region = xarray_to_grid(
+        Auv, cell_size, region=intersectregion,
+        method='minc',mask_polygon=survey_polygon, 
+        mask_pixels=input_mask_pixels, 
+        numneighbours=5, bdist=None, maxiters=100
+        )
 
     # Pad and fill the data
     print('\nPadding the local curvature gradient grids.')
@@ -203,10 +206,15 @@ def gravity_from_curv(Ane, Auv, cell_size,
     
     # Transform to gD
     print('\nTransforming the local curvature gradient grids to gravity.')
-    if mask_polygon is None:
-        mask_polygon = intersectregion
+    if survey_polygon is None:
+        survey_polygon = [
+        (intersectregion[0], intersectregion[2]),
+        (intersectregion[1], intersectregion[2]),
+        (intersectregion[1], intersectregion[3]),
+        (intersectregion[0], intersectregion[3])
+        ]
     gD_grid, gD_err = grav_of_Kurvs(Ane_grid_pad, Auv_grid_pad,
-        firstorder=firstorder, mask_polygon=mask_polygon, nan_mask=nan_mask)
+        firstorder=firstorder, survey_polygon=survey_polygon, nan_mask=nan_mask)
 
 
     # ..., scale to desired units

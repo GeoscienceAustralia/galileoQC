@@ -60,30 +60,27 @@ def _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=N
 
     # No expansion: just mean-correct
     if pad_cells < 1:
-        nanmask = np.isnan(Gne_grid.data)
+        nan_mask = np.isnan(Gne_grid.data)
         Gne_grid_padded = Gne_grid - Gne_grid.mean()
-        Guv_grid_padded = Guv_grid - Guv_grid.mean(), nanmask
+        Guv_grid_padded = Guv_grid - Guv_grid.mean()
     
     # Here the mean-padding is along each vector, ...
     if mode == "mean":
-        Gne_grid_padded, nanmask = _pad_mean(Gne_grid, pad_cells)
-        Guv_grid_padded, nanmask = _pad_mean(Guv_grid, pad_cells)
-        # nanmask = np.isnan(Gne_grid_padded.data)
+        Gne_grid_padded, nan_mask = _pad_mean(Gne_grid, pad_cells)
+        Guv_grid_padded, nan_mask = _pad_mean(Guv_grid, pad_cells)
     
     elif mode == "regional":
-        Gne_grid_padded, Guv_grid_padded, nanmask = _pad_regional(Gne_grid,
+        Gne_grid_padded, Guv_grid_padded, nan_mask = _pad_regional(Gne_grid,
             Guv_grid, pad_cells, regional_grid, firstorder=firstorder)
 
-        # if nanmask is None:
-        #     nanmask = np.isnan(Gne_grid_padded.data)
     else:
         print("\nWARNING in _pad_grid. The mode {mode} is unrecognised.")
         print("It should be one of 'mean' or 'regional'; no padding done.")
-        nanmask = np.isnan(Gne_grid.data)
+        nan_mask = np.isnan(Gne_grid.data)
         Gne_grid_padded = Gne_grid - Gne_grid.mean()
         Guv_grid_padded = Guv_grid - Guv_grid.mean()
 
-    return Gne_grid_padded, Guv_grid_padded, nanmask
+    return Gne_grid_padded, Guv_grid_padded, nan_mask
 
 
 
