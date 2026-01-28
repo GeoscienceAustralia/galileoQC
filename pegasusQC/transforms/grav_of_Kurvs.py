@@ -11,13 +11,13 @@ License: CC BY-SA
 """
 
 import numpy as np
+import xrft
 import matplotlib.path as mpltPath
 
+from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.gridFiles.gridutility import report_gridStats
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 import pegasusQC.gridFiles.gridutility as gut
-from scipy.fftpack import fft2
-import xrft
 
 
 def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None):
@@ -78,8 +78,8 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     # Next, form the wavenumbers ...
     kx, ky = np.meshgrid(kurv_fft.freq_x, kurv_fft.freq_y)
     k = np.sqrt(kx * kx + ky * ky)
-    print(f'Wavenumber resolution = {kx[0,1] - kx[0,0]:.3g}')
-    print(f'Equivalent wavelength = {1.0 / (kx[0,1] - kx[0,0]):.3g} m.')
+    print(f'Wavenumber resolution = {k[0,1] - k[0,0]:.3g}')
+    print(f'Equivalent wavelength = {2.0 * np.pi / (k[0,1] - k[0,0]):.3g} m.')
     
     # ..., find the indices of the wavenumber origin ... 
     ky_null = np.nonzero(kurv_fft.freq_y.values == 0)[0][0]
@@ -107,6 +107,7 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     # Separate real and imag parts now so masking works as desired.
     gD_im = gD_tr.imag
     gD_re = gD_tr.real
+    xdImage(gD_re, 'unmasked, untrimmed gD_grid (um/s/s)', hs=True)
 
     # ... replace NaNs, ...
     if not nan_mask is None:
@@ -125,4 +126,4 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
         gD_result = gD_re
     # ...,  and trim to smallest cardinal rectangle.
 
-    return _trim_rectangle(gD_result), _trim_rectangle(gD_err)
+    return _trim_rectangle(gD_result), _trim_rectangle(gD_err), gD_tr.real
