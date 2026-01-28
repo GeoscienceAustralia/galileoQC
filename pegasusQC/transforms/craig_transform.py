@@ -11,6 +11,7 @@ License: CC BY-SA
 """
 
 import numpy as np
+import xarray as xr
 
 from pegasusQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from pegasusQC.transforms.spheretest import (sphereSurvey, _make_xr)
@@ -20,6 +21,8 @@ from pegasusQC.gridFiles.xarray_to_grid import xarray_to_grid
 from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.gridFiles.gridutility import report_gridStats
 from pegasusQC.gridFiles.sample_grid_to_line import sample_grid_to_line
+from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
+from pegasusQC.transforms.conform import conform
 
 
 def craig_transform(
@@ -27,7 +30,7 @@ def craig_transform(
     cell_size=None, result_units='um/s/s', survey_polygon=None,
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
     regional_grav_units='mGal',
-    numstns=None, firstorder=False
+    numstns=None, firstorder=False, conforming=False
 ):
     """
     Runs the Craig transform on gravity differential curvature data to
@@ -96,7 +99,7 @@ def craig_transform(
     regional_grid_file : String, optional
 
         Name of the ERS file containing the regional grid. Required if
-        `padding_mode` == "regional". Default None.
+        `padding_mode` == "regional" or if `confroming` == True. Default None.
 
     regional_grav_units : String, optional
 
@@ -107,22 +110,27 @@ def craig_transform(
     firstorder : bool, optional
 
         If True, include first order Craig correction. Default False.
+        
+    conforming : bool, optional
+
+        If True, then high-pass filter the gD data before returning it.
+        Default False.
 
     RETURNS
     ----------
     None:
     
     """
-    if not whizzFile is None and padding_mode == "regional":
+    if not whizzFile is None and (padding_mode == "regional" or conforming == True):
         if regional_grid_file is None:
-            print('\nERROR - regional padding mode requires a regional grid file to be specified.')
+            print('\nERROR - regional padding mode and conforming require a regional grid file to be specified.')
             return
         elif regional_grav_units in ("mGal", "mgal"):
             regional_grav_units = "mGal"
         elif regional_grav_units in ("gu", "um/s/s"):
             regional_grav_units = "um/s/s"
         else:
-            print('\nERROR - regional grid file gravity units not understood.')
+            print('\nERROR - regional grid file gravity units not understood. Must be "mGal" or "um/s/s".')
             return
 
     if whizzFile is None:
@@ -171,21 +179,55 @@ def craig_transform(
                 print('ERROR - could not calculate cell size, please enter explicitly.')
                 return None
         
+        # If required, get the regional grid from file
+        if conforming or padding_mode == 'regional':
+            e_chan = Ane.attrs['x_channel']
+            n_chan = Ane.attrs['y_channel']
+            print('\nReading in the regional data.')
+            reg_xa, _ = gridfile_to_xa(regional_grid_file)
+            # Nicer if we use the same coordinate names for all!
+            regional_grid = xr.DataArray(data=reg_xa.data,
+                                         dims=['y', 'x'],
+                                         coords={
+                                             'y': reg_xa.y.values,
+                                             'x': reg_xa.x.values
+                                         },
+                                         attrs={
+                                         'author': 'Mark Dransfield',
+                                         'x_channel': e_chan,
+                                         'y_channel': n_chan,
+                                         'z_channel': regional_grid_file,
+                                         'units': regional_grav_units
+                                         })
+
         # main calculation
-        gD_grid, gD_err = gravity_from_curv(
+        gD_grid, gD_err, gD_raw = gravity_from_curv(
             Ane, Auv, cell_size, gd_chan=gd_chan, altitude=None, 
             result_units=result_units, survey_polygon=survey_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode,
-            regional_grid_file=regional_grid_file,
-            regional_grav_units=regional_grav_units,
+            regional_grid=regional_grid,
             firstorder=firstorder
         )
 
+        # conformed to regional if required.
+        if conforming:
+            print('  Raw grid stats:')
+            report_gridStats(gD_raw)
+            print('  Regional grid stats:')
+            report_gridStats(regional_grid)
+            # xdImage(gD_raw, 'gD_raw (um/s/s)', hs=False)
+
+            gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon)
+            print('  conformed grid stats:')
+            report_gridStats(gD_grid)
+
         # report statistics, and image grids (calculate clipping limits for images)
+        print('  Final conformed and transformed grid stats:')
+        report_gridStats(gD_grid)
         im_min = np.nanmin(gD_grid.data)
         im_max = np.nanmax(gD_grid.data)
-        report_gridStats(gD_grid)
         xdImage(gD_grid, 'gD_grid (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
+        print('  Final error grid stats:')
         report_gridStats(gD_err)
         xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
 
