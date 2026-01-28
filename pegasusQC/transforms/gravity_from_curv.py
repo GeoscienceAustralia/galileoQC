@@ -27,8 +27,7 @@ def gravity_from_curv(Ane, Auv, cell_size,
                     survey_polygon=None,
                     pad_cells=None,
                     padding_mode='regional',
-                    regional_grid_file=None,
-                    regional_grav_units='mGal',
+                    regional_grid=None,
                     firstorder=False
 ):
     """
@@ -104,7 +103,6 @@ def gravity_from_curv(Ane, Auv, cell_size,
 
         If True, include first order Craig correction. Default False.
         
-
     Returns
     -------
     gD : xarray 2D DataArray
@@ -125,22 +123,6 @@ def gravity_from_curv(Ane, Auv, cell_size,
         regional_grid = None
         input_mask_pixels = 5
     elif mode == 'regional':
-        print('\nReading in the regional data for padding.')
-        reg_xa, _ = gridfile_to_xa(regional_grid_file)
-        # Nicer if we use the same coordinate names for all!
-        regional_grid = xr.DataArray(data=reg_xa.data,
-                                     dims=['y', 'x'],
-                                     coords={
-                                         'y': reg_xa.y.values,
-                                         'x': reg_xa.x.values
-                                     },
-                                     attrs={
-                                     'author': 'Mark Dransfield',
-                                     'x_channel': e_chan,
-                                     'y_channel': n_chan,
-                                     'z_channel': regional_grid_file,
-                                     'units': regional_grav_units
-                                     })
         input_mask_pixels = 3
     elif mode == 'constant':
         regional_grid = None
@@ -213,9 +195,12 @@ def gravity_from_curv(Ane, Auv, cell_size,
         (intersectregion[1], intersectregion[3]),
         (intersectregion[0], intersectregion[3])
         ]
-    gD_grid, gD_err = grav_of_Kurvs(Ane_grid_pad, Auv_grid_pad,
-        firstorder=firstorder, survey_polygon=survey_polygon, nan_mask=nan_mask)
-
+    gD_grid, gD_err, gD_raw = grav_of_Kurvs(
+        Ane_grid_pad, Auv_grid_pad,
+        firstorder=firstorder, 
+        survey_polygon=survey_polygon, 
+        nan_mask=nan_mask
+        )
 
     # ..., scale to desired units
     if result_units in ('mGal', 'mGal'):
@@ -223,11 +208,15 @@ def gravity_from_curv(Ane, Auv, cell_size,
         gD_grid.attrs['units'] = 'mGal'
         gD_err = gD_err / 10000.0
         gD_err.attrs['units'] = 'mGal'
+        gD_raw = gD_raw / 10000.0
+        gD_raw.attrs['units'] = 'mGal'
     else:
         gD_grid = gD_grid / 1000.0
         gD_grid.attrs['units'] = 'um/s/s'
         gD_err = gD_err / 1000.0
         gD_err.attrs['units'] = 'um/s/s'
+        gD_raw = gD_raw / 1000.0
+        gD_raw.attrs['units'] = 'um/s/s'
 
     # ..., and store attributes
     if gd_chan is None:
@@ -244,5 +233,10 @@ def gravity_from_curv(Ane, Auv, cell_size,
     gD_err.attrs['long_name'] = imag_chan
     gD_err.attrs['title'] = 'gD imaginary part'
 
-    return gD_grid, gD_err
+    gD_raw.attrs['x_channel'] = e_chan
+    gD_raw.attrs['y_channel'] = n_chan
+    gD_raw.attrs['long_name'] = 'gD_craig_raw'
+    gD_raw.attrs['title'] = 'gD via Craig transform (unmasked)'
+
+    return gD_grid, gD_err, gD_raw
     
