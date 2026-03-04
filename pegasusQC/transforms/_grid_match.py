@@ -47,6 +47,8 @@ def _grid_match(local, regional):
     reg_matched = xr.DataArray(
         data=(interp((Y,X))),
         dims=["y", "x"],
-        coords={"y": local.y.values, "x": local.x.values})
-    return reg_matched - reg_matched.mean()
+        coords={"y": local.y.values, "x": local.x.values},
+        attrs=regional.attrs,
+        )
+    return reg_matched
     

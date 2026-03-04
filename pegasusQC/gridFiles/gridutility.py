@@ -47,6 +47,12 @@ def report_gridStats(my_grid, mask_polygon=[]):
         print(f'min of result = {my_grid.min().data.item():.2f}')
         print(f'max of result = {my_grid.max().data.item():.2f}')
     print(f'Array shape = {my_grid.shape}')
+    print(f'exscribed rectangle:')
+    print(f'  [{min(my_grid.x.values):.0f}, [{min(my_grid.y.values):.0f}],')
+    print(f'  [{max(my_grid.x.values):.0f}, [{min(my_grid.y.values):.0f}],')
+    print(f'  [{max(my_grid.x.values):.0f}, [{max(my_grid.y.values):.0f}],')
+    print(f'  [{min(my_grid.x.values):.0f}, [{max(my_grid.y.values):.0f}]')
+    print(f'cell spacing = {my_grid.x.values[1]-my_grid.x.values[0]:.0f}')
 
 
 def maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y'):

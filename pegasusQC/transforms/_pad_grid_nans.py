@@ -52,5 +52,6 @@ def _pad_grid_nans(grid, pad_cells):
         parr.y.values[i] = parr.y.values[pad_cells] - (pad_cells - i) * dy
         parr.y.values[-1-i] = parr.y.values[-1-pad_cells] + (pad_cells - i) * dy
 
+    parr += -parr.mean()
     # ... so need to mean-correct post-padding
-    return parr - parr.mean()
+    return parr

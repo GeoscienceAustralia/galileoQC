@@ -148,9 +148,9 @@ def craig_transform(
                   mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
                  )
         gD_grid_syn, gD_err_syn, Ane_grid = gravity_from_curv(
-            Gne_syn, Guv_syn, cell_size=cell_size, altitude=None,
-            result_units=result_units, mask_polygon=None,
-            pad_cells=pad_cells, padding_mode=padding_mode,
+            Gne_syn, Guv_syn, cell_size, gd_chan=gd_chan, altitude=None,
+            result_units=result_units, survey_polygon=survey_polygon,
+            pad_cells=pad_cells, padding_mode=padding_mode, regional_grid=None,
             firstorder=False
         )
 

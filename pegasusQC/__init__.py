@@ -107,3 +107,4 @@ from pegasusQC.qualitycontrol.checkAtmosEffect import checkAtmosEffect
 
 # Data Transforms
 from pegasusQC.transforms.craig_transform import craig_transform
+from pegasusQC.transforms.conform import conform
