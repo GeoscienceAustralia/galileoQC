@@ -218,6 +218,7 @@ def craig_transform(
             # xdImage(gD_raw, 'gD_raw (um/s/s)', hs=False)
 
             gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon)
+            # conform(loc_file, reg_file, loc_units, reg_units, pad_cells, survey_polygon, rim, low_lambda, hi_lambda, plot_flag=False)
             print('  conformed grid stats:')
             report_gridStats(gD_grid)
 

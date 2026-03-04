@@ -2,18 +2,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 import xrft
-from pathlib import Path
 
 from pegasusQC.transforms.cos2_filter import cos_square_radial_filter
 from pegasusQC.transforms._pad_grid_nans import _pad_grid_nans
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 from pegasusQC.transforms._grid_match import _grid_match
-from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from pegasusQC.gridFiles.xdImage import xdImage
+from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
 
-def conform(loc_file, reg_file, loc_units, reg_units, pad_cells, mask_polygon, rim, low_lambda, hi_lambda, plot_flag=False):
+def conform_from_file(loc_file, reg_file, loc_units, reg_units, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False):
     """
     Conforms (Dransfield, 2008) the `local` grid in `loc_file` to the `regional` grid in `reg_file`.
+    
+    If `loc_file` and `reg_file` both equal the string "synth", then a synthetic model is
+    constructed and conformed. This is for testing.
     
     Parameters
     ----------
@@ -32,30 +34,34 @@ def conform(loc_file, reg_file, loc_units, reg_units, pad_cells, mask_polygon, r
     reg_units : String
 
         The units ("mGal" or "ums2") of the regional gravity data.
-        
-    pad_cells : Int
-
-        The number of grid cells to pad the `local` data for the Fourier transform.
     
-    mask_polygon : List
+    survey_polygon : List
 
         The polygon vertices of the survey boundary, as an array or list of (x,y)
         pairs, in either clockwise or counter-clockwise order around the boundary.
-        For example, mask_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
+        For example, survey_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
         trimmed to this polygon.
     
-    rim : Int
+    rim : Int, optional
 
         The width in number of pixels for a narrow strip around the `local` grid which will
         be filled by interpolation to the padding area. A value between 8 and 16 is recommended.
-    
-    low_lambda : Float
+        Default 16.
+        
+    low_lambda : Float, optional
 
-        The short wavelength defining the cosine squared conforming filter.
+        The short wavelength defining the cosine squared conforming filter. Defaults to a value
+        depending on the size of the local grid.
     
-    hi_lambda : Float
+    hi_lambda : Float, optional
 
-        The long wavelength defining the cosine squared conforming filter.
+        The long wavelength defining the cosine squared conforming filter. Defaults to 1.2 times
+        `low_lambda`.
+    
+    pad_cells : Int, optional
+
+        The number of grid cells to pad the `local` data for the Fourier transform. Defaults to
+        a value dependent on `low_lambda`.
     
     plot_flag : Bool, optional
 
@@ -73,61 +79,137 @@ def conform(loc_file, reg_file, loc_units, reg_units, pad_cells, mask_polygon, r
     -----
     ToDo:
     
-    - allow mask_polygon to be None, and default to smallest enclosing cardinal rectangle;
+    - allow survey_polygon to be None, and default to smallest enclosing cardinal rectangle;
+    - use convex hull instead of rectangle at 'pad out local with NaNs' stage;
+    - investigate the use of windows in the FFTs, and optimise;
+    
+    """
+    stoperror = False
+
+    # setup for the synthetic model
+    if "synth" in str(loc_file) or "synth" in str(reg_file):
+        local = harmonicSurvey(size=6000.)
+        regional = harmonicSurvey(size=50000.)
+        local.attrs['units'] = "um/s/s"
+        regional.attrs['units'] = "um/s/s"
+        if low_lambda == None or hi_lambda == None:
+            low_lambda = 6000.
+            hi_lambda = 9000.
+        if pad_cells == None:
+            cell_size = round((local.x.data[1] - local.x.data[0]) / 2.0, 1)
+            pad_cells = int(np.round(low_lambda / cell_size, 0))
+    
+    # setup for data read from file
+    else:
+        local, _ = gridfile_to_xa(whizzFile=loc_file)
+        regional, _ = gridfile_to_xa(whizzFile=reg_file)
+        
+        # Local - check units
+        if loc_units in ["mGal", "mgal"]:
+            local = local * 10.0
+            local.attrs['units'] = "um/s/s"
+        elif loc_units in ["gu", "ums2", "um/s/s"]:
+            local.attrs['units'] = "um/s/s"
+        else:
+            print('ERROR - loc_units not one of "mGal", "ums2", "um/s/s"')
+            stoperror = True
+            
+        # Regional - check units
+        if reg_units in ["mGal", "mgal"]:
+            regional = regional * 10.0
+            regional.attrs['units'] = "um/s/s"
+        elif reg_units in ["gu", "ums2", "um/s/s"]:
+            regional.attrs['units'] = "um/s/s"
+        else:
+            print('ERROR - reg_units not one of "mGal", "ums2", "um/s/s"')
+            stoperror = True
+            
+        if stoperror:
+            return None
+        
+    return conform(local, regional, survey_polygon, rim, low_lambda, hi_lambda, pad_cells, plot_flag)
+
+
+def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False):
+    """
+    Conforms (Dransfield, 2008) the `local` grid in `loc_file` to the `regional` grid in `reg_file`.
+    
+    Parameters
+    ----------
+    local_in : xarray.core.dataarray.DataArray
+
+        The `local` grid to be conformed.
+    
+    regional : xarray.core.dataarray.DataArray
+
+        The regional grid used to conform.
+
+    survey_polygon : List
+
+        The polygon vertices of the survey boundary, as an array or list of (x,y)
+        pairs, in either clockwise or counter-clockwise order around the boundary.
+        For example, survey_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
+        trimmed to this polygon.
+    
+    rim : Int, optional
+
+        The width in number of pixels for a narrow strip around the `local` grid which will
+        be filled by interpolation to the padding area. A value between 8 and 16 is recommended.
+        Default 16.
+        
+    low_lambda : Float, optional
+
+        The short wavelength defining the cosine squared conforming filter. Defaults to a value
+        depending on the size of the local grid.
+    
+    hi_lambda : Float, optional
+
+        The long wavelength defining the cosine squared conforming filter. Defaults to 1.2 times
+        `low_lambda`.
+    
+    pad_cells : Int, optional
+
+        The number of grid cells to pad the `local` data for the Fourier transform. Defaults to
+        a value dependent on `low_lambda`.
+    
+    plot_flag : Bool, optional
+
+        If True, images will be displayed of the grids at each stage of the processing. If False,
+        then only the `local` input and output grids will be displayed. Default False.
+    
+
+    RETURNS
+    ----------
+    conformed_local : xarray.core.dataarray.DataArray
+    
+        The `local` grid conformed to the long wavelengths of the `regional` grid. Output in units of um/s/s.
+        
+    NOTES
+    -----
+    ToDo:
+    
+    - allow survey_polygon to be None, and default to smallest enclosing cardinal rectangle;
     - use convex hull instead of rectangle at 'pad out local with NaNs' stage;
     - investigate the use of windows in the FFTs, and optimise;
     
     """
     stoperror = False
     da_extremes = lambda da : f'; range = ({da.min().values:.0f}, {da.max().values:.0f})'
-
-    # setup for the synthetic model
-    if "synth" in str(loc_file) or "synth" in str(reg_file):
-        local_in = harmonicSurvey(size=6000.)
-        regional = harmonicSurvey(size=50000.)
-        local_in.attrs['units'] = "gu"
-        regional.attrs['units'] = "gu"
-    
-    # setup for data read from file
-    else:
-        local_in, _ = gridfile_to_xa(whizzFile=loc_file)
-        regional, _ = gridfile_to_xa(whizzFile=reg_file)
-        
-        # check that valid units were provided
-        if loc_units in ["mGal", "mgal"]:
-            local_in = local_in * 10.0
-            local_in.attrs['units'] = "gu"
-        elif loc_units in ["gu", "ums2"]:
-            local_in.attrs['units'] = "gu"
-        else:
-            print('ERROR - loc_units not one of "mGal", "ums2"')
-            stoperror = True
             
-        if reg_units in ["mGal", "mgal"]:
-            regional = regional * 10.0
-            regional.attrs['units'] = "gu"
-        elif reg_units in ["gu", "ums2"]:
-            regional.attrs['units'] = "gu"
-        else:
-            print('ERROR - reg_units not one of "mGal", "ums2"')
-            stoperror = True
-            
-        if stoperror:
-            return None
-    
-    # check for square grid cells in regional
-    reg_cell_size = round((regional.x.data[1] - regional.x.data[0]) / 2.0, 1)
-    tst_cell_size = round((regional.y.data[1] - regional.y.data[0]) / 2.0, 1)
-    if reg_cell_size != tst_cell_size:
-        print(f'ERROR regional grid does not have square cells: {reg_cell_size} != {(regional.y.data[1] - regional.y.data[0]) / 2.0}')
+    # local grid check
+    local_in, stoperror = _check_grid(local_in)
+    if stoperror:
+        print(f'ERROR in local grid.')
         return None
 
-    # check for square grid cells in local
-    loc_cell_size = round((local_in.x.data[1] - local_in.x.data[0]) / 2.0, 1)
-    tst_cell_size = round((local_in.y.data[1] - local_in.y.data[0]) / 2.0, 1)
-    if loc_cell_size != tst_cell_size:
-        print(f'ERROR local grid does not have square cells: {loc_cell_size} != {(local_in.y.data[1] - local_in.y.data[0]) / 2.0}')
+    # regional grid check
+    regional, stoperror = _check_grid(regional)
+    if stoperror:
+        print(f'ERROR in regional grid.')
         return None
+
+    low_lambda, hi_lambda, pad_cells = _set_defaults(low_lambda, hi_lambda, pad_cells, survey_polygon, local_in.attrs['cell_size'])
+    print(f'Parameters: low_lambda = {low_lambda:.0f}, hi_lambda = {hi_lambda:.0f}, pad_cells = {pad_cells}')
 
     if plot_flag:
         xdImage(local_in, f'starting local grid {da_extremes(local_in)}', hs=True)
@@ -292,7 +374,7 @@ def conform(loc_file, reg_file, loc_units, reg_units, pad_cells, mask_polygon, r
     geometries = [
         {
             'type': 'Polygon',
-            'coordinates': [mask_polygon]
+            'coordinates': [survey_polygon]
         }
     ]
     sum_masked.rio.write_crs(4283, inplace=True)
@@ -363,4 +445,65 @@ def harmonicSurvey(size=6000.0, lambdas=None):
         da += A * np.sin(k_x * X + phi_x) * np.sin(k_y * Y + phi_y)
 
     return da
+
+
+def _check_grid(grid):
+    """
+    Checks that the gravity `grid` has square grid cells, and units of um/s/s. Designed
+    only for use by `conform`.
+    """
+    stoperror = False
+
+    # check for square grid cells
+    cell_size = round((grid.x.data[1] - grid.x.data[0]) / 2.0, 1)
+    tst_cell_size = round((grid.y.data[1] - grid.y.data[0]) / 2.0, 1)
+    if cell_size != tst_cell_size:
+        print(f'ERROR grid does not have square cells: {cell_size} != {(grid.y.data[1] - grid.y.data[0]) / 2.0}')
+        stoperror = True
+    else:
+        grid.attrs['cell_size'] = cell_size
+        
+    # local: check for valid units
+    if not 'units' in grid.attrs.keys():
+        print(f'ERROR grid does not have units.')
+        stoperror = True
+    elif not grid.attrs['units'] in ["gu", "ums2", "um/s/s"]:
+        print(f'ERROR grid units {grid.attrs["units"]} not in ["gu", "ums2", "um/s/s"].')
+        stoperror = True
+    else:
+        grid.attrs['units'] = "um/s/s"
+        
+    return grid, stoperror
+
+
+def _set_defaults(low_lambda, hi_lambda, pad_cells, survey_polygon, cell_size):
+    """
+    Sets sensible defaults for filter wavelengths, and number of cells for grid
+    padding, based on the survey size and the grid cell size.
+    
+    Designed only as a function for `conform`.
+    """
+    
+    if (low_lambda is None) and (not hi_lambda is None):
+        low_lambda = 0.8 * hi_lambda
+    elif not (low_lambda is None) and (hi_lambda is None):
+        hi_lambda = 1.2 * low_lambda
+    elif (low_lambda is None) and (hi_lambda is None):
+        minx = 1e10
+        maxx = -1.e10
+        miny = 1e10
+        maxy = -1.e10
+        for i in range(len(s)):
+            minx = min(minx, survey_polygon[i][0])
+            maxx = max(maxx, survey_polygon[i][0])
+            miny = min(miny, survey_polygon[i][1])
+            maxy = max(maxy, survey_polygon[i][1])
+        low_lambda = min((maxx - minx), (maxy - miny)) / 2.0
+        hi_lambda = 1.2 * hi_lambda
+        
+    if pad_cells is None:
+        pad_cells = int(np.round(low_lambda / cell_size, 0))
+    
+    return low_lambda, hi_lambda, pad_cells
+
 
