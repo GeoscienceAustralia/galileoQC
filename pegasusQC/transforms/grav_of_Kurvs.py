@@ -113,6 +113,7 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     if not nan_mask is None:
         gD_im = gD_im.where(~nan_mask, other=np.nan)
         gD_re = gD_re.where(~nan_mask, other=np.nan)
+        xdImage(gD_re, 'masked, untrimmed gD_grid (um/s/s)', hs=True)
     # ... mask to survey boundary polygon, ...
     if not survey_polygon is None:
         x_chan = 'x'
@@ -121,6 +122,7 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
         x_chan = 'x'
         y_chan = 'y'
         gD_result = gut.maskGridByPolygon(gD_re, survey_polygon, x_chan=x_chan, y_chan=y_chan)
+        xdImage(gD_result, 'masked, trimmed gD_grid (um/s/s)', hs=True)
     else:
         gD_err = gD_im
         gD_result = gD_re

@@ -493,13 +493,13 @@ def _set_defaults(low_lambda, hi_lambda, pad_cells, survey_polygon, cell_size):
         maxx = -1.e10
         miny = 1e10
         maxy = -1.e10
-        for i in range(len(s)):
+        for i in range(len(survey_polygon)):
             minx = min(minx, survey_polygon[i][0])
             maxx = max(maxx, survey_polygon[i][0])
             miny = min(miny, survey_polygon[i][1])
             maxy = max(maxy, survey_polygon[i][1])
         low_lambda = min((maxx - minx), (maxy - miny)) / 2.0
-        hi_lambda = 1.2 * hi_lambda
+        hi_lambda = 1.2 * low_lambda
         
     if pad_cells is None:
         pad_cells = int(np.round(low_lambda / cell_size, 0))

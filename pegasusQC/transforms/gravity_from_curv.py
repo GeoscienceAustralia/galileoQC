@@ -17,6 +17,7 @@ from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from pegasusQC.gridFiles.xarray_to_grid import xarray_to_grid
 from pegasusQC.transforms._calc_padcells import _calc_padcells
 from pegasusQC.transforms._pad_grids import _pad_grids
+from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.transforms.grav_of_Kurvs import grav_of_Kurvs
 
 
@@ -201,8 +202,10 @@ def gravity_from_curv(Ane, Auv, cell_size,
         survey_polygon=survey_polygon, 
         nan_mask=nan_mask
         )
+    xdImage(gD_grid, 'Post-gok: gD_grid (Em)', hs=False)
 
     # ..., scale to desired units
+    # ... 10,000 Em per mGal
     if result_units in ('mGal', 'mGal'):
         gD_grid = gD_grid / 10000.0
         gD_grid.attrs['units'] = 'mGal'

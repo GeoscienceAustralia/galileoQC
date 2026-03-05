@@ -208,6 +208,7 @@ def craig_transform(
             regional_grid=regional_grid,
             firstorder=firstorder
         )
+        xdImage(gD_grid, 'Post-gfc: gD_grid (um/s/s)', hs=False)
 
         # conformed to regional if required.
         if conforming:
@@ -215,9 +216,9 @@ def craig_transform(
             report_gridStats(gD_raw)
             print('  Regional grid stats:')
             report_gridStats(regional_grid)
-            # xdImage(gD_raw, 'gD_raw (um/s/s)', hs=False)
+            xdImage(gD_grid, ' Pre-conform: gD_grid (um/s/s)', hs=False)
 
-            gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon)
+            gD_grid = conform(gD_grid, regional_grid, survey_polygon=survey_polygon, plot_flag=True)
             # conform(loc_file, reg_file, loc_units, reg_units, pad_cells, survey_polygon, rim, low_lambda, hi_lambda, plot_flag=False)
             print('  conformed grid stats:')
             report_gridStats(gD_grid)
