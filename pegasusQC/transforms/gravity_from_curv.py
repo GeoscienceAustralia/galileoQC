@@ -29,7 +29,8 @@ def gravity_from_curv(Ane, Auv, cell_size,
                     pad_cells=None,
                     padding_mode='regional',
                     regional_grid=None,
-                    firstorder=False
+                    firstorder=False,
+                    plot_flag=False
 ):
     """
     Calculates the vertical gravity, gD, from the differential curvature
@@ -103,6 +104,11 @@ def gravity_from_curv(Ane, Auv, cell_size,
     firstorder : bool, optional
 
         If True, include first order Craig correction. Default False.
+    
+    plot_flag : Bool, optional
+
+        If True, images will be displayed of the grids at each stage of the processing. If False,
+        then only the `local` input and output grids will be displayed. Default False.
         
     Returns
     -------
@@ -202,7 +208,8 @@ def gravity_from_curv(Ane, Auv, cell_size,
         survey_polygon=survey_polygon, 
         nan_mask=nan_mask
         )
-    xdImage(gD_grid, 'Post-gok: gD_grid (Em)', hs=False)
+    if plot_flag:
+        xdImage(gD_grid, 'Post-gok: gD_grid (Em)', hs=False)
 
     # ..., scale to desired units
     # ... 10,000 Em per mGal

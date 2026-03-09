@@ -22,7 +22,7 @@ groupName = config.groupName
 projectName = config.projectName
 
 
-def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[]):
+def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[], verbose=False):
     """
     Return a point-located xArray Dataset of (northing, easting, z), over the `fiducials` dimension,
     from a whizz_file.
@@ -68,6 +68,10 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
     controls : String list, optional
 
         The line numbers to be skipped if skipcontrols=True. Default is empty.
+
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
 
     Returns
     -------

@@ -130,7 +130,10 @@ def conform_from_file(loc_file, reg_file, loc_units, reg_units, survey_polygon, 
     return conform(local, regional, survey_polygon, rim, low_lambda, hi_lambda, pad_cells, plot_flag)
 
 
-def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False):
+def conform(
+    local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, 
+    pad_cells=None, original_mask=None, plot_flag=False
+):
     """
     Conforms (Dransfield, 2008) the `local` grid in `loc_file` to the `regional` grid in `reg_file`.
     
@@ -171,6 +174,11 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
 
         The number of grid cells to pad the `local` data for the Fourier transform. Defaults to
         a value dependent on `low_lambda`.
+
+    original_mask : numpy mask array, optional
+
+        Used to mask the final conformed gravity before completion. Default is None, in
+        which case, `original_mask` is calculated from `local_in`.
     
     plot_flag : Bool, optional
 
@@ -195,6 +203,7 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
     """
     stoperror = False
     da_extremes = lambda da : f'; range = ({da.min().values:.0f}, {da.max().values:.0f})'
+    print('\nConforming the local gravity to the regional.')
             
     # local grid check
     local_in, stoperror = _check_grid(local_in)
@@ -216,7 +225,13 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
         xdImage(regional,f'starting regional grid {da_extremes(regional)}', hs=True)
     
     # This mask is so we can mask the final data back to the original extents after conforming
-    original_mask = np.ma.masked_array(local_in, ~np.isnan(local_in)).mask
+    if original_mask is None:
+        original_mask = np.ma.masked_array(local_in, ~np.isnan(local_in)).mask
+    if plot_flag:
+        # xdImage(original_mask, f'original_mask', clipTo3Std=False)
+        plt.imshow(original_mask, origin='lower')
+        print(f'orig mask 1 shape = {original_mask.shape}')
+
 
     # Filling holes in the original local grid (may want to restrict this to smallest
     # enclosing rectangle or, better, a convex hull)
@@ -270,7 +285,8 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
     reg_match_pad = _grid_match(parr, regional)
 
     # (pad original_mask with `pad_cells` NaNs so that it matches the final dataarray shape)
-    original_mask = np.pad(original_mask, pad_cells, mode='constant', constant_values=False)
+    # original_mask = np.pad(original_mask, pad_cells, mode='constant', constant_values=False)
+    # print(f'orig mask 2 shape = {original_mask.shape}')
 
     # smooth the padded grid in x, then y, directions
     test = parr.rolling(x=w, center=True).mean()#.dropna('x')
@@ -317,7 +333,7 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
     kx, ky = np.meshgrid(reg_fft.freq_x, reg_fft.freq_y)
     k = np.sqrt(kx * kx + ky * ky)
     print(f'Regional grid Wavenumber resolution = {k[0,1] - k[0,0]:.3g}')
-    print(f'Equivalent wavelength = {2.0 * np.pi / (k[0,1] - k[0,0]):.3g} m.')
+    print(f'              Equivalent wavelength = {2.0 * np.pi / (k[0,1] - k[0,0]):.0f} m.')
     k_zero = max(k_low, k_hi)
     k_unity = min(k_low, k_hi)
     if plot_flag:
@@ -325,9 +341,9 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
         a2[0].plot([k_zero, k_unity], [0., 1.])
         a2[0].set_title('low-pass')
         a2[0].set_xlabel('wavelength [m]')
-    print(f'Low pass filter 2dB = {(k_zero + k_unity) / 2.:.3g} per m.')
-    print(f'Low pass filter 2dB = {4. * np.pi / (k_zero + k_unity):.3g} m.')
-    print(f'Low pass filtering at {k_unity}, {k_zero} per m.')
+    print(f'Filter 2dB = {(k_zero + k_unity) / 2.:.3g} per m.')
+    print(f'Filter 2dB = {4. * np.pi / (k_zero + k_unity):.3g} m.')
+    print(f'Low pass filtering at {k_unity:.3g}, {k_zero:.3g} per m.')
     lowfilter = cos_square_radial_filter(k, k_zero, k_unity)
     low_fft = reg_fft * lowfilter
     reg_out = xrft.idft(low_fft, window=True, true_phase=True, true_amplitude=True)
@@ -346,16 +362,14 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
     kx, ky = np.meshgrid(loc_fft.freq_x, loc_fft.freq_y)
     k = np.sqrt(kx * kx + ky * ky)
     print(f'Local grid Wavenumber resolution = {k[0,0] - k[0,1]:.3g}')
-    print(f'Equivalent wavelength = {2.0 * np.pi / (k[0,0] - k[0,1]):.0f} m.')
+    print(f'           Equivalent wavelength = {2.0 * np.pi / (k[0,0] - k[0,1]):.0f} m.')
     k_zero = min(k_low, k_hi)
     k_unity = max(k_low, k_hi)
     if plot_flag:
         a2[1].plot([k_zero, k_unity], [0., 1.])
         a2[1].set_title('high-pass')
         a2[0].set_xlabel('wavelength [m]')
-    print(f'High pass filter 2dB = {(k_zero + k_unity) / 2.:.3g} per m.')
-    print(f'High pass filter 2dB = {4. * np.pi / (k_zero + k_unity):.3g} m.')
-    print(f'High pass filtering at {k_unity}, {k_zero} per m.')
+    print(f'High pass filtering at {k_unity:.3g}, {k_zero:.3g} per m.')
     highfilter = cos_square_radial_filter(k, k_zero, k_unity)
     hi_fft = loc_fft * highfilter
     hi_grav = xrft.ifft(hi_fft, window=None, true_phase=True, true_amplitude=True)
@@ -366,9 +380,27 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
     # sum hi- and lo-pass filtered data
     sum_grav = low_grav.real# + reg_restore.real
     sum_grav.values = (sum_grav.values + hi_grav.real.values)
+    if plot_flag:
+        xdImage(local_in, f'local_in {da_extremes(local_in)}', clipTo3Std=False)
+        xdImage(sum_grav, f'sum_grav {da_extremes(sum_grav)}', clipTo3Std=False)
+        print(f'local_in shape = {local_in.shape}')
+        print(f'sum_grav shape = {sum_grav.shape}')
     
+    sum_clipped = sum_grav.sel(x=local_in.x, y=local_in.y, method="nearest")
+    if plot_flag:
+        xdImage(sum_clipped, f'sum_clipped {da_extremes(sum_clipped)}', clipTo3Std=False)
+
+
     # mask out data except where original data existed
-    sum_masked = sum_grav.where(original_mask)
+    if plot_flag:
+        plt.imshow(original_mask, origin='lower')
+        print(f'orig mask 3 shape = {original_mask.shape}')
+    sum_masked = sum_clipped.where(original_mask)
+    if plot_flag:
+        xdImage(sum_masked, f'sum_masked 2 {da_extremes(sum_masked)}', clipTo3Std=False)
+
+
+
 
     # mask back to the given survey_mask, and trim to smallest enclosing rectangle
     geometries = [
@@ -383,12 +415,13 @@ def conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lamb
     sum_clipped.attrs = local_in.attrs
 
     # show before and after grids
-    # with plt.ion():
-    myfig, myax = plt.subplots(1,2, figsize=(12,6))
-    vmin = min(local_in.min(), sum_clipped.min()).values
-    vmax = max(local_in.max(), sum_clipped.max()).values
-    xdImage(local_in, f'starting local grid {da_extremes(local_in)}', clipTo3Std=False, ax=myax[0], minClip=vmin, maxClip=vmax)
-    xdImage(sum_clipped, f'final conformed local grid {da_extremes(sum_clipped)}', clipTo3Std=False, ax=myax[1], minClip=vmin, maxClip=vmax)
+    if plot_flag:
+        myfig, myax = plt.subplots(1,2, figsize=(12,6))
+        vmin = min(local_in.min(), sum_clipped.min()).values
+        vmax = max(local_in.max(), sum_clipped.max()).values
+        xdImage(local_in, f'starting local grid {da_extremes(local_in)}', clipTo3Std=False, ax=myax[0], minClip=vmin, maxClip=vmax)
+        xdImage(sum_clipped, f'final conformed local grid {da_extremes(sum_clipped)}', clipTo3Std=False, ax=myax[1], minClip=vmin, maxClip=vmax)
+        plt.show()
     
     return sum_clipped
 
@@ -455,8 +488,8 @@ def _check_grid(grid):
     stoperror = False
 
     # check for square grid cells
-    cell_size = round((grid.x.data[1] - grid.x.data[0]) / 2.0, 1)
-    tst_cell_size = round((grid.y.data[1] - grid.y.data[0]) / 2.0, 1)
+    cell_size = grid.x.data[1] - grid.x.data[0]
+    tst_cell_size = grid.y.data[1] - grid.y.data[0]
     if cell_size != tst_cell_size:
         print(f'ERROR grid does not have square cells: {cell_size} != {(grid.y.data[1] - grid.y.data[0]) / 2.0}')
         stoperror = True

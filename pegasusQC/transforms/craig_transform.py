@@ -12,6 +12,7 @@ License: CC BY-SA
 
 import numpy as np
 import xarray as xr
+import matplotlib.pyplot as plt
 
 from pegasusQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from pegasusQC.transforms.spheretest import (sphereSurvey, _make_xr)
@@ -30,7 +31,8 @@ def craig_transform(
     cell_size=None, result_units='um/s/s', survey_polygon=None,
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
     regional_grav_units='mGal',
-    numstns=None, firstorder=False, conforming=False
+    numstns=None, firstorder=False, conforming=False,
+    plot_flag=False
 ):
     """
     Runs the Craig transform on gravity differential curvature data to
@@ -154,17 +156,19 @@ def craig_transform(
             firstorder=False
         )
 
-        report_gridStats(gD_err_syn)
-        xdImage(gD_err_syn, 'gD_err_syn (um/s/s)', hs=False)
-        report_gridStats(gD_grid_syn)
-        xdImage(gD_grid_syn, 'gD_grid_syn (um/s/s)', hs=False)
-        report_gridStats(origD_grid_syn)
-        xdImage(origD_grid_syn, 'origD_grid_syn (um/s/s)', hs=False)
-        diff = origD_grid_syn.data[1:-1,1:-1] - gD_grid_syn.data
+        if plot_flag:
+            report_gridStats(gD_err_syn)
+            xdImage(gD_err_syn, 'gD_err_syn (um/s/s)', hs=False)
+            report_gridStats(gD_grid_syn)
+            xdImage(gD_grid_syn, 'gD_grid_syn (um/s/s)', hs=False)
+            report_gridStats(origD_grid_syn)
+            xdImage(origD_grid_syn, 'origD_grid_syn (um/s/s)', hs=False)
+            diff = origD_grid_syn.data[1:-1,1:-1] - gD_grid_syn.data
         diff_gD = gD_grid_syn.copy()
         diff_gD.data = diff
-        report_gridStats(diff_gD)
-        xdImage(diff_gD, 'origD_grid_syn-gD_grid_syn (um/s/s)', hs=False)
+        if plot_flag:
+            report_gridStats(diff_gD)
+            xdImage(diff_gD, 'origD_grid_syn-gD_grid_syn (um/s/s)', hs=False)
 
         gD_grid = gD_grid_syn
     else:
@@ -208,30 +212,51 @@ def craig_transform(
             regional_grid=regional_grid,
             firstorder=firstorder
         )
-        xdImage(gD_grid, 'Post-gfc: gD_grid (um/s/s)', hs=False)
+        if plot_flag:
+            xdImage(gD_grid, 'Post-gfc: gD_grid (um/s/s)', hs=False)
 
         # conformed to regional if required.
+        report_summary = '\n  Final transformed grid stats:'
         if conforming:
-            print('  Raw grid stats:')
-            report_gridStats(gD_raw)
-            print('  Regional grid stats:')
-            report_gridStats(regional_grid)
-            xdImage(gD_grid, ' Pre-conform: gD_grid (um/s/s)', hs=False)
+            report_summary = '\n  Final conformed and transformed grid stats:'
+            if plot_flag:
+                print('  Raw grid stats:')
+                report_gridStats(gD_raw)
+                print('  gD grid stats:')
+                report_gridStats(gD_grid)
+                print('  Regional grid stats:')
+                report_gridStats(regional_grid)
+                xdImage(gD_grid, ' Pre-conform: gD_grid (um/s/s)', hs=False)
+                xdImage(gD_raw, ' Pre-conform: gD_raw (um/s/s)', hs=False)
+            original_mask = np.ma.masked_array(gD_grid, ~np.isnan(gD_grid)).mask
+            if plot_flag:
+                plt.imshow(original_mask, origin='lower')
 
-            gD_grid = conform(gD_grid, regional_grid, survey_polygon=survey_polygon, plot_flag=True)
-            # conform(loc_file, reg_file, loc_units, reg_units, pad_cells, survey_polygon, rim, low_lambda, hi_lambda, plot_flag=False)
-            print('  conformed grid stats:')
-            report_gridStats(gD_grid)
+            gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon, plot_flag=plot_flag, original_mask=original_mask)
+            if plot_flag:
+                print('  conformed grid stats:')
+                report_gridStats(gD_grid)
 
         # report statistics, and image grids (calculate clipping limits for images)
-        print('  Final conformed and transformed grid stats:')
+        print(report_summary)
         report_gridStats(gD_grid)
         im_min = np.nanmin(gD_grid.data)
         im_max = np.nanmax(gD_grid.data)
-        xdImage(gD_grid, 'gD_grid (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
+        # xdImage(gD_grid, 'gD_grid (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
         print('  Final error grid stats:')
         report_gridStats(gD_err)
-        xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
+        im_mean = np.nanmean(gD_err.data)
+        # xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
+
+        myfig, myax = plt.subplots(1,2, figsize=(12,6))
+        gD_grid.plot(ax=myax[0], vmin=im_min, vmax=im_max)
+        myax[0].set_xlabel(gD_grid.attrs['x_channel'])
+        myax[0].set_ylabel(gD_grid.attrs['y_channel'])
+        myax[0].set_title(gD_grid.attrs['title'])
+        gD_err.plot(ax=myax[1], vmin=im_mean-(im_max-im_min)/2., vmax=im_mean+(im_max-im_min)/2.)
+        myax[1].set_xlabel(gD_err.attrs['x_channel'])
+        myax[1].set_ylabel(gD_err.attrs['y_channel'])
+        myax[1].set_title(gD_err.attrs['title'])
 
         # Sample the result back into the whizzFile database.
         if not gd_chan is None:

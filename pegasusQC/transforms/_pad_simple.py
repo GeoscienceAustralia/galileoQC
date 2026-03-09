@@ -22,7 +22,7 @@ from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 
 
-def _pad_simple(local_grid, regional_grid):
+def _pad_simple(local_grid, regional_grid, verbose=False):
     """
     `local_grid` is mean-corrected and padded to same area as `regional_grid`.
 
@@ -41,6 +41,10 @@ def _pad_simple(local_grid, regional_grid):
     regional_grid : xarray 2D DataArray
 
         Regional gravity grid
+
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
 
     Returns
     -------
@@ -95,7 +99,8 @@ def _pad_simple(local_grid, regional_grid):
     print('\n Grid stats: regional subtract local.')
     print(' Ideally, the mean should be close to 0 (abs value < 1),')
     print(' and the range should be roughly symmetrical.')
-    report_gridStats(test)
+    if verbose:
+        report_gridStats(test)
     xdImage(_trim_rectangle(test), 'Regional subtract local', hs=False)
 
     # replace nans with zero in local grids for sum

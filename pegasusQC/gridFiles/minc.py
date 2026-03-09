@@ -39,7 +39,7 @@ from scipy.ndimage import distance_transform_edt
 
 
 def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
-         maxiters=100
+         maxiters=100, verbose=False
 ):
     """
     Minimum Curvature Gridding.
@@ -47,21 +47,41 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
     Parameters
     ----------
     x : numpy array
+
         1D array with x coordinates.
+
     y : numpy array
+
         1D array with y coordinates.
+
     z : numpy array
+
         1D array with z coordinates.
+
     dxy : float
+
         Cell x and y dimension.
+
     showlog : function, optional
+
         Routine to show text messages. The default is print.
+
     extent : list, optional
+
         Extent defined as (left, right, bottom, top). The default is None.
+
     bdist : float, optional
+
         Blanking distance in units of cell. The default is None.
+
     maxiters : int, optional
+
         Maximum number of iterations. The default is 100.
+
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
+
 
     Returns
     -------
@@ -85,16 +105,19 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
         extent = [x.min(), x.max(), y.min(), y.max()]
 
     extent = np.array(extent)
-    showlog(f'length observed = {len(x)}')
+    if verbose:
+        showlog(f'length observed = {len(x)}')
 
-    showlog('Setting up grid...')
+    if verbose:
+        ('Setting up grid...')
 
     # Add buffer
     extent[0] -= dxy * 3
     extent[1] += dxy * 3
     extent[2] -= dxy * 3
     extent[3] += dxy * 3
-    showlog(extent)
+    if verbose:
+     showlog(extent)
 
     # Make new start grid
 
@@ -103,11 +126,13 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
 
     xxx, yyy = np.meshgrid(xxx, yyy)
     rows, cols = xxx.shape
-    showlog(f"grid will be made to {rows} rows x {cols} columns.")
+    if verbose:
+        showlog(f"grid will be made to {rows} rows x {cols} columns.")
 
     points = np.transpose([x.flatten(), y.flatten()])
 
-    showlog('Creating nearest neighbour starting value...')
+    if verbose:
+        showlog('Creating nearest neighbour starting value...')
 
     u = griddata(points, z, (xxx, yyy), method='linear')
     # u = griddata(points, z, (xxx, yyy), method='nearest')
@@ -120,11 +145,13 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
     y2 = y.flatten()
     z2 = z.flatten()
 
-    showlog('Organizing input data...')
+    if verbose:
+        showlog('Organizing input data...')
 
     crds, blist = morg(x2, y2, z2, extent, dxy, rows, cols)
-    showlog(f'type, size of crds: {type(crds)} , {len(crds)}')
-    showlog(f'type, size of blist: {type(blist)} , {len(blist)}')
+    if verbose:
+        showlog(f'type, size of crds: {type(crds)} , {len(crds)}')
+        showlog(f'type, size of blist: {type(blist)} , {len(blist)}')
 
     coords = {}
     excludedpnts = 0
@@ -146,10 +173,11 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
             coords[iint, jint] = []
         coords[iint, jint].append([bmax, r, zval, b])
 
-    showlog(f'type, size of coords: {type(coords)} , {len(coords)}')
-    showlog(f'coords: \n{coords[iint, jint]}')
+    if verbose:
+        showlog(f'type, size of coords: {type(coords)} , {len(coords)}')
+        showlog(f'coords: \n{coords[iint, jint]}')
 
-    if excludedpnts > 0:
+    if excludedpnts > 0 and verbose:
         showlog(str(excludedpnts) + ' point(s) excluded.')
     # Choose only the closest coordinate per cell
     ijxyz = []
@@ -166,9 +194,10 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
             _, _, zval, b = coords[key][0]
             ijxyz.append([iint, jint, zval, b])
 
-    showlog('Creating minimum curvature grid...')
-    showlog(f'type, size of ijxyz: {type(ijxyz)} , {len(ijxyz)}')
-    showlog(f'ijxyz: \n{ijxyz[0:1]}')
+    if verbose:
+        showlog('Creating minimum curvature grid...')
+        showlog(f'type, size of ijxyz: {type(ijxyz)} , {len(ijxyz)}')
+        showlog(f'ijxyz: \n{ijxyz[0:1]}')
 
     uold = np.zeros((rows, cols))
 
@@ -200,13 +229,16 @@ def minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None,
         errdiff1 = np.abs(u - uold)
         errstd = errdiff1.std() * 2.5
         errdiff = np.sum(errdiff1) / (rows * cols)
-        showlog(f'Solution Error: {errdiff:.5f}')
+        if verbose:
+            showlog(f'Solution Error: {errdiff:.5f}')
 
         if errdiff > errold:
             u = uold
-            showlog('Solution diverging. Stopping...')
+            if verbose:
+                showlog('Solution diverging. Stopping...')
             break
-    showlog('Finished!')
+    if verbose:
+        showlog('Finished!')
 
     u = np.ma.array(u)
 

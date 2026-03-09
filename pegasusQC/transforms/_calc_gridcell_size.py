@@ -60,7 +60,9 @@ def _calc_gridcell_size(whizzFile):
                 print('    Recommend running updateLineSpacing() with explicit values.')
                 print('    And/or re-running craig_transform with explicit cell_size.')
                 return None
-    print(f'\nGridding data with cell size = {cell_size}.')
+    path_substring = filename.split('/')
+    local_filename = path_substring[-1].rsplit('.', 1)
+    print(f'\nGridding {local_filename[0]} data with cell size = {cell_size}.')
     return cell_size
     
 

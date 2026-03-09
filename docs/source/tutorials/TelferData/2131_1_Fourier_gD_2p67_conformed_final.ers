@@ -1,0 +1,36 @@
+DatasetHeader Begin
+	LastUpdated	= Fri Oct 01 03:44:41 GMT 2010
+	Version	= "5.0"
+	DataSetType	= ERStorage
+	DataType	= Raster
+	HeaderOffset	= 0
+	CoordinateSpace Begin
+		Projection	= "TMAMG51"
+		CoordinateType	= EN
+		Units	= "METERS"
+		Datum	= "WGS84"
+		Rotation	= 0:0:0 
+	CoordinateSpace End
+	ByteOrder	= LSBFirst
+	RasterInfo Begin
+		CellType	= IEEE4ByteReal
+		NrOfLines	= 1040
+		NrOfCellsPerLine	= 1022
+		NrOfBands	= 1
+		NullCellValue	= -999999.00000000
+		CellInfo Begin
+			Xdimension	=            62.5
+			Ydimension	=            62.5
+		CellInfo End
+		RegistrationCellX	= 0
+		RegistrationCellY	= 0
+		RegistrationCoord Begin
+			Eastings	=       390156.25
+			Northings	=      7622718.75
+		RegistrationCoord End
+		BandId Begin
+			Value	= "Fourier derived vertical gravity conformed with GA_GAGAR09 (2.67 g/cc terrain correction density)"
+			Units	= "mGal"
+		BandId End
+	RasterInfo End
+DatasetHeader End
