@@ -30,7 +30,7 @@ A massive amount of help, encouragement and support from many people at Geoscien
 
 ## Testing
 
-The __pe*ga*susQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using the JupyterLab Desktop app.
+The __pe*ga*susQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook except for the testing under macos which used the JupyterLab Desktop app.
 
 Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.
 

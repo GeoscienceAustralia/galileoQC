@@ -20,7 +20,15 @@ copyright = '2025, Geoscience Australia'
 author = 'Mark Helm Dransfield'
 # version = '0.0.2'
 # release = '0.0.2'
-version = release = importlib.metadata.version('pegasusQC')
+
+
+try:
+    version = release = importlib.metadata.version('pegasusQC')
+except importlib.metadata.PackageNotFoundError:
+    version = release = '0.0.2'  # fallback version
+
+
+# version = release = importlib.metadata.version('pegasusQC')
 today_fmt = '%d %b %Y' 
 
 # -- General configuration ---------------------------------------------------

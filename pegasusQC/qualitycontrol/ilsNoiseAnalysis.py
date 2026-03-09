@@ -58,7 +58,7 @@ def ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, 
 
     vertaccel : String, optional
 
-        The name of the channel containing the vertical velocity field. Default ''.
+        The name of the channel containing the vertical acceleration field. Default ''.
 
     vertvelocity : String, optional
 
@@ -66,7 +66,7 @@ def ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, 
 
     vertdispl : String, optional
 
-        The name of the channel containing the vertical velocity field. Default ''.
+        The name of the channel containing the vertical displacement field. Default ''.
 
     lines : String list, optional
 

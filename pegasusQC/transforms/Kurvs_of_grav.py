@@ -51,12 +51,12 @@ def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
 
      # Take DFT of vertical gravity.
     grav_fft = xrft.dft(gravity, detrend='linear', window=True, true_phase=True, true_amplitude=True)
-
+    
     # Next, form the wavenumbers ...
     kx, ky = np.meshgrid(grav_fft.freq_x, grav_fft.freq_y)
     k = np.sqrt(kx * kx + ky * ky)
     print(f'Wavenumber resolution = {kx[0,1] - kx[0,0]:.3g}')
-    print(f'Equivalent wavelength = {1.0 / (kx[0,1] - kx[0,0]):.3g} m.')
+    print(f'Equivalent wavelength = {2.0 * np.pi / (kx[0,1] - kx[0,0]):.3g} m.')
     
     # ..., find the indices of the wavenumber origin ... 
     ky_null = np.nonzero(grav_fft.freq_y.values == 0)[0][0]

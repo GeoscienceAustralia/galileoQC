@@ -11,16 +11,16 @@ License: CC BY-SA
 """
 
 import numpy as np
+import xrft
 import matplotlib.path as mpltPath
 
+from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.gridFiles.gridutility import report_gridStats
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 import pegasusQC.gridFiles.gridutility as gut
-from scipy.fftpack import fft2
-import xrft
 
 
-def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None):
+def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None, plot_flag=False, verbose=False):
     """
     Apply the Craig Transform to (`Guv` + i `Gne`), mask the resulting grid
     to `mask_region` (NOT IMPLEMENTED),
@@ -56,6 +56,11 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     nan_mask : numpy 2D mask array, optional
 
         blah blah. Default None.
+    
+    plot_flag : Bool, optional
+
+        If True, images will be displayed of the grids at each stage of the processing. If False,
+        then only the `local` input and output grids will be displayed. Default False.
 
     Returns
     -------
@@ -78,8 +83,8 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     # Next, form the wavenumbers ...
     kx, ky = np.meshgrid(kurv_fft.freq_x, kurv_fft.freq_y)
     k = np.sqrt(kx * kx + ky * ky)
-    print(f'Wavenumber resolution = {kx[0,1] - kx[0,0]:.3g}')
-    print(f'Equivalent wavelength = {1.0 / (kx[0,1] - kx[0,0]):.3g} m.')
+    print(f'Wavenumber resolution = {k[0,1] - k[0,0]:.3g}')
+    print(f'Equivalent wavelength = {2.0 * np.pi / (k[0,1] - k[0,0]):.3g} m.')
     
     # ..., find the indices of the wavenumber origin ... 
     ky_null = np.nonzero(kurv_fft.freq_y.values == 0)[0][0]
@@ -107,11 +112,20 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     # Separate real and imag parts now so masking works as desired.
     gD_im = gD_tr.imag
     gD_re = gD_tr.real
+    if plot_flag:
+        xdImage(gD_re, 'unmasked, untrimmed gD_grid (um/s/s)', hs=True)
+        if verbose:
+            report_gridStats(gD_re)
 
     # ... replace NaNs, ...
     if not nan_mask is None:
         gD_im = gD_im.where(~nan_mask, other=np.nan)
         gD_re = gD_re.where(~nan_mask, other=np.nan)
+        if plot_flag:
+            xdImage(gD_re, 'masked, untrimmed gD_grid (um/s/s)', hs=True)
+            if verbose:
+                print('    gD_re')
+                report_gridStats(gD_re)
     # ... mask to survey boundary polygon, ...
     if not survey_polygon is None:
         x_chan = 'x'
@@ -120,9 +134,39 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
         x_chan = 'x'
         y_chan = 'y'
         gD_result = gut.maskGridByPolygon(gD_re, survey_polygon, x_chan=x_chan, y_chan=y_chan)
+        if plot_flag:
+            xdImage(gD_result, 'masked, trimmed gD_grid (um/s/s)', hs=True)
+            if verbose:
+                print(f'    gD_result, {gD_result.shape}')
+                report_gridStats(gD_result)
     else:
         gD_err = gD_im
         gD_result = gD_re
-    # ...,  and trim to smallest cardinal rectangle.
 
-    return _trim_rectangle(gD_result), _trim_rectangle(gD_err)
+    # ...,  and trim to smallest cardinal rectangle.
+    gD_result_t = _trim_rectangle(gD_result)
+    gD_err_t = _trim_rectangle(gD_err)
+    if plot_flag:
+        print(f'    gD_result_t, {gD_result_t.shape}')
+        print(f'    gD_err_t, {gD_err_t.shape}')
+
+    # We want to keep any infill for gD_raw so it helps conforming
+    margin = 0.2 * np.abs(gD_result_t.x[1] - gD_result_t.x[0])
+    min_x = gD_result_t.x.min().values - margin
+    max_x = gD_result_t.x.max().values + margin
+    min_y = gD_result_t.y.min().values - margin
+    max_y = gD_result_t.y.max().values + margin
+    test_poly = [
+        [min_x, min_y],
+        [max_x, min_y],
+        [max_x, max_y],
+        [min_x, max_y],
+    ]
+    gD_raw = gut.maskGridByPolygon(gD_tr.real, test_poly, x_chan=x_chan, y_chan=y_chan)
+    gD_raw_t = _trim_rectangle(gD_raw)
+    if plot_flag:
+        print(f'    gD_raw, {gD_raw.shape}')
+        print(f'    gD_raw_t, {gD_raw_t.shape}')
+
+    # return _trim_rectangle(gD_result), _trim_rectangle(gD_err), _trim_rectangle(gD_raw)
+    return gD_result_t, gD_err_t, gD_raw_t

@@ -11,6 +11,7 @@ License: CC BY-SA
 """
 
 import numpy as np
+import xarray as xr
 
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 
@@ -62,6 +63,7 @@ def _pad_mean(grid, pad_cells):
                          mode="mean",
                          fill_value=grid_mean,
                          stat_length=None)
+
     dx = grid_fill.x.values[1] - grid_fill.x.values[0]
     dy = grid_fill.y.values[1] - grid_fill.y.values[0]
     for i in range(0,pad_cells):
@@ -70,5 +72,8 @@ def _pad_mean(grid, pad_cells):
         parr.y.values[i] = parr.y.values[pad_cells] - (pad_cells - i) * dy
         parr.y.values[-1-i] = parr.y.values[-1-pad_cells] + (pad_cells - i) * dy
 
+    with xr.set_options(keep_attrs=True):
+        output = parr - parr.mean().values
+
     # ... so need to mean-correct post-padding
-    return parr - parr.mean(), pnanmask
+    return output, pnanmask

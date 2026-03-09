@@ -22,7 +22,7 @@ from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 
 
-def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False):
+def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False, verbose=False):
     """
     `Gne_grid` and `Guv_grid` are mean-corrected and padded by `pad_cells`
     pixels in all four directions using values calculated from the `regional_grid`.
@@ -57,6 +57,10 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
 
         If True, include first order Craig correction. Default False.
 
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
+
     Returns
     -------
     Gne_x_grid, Guv_x_grid : (xarray 2D DataArray, xarray 2D DataArray)
@@ -87,16 +91,17 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
     # Transform regional to differential curvatures
     gne_reg, guv_reg = Kurvs_of_grav(regional_grid, firstorder=firstorder)
 
-    print('\nInitial Grid Statistics')
-    print('  Gne regional')
-    report_gridStats(gne_reg)
-    print('  Gne local')
-    report_gridStats(Gne_grid)
-    print('  Guv regional')
-    report_gridStats(guv_reg)
-    print('  Guv local')
-    report_gridStats(Guv_grid)
-    print('\n')
+    if verbose:
+        print('\nInitial Grid Statistics')
+        print('  Gne regional')
+        report_gridStats(gne_reg)
+        print('  Gne local')
+        report_gridStats(Gne_grid)
+        print('  Guv regional')
+        report_gridStats(guv_reg)
+        print('  Guv local')
+        report_gridStats(Guv_grid)
+        print('\n')
 
     if _scaling_doubtful(gne_reg, Gne_grid):
         print('\nWARNING - grid statistical ranges suggest units error.\n')
@@ -114,17 +119,19 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
     data_mask_uv = np.isnan(Guv_padded.data)
 
     test_ne = gne_reg_match - Gne_padded
-    print('\n Grid stats: regional subtract local.')
-    print(' Ideally, the mean should be close to 0 (abs value < 1),')
-    print(' and the range should be roughly symmetrical.')
-    print('\n   Gne')
-    report_gridStats(test_ne)
-    xdImage(_trim_rectangle(test_ne), 'Gne regional subtract local (E)', hs=False)
-
     test_uv = guv_reg_match - Guv_padded
-    print('\n   Guv')
-    report_gridStats(test_uv)
-    xdImage(_trim_rectangle(test_uv), 'Guv regional subtract local (E)', hs=False)
+    if verbose:
+        print('\n Grid stats: regional subtract local.')
+        print(' Ideally, the mean should be close to 0 (abs value < 1),')
+        print(' and the range should be roughly symmetrical.')
+
+        print('\n   Gne')
+        report_gridStats(test_ne)
+        xdImage(_trim_rectangle(test_ne), 'Gne regional subtract local (E)', hs=False)
+
+        print('\n   Guv')
+        report_gridStats(test_uv)
+        xdImage(_trim_rectangle(test_uv), 'Guv regional subtract local (E)', hs=False)
 
     # replace nans with zero in local grids for transform
     Gne_arith = Gne_padded.fillna(0.0)
