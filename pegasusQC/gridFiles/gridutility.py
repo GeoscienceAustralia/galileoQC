@@ -52,8 +52,14 @@ def report_gridStats(my_grid, mask_polygon=[]):
     print(f'  [{max(my_grid.x.values):.0f}, [{min(my_grid.y.values):.0f}],')
     print(f'  [{max(my_grid.x.values):.0f}, [{max(my_grid.y.values):.0f}],')
     print(f'  [{min(my_grid.x.values):.0f}, [{max(my_grid.y.values):.0f}]')
-    print(f'cell spacing = {my_grid.x.values[1]-my_grid.x.values[0]:.0f}')
-    print(f'number of NaNs = {my_grid.isnull().sum().values}')
+    dx = my_grid.x.values[1] - my_grid.x.values[0]
+    dy = my_grid.y.values[1] - my_grid.y.values[0]
+    if dx == dy:
+        print(f'cell spacing = {dx:.1f}')
+    else:
+        print(f'X cell spacing = {dx:.3f}')
+        print(f'Y cell spacing = {dy:.3f}')        
+    print(f'number of NaNs = {my_grid.isnull().sum().values}\n')
 
 
 def maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y'):

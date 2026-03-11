@@ -233,6 +233,8 @@ def craig_transform(
                 plt.imshow(original_mask, origin='lower')
 
             gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon, plot_flag=plot_flag, original_mask=original_mask)
+            if gD_grid is None:
+                return None
             if plot_flag:
                 print('  conformed grid stats:')
                 report_gridStats(gD_grid)
@@ -242,11 +244,9 @@ def craig_transform(
         report_gridStats(gD_grid)
         im_min = np.nanmin(gD_grid.data)
         im_max = np.nanmax(gD_grid.data)
-        # xdImage(gD_grid, 'gD_grid (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
         print('  Final error grid stats:')
         report_gridStats(gD_err)
         im_mean = np.nanmean(gD_err.data)
-        # xdImage(gD_err, 'gD_err (um/s/s)', minClip=im_min, maxClip=im_max, hs=False)
 
         myfig, myax = plt.subplots(1,2, figsize=(12,6))
         gD_grid.plot(ax=myax[0], vmin=im_min, vmax=im_max)

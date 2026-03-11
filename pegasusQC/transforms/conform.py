@@ -9,6 +9,8 @@ from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 from pegasusQC.transforms._grid_match import _grid_match
 from pegasusQC.gridFiles.xdImage import xdImage
 from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
+from pegasusQC.gridFiles.gridutility import report_gridStats
+
 
 def conform_from_file(loc_file, reg_file, loc_units, reg_units, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False):
     """
@@ -336,11 +338,6 @@ def conform(
     print(f'              Equivalent wavelength = {2.0 * np.pi / (k[0,1] - k[0,0]):.0f} m.')
     k_zero = max(k_low, k_hi)
     k_unity = min(k_low, k_hi)
-    if plot_flag:
-        f2,a2 = plt.subplots(1,2,figsize=(6,3))
-        a2[0].plot([k_zero, k_unity], [0., 1.])
-        a2[0].set_title('low-pass')
-        a2[0].set_xlabel('wavelength [m]')
     print(f'Filter 2dB = {(k_zero + k_unity) / 2.:.3g} per m.')
     print(f'Filter 2dB = {4. * np.pi / (k_zero + k_unity):.3g} m.')
     print(f'Low pass filtering at {k_unity:.3g}, {k_zero:.3g} per m.')
@@ -365,10 +362,6 @@ def conform(
     print(f'           Equivalent wavelength = {2.0 * np.pi / (k[0,0] - k[0,1]):.0f} m.')
     k_zero = min(k_low, k_hi)
     k_unity = max(k_low, k_hi)
-    if plot_flag:
-        a2[1].plot([k_zero, k_unity], [0., 1.])
-        a2[1].set_title('high-pass')
-        a2[0].set_xlabel('wavelength [m]')
     print(f'High pass filtering at {k_unity:.3g}, {k_zero:.3g} per m.')
     highfilter = cos_square_radial_filter(k, k_zero, k_unity)
     hi_fft = loc_fft * highfilter
@@ -387,6 +380,8 @@ def conform(
         print(f'sum_grav shape = {sum_grav.shape}')
     
     sum_clipped = sum_grav.sel(x=local_in.x, y=local_in.y, method="nearest")
+    sum_clipped.attrs = local_in.attrs
+    report_gridStats(sum_clipped)
     if plot_flag:
         xdImage(sum_clipped, f'sum_clipped {da_extremes(sum_clipped)}', clipTo3Std=False)
 
@@ -413,16 +408,21 @@ def conform(
     sum_masked.rio.write_nodata(np.nan, encoded=True, inplace=True)
     sum_clipped = _trim_rectangle(sum_masked.real.rio.clip(geometries))
     sum_clipped.attrs = local_in.attrs
+    report_gridStats(sum_clipped)
 
     # show before and after grids
     if plot_flag:
         myfig, myax = plt.subplots(1,2, figsize=(12,6))
-        vmin = min(local_in.min(), sum_clipped.min()).values
-        vmax = max(local_in.max(), sum_clipped.max()).values
-        xdImage(local_in, f'starting local grid {da_extremes(local_in)}', clipTo3Std=False, ax=myax[0], minClip=vmin, maxClip=vmax)
-        xdImage(sum_clipped, f'final conformed local grid {da_extremes(sum_clipped)}', clipTo3Std=False, ax=myax[1], minClip=vmin, maxClip=vmax)
-        plt.show()
-    
+
+        local_in.plot(ax=myax[0])
+        myax[0].set_xlabel(local_in.attrs['x_channel'])
+        myax[0].set_ylabel(local_in.attrs['y_channel'])
+        myax[0].set_title(f'starting local grid {da_extremes(local_in)}')
+
+        sum_clipped.plot(ax=myax[1])
+        myax[1].set_xlabel(sum_clipped.attrs['x_channel'])
+        myax[1].set_ylabel(sum_clipped.attrs['y_channel'])
+        myax[1].set_title(f'final conformed local grid {da_extremes(sum_clipped)}')
     return sum_clipped
 
 
@@ -491,7 +491,7 @@ def _check_grid(grid):
     cell_size = grid.x.data[1] - grid.x.data[0]
     tst_cell_size = grid.y.data[1] - grid.y.data[0]
     if cell_size != tst_cell_size:
-        print(f'ERROR grid does not have square cells: {cell_size} != {(grid.y.data[1] - grid.y.data[0]) / 2.0}')
+        print(f'ERROR grid does not have square cells: {cell_size} != {(grid.y.data[1] - grid.y.data[0])}')
         stoperror = True
     else:
         grid.attrs['cell_size'] = cell_size
