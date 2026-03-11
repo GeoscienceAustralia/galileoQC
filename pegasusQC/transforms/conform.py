@@ -290,7 +290,6 @@ def conform(
         fill_value=grid_mean,
         stat_length=None)
     parr = parr.assign_coords(y=n, x=e)
-    report_gridStats(parr)
     if plot_flag:
         xdImage(parr,f'local, linear-ramp padded {da_extremes(parr)}', hs=True)
     
@@ -302,16 +301,13 @@ def conform(
     # print(f'orig mask 2 shape = {original_mask.shape}')
 
     # smooth the padded grid in x, then y, directions
-    test = parr.rolling(x=w, center=True).mean()#.dropna('x')
-    test1 = test.rolling(y=w, center=True).mean()#.dropna('x')
-    report_gridStats(test)
-    report_gridStats(test1)
+    test = parr.rolling(x=w, center=True).mean()
+    test1 = test.rolling(y=w, center=True).mean()
     if plot_flag:
         xdImage(test1, f'padded, smoothed local grid {da_extremes(test1)}', hs=True)
 
     # replace original local grid, and the rim, with NaNs
     masked_test1 = test1[w:-w,w:-w].where(~newz)
-    report_gridStats(masked_test1)
     if plot_flag:
         xdImage(masked_test1, f'local grid, and rim removed {da_extremes(masked_test1)}', hs=True)
 
@@ -319,11 +315,7 @@ def conform(
     reg_match = reg_match_pad[w:-w,w:-w]
 
     # put the original local grid back in place
-    report_gridStats(local)
-    print(f'\nmasked_test1[pad_cells:-pad_cells,pad_cells:-pad_cells]\n{masked_test1[pad_cells:-pad_cells,pad_cells:-pad_cells]} ')
-    print(f'\nlocal\n{local} ')
     masked_test1[pad_cells:-pad_cells,pad_cells:-pad_cells] = local
-    report_gridStats(masked_test1)
     if plot_flag:
         xdImage(masked_test1,f'rimmed local grid padded with smoothed linear ramp {da_extremes(masked_test1)}', hs=True)
 
@@ -399,8 +391,8 @@ def conform(
     
     sum_clipped = sum_grav.sel(x=local_in.x, y=local_in.y, method="nearest")
     sum_clipped.attrs = local_in.attrs
-    report_gridStats(sum_clipped)
     if plot_flag:
+        report_gridStats(sum_clipped)
         xdImage(sum_clipped, f'sum_clipped {da_extremes(sum_clipped)}', clipTo3Std=False)
 
 
@@ -426,10 +418,10 @@ def conform(
     sum_masked.rio.write_nodata(np.nan, encoded=True, inplace=True)
     sum_clipped = _trim_rectangle(sum_masked.real.rio.clip(geometries))
     sum_clipped.attrs = local_in.attrs
-    report_gridStats(sum_clipped)
 
     # show before and after grids
     if plot_flag:
+        report_gridStats(sum_clipped)
         myfig, myax = plt.subplots(1,2, figsize=(12,6))
 
         local_in.plot(ax=myax[0])
