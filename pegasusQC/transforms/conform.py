@@ -267,19 +267,30 @@ def conform(
     # pad with a linear ramp to 0.0 at the edge
     grid_mean = np.nanmean(local.values)
     padding = pad_cells + w
-    parr = local.pad(x=(padding, padding),
-                     y=(padding, padding), 
-                        keep_attrs=True,
-                        mode='linear_ramp',
-                        fill_value=grid_mean,
-                        stat_length=None)
     dx = local.x.values[1] - local.x.values[0]
     dy = local.y.values[1] - local.y.values[0]
-    for i in range(0,padding):
-        parr.x.values[i] = parr.x.values[padding] - (padding - i) * dx
-        parr.x.values[-1-i] = parr.x.values[-1-padding] + (padding - i) * dx
-        parr.y.values[i] = parr.y.values[padding] - (padding - i) * dy
-        parr.y.values[-1-i] = parr.y.values[-1-padding] + (padding - i) * dy
+    if (dx - dy) < 0.1:
+        dy = dx
+    e0 = local.x.values[0] - dx * padding
+    n0 = local.y.values[0] - dy * padding
+    ew = local.x.values[-1] + dx * padding
+    nw = local.y.values[-1] + dy * padding
+    nume = round((ew - e0) / dx) + 1
+    numn = round((nw - n0) / dy) + 1
+    e = np.linspace(e0, ew, nume, endpoint=True)
+    n = np.linspace(n0, nw, numn, endpoint=True)
+    # ugly, but we need to ensure coordinates align, avoiding rounding error in `linspace`
+    e[padding:-padding] = local.x.values
+    n[padding:-padding] = local.y.values
+    parr = local.pad(
+        y=(padding, padding),
+        x=(padding, padding),
+        keep_attrs=True,
+        mode='linear_ramp',
+        fill_value=grid_mean,
+        stat_length=None)
+    parr = parr.assign_coords(y=n, x=e)
+    report_gridStats(parr)
     if plot_flag:
         xdImage(parr,f'local, linear-ramp padded {da_extremes(parr)}', hs=True)
     
@@ -293,11 +304,14 @@ def conform(
     # smooth the padded grid in x, then y, directions
     test = parr.rolling(x=w, center=True).mean()#.dropna('x')
     test1 = test.rolling(y=w, center=True).mean()#.dropna('x')
+    report_gridStats(test)
+    report_gridStats(test1)
     if plot_flag:
         xdImage(test1, f'padded, smoothed local grid {da_extremes(test1)}', hs=True)
 
     # replace original local grid, and the rim, with NaNs
     masked_test1 = test1[w:-w,w:-w].where(~newz)
+    report_gridStats(masked_test1)
     if plot_flag:
         xdImage(masked_test1, f'local grid, and rim removed {da_extremes(masked_test1)}', hs=True)
 
@@ -305,7 +319,11 @@ def conform(
     reg_match = reg_match_pad[w:-w,w:-w]
 
     # put the original local grid back in place
+    report_gridStats(local)
+    print(f'\nmasked_test1[pad_cells:-pad_cells,pad_cells:-pad_cells]\n{masked_test1[pad_cells:-pad_cells,pad_cells:-pad_cells]} ')
+    print(f'\nlocal\n{local} ')
     masked_test1[pad_cells:-pad_cells,pad_cells:-pad_cells] = local
+    report_gridStats(masked_test1)
     if plot_flag:
         xdImage(masked_test1,f'rimmed local grid padded with smoothed linear ramp {da_extremes(masked_test1)}', hs=True)
 
