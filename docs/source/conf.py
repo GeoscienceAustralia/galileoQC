@@ -18,14 +18,11 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 project = 'pegasusQC'
 copyright = '2025, Geoscience Australia'
 author = 'Mark Helm Dransfield'
-# version = '0.0.2'
-# release = '0.0.2'
-
 
 try:
     version = release = importlib.metadata.version('pegasusQC')
 except importlib.metadata.PackageNotFoundError:
-    version = release = '0.0.3'  # fallback version
+    version = release = '0.0.4'  # fallback version
 
 
 # version = release = importlib.metadata.version('pegasusQC')
