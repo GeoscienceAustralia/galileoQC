@@ -25,7 +25,7 @@ author = 'Mark Helm Dransfield'
 try:
     version = release = importlib.metadata.version('pegasusQC')
 except importlib.metadata.PackageNotFoundError:
-    version = release = '0.0.2'  # fallback version
+    version = release = '0.0.3'  # fallback version
 
 
 # version = release = importlib.metadata.version('pegasusQC')
