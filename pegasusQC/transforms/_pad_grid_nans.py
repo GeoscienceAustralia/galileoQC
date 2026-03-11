@@ -62,24 +62,4 @@ def _pad_grid_nans(grid, pad_cells, cell_size=None):
                     stat_length=None)
     parr = parr.assign_coords(x=e, y=n)   
     parr += -parr.mean()
-
-
-
-
-    # parr = grid.pad(x=(pad_cells, pad_cells), 
-    #                 y=(pad_cells, pad_cells), 
-    #                 keep_attrs=True,
-    #                 mode="constant",
-    #                 fill_value=np.nan,
-    #                 stat_length=None)
-    # dx = grid.x.values[1] - grid.x.values[0]
-    # dy = grid.y.values[1] - grid.y.values[0]
-    # for i in range(0,pad_cells):
-    #     parr.x.values[i] = parr.x.values[pad_cells] - (pad_cells - i) * dx
-    #     parr.x.values[-1-i] = parr.x.values[-1-pad_cells] + (pad_cells - i) * dx
-    #     parr.y.values[i] = parr.y.values[pad_cells] - (pad_cells - i) * dy
-    #     parr.y.values[-1-i] = parr.y.values[-1-pad_cells] + (pad_cells - i) * dy
-
-    # parr += -parr.mean()
-    # ... so need to mean-correct post-padding
     return parr
