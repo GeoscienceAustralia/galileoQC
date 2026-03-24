@@ -97,8 +97,8 @@ nb_execution_timeout = 180
 if False:
     html_theme = "furo"
     html_theme_options = {
-        "light_logo": "pegasus_logo_light.png",
-        "dark_logo": "pegasus_logo_dark.png",
+        # "light_logo": "pegasus_logo_light.png",
+        # "dark_logo": "pegasus_logo_dark.png",
         "sidebar_hide_name": False,
         "version_selector": True,
     }
@@ -106,8 +106,8 @@ if False:
 if True:
     html_theme = "alabaster"
     html_theme_options = {
-        'logo': './pegasus_logo_light.png',
-        'logo_name': True,
+        # 'logo': './pegasus_logo_light.png',
+        # 'logo_name': True,
         'description': 'Quality control for airborne gravity surveys.',
         'fixed_sidebar': 'true',
         'show_relbars': 'true',
@@ -117,12 +117,4 @@ if True:
 numfig = True
 html_title = "galileoQC"
 html_static_path = ['static']
-
-# html_theme_options = {
-#     'logo_name': 'true',
-#     'description': 'Quality control for airborne gravity surveys.',
-#     'fixed_sidebar': 'true',
-#     'show_relbars': 'true',
-#     'show_relbar_top': 'false',
-# }
 
