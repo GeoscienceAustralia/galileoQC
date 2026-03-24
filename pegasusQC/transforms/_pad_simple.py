@@ -24,7 +24,8 @@ from pegasusQC.transforms._trim_rectangle import _trim_rectangle
 
 def _pad_simple(local_grid, regional_grid, verbose=False):
     """
-    `local_grid` is mean-corrected and padded to same area as `regional_grid`.
+    `local_grid` is mean-corrected and padded, with `regional_grid` values,
+    to same area as `regional_grid`.
 
     If `local_grid` is of terrain-corrected data, then the `regional_data`
     should be too. Similarly for free-air data.

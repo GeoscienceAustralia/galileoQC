@@ -13,7 +13,7 @@ License: CC BY-SA
 import numpy as np
 import xarray as xr
 
-def sphereSurvey(numstns=None):
+def sphereSurvey(numstns=20):
     """
     Creates an airborne survey over 3 point mass sources, calculates all
     gravity acceleration vector and curvature tensor outputs.
@@ -25,7 +25,10 @@ def sphereSurvey(numstns=None):
     
     Parameters
     ----------
-    None.
+    numstns : int, optional
+
+        The number of stations (samples) in the grid's x and y directions.
+        Default 20.
 
     Returns
     -------
@@ -37,14 +40,8 @@ def sphereSurvey(numstns=None):
     # survey parameters - note that the loop order below is important.
     nn = 201
     ne = 201
-    de = 20
-    dn = 20
-    if numstns is None:
-        de = 20
-        dn = 20
-    else:
-        de = numstns
-        dn = numstns
+    de = numstns
+    dn = numstns
     oe = -(divmod(ne,2)[0]) * de
     on = -(divmod(nn,2)[0]) * dn
     d = -50

@@ -26,8 +26,8 @@ def _calc_gridcell_size(whizzFile):
     Returns a sensible grid cell size for gridding line-based data in xarray
     DataSet `ds`. Usefully provides a default for gridding functions.
     
-    The algorithm is described here: "return 500.0"
-    Later we will use the "TraverseLineSpacing", if available in the whizzfile.
+    The algorithm uses the "TraverseLineSpacing", calling updateLineSpacing to
+    set it if it does not exist in the whizzfile, and returns 1/4 of that value.
     
     Parameters
     ----------
@@ -68,6 +68,20 @@ def _calc_gridcell_size(whizzFile):
 
 def _nice_number(number):
     """
-    TBD
+    Given any float, returns a reasonable value to be used for gridding. Currently
+    just rounded to one decimal place.
+    
+    Parameters
+    ----------
+    number : float
+
+        The number to be transformed.
+
+    Returns
+    -------
+     : float
+
+        the transformed value.
+        
     """
-    return number
+    return round(number, 1)

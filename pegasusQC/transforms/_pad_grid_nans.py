@@ -25,10 +25,16 @@ def _pad_grid_nans(grid, pad_cells, cell_size=None):
 
         Grid to be expanded.
 
-    pad_cells : int, optional
+    pad_cells : int
 
         Number of cells to add to the grid along each of the four sides.
         The resultant grid is thus larger by `2 x pad_cells` in both directions.
+
+    cell_size : float, optional
+
+        The width in metres of a single, square grid cell. Default None, in
+        which case it is calculated from the grid coordinates. Preferably, it
+        is passed since this avoids rounding errors.
 
     Returns
     -------

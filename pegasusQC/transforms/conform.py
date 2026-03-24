@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Conform a local gravity grid to a regional grid, both read from file.
+
+Author: Mark Helm Dransfield
+
+Created: Feb 2026
+
+License: CC BY-SA
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -12,7 +24,10 @@ from pegasusQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from pegasusQC.gridFiles.gridutility import report_gridStats
 
 
-def conform_from_file(loc_file, reg_file, loc_units, reg_units, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False):
+def conform_from_file(
+    loc_file, reg_file, loc_units, reg_units, survey_polygon, 
+    rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False
+):
     """
     Conforms (Dransfield, 2008) the `local` grid in `loc_file` to the `regional` grid in `reg_file`.
     
