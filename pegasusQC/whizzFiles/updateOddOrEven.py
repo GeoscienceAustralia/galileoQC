@@ -139,11 +139,11 @@ def _set_plan_parities(planFile, x='', y='', verbose=False):
             x = f[groupName]['CoordinateFrame'].attrs['XChannel']
         if y == '':
             y = f[groupName]['CoordinateFrame'].attrs['YChannel']
-        if 'TravSpacing' in f[groupName]['CoordinateFrame'].attrs:
-            trav_spacing = f[groupName]['CoordinateFrame'].attrs['TravSpacing']
+        if 'TraverseSpacing' in f[groupName]['CoordinateFrame'].attrs:
+            trav_spacing = f[groupName]['CoordinateFrame'].attrs['TraverseSpacing']
         else:
-            print('ERROR - TravSpacing not found in CoordinateFrame attributes.')
-            print('    Try running updateLineSpacing() to set TravSpacing.')
+            print('ERROR - TraverseSpacing not found in CoordinateFrame attributes.')
+            print('    Try running updateLineSpacing() to set TraverseSpacing.')
             return
 
         trav_parity = True
