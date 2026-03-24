@@ -1,10 +1,10 @@
 # About
 
-__pe*ga*susQC__ is a collection of functions for use in checking airborne gravity data under a quality control procedure. A number of assumptions underlie its development and use.
+__galileoQC__ is a collection of functions for use in checking airborne gravity data under a quality control procedure. A number of assumptions underlie its development and use.
 
 The airborne data in question might be from a gravimeter, or gravity gradiometer, or both, carried on an aircraft together with other instruments as part of a survey to map the changes in gravity over some area. This is done by flying a series of nominally parallel and equally spaced survey lines covering the area. The flying height is either constant with respect to some height datum, or else it approximately and reasonably smoothly drapes over the terrain.
 
-__pe*ga*susQC__ provides functions to:
+__galileoQC__ provides functions to:
 
 - check the navigation and positioning of the aircraft on the survey lines;
 - calculate and display the statistics of the collected data;
@@ -14,14 +14,14 @@ __pe*ga*susQC__ provides functions to:
 - interpolate data to regular grids, and image and display those grids;
 - check consistency of supplied data in various forms.
 
-These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. pe*ga*susQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
+These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. galileoQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
 
-The tested, and preferred, method of using __pe*ga*susQC__ is via a Jupyter-lab notebook. Some examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
+The tested, and preferred, method of using __galileoQC__ is via a Jupyter-lab notebook. Some examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
 
 *Mark Dransfield* {sub-ref}`today`
 
 :::{note}
-__pe*ga*susQC__ is at early stage of development and will keep improving in the future. The commonly used functions in the API should be quite stable, but minor utilities could change in the next version. If you find any bugs or would like to request any enhancements, please raise an issue on GitHub.
+__galileoQC__ is at early stage of development and will keep improving in the future. The commonly used functions in the API should be quite stable, but minor utilities could change in the next version. If you find any bugs or would like to request any enhancements, please raise an issue on GitHub.
 :::
 
 ## Acknowledgements
@@ -30,7 +30,7 @@ A massive amount of help, encouragement and support from many people at Geoscien
 
 ## Testing
 
-The __pe*ga*susQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook except for the testing under macos which used the JupyterLab Desktop app.
+The __galileoQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook except for the testing under macos which used the JupyterLab Desktop app.
 
 Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.
 

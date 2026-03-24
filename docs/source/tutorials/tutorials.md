@@ -5,7 +5,7 @@ This section provides links to the tutorial notebooks (in Jupyter-lab format).
 
 The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules-target).
 
-You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __pe*ga*susQC__ installed and running.
+You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __galileoQC__ installed and running.
 
 ## Prepare XYZ data
 
@@ -70,7 +70,7 @@ Odd_Even_Analysis.ipynb
 
 ## Gravimetry Corrections
 
-There are four standard corrections that must be made to airborne gravity data: atmospheric correction, free-air correction, Eotvos correction and latitude correction.  These corrections must be made using the modern standard formulae appropriate to airborne gravimetry. The formulae for the atmospheric, free-air and latitude corrections used here were taken from [^Hinze2005] where they appear in units of $mGal$. Here they are modified to be in $\mu ms^{-2}$ but __pe*ga*susQC__ uses the units of the measured data, either $mGal$ or $\mu ms^{-2}$. The Eotvos correction formula was taken from [^Jekeli2016] and also appears in [^Zhao2015].
+There are four standard corrections that must be made to airborne gravity data: atmospheric correction, free-air correction, Eotvos correction and latitude correction.  These corrections must be made using the modern standard formulae appropriate to airborne gravimetry. The formulae for the atmospheric, free-air and latitude corrections used here were taken from [^Hinze2005] where they appear in units of $mGal$. Here they are modified to be in $\mu ms^{-2}$ but __galileoQC__ uses the units of the measured data, either $mGal$ or $\mu ms^{-2}$. The Eotvos correction formula was taken from [^Jekeli2016] and also appears in [^Zhao2015].
 
 
 ```{toctree}
@@ -149,7 +149,7 @@ Aeromag_Analysis.ipynb
 
 ## Data Acknowledgements
 
-The tutorials use field data from airborne gravity surveys to demonstrate the use of __pe*ga*susQC__ on real data. Permission to use field data has been kindly given by:
+The tutorials use field data from airborne gravity surveys to demonstrate the use of __galileoQC__ on real data. Permission to use field data has been kindly given by:
 
 Stephan Sander (Co-President, Sander Geophysics),
 

@@ -15,17 +15,17 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'pegasusQC'
+project = 'galileoQC'
 copyright = '2025, Geoscience Australia'
 author = 'Mark Helm Dransfield'
 
 try:
-    version = release = importlib.metadata.version('pegasusQC')
+    version = release = importlib.metadata.version('galileoQC')
 except importlib.metadata.PackageNotFoundError:
     version = release = '0.0.4'  # fallback version
 
 
-# version = release = importlib.metadata.version('pegasusQC')
+# version = release = importlib.metadata.version('galileoQC')
 today_fmt = '%d %b %Y' 
 
 # -- General configuration ---------------------------------------------------
@@ -48,7 +48,7 @@ napoleon_numpy_docstring = True
 # autodoc2 settings
 autodoc2_packages = [
     {
-        "path": "../../pegasusQC",
+        "path": "../../galileoQC",
         "auto_mode": True,
     },
 ]
@@ -115,7 +115,7 @@ if True:
     }
 
 numfig = True
-html_title = "pegasusQC"
+html_title = "galileoQC"
 html_static_path = ['static']
 
 # html_theme_options = {

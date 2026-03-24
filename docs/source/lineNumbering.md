@@ -19,7 +19,7 @@ The airborne geophysics industry has no common approach to encoding information 
 
 For QC, the most critical requirement is to be able to identify the planned line, given the flown line segment. It is also useful for some QC functions to be able to identify a segment as a traverse or control line.
 
-The `updateLineAttributes` function writes the encoding format as metadata to the whizz file, allowing **pe*ga*susQC** to process the data efficiently for a number of purposes. It recognises several encoding formats for line numbering.
+The `updateLineAttributes` function writes the encoding format as metadata to the whizz file, allowing **galileoQC** to process the data efficiently for a number of purposes. It recognises several encoding formats for line numbering.
 
 For example, the encoding format can be set to "ARK", causing each line to be identified as either a traverse or a control line, and setting the re-flight number for each line, according to the "ARK" line-numbering scheme. The following function call performs this task for the survey data in `whizzfile`:
 

@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pegasusQC"
+name = "galileoQC"
 version = "0.0.4"
 authors = [
   { name="Mark Helm Dransfield", email="dransfield.m@bigpond.com" },
