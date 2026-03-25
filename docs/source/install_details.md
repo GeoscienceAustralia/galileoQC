@@ -7,7 +7,7 @@ There are many ways to accomplish these steps. Here one way is documented, toget
 
 These instructions use the python venv environment manager and pip installer.
 
-It is important to have a single virtual environment set up, with pagasusQC and jupyterlab, installed in that environment. Throughout this installation guide, the environment used for galileoQC is named `whizz`. If you use a different name, just replace `whizz` with that name.
+It is important to have a single virtual environment set up, with galileoQC and jupyterlab, installed in that environment. Throughout this installation guide, the environment used for galileoQC is named `whizz`. If you use a different name, just replace `whizz` with that name.
 
 For each operating system, the steps are:
 
@@ -25,7 +25,7 @@ Go into Settings -> Apps -> Advanced app settings -> App execution aliases, and 
 
 The following commands must all be entered from the `cmd` window (not the Powershell).
 
-Firstly install Python, then create a virtual environment `whizz` (you can choose another name if you like but it is `whizz` in the documentation), and then activate the virtual environment.
+Firstly install Python (the example is version 3.13 but the latest version is recommended), then create a virtual environment `whizz` (you can choose another name if you like but it is `whizz` in the documentation), and then activate the virtual environment.
 
 ```bash
 $ winget install Python.Python.3.13
@@ -33,14 +33,14 @@ $ python -m venv whizz
 $ whizz\Scripts\activate
 ```
 
-The prompt shows that you are in the whizz environment, ready to install `galileoQC`. Currently, galileoQC is in a private repository. While this remains the case, we will proceed by downloading the repo using a web browser (one needs permission here), and then installing locally.
+The prompt shows that you are in the whizz environment, ready to install `galileoQC`. Currently, galileoQC is in a private repository. While this remains the case, proceed by downloading the repo using a web browser (you will need permission), and then installing locally.
 
-Do this from your web browser by proceeding to the `galileoQC` repo; click on Code (green button); then Download ZIP. Once downloaded, extract the contents to your HOME directory, or other directory of choice.
+Do this from your web browser by proceeding to the `galileoQC` repo in Github; click on Code (green button); then Download ZIP. Once downloaded, extract the contents to your HOME directory, or other directory of choice.
 
 Now use pip to install it.
 
 ```bash
-(whizz) $ pip install .\name_of_directory_containing_setup_py
+(whizz) $ pip install .\name_of_directory_containing_pyproject.toml
 ```
 
 And then install jupyterlab.
@@ -57,9 +57,9 @@ Now everything is installed and you should be able to run galileoQC. To see how 
 
 ## Linux pip install (macos, fedora, debian and ubuntu)
 
-First, you will need a working version of `python3`, as well as the `pip` installer and the `venv` virtual environment manager. These should be readily available on any linux system so we assume they are ready to go. If not, a search on the web will provide instructions for installing them (some brief notes are included further below). The installations are different for different operating systems. On macos, this needs some care because there is usually an older version of python already installed but the python install instructions will help you here.
+First, you will need a working version of `python3`, as well as the `pip` installer and the `venv` virtual environment manager. These should be readily available on any linux system. If not, a search on the web will provide instructions for installing them (some brief notes are included further below). The installations are different for different operating systems. On macos, this needs some care because there is usually an older version of python already installed but the python install instructions will help you here.
 
-Here, we create an environment called `whizz` within which we will install and run galileoQC. (You don't have to call the environment `whizz` but that is the name used in all the documentation.)
+First, create an environment called `whizz` within which galileoQC will be installed and run.. (You don't have to call the environment `whizz` but that is the name used in all the documentation.)
 
 Open a terminal window and enter the following commands. Note that this documentation does not yet specify version numbers of software.
 
@@ -77,7 +77,7 @@ Do this from your web browser by proceeding to the `galileoQC` repo; click on Co
 Now use pip to install it.
 
 ```bash
-(whizz) $ pip install ./name_of_directory_containing_setup_py
+(whizz) $ pip install ./name_of_directory_containing_pyproject.toml
 ```
 
 Now you need a way of running `galileoQC`. Recommended for this purpose is `jupyterlab`. This is easily installed:
