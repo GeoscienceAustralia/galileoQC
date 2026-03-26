@@ -120,7 +120,11 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
         url=f"doi:{doi}/australia-ground-gravity.nc",
         known_hash=checksum,
     )
-    data = xr.load_dataset(fname)
+    try:
+        data = xr.load_dataset(fname)
+    except:
+        print(f'Unable to download ground gravity from australia-ground-gravity.nc')
+        return
     ds_5371 = data.where((data.longitude > minlon) 
         & (data.longitude < maxlon) 
         & (data.latitude > minlat) 
