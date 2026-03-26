@@ -141,7 +141,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='',
 
     measFile = str(measPath)
 
-    with h5py.File(measFile, 'r+') as fm:
+    with h5py.File(measFile, 'r') as fm:
         gMeas = fm[groupName]['Lines']
         if measX == '':
             measX = fm[groupName]['CoordinateFrame'].attrs['XChannel']

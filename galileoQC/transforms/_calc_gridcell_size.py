@@ -44,22 +44,25 @@ def _calc_gridcell_size(whizzFile):
     """
 
     filename = str(whizzFile)
-    with h5py.File(filename, 'r+') as f:
+    travSpacingKnown = False
+    with h5py.File(filename, 'r') as f:
         if 'TraverseSpacing' in f[groupName]['CoordinateFrame'].attrs:
-            trav_spacing = f[groupName]['CoordinateFrame'].attrs['TraverseSpacing']
-            cell_size = _nice_number(trav_spacing / 4.0)
+            travSpacingKnown = True
+    if not travSpacingKnown:
+        updateLineSpacing(whizzFile)
+    with h5py.File(filename, 'r') as f:
+        if 'TraverseSpacing' in f[groupName]['CoordinateFrame'].attrs:
+            travSpacingKnown = True
+    if not travSpacingKnown:
+        print('ERROR - could not calculate cell size for gridding.')
+        print('    TraverseSpacing not set in whizzFile, and value not estimatable.')
+        print('    Recommend running updateLineSpacing() with explicit values.')
+        print('    And/or re-running craig_transform with explicit cell_size.')
+        return None
 
-        else:
-            updateLineSpacing(whizzFile)
-            if 'TraverseSpacing' in f[groupName]['CoordinateFrame'].attrs:
-                trav_spacing = f[groupName]['CoordinateFrame'].attrs['TraverseSpacing']
-                cell_size = _nice_number(trav_spacing / 4.0)
-            else:
-                print('ERROR - could not calculate cell size for gridding.')
-                print('    TraverseSpacing not set in whizzFile, and value not estimatable.')
-                print('    Recommend running updateLineSpacing() with explicit values.')
-                print('    And/or re-running craig_transform with explicit cell_size.')
-                return None
+    with h5py.File(filename, 'r+') as f:
+        trav_spacing = f[groupName]['CoordinateFrame'].attrs['TraverseSpacing']
+        cell_size = _nice_number(trav_spacing / 4.0)
     path_substring = filename.split('/')
     local_filename = path_substring[-1].rsplit('.', 1)
     print(f'\nGridding {local_filename[0]} data with cell size = {cell_size}.')

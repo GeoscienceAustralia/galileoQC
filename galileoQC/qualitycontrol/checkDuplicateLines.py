@@ -27,7 +27,7 @@ def checkDuplicateLines(whizzFile):
     """
     filename = str(whizzFile)
 
-    with h5py.File(filename, 'r+') as f:
+    with h5py.File(filename, 'r') as f:
         # create all the data structure ready for the datasets
         g = f[groupName]['Lines']
         flightlines = list(g.keys())
