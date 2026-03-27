@@ -134,6 +134,9 @@ def craig_transform(
         else:
             print('\nERROR - regional grid file gravity units not understood. Must be "mGal" or "um/s/s".')
             return
+    else:
+        regional_grid_file = None
+        regional_grid = None
 
     if whizzFile is None:
         cell_size = 10.0
