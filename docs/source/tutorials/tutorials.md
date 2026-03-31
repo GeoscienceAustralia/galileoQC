@@ -166,8 +166,6 @@ The Vinton Dome FTG final data were supplied by Bell Geospace. The data are desc
 
 The Eastern Victoria airborne gravimeter survey field data were supplied by Sander Geophysics in 2022-25. Details can be found at [^EastVicRefs].
 
-The Bonaparte Gulf FTG data was flown for Beach Energy by ARKeX in 2013 and the final data were downloaded from the Northern Territory GEMIS web-site [^Bonaparte2013].
-
 ## References
 
 [^Pratt2003]: D. A. Pratt. Geophysicists, 2003.The ASEG-GDF2 standard for point located data. In
@@ -186,8 +184,6 @@ https://www.aseg.org.au/public/200/files/ASEG-GDF2-REV4.pdf. Australian Society 
 [^Murphy2010]: C. A. Murphy. Recent developments with Air-FTG®. In R. Lane, editor, Airborne Gravity 2010 - Abstracts from theASEG-PESA Airborne Gravity 2010 Workshop: Published jointly by Geoscience Australia and the Geological Survey of New South Wales, Geoscience Australia Record 2010/23 and GSNSW File GS2010/0457., pages 142–151, June 2010.
 
 [^Sunderland2022]: A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.
-
-[^Bonaparte2013]: https://geoscience.nt.gov.au/gemis/ntgsjspui/handle/1/84581
 
 [^Hinze2005]: W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Véronneau}, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005.
 
