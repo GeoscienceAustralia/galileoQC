@@ -66,6 +66,6 @@ def checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle, units=''):
     tx = g0 - gx
     predy = g0 - yyy / xxx * tx
     predErr = predy - gy
-    predErr.attrs['units'] = units
+    predErr.attrs['Units'] = units
 
     xdImage(predErr, plotTitle, colormap=config.qc_colormap, cmap_norm='no', hs=False, azdeg=90)

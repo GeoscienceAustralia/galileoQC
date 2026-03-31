@@ -61,8 +61,9 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         projName = f[groupName].attrs['ProjectName']
         if flightLines == []:
             flightLines = list(g.keys())
-        corr_units = g[flightLines[0]][channel1].attrs['Units']
-        if not (g[flightLines[0]][channel1].attrs['Units'] == corr_units):
+        corr_units = getChannelAttrs(g[flightLines[0]], channel1, myattribute='Units')
+        corr_units2 = getChannelAttrs(g[flightLines[0]], channel2, myattribute='Units')
+        if not (corr_units2 == corr_units):
             print('Error: {channel1} and {channel2} do not have the same units.')
             return
 
@@ -143,7 +144,7 @@ def psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinele
             flightLines = list(g.keys())
 
         myscaling = 'density'
-        corr_units = rd.getChannelAttrs(g[flightLines[0]], channel)
+        corr_units = rd.getChannelAttrs(g[flightLines[0]], channel, myattribute='Units')
         if myscaling == 'density':
             y_label = f'{channel} [{corr_units}^2/Hz]'
         else:
@@ -277,8 +278,9 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
         projName = f[groupName].attrs['ProjectName']
         if flightLines == []:
             flightLines = list(g.keys())
-        corr_units = g[flightLines[0]][rawchan].attrs['Units']
-        if not (g[flightLines[0]][filchan].attrs['Units'] == corr_units):
+        corr_units = getChannelAttrs(g[flightLines[0]], rawchan, myattribute='Units')
+        corr_units2 = getChannelAttrs(g[flightLines[0]], rawfilchanchan, myattribute='Units')
+        if not (corr_units2 == corr_units):
             print('Error: {rawchan} and {filchan} do not have the same units.')
             return
 

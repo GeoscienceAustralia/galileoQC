@@ -78,8 +78,8 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
 
         line_strs = list(g.keys())
         flightLine = line_strs[0]
-        turb_units = g[flightLine][turbulence].attrs['Units']
-        err_units = g[flightLine][aD].attrs['Units']
+        turb_units = getChannelAttrs(g[flightLine], turbulence, myattribute='Units')
+        err_units = getChannelAttrs(g[flightLine], aD, myattribute='Units')
 
         if measX == '':
             measX = f[groupName]['CoordinateFrame'].attrs['XChannel']

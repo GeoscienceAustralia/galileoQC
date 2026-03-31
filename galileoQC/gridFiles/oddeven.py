@@ -302,7 +302,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         return
 
     # Subtraction does not preserve attributes
-    for attribute in ['units', 'long_name', 'title']:
+    for attribute in ['Units', 'long_name', 'title']:
         if attribute in even_grid.attrs:
             d_grid.attrs[attribute] = even_grid.attrs[attribute]
 
@@ -317,7 +317,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=hs, azdeg=45, ax=None, clipTo3Std = True)
 
-    gut.report_gridStats(d_grid, mask_polygon=mask_polygon)
+    gut.report_gridStats(d_grid, mask_polygon=mask_polygon, title='odd-even difference')
 
 
 def _getOddEvenLines(whizz_file):
@@ -566,7 +566,7 @@ def altsample_grid(whizz_file, channel, filter_length, grid_space, method='neigh
     d_grid = even_grid - odd_grid
 
     # Subtraction does not preserve attributes
-    d_grid.attrs['units'] = even_grid.attrs['units']
+    d_grid.attrs['Units'] = even_grid.attrs['Units']
     d_grid.attrs['long_name'] = even_grid.attrs['long_name']
     d_grid.attrs['title'] = f"Grid difference of alternates : {even_grid.attrs['title']}"
     d_grid['x'].attrs['orig_name'] = even_grid['x'].attrs['orig_name']
@@ -578,7 +578,7 @@ def altsample_grid(whizz_file, channel, filter_length, grid_space, method='neigh
         minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2,
         hs=hs, azdeg=45, ax=None, clipTo3Std = True)
 
-    gut.report_gridStats(d_grid, mask_polygon=mask_polygon)
+    gut.report_gridStats(d_grid, mask_polygon=mask_polygon, title='odd-even difference')
 
 
 

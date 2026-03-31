@@ -57,7 +57,7 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
     hdfFile = str(hdfPath)
     # If we were passed a filename, get data from file
     if isinstance(grid, (pathlib.PurePath, str)):
-        eg, ng, zg, datum, projection = grd.read_ers_image(grid)
+        eg, ng, zg, datum, projection, _ = grd.read_ers_image(grid)
         zg = zg[::-1, :]
         newChannelName = grid.stem
 

@@ -103,7 +103,7 @@ def allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], 
 
             # get the units for the y axis label
             xlabelstr = 'Line number'
-            my_units = rd.getChannelAttrs(g[lines[0]], channel)
+            my_units = rd.getChannelAttrs(g[lines[0]], channel, myattribute='Units')
             if my_units == '':
                 ylabelstr = f'{channel}'
             else:

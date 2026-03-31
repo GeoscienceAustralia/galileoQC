@@ -50,6 +50,6 @@ def traceImages(file1, file2, file3, plotTitle, units=''):
     (x2, _) = gridfile_to_xa(file2, bandout=0)
     (x3, _) = gridfile_to_xa(file3, bandout=0)
     trace = x1 + x2 + x3
-    trace.attrs['units'] = units
+    trace.attrs['Units'] = units
     xdImage(trace, plotTitle, colormap=config.qc_colormap, cmap_norm='no', hs=False, azdeg=90)
 

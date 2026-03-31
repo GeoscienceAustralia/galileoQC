@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.path as mpltPath
 
 
-def report_gridStats(my_grid, mask_polygon=[]):
+def report_gridStats(my_grid, mask_polygon=[], title=None):
     """
     Reports the standard deviation of the z values in the portion of my_grid inside the mask_polygon.
 
@@ -29,18 +29,24 @@ def report_gridStats(my_grid, mask_polygon=[]):
         If the size of mask_polygon > 0, then my_grid will be masked to the area
         within the polygon defined by it.
 
+    title : String, optional
+
+        Printed before the report if provided; default None.
+
     Returns
     -------
     None.
 
     """
+    if not title is None:
+        print(f'\n    {title} - Grid Statistics')
     if np.array(mask_polygon).size > 0:
         my_grid = maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y')
-    if 'units' in my_grid.attrs:
-        print(f'RMS of result = {my_grid.std().data.item():.2f} {my_grid.attrs["units"]}')
-        print(f'mean of result = {my_grid.mean().data.item():.2f} {my_grid.attrs["units"]}')
-        print(f'min of result = {my_grid.min().data.item():.2f} {my_grid.attrs["units"]}')
-        print(f'max of result = {my_grid.max().data.item():.2f} {my_grid.attrs["units"]}')
+    if 'Units' in my_grid.attrs:
+        print(f'RMS of result = {my_grid.std().data.item():.2f} {my_grid.attrs["Units"]}')
+        print(f'mean of result = {my_grid.mean().data.item():.2f} {my_grid.attrs["Units"]}')
+        print(f'min of result = {my_grid.min().data.item():.2f} {my_grid.attrs["Units"]}')
+        print(f'max of result = {my_grid.max().data.item():.2f} {my_grid.attrs["Units"]}')
     else:
         print(f'RMS of result = {my_grid.std().data.item():.2f}')
         print(f'mean of result = {my_grid.mean().data.item():.2f}')

@@ -61,6 +61,10 @@ def read_ers_image(ersFile, bandout=0):
 
         The geographic projection as read from `ersFile`.
 
+    String
+
+        The units string as read from `ersFile`, default "".
+
     """
     headerfile = str(ersFile)
     imagefile = str(ersFile.with_suffix(''))
@@ -126,7 +130,7 @@ def read_ers_image(ersFile, bandout=0):
 
     nullcell = np.nan
 
-    return eastings, northings, zz, datum, projection
+    return eastings, northings, zz, datum, projection, units
 
 
 def read_ers_header(imagefile):

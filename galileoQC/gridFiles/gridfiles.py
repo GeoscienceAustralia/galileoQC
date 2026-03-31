@@ -110,7 +110,7 @@ def gridfile_to_xr(whizzFile='', bandout=0):
         whizzFile = Path(fb.get_grid_filename(filetypes=(('NetCdf4 grid', '*.nc'),
                                                          ('ERMapper grid', '*.ers'))))
     if whizzFile.suffix.upper() == '.ERS':
-        e, n, z, datum, projection = ers.read_ers_image(whizzFile, bandout=bandout)
+        e, n, z, datum, projection, units = ers.read_ers_image(whizzFile, bandout=bandout)
         xa = xr.DataArray(data=z,#np.flip(z, 0), # DANGER!!!
                           dims=["N", "E"],
                           coords={"N": n, "E": e})
@@ -123,6 +123,7 @@ def gridfile_to_xr(whizzFile='', bandout=0):
         xd.attrs["projection"] = projection
         if datum == 'WGS84' and projection == 'SUTM55':
             xd.rio.write_crs("epsg:32755", inplace=True)
+        xd.attrs["Units"] = units
     elif whizzFile.suffix.upper() == '.NC':
         nc = nc4.Dataset(str(whizzFile), mode='r')
         xd = xr.open_dataset(xr.backends.NetCDF4DataStore(nc))
@@ -157,7 +158,7 @@ def gridfile_to_xa(whizzFile='', bandout=0):
         whizzFile = Path(fb.get_grid_filename(filetypes=(('NetCdf4 grid', '*.nc'),
                                                          ('ERMapper grid', '*.ers'))))
     if whizzFile.suffix.upper() == '.ERS':
-        e, n, z, datum, projection = ers.read_ers_image(whizzFile, bandout=bandout)
+        e, n, z, datum, projection, units = ers.read_ers_image(whizzFile, bandout=bandout)
         xa = xr.DataArray(data=np.flip(z, 0), # DANGER!!!
                           dims=["N", "E"],
                           coords={"N": n, "E": e})
@@ -169,6 +170,7 @@ def gridfile_to_xa(whizzFile='', bandout=0):
         xa.attrs["projection"] = projection
         if datum == 'WGS84' and projection == 'SUTM55':
             xa.rio.write_crs("epsg:32755", inplace=True)
+        xa.attrs["Units"] = units
     elif whizzFile.suffix.upper() == '.NC':
         # nc = nc4.Dataset(str(whizzFile), mode='r')
         xa = xr.load_dataarray(str(whizzFile))#xr.backends.NetCDF4DataStore(nc))
@@ -228,7 +230,7 @@ def ers_to_netcdf4(ersFile='', ncFile='', datum='', projection='', long_name='',
     xd.attrs = {'datum' : datum,
                 'projection' : projection,
                 'long_name' : long_name,
-                'units' : units}
+                'Units' : units}
     print(xd)
     xd.to_netcdf(ncFile)
      
@@ -274,7 +276,7 @@ def update_grid(whizzFile='', datum='', projection='', long_name='', units=''):
     # xs.attrs = {'datum' : datum,
     #             'projection' : projection,
     #             'long_name' : long_name,
-    #             'units' : units}
+    #             'Units' : units}
     suffix = whizzFile.suffix
     fname = whizzFile.with_suffix('').name + '+'
     newWhizz = whizzFile.with_name(fname).with_suffix(suffix)

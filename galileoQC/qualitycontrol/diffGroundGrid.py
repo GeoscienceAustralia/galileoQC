@@ -60,7 +60,7 @@ def diffGroundGrid(whizzFile, whizzChannel, whizzLine, gridPath, plot_title='Gro
     """
 
     # retrieve the grid information
-    eg, ng, zg, datum, projection = grd.read_ers_image(gridPath)
+    eg, ng, zg, datum, projection, _ = grd.read_ers_image(gridPath)
     ngmin = np.min(ng)
     ngmax = np.max(ng)
     ngd = np.abs(ng[1] - ng[0])

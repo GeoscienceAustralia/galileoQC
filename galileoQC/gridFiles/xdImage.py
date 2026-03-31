@@ -106,8 +106,8 @@ def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm'
     vmin = np.nan
     vmax = np.nan
 
-    if 'units' in data_array.attrs:
-        cb_title = data_array.attrs['units']
+    if 'Units' in data_array.attrs:
+        cb_title = data_array.attrs['Units']
     else:
         cb_title = ''
     

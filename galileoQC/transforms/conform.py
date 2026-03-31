@@ -107,8 +107,8 @@ def conform_from_file(
     if "synth" in str(loc_file) or "synth" in str(reg_file):
         local = harmonicSurvey(size=6000.)
         regional = harmonicSurvey(size=50000.)
-        local.attrs['units'] = "um/s/s"
-        regional.attrs['units'] = "um/s/s"
+        local.attrs['Units'] = "um/s/s"
+        regional.attrs['Units'] = "um/s/s"
         if low_lambda == None or hi_lambda == None:
             low_lambda = 6000.
             hi_lambda = 9000.
@@ -124,9 +124,9 @@ def conform_from_file(
         # Local - check units
         if loc_units in ["mGal", "mgal"]:
             local = local * 10.0
-            local.attrs['units'] = "um/s/s"
+            local.attrs['Units'] = "um/s/s"
         elif loc_units in ["gu", "ums2", "um/s/s"]:
-            local.attrs['units'] = "um/s/s"
+            local.attrs['Units'] = "um/s/s"
         else:
             print('ERROR - loc_units not one of "mGal", "ums2", "um/s/s"')
             stoperror = True
@@ -134,9 +134,9 @@ def conform_from_file(
         # Regional - check units
         if reg_units in ["mGal", "mgal"]:
             regional = regional * 10.0
-            regional.attrs['units'] = "um/s/s"
+            regional.attrs['Units'] = "um/s/s"
         elif reg_units in ["gu", "ums2", "um/s/s"]:
-            regional.attrs['units'] = "um/s/s"
+            regional.attrs['Units'] = "um/s/s"
         else:
             print('ERROR - reg_units not one of "mGal", "ums2", "um/s/s"')
             stoperror = True
@@ -407,7 +407,7 @@ def conform(
     sum_clipped = sum_grav.sel(x=local_in.x, y=local_in.y, method="nearest")
     sum_clipped.attrs = local_in.attrs
     if plot_flag:
-        report_gridStats(sum_clipped)
+        report_gridStats(sum_clipped, title='Sum high- and low-pass filtered grids')
         xdImage(sum_clipped, f'sum_clipped {da_extremes(sum_clipped)}', clipTo3Std=False)
 
 
@@ -418,9 +418,6 @@ def conform(
     sum_masked = sum_clipped.where(original_mask)
     if plot_flag:
         xdImage(sum_masked, f'sum_masked 2 {da_extremes(sum_masked)}', clipTo3Std=False)
-
-
-
 
     # mask back to the given survey_mask, and trim to smallest enclosing rectangle
     geometries = [
@@ -436,7 +433,7 @@ def conform(
 
     # show before and after grids
     if plot_flag:
-        report_gridStats(sum_clipped)
+        report_gridStats(sum_clipped, title='Sum, clipped and masked')
         myfig, myax = plt.subplots(1,2, figsize=(12,6))
 
         local_in.plot(ax=myax[0])
@@ -522,14 +519,14 @@ def _check_grid(grid):
         grid.attrs['cell_size'] = cell_size
         
     # local: check for valid units
-    if not 'units' in grid.attrs.keys():
+    if not 'Units' in grid.attrs.keys():
         print(f'ERROR grid does not have units.')
         stoperror = True
-    elif not grid.attrs['units'] in ["gu", "ums2", "um/s/s"]:
-        print(f'ERROR grid units {grid.attrs["units"]} not in ["gu", "ums2", "um/s/s"].')
+    elif not grid.attrs['Units'] in ["gu", "ums2", "um/s/s"]:
+        print(f'ERROR grid units {grid.attrs["Units"]} not in ["gu", "ums2", "um/s/s"].')
         stoperror = True
     else:
-        grid.attrs['units'] = "um/s/s"
+        grid.attrs['Units'] = "um/s/s"
         
     return grid, stoperror
 

@@ -97,12 +97,11 @@ def _pad_simple(local_grid, regional_grid, verbose=False):
     reg_mean = reg_match.where(data_unmask, np.nan).mean()
 
     test = reg_match - parr - reg_mean - local_grid.mean()
-    print('\n Grid stats: regional subtract local.')
+    if verbose:
+        report_gridStats(test, title='regional subtract local')
+    xdImage(_trim_rectangle(test), 'Regional subtract local', hs=False)
     print(' Ideally, the mean should be close to 0 (abs value < 1),')
     print(' and the range should be roughly symmetrical.')
-    if verbose:
-        report_gridStats(test)
-    xdImage(_trim_rectangle(test), 'Regional subtract local', hs=False)
 
     # replace nans with zero in local grids for sum
     local_arith = parr.fillna(0.0)

@@ -112,11 +112,11 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         count = 0
         flightLine = list(g.keys())[0]
 
-        turb_units = rd.getChannelAttrs(g[flightLine], turbulence)
+        turb_units = rd.getChannelAttrs(g[flightLine], turbulence, myattribute='Units')
         if need_calc:
-            err_units = rd.getChannelAttrs(g[flightLine], aNE)
+            err_units = rd.getChannelAttrs(g[flightLine], aNE, myattribute='Units')
         else:
-            err_units = rd.getChannelAttrs(g[flightLine], eNE)
+            err_units = rd.getChannelAttrs(g[flightLine], eNE, myattribute='Units')
 
         labelx = []
         labely = []

@@ -129,7 +129,7 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
                 coords={'fiducials': fiducials}, 
                 dims = ['fiducials'],
                 attrs = {
-                    'units': 'm'
+                    'Units': 'm'
                 }
             ),
             n_chan: xr.DataArray(
@@ -137,7 +137,7 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
                 coords={'fiducials': fiducials}, 
                 dims = ['fiducials'],
                 attrs = {
-                    'units': 'm'
+                    'Units': 'm'
                 }
             ),
             xr_zchan: xr.DataArray(
@@ -145,7 +145,7 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
                 coords={'fiducials': fiducials}, 
                 dims = ['fiducials'],
                 attrs = {
-                    'units': '-'
+                    'Units': '-'
                 }
             )},
             attrs = {
@@ -173,9 +173,9 @@ def whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remov
             my_dataset[n_chan][sfid:efid] = yData
             my_dataset[xr_zchan][sfid:efid] = zData
 
-            my_dataset[e_chan].attrs['units'] = rd.getChannelAttrs(lines_group[line], e_chan)
-            my_dataset[n_chan].attrs['units'] = rd.getChannelAttrs(lines_group[line], n_chan)
-            my_dataset[xr_zchan].attrs['units'] = rd.getChannelAttrs(lines_group[line], z_chan)
+            my_dataset[e_chan].attrs['Units'] = rd.getChannelAttrs(lines_group[line], e_chan, myattribute='Units')
+            my_dataset[n_chan].attrs['Units'] = rd.getChannelAttrs(lines_group[line], n_chan, myattribute='Units')
+            my_dataset[xr_zchan].attrs['Units'] = rd.getChannelAttrs(lines_group[line], z_chan, myattribute='Units')
             if remove_mean and diff_one:
                 my_dataset.attrs['title'] = f'{z_chan} (mr) (d1)'
             elif remove_mean:

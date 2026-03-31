@@ -64,8 +64,8 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbou
     my_data2 = whizz_to_xarray(whizz_file, channel2, remove_mean=False, diff_one=False)
     my_data1[channel1] = my_data1[channel1] - my_data2[channel2]
     my_data1.attrs['title'] = f'{channel1} - {channel2}'
-    if 'units' in my_data2[channel2].attrs:
-        my_data1[channel1].attrs['units'] =  my_data2[channel2].attrs['units']
+    if 'Units' in my_data2[channel2].attrs:
+        my_data1[channel1].attrs['Units'] =  my_data2[channel2].attrs['Units']
     my_grid, my_region = xarray_to_grid(my_data1, grid_space, method=method, mask_polygon=mask_polygon, 
         mask_pixels=mask_pixels, numneighbours=numneighbours)
 

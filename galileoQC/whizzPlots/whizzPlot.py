@@ -145,23 +145,23 @@ def _get_data(whizzFile, flightLine, channel, x='', y='', h=''):
         xName = x
         if x == '':
             xName = f[groupName]['CoordinateFrame'].attrs['XChannel']
-        xUnits = getChannelAttrs(g[flightLine], xName)#g[flightLine][xName].attrs['Units']
+        xUnits = getChannelAttrs(g[flightLine], xName, myattribute='Units')
         xData = np.array(g[flightLine][xName])
 
         yName = y
         if y == '':
             yName = f[groupName]['CoordinateFrame'].attrs['YChannel']
-        yUnits = g[flightLine][yName].attrs['Units']
+        yUnits = getChannelAttrs(g[flightLine], yName, myattribute='Units')
         yData = np.array(g[flightLine][yName])
 
         hName = h
         if h == '':
             hName = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
-        hUnits = g[flightLine][hName].attrs['Units']
+        hUnits = getChannelAttrs(g[flightLine], hName, myattribute='Units')
         hData = np.array(g[flightLine][hName])
 
         zData = np.array(g[flightLine][channel])
-        zUnits = g[flightLine][channel].attrs['Units']
+        zUnits = getChannelAttrs(g[flightLine], channel, myattribute='Units')
 
     return xData, xUnits, yData, yUnits, hData, hUnits, zData, zUnits, projName
 

@@ -198,7 +198,7 @@ def _make_xr(data, name, units, n, e, n_chan='northing', e_chan='easting'):
                     coords={'fiducials': fiducials}, 
                     dims = ['fiducials'],
                     attrs = {
-                        'units': 'm'
+                        'Units': 'm'
                     }
                 ),
                 n_chan: xr.DataArray(
@@ -206,7 +206,7 @@ def _make_xr(data, name, units, n, e, n_chan='northing', e_chan='easting'):
                     coords={'fiducials': fiducials}, 
                     dims = ['fiducials'],
                     attrs = {
-                        'units': 'm'
+                        'Units': 'm'
                     }
                 ),
                 z_chan: xr.DataArray(
@@ -214,7 +214,7 @@ def _make_xr(data, name, units, n, e, n_chan='northing', e_chan='easting'):
                     coords={'fiducials': fiducials}, 
                     dims = ['fiducials'],
                     attrs = {
-                        'units': units
+                        'Units': units
                     }
                 )},
                 attrs = {

@@ -121,7 +121,7 @@ def checkEotvosCorr(whizzFile, eotCorr, latitude='', x='', y='', GRS80_height=''
             time = f[groupName]['CoordinateFrame'].attrs['TimeChannel']            
 
         flightLine = list(g.keys())[0]
-        corr_units = g[flightLine][eotCorr].attrs['Units']
+        corr_units = getChannelAttrs(g[flightLine], eotCorr, myattribute='Units')
         if corr_units == 'mGal':
             unit_scale = 10.0
         elif corr_units in ['gu', 'µm/s/s', 'um/s/s', 'um/s2']:

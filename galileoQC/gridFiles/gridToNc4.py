@@ -153,7 +153,7 @@ def gridToNc4(whizz_file, z_chans, grid_space, *, region=None, lines=[], e_chan=
         xd.attrs = {'datum' : datum,
                     'projection' : projection,
                     'long_name' : fname,
-                    'units' : ''}
+                    'Units' : ''}
 
         if ncFile == '':
             # append z_chan to whizzfile, then suffix to nc

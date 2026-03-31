@@ -36,8 +36,8 @@ def imageStats(whizzFile=''):
 
     """
     xa, fileUsed = gridfile_to_xa(whizzFile, bandout=0)
-    if 'units' in xa.attrs:
-        data_units = f" {xa.attrs['units']}"
+    if 'Units' in xa.attrs:
+        data_units = f" {xa.attrs['Units']}"
     else:
         data_units = ""
         

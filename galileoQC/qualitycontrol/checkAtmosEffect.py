@@ -65,7 +65,7 @@ def checkAtmosEffect(whizzFile, atmosCorr, lines=[], GRS80_height=''):
             GRS80_height = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
 
         flightLine = list(g.keys())[0]
-        corr_units = g[flightLine][atmosCorr].attrs['Units']
+        corr_units = getChannelAttrs(g[flightLine], atmosCorr, myattribute='Units')
         if corr_units == 'mGal':
             unit_scale = 10.0
         elif corr_units in ['gu', 'µm/s/s', 'um/s/s', 'um/s2']:

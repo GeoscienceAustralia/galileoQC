@@ -74,7 +74,7 @@ def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, 
         
         for line in flightLines:
             xData = rd.getLineData(g[line], x)
-            xUnits = rd.getChannelAttrs(g[line], x)
+            xUnits = rd.getChannelAttrs(g[line], x, myattribute='Units')
             if xUnits == '':
                 xlabelstr = f'{x}'
             else:
@@ -86,7 +86,7 @@ def plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, 
             ax = fig.add_subplot(1,1,1)
             for channel in channels:
                 yData = rd.getLineData(g[line], channel)
-                yUnits = rd.getChannelAttrs(g[line], channel)
+                yUnits = rd.getChannelAttrs(g[line], channel, myattribute='Units')
                 if yUnits == '':
                     ylabelstr = f'{channel}'
                 else:

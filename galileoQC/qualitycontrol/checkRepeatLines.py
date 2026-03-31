@@ -100,11 +100,11 @@ def checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True,
             # if the channel has an attribute 'Units' 
             dd = g[all_flightLines[0]][channel]
             chan_g_label = channel
-            chan_g_units = rd.getChannelAttrs(g[all_flightLines[0]], channel)
+            chan_g_units = rd.getChannelAttrs(g[all_flightLines[0]], channel, myattribute='Units')
             chan_g_label += ' ' + chan_g_units
 
-            chan_z_units = rd.getChannelAttrs(g[all_flightLines[0]], z)
-            chan_x_units = rd.getChannelAttrs(g[all_flightLines[0]], x)
+            chan_z_units = rd.getChannelAttrs(g[all_flightLines[0]], z, myattribute='Units')
+            chan_x_units = rd.getChannelAttrs(g[all_flightLines[0]], x, myattribute='Units')
 
             # read the data into the arrays
             for line in all_flightLines:
