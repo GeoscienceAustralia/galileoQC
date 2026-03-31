@@ -13,9 +13,10 @@ License: CC BY-SA
 from scipy.fftpack import fft2
 import xrft
 import numpy as np
+from galileoQC.gridFiles.gridutility import report_gridStats
 
 
-def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
+def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0, verbose=False):
     """
     Calculates the differential curvatures of gravity, via
     FFT.
@@ -37,6 +38,10 @@ def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
         mGal or um/s/s and the desired outputs are gradients
         in E. For mGal, scale = 10000.0; for E, 1000.0.
 
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
+
     Returns
     -------
     gne, guv : list(xarray 2D DataArray)
@@ -44,13 +49,15 @@ def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
         The differential curvatures of gravity.
         
     """
-    if gravity.attrs['units'] == "mGal":
+    scale = 1000.0
+    if gravity.attrs['Units'] == "mGal":
         scale = 10000.0
-    else:
-        scale = 1000.0
+
+    if verbose:
+        report_gridStats(gravity, title='regional gravity prior fft')
 
      # Take DFT of vertical gravity.
-    grav_fft = xrft.dft(gravity, detrend='linear', window=True, true_phase=True, true_amplitude=True)
+    grav_fft = xrft.dft(gravity.fillna(0.0), detrend='linear', window=True, true_phase=True, true_amplitude=True)
     
     # Next, form the wavenumbers ...
     kx, ky = np.meshgrid(grav_fft.freq_x, grav_fft.freq_y)
@@ -85,10 +92,12 @@ def Kurvs_of_grav(gravity, firstorder=False, scale=1000.0):
     gne = xrft.idft(gne_fft * 2.0 * np.pi, detrend='linear', window=True, true_phase=True, true_amplitude=True)
     guv = xrft.idft(guv_fft * 2.0 * np.pi, detrend='linear', window=True, true_phase=True, true_amplitude=True)
 
+    if verbose:
+        report_gridStats(gne, title='regional gne, just created')
     # ..., scale to eotvos
     gne_real = gne.real * scale
-    gne_real.attrs['units'] = 'eotvos'
+    gne_real.attrs['Units'] = 'eotvos'
     guv_real = guv.real * scale
-    guv_real.attrs['units'] = 'eotvos'
+    guv_real.attrs['Units'] = 'eotvos'
     
     return gne_real, guv_real

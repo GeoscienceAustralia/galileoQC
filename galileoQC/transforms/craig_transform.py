@@ -32,7 +32,7 @@ def craig_transform(
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
     regional_grav_units='mGal',
     numstns=None, firstorder=False, conforming=False,
-    plot_flag=False
+    plot_flag=False, verbose=False
 ):
     """
     Runs the Craig transform on gravity differential curvature data to
@@ -117,6 +117,10 @@ def craig_transform(
 
         If True, then high-pass filter the gD data before returning it.
         Default False.
+
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
 
     RETURNS
     ----------
@@ -204,8 +208,13 @@ def craig_transform(
                                          'x_channel': e_chan,
                                          'y_channel': n_chan,
                                          'z_channel': regional_grid_file,
-                                         'units': regional_grav_units
+                                         'Units': regional_grav_units
                                          })
+            if verbose:
+                report_gridStats(regional_grid, title='Regional Grid')
+            if plot_flag:
+                xdImage(regional_grid, 'Regional Grid')
+            # regional_grid = _grid_clean(regional_grid)
 
         # main calculation
         gD_grid, gD_err, gD_raw = gravity_from_curv(
@@ -213,22 +222,21 @@ def craig_transform(
             result_units=result_units, survey_polygon=survey_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode,
             regional_grid=regional_grid,
-            firstorder=firstorder
+            firstorder=firstorder,
+            plot_flag=plot_flag,
+            verbose=verbose
         )
         if plot_flag:
             xdImage(gD_grid, 'Post-gfc: gD_grid (um/s/s)', hs=False)
 
         # conformed to regional if required.
-        report_summary = '\n  Final transformed grid stats:'
+        report_summary = '\n  Final transformed grids:'
         if conforming:
             report_summary = '\n  Final conformed and transformed grid stats:'
             if plot_flag:
-                print('  Raw grid stats:')
-                report_gridStats(gD_raw)
-                print('  gD grid stats:')
-                report_gridStats(gD_grid)
-                print('  Regional grid stats:')
-                report_gridStats(regional_grid)
+                report_gridStats(gD_raw, title='Raw grid')
+                report_gridStats(gD_grid, title='gD grid')
+                report_gridStats(regional_grid, title='Regional grid')
                 xdImage(gD_grid, ' Pre-conform: gD_grid (um/s/s)', hs=False)
                 xdImage(gD_raw, ' Pre-conform: gD_raw (um/s/s)', hs=False)
             original_mask = np.ma.masked_array(gD_grid, ~np.isnan(gD_grid)).mask
@@ -239,8 +247,7 @@ def craig_transform(
             if gD_grid is None:
                 return None
             if plot_flag:
-                print('  conformed grid stats:')
-                report_gridStats(gD_grid)
+                report_gridStats(gD_grid, title='conformed grid')
 
         # report statistics, and image grids (calculate clipping limits for images)
         print(report_summary)

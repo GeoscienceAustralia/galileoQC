@@ -11,6 +11,7 @@ License: CC BY-SA
 """
 
 import numpy as np
+import xarray as xr
 import xrft
 import matplotlib.path as mpltPath
 
@@ -113,9 +114,13 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
     gD_im = gD_tr.imag
     gD_re = gD_tr.real
     if plot_flag:
+        ntemp = np.array(range(craig.real.shape[0]))
+        etemp = np.array(range(craig.real.shape[1]))
+        craigArray = xr.DataArray(craig.real, coords={"N": ntemp, "E": etemp}, dims=["N", "E"])
+        xdImage(craigArray, 'Craig filter (Fourier real)', hs=False)
         xdImage(gD_re, 'unmasked, untrimmed gD_grid (um/s/s)', hs=True)
         if verbose:
-            report_gridStats(gD_re)
+            report_gridStats(gD_re, title='unmasked, untrimmed gD_grid (um/s/s)')
 
     # ... replace NaNs, ...
     if not nan_mask is None:
@@ -124,8 +129,7 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
         if plot_flag:
             xdImage(gD_re, 'masked, untrimmed gD_grid (um/s/s)', hs=True)
             if verbose:
-                print('    gD_re')
-                report_gridStats(gD_re)
+                report_gridStats(gD_re, title='masked, untrimmed gD_grid (um/s/s)')
     # ... mask to survey boundary polygon, ...
     if not survey_polygon is None:
         x_chan = 'x'
@@ -137,8 +141,7 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
         if plot_flag:
             xdImage(gD_result, 'masked, trimmed gD_grid (um/s/s)', hs=True)
             if verbose:
-                print(f'    gD_result, {gD_result.shape}')
-                report_gridStats(gD_result)
+                report_gridStats(gD_result, title='masked, trimmed gD_grid (um/s/s)')
     else:
         gD_err = gD_im
         gD_result = gD_re

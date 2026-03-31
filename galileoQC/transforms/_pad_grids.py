@@ -16,7 +16,7 @@ import rioxarray # for the extension to load
 from galileoQC.transforms._pad_mean import _pad_mean
 from galileoQC.transforms._pad_regional import _pad_regional
 
-def _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=None, firstorder=False):
+def _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=None, firstorder=False, verbose=False):
     """
     `Gne_grid` and `Guv_grid` are mean-corrected and padded by `pad_cells` pixels in all four
     directions. If `pad_cells` < 1, or `mode` is unrecognised, or is "regional"
@@ -50,6 +50,10 @@ def _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=N
 
         If True, include first order Craig correction. Default False.
 
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
+
     Returns
     -------
     grid : xarray 2D DataArray
@@ -71,7 +75,8 @@ def _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=N
     
     elif mode == "regional":
         Gne_grid_padded, Guv_grid_padded, nan_mask = _pad_regional(Gne_grid,
-            Guv_grid, pad_cells, regional_grid, firstorder=firstorder)
+            Guv_grid, pad_cells, regional_grid, firstorder=firstorder,
+            verbose=verbose)
 
     else:
         print("\nWARNING in _pad_grid. The mode {mode} is unrecognised.")

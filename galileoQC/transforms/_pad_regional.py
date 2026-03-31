@@ -89,18 +89,15 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
         return Gne_x_grid, Guv_x_grid, data_mask_ne
 
     # Transform regional to differential curvatures
-    gne_reg, guv_reg = Kurvs_of_grav(regional_grid, firstorder=firstorder)
+    gne_reg, guv_reg = Kurvs_of_grav(regional_grid, firstorder=firstorder, verbose=verbose)
 
     if verbose:
         print('\nInitial Grid Statistics')
-        print('  Gne regional')
-        report_gridStats(gne_reg)
-        print('  Gne local')
-        report_gridStats(Gne_grid)
-        print('  Guv regional')
-        report_gridStats(guv_reg)
-        print('  Guv local')
-        report_gridStats(Guv_grid)
+        report_gridStats(regional_grid, title='input gD regional')
+        report_gridStats(gne_reg, title='Gne regional')
+        report_gridStats(Gne_grid, title='Gne local')
+        report_gridStats(guv_reg, title='Guv regional')
+        report_gridStats(Guv_grid, title='Guv local')
         print('\n')
 
     if _scaling_doubtful(gne_reg, Gne_grid):
@@ -125,12 +122,10 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
         print(' Ideally, the mean should be close to 0 (abs value < 1),')
         print(' and the range should be roughly symmetrical.')
 
-        print('\n   Gne')
-        report_gridStats(test_ne)
+        report_gridStats(test_ne, title='Gne regional subtract local')
         xdImage(_trim_rectangle(test_ne), 'Gne regional subtract local (E)', hs=False)
 
-        print('\n   Guv')
-        report_gridStats(test_uv)
+        report_gridStats(test_uv, title='Guv regional subtract local')
         xdImage(_trim_rectangle(test_uv), 'Guv regional subtract local (E)', hs=False)
 
     # replace nans with zero in local grids for transform
@@ -171,6 +166,8 @@ def _scaling_doubtful(grid1, grid2):
     range1 = np.abs(grid1.max().data.item() - grid1.min().data.item())
     range2 = np.abs(grid2.max().data.item() - grid2.min().data.item())
     if abs(np.log10(range1 / range2)) > 0.5:
+        return True
+    elif np.isnan(range1) or np.isnan(range1):
         return True
 
     return False

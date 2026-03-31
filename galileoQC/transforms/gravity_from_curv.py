@@ -19,6 +19,7 @@ from galileoQC.transforms._calc_padcells import _calc_padcells
 from galileoQC.transforms._pad_grids import _pad_grids
 from galileoQC.gridFiles.xdImage import xdImage
 from galileoQC.transforms.grav_of_Kurvs import grav_of_Kurvs
+from galileoQC.gridFiles.gridutility import report_gridStats
 
 
 def gravity_from_curv(Ane, Auv, cell_size,
@@ -30,7 +31,8 @@ def gravity_from_curv(Ane, Auv, cell_size,
                     padding_mode='regional',
                     regional_grid=None,
                     firstorder=False,
-                    plot_flag=False
+                    plot_flag=False,
+                    verbose=False
 ):
     """
     Calculates the vertical gravity, gD, from the differential curvature
@@ -110,6 +112,10 @@ def gravity_from_curv(Ane, Auv, cell_size,
         If True, images will be displayed of the grids at each stage of the processing. If False,
         then only the `local` input and output grids will be displayed. Default False.
         
+    verbose : Bool, optional
+
+        If True, then prints out details. Default = False.
+
     Returns
     -------
     gD : xarray 2D DataArray
@@ -184,14 +190,20 @@ def gravity_from_curv(Ane, Auv, cell_size,
         mask_pixels=input_mask_pixels, 
         numneighbours=5, bdist=None, maxiters=100
         )
-
+    if verbose:
+        report_gridStats(Ane_grid, title="Ane_grid")
+        report_gridStats(Auv_grid, title="Auv_grid")
     # Pad and fill the data
     print('\nPadding the local curvature gradient grids.')
     Ane_grid_pad, Auv_grid_pad, nan_mask = _pad_grids(
         Ane_grid, Auv_grid, pad_cells,
         mode=mode, regional_grid=regional_grid,
-        firstorder=firstorder
+        firstorder=firstorder,
+        verbose=verbose
         )
+    if verbose:
+        report_gridStats(Ane_grid_pad, title="Ane_grid_pad")
+        report_gridStats(Auv_grid_pad, title="Auv_grid_pad")
     
     # Transform to gD
     print('\nTransforming the local curvature gradient grids to gravity.')
@@ -206,7 +218,9 @@ def gravity_from_curv(Ane, Auv, cell_size,
         Ane_grid_pad, Auv_grid_pad,
         firstorder=firstorder, 
         survey_polygon=survey_polygon, 
-        nan_mask=nan_mask
+        nan_mask=nan_mask,
+        plot_flag=plot_flag,
+        verbose=True
         )
     if plot_flag:
         xdImage(gD_grid, 'Post-gok: gD_grid (Em)', hs=False)
@@ -215,18 +229,18 @@ def gravity_from_curv(Ane, Auv, cell_size,
     # ... 10,000 Em per mGal
     if result_units in ('mGal', 'mGal'):
         gD_grid = gD_grid / 10000.0
-        gD_grid.attrs['units'] = 'mGal'
+        gD_grid.attrs['Units'] = 'mGal'
         gD_err = gD_err / 10000.0
-        gD_err.attrs['units'] = 'mGal'
+        gD_err.attrs['Units'] = 'mGal'
         gD_raw = gD_raw / 10000.0
-        gD_raw.attrs['units'] = 'mGal'
+        gD_raw.attrs['Units'] = 'mGal'
     else:
         gD_grid = gD_grid / 1000.0
-        gD_grid.attrs['units'] = 'um/s/s'
+        gD_grid.attrs['Units'] = 'um/s/s'
         gD_err = gD_err / 1000.0
-        gD_err.attrs['units'] = 'um/s/s'
+        gD_err.attrs['Units'] = 'um/s/s'
         gD_raw = gD_raw / 1000.0
-        gD_raw.attrs['units'] = 'um/s/s'
+        gD_raw.attrs['Units'] = 'um/s/s'
 
     # ..., and store attributes
     if gd_chan is None:
