@@ -101,7 +101,7 @@ def _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False
         print('\n')
 
     if _scaling_doubtful(gne_reg, Gne_grid):
-        print('\nWARNING - grid statistical ranges suggest units error.\n')
+        print('\nWARNING - grid statistical ranges are quite different for regional and local data. Check units are correct.\n')
 
     # Pad-extend local grids
     Gne_padded = _pad_grid_nans(Gne_grid, pad_cells)

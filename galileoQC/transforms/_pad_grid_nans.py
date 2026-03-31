@@ -43,6 +43,12 @@ def _pad_grid_nans(grid, pad_cells, cell_size=None):
         Expanded, mean-corrected grid.
         
     """
+    parr = grid.pad(x=(pad_cells, pad_cells), 
+                    y=(pad_cells, pad_cells), 
+                    keep_attrs=True,
+                    mode="constant",
+                    fill_value=np.nan,
+                    stat_length=None)
     grid_mean = np.nanmean(grid.values)
     if cell_size is None:
         dx = grid.x.values[1] - grid.x.values[0]
@@ -60,12 +66,9 @@ def _pad_grid_nans(grid, pad_cells, cell_size=None):
     numn = round((nw - n0) / dy) + 1
     e = np.linspace(e0, ew, nume, endpoint=True)
     n = np.linspace(n0, nw, numn, endpoint=True)
-    parr = grid.pad(x=(pad_cells, pad_cells), 
-                    y=(pad_cells, pad_cells), 
-                    keep_attrs=True,
-                    mode="constant",
-                    fill_value=np.nan,
-                    stat_length=None)
     parr = parr.assign_coords(x=e, y=n)   
-    parr += -parr.mean()
-    return parr
+
+    with xr.set_options(keep_attrs=True):
+        output = parr - grid_mean
+
+    return output

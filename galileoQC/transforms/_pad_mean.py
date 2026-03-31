@@ -66,11 +66,15 @@ def _pad_mean(grid, pad_cells):
 
     dx = grid_fill.x.values[1] - grid_fill.x.values[0]
     dy = grid_fill.y.values[1] - grid_fill.y.values[0]
-    for i in range(0,pad_cells):
-        parr.x.values[i] = parr.x.values[pad_cells] - (pad_cells - i) * dx
-        parr.x.values[-1-i] = parr.x.values[-1-pad_cells] + (pad_cells - i) * dx
-        parr.y.values[i] = parr.y.values[pad_cells] - (pad_cells - i) * dy
-        parr.y.values[-1-i] = parr.y.values[-1-pad_cells] + (pad_cells - i) * dy
+    e0 = grid.x.values[0] - dx * pad_cells
+    n0 = grid.y.values[0] - dy * pad_cells
+    ew = grid.x.values[-1] + dx * pad_cells
+    nw = grid.y.values[-1] + dy * pad_cells
+    nume = round((ew - e0) / dx) + 1
+    numn = round((nw - n0) / dy) + 1
+    e = np.linspace(e0, ew, nume, endpoint=True)
+    n = np.linspace(n0, nw, numn, endpoint=True)
+    parr = parr.assign_coords(x=e, y=n)   
 
     with xr.set_options(keep_attrs=True):
         output = parr - parr.mean().values
