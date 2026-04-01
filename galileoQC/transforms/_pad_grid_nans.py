@@ -11,6 +11,7 @@ License: CC BY-SA
 """
 
 import numpy as np
+import xarray as xr
 
 
 def _pad_grid_nans(grid, pad_cells, cell_size=None):

@@ -37,13 +37,16 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
 
     Parameters
     ----------
-    grid : String or pathlib Path
+    grid : String or pathlib Path or xarray.core.dataarray.DataArray
 
-        Name of a ERMapper file, including path and extension.
+        Name of a ERMapper file, including path and extension, that
+        contains the grid to be sampled or an actual grid as a DataArray.
+
 
     hdfPath : String or pathlib Path
 
-        Name of a HDF5 Whizz file, including path and extension.
+        Name of the HDF5 Whizz file, including path and extension, to
+        which the grid will be sampled.
 
     lines : Array{String}, optional
 
@@ -104,9 +107,6 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
     egd = np.abs(eg[1] - eg[0])
     
     print('\nGrid file read for channel ', newChannelName)
-    print("  corners (", egmin, ngmin, "), (", egmax,  ngmax, ")")
-    print("  spacings ", ngd, egd)
-    print("  shape ", eg.shape, ng.shape, zg.shape)
 
     # create interpolator for gridded data
 
@@ -123,10 +123,18 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
         if lines == []:
             lines = list(g.keys())
 
+        num_lines = len(lines)
+        num_written_lines = num_lines
+        new_error = True
         for line in lines:
             lineText = 'Line ' + str(line)
             if newChannelName in g[line]:
-                print(f'{lineText}: {newChannelName} already in whizz_file, not written.')
+                if new_error:
+                    print(f'{lineText}: {newChannelName} already in whizz_file, not written.')
+                    print('    This warning only provided on the first occurrence. ')
+                    print('    Usually it is true for many, or all, flight-lines.')
+                    new_error = False
+                num_written_lines -= 1
                 continue
 
             # retrieve line positions
@@ -152,6 +160,7 @@ def sample_grid_to_line(grid, hdfPath, lines=[]):
             dd = g[line].create_dataset(newChannelName, data = zm, compression="gzip", compression_opts=4)
             dd.attrs['Name'] = newChannelName
 
+    print(f'\nGrid file sampled to whizz file for {num_written_lines} of {num_lines} flight-lines.')
     return
 
 

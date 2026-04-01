@@ -57,9 +57,8 @@ def gravity_from_curv(Ane, Auv, cell_size,
 
     gd_chan : String, optional
 
-        The name of the channel in `whizzFile` to write the gD output to. If the
-        name already exists in the whizzFile, then the new data are NOT written.
-        Default None in which case, the code invents a name.
+        The `long name` attribute of the gD output DataArray.
+        Default None in which case, the code uses `gd_craig`.
 
     altitude : xarray 1D DataSet, optional
 

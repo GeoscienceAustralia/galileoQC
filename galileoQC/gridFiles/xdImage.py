@@ -102,7 +102,7 @@ def xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm'
 
     """
 
-    if type(data_array) != xr.core.dataarray.DataArray:
+    if not type(data_array) is xr.core.dataarray.DataArray:
         print(f'ERROR - data_array input has type {type(data_array)} but should be an xarray DataArray.')
         return
 

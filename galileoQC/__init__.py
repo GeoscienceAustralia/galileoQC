@@ -20,6 +20,7 @@ from galileoQC.qualitycontrol.qualityAnalysis import *
 from galileoQC.whizzPlots.whizzPlot import *
 from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from galileoQC.gridFiles.read_ers import *
+from galileoQC.gridFiles.write_ers import write_ers
 
 # Data management
 from galileoQC.whizzFiles.gdfReader import asegToHDF

@@ -12,6 +12,7 @@ License: CC BY-SA
 
 import numpy as np
 import xarray as xr
+import pathlib
 import matplotlib.pyplot as plt
 
 from galileoQC.gridFiles.whizz_to_xarray import whizz_to_xarray
@@ -24,14 +25,15 @@ from galileoQC.gridFiles.gridutility import report_gridStats
 from galileoQC.gridFiles.sample_grid_to_line import sample_grid_to_line
 from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from galileoQC.transforms.conform import conform
+from galileoQC.gridFiles.write_ers import write_ers
 
 
 def craig_transform(
     whizzFile=None, gne_chan=None, guv_chan=None, gd_chan=None,
     cell_size=None, result_units='um/s/s', survey_polygon=None,
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
-    regional_grav_units='mGal',
-    numstns=None, firstorder=False, conforming=False,
+    regional_grav_units='mGal', numstns=None, firstorder=False,
+    conforming=False, save_to_ers=False,
     plot_flag=False, verbose=False
 ):
     """
@@ -59,9 +61,11 @@ def craig_transform(
 
     gd_chan : String, optional
 
-        The name of the channel in `whizzFile` to write the gD output to. If the
-        name already exists in the whizzFile, then the new data are NOT written.
-        Default None in which case, the new data are NOT written.
+        The name of the channel in `whizzFile` to write the gD output. If the
+        name already exists for a flight-line in the whizzFile, then the new
+        data are NOT written.  Also used as the ERS filename if the grid is
+        written to an ERS file and is the `long name` attribute in the output
+        DataArray.) Default None in which case, the new data are NOT written.
 
     altitude_chan : String, optional
 
@@ -118,14 +122,26 @@ def craig_transform(
         If True, then high-pass filter the gD data before returning it.
         Default False.
 
+    save_to_ers : bool, optional
+
+        If True, save the the transformed output grid as an ERS file. Default False.
+
+    plot_flag : bool, optional
+
+        If True, plot images of grids at intermediate stages of the processing.
+        Meant for debugging the code but can be helpful for understanding the
+        method. Default False.
+
     verbose : Bool, optional
 
-        If True, then prints out details. Default = False.
+        If True, then prints out details. Default False.
 
     RETURNS
     ----------
-    None:
     
+    gd_grid : xarray DataArray
+
+        The resultant grid from the transform.
     """
     if not whizzFile is None and (padding_mode == "regional" or conforming == True):
         if regional_grid_file is None:
@@ -272,4 +288,21 @@ def craig_transform(
         if not gd_chan is None:
             sample_grid_to_line(gD_grid, whizzFile)
     
+        if save_to_ers:
+            if isinstance(whizzFile, pathlib.Path):
+                whizzFilePath = whizzFile
+            elif isinstance(whizzFile, str):
+                whizzFilePath = Path(whizzFile)
+            else:
+                print('Error - type of whizzFile not recognised. Must be Path or String')
+                print('    Output grid not written to file.')
+                return gD_grid
+
+            my_long_name = "gD_craig"
+            if 'long_name' in gD_grid.attrs:
+                my_long_name = gD_grid.attrs['long_name']
+
+            ersfilepath = whizzFilePath.with_name(my_long_name)
+            write_ers(ersfilepath, gD_grid)
+
     return gD_grid
