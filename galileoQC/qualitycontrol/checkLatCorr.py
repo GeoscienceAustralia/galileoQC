@@ -73,7 +73,7 @@ def checkLatCorr(whizzFile, latCorr, latitude='', lines=[], changeSign=False):
             latitude = f[groupName]['CoordinateFrame'].attrs['LatitudeChannel']
 
         flightLine = list(g.keys())[0]
-        corr_units = getChannelAttrs(g[flightLine], latCorr, myattribute='Units')
+        corr_units = rd.getChannelAttrs(g[flightLine], latCorr, myattribute='Units')
         if corr_units == 'mGal':
             unit_scale = 10.0
         elif corr_units in ['gu', 'µm/s/s', 'um/s/s', 'um/s2']:

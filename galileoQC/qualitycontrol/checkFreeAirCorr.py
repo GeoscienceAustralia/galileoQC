@@ -78,7 +78,7 @@ def checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[], 
             GRS80_height = f[groupName]['CoordinateFrame'].attrs['AltitudeChannel']
 
         flightLine = list(g.keys())[0]
-        corr_units = getChannelAttrs(g[flightLine], faCorr, myattribute='Units')
+        corr_units = rd.getChannelAttrs(g[flightLine], faCorr, myattribute='Units')
         if corr_units == 'mGal':
             unit_scale = 10.0
         elif corr_units in ['gu', 'µm/s/s', 'um/s/s', 'um/s2']:

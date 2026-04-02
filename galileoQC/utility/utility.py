@@ -66,7 +66,9 @@ def _getCoordFrameAttr(whizz_group, attr_name):
 
 
 def _distance(x, y):
-    return np.sqrt(x * x + y * y)
+    sum_sq = np.array(x * x + y * y)
+    clean_sum = sum_sq[~np.isnan(sum_sq)]
+    return np.sqrt(clean_sum)
 
 
 def _length(x, y):

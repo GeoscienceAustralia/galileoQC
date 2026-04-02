@@ -61,8 +61,8 @@ def psdChannelDiff(whizzFile, channel1, channel2, flightLines=[]):
         projName = f[groupName].attrs['ProjectName']
         if flightLines == []:
             flightLines = list(g.keys())
-        corr_units = getChannelAttrs(g[flightLines[0]], channel1, myattribute='Units')
-        corr_units2 = getChannelAttrs(g[flightLines[0]], channel2, myattribute='Units')
+        corr_units = rd.getChannelAttrs(g[flightLines[0]], channel1, myattribute='Units')
+        corr_units2 = rd.getChannelAttrs(g[flightLines[0]], channel2, myattribute='Units')
         if not (corr_units2 == corr_units):
             print('Error: {channel1} and {channel2} do not have the same units.')
             return
@@ -278,8 +278,8 @@ def psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.
         projName = f[groupName].attrs['ProjectName']
         if flightLines == []:
             flightLines = list(g.keys())
-        corr_units = getChannelAttrs(g[flightLines[0]], rawchan, myattribute='Units')
-        corr_units2 = getChannelAttrs(g[flightLines[0]], rawfilchanchan, myattribute='Units')
+        corr_units = rd.getChannelAttrs(g[flightLines[0]], rawchan, myattribute='Units')
+        corr_units2 = rd.getChannelAttrs(g[flightLines[0]], rawfilchanchan, myattribute='Units')
         if not (corr_units2 == corr_units):
             print('Error: {rawchan} and {filchan} do not have the same units.')
             return
