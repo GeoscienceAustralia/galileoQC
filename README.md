@@ -16,8 +16,6 @@ Installation is known to work using pip:
 pip install galileoQC
 ```
 
-galileoQC is currently in a private repository and not generally available.
-
 More information will be available when the package is published. In the meantime, contact Mark Dransfield if help is required.
 
 
