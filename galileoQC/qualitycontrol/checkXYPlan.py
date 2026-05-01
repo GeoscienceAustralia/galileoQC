@@ -169,7 +169,7 @@ def checkXYPlan(planPaths, measPath, lines=[], planX='', planY='',
             gLineMeas = gMeas[line]
             planLineInPlan, gpline, planfile = util._get_line_planfiles(planPaths, gLineMeas, verbose=verbose)
             with h5py.File(planfile, 'r') as fp:
-                gPlan = fp[groupName]['Lines']
+                gPlan = fp[groupName]['Lines'] # ToDo: if not(planLineInPlan) then planfile is unknown!!!??
                 # Need to deal with situation where these attributes are not set.
                 # 1. Trap for possibility;
                 # 2. Tell user to run updateCoordinateFrame

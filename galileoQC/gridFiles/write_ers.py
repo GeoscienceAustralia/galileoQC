@@ -127,10 +127,10 @@ def _write_ers_header(headerFilePath, data_array, nullcell=-999999):
     ncells = len(data_array.x)
 
     estr = f'{data_array.x.values[0]:.2f}'
-    nstr = f'{data_array.y.values[-1]:.2f}'
+    nstr = f'{data_array.y.values[0]:.2f}'
 
     reg_cell_x = 0
-    reg_cell_y = ncells - 1
+    reg_cell_y = nrows - 1
 
     with open(headerFilePath, 'wt') as fid:
         fid.write(f'DatasetHeader Begin\n')

@@ -49,15 +49,15 @@ def checkErsHeaders(folderPath=r'\.'):
     # get the header dict for each ers file
     ersDicts = []
     for aFile in ersFiles:
-            [ncells, nrows, nbands, eastings, northings, nullcell,
-                    precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection, units] = ers.read_ers_header(str(aFile))
-            commonOK, reportStr = _commonErsHdrErrors(ncells, nrows, nbands, nullcell,
-                    precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection, units)
-            ersDicts.append([ncells, nrows, nbands, nullcell,
-                    precision, headerbytes, originalnullcell, byteorder, datum,
-                    projection, units])
+        [ncells, nrows, nbands, eastings, northings, nullcell,
+                precision, headerbytes, originalnullcell, byteorder, datum,
+                projection, units] = ers.read_ers_header(str(aFile))
+        commonOK, reportStr = _commonErsHdrErrors(ncells, nrows, nbands, nullcell,
+                precision, headerbytes, originalnullcell, byteorder, datum,
+                projection, units)
+        ersDicts.append([ncells, nrows, nbands, nullcell,
+                precision, headerbytes, originalnullcell, byteorder, datum,
+                projection, units])
             
     # compare the contents line-by-line
     print(f'Comparing ERS files against {ersFiles[0].name}.')
