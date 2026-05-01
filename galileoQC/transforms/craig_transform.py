@@ -258,6 +258,12 @@ def craig_transform(
             original_mask = np.ma.masked_array(gD_grid, ~np.isnan(gD_grid)).mask
             if plot_flag:
                 plt.imshow(original_mask, origin='lower')
+            if survey_polygon is None:
+                survey_polygon = [
+                    (float(gD_raw.x[0]), float(gD_raw.y[0])), 
+                    (float(gD_raw.x[-1]), float(gD_raw.y[0])), 
+                    (float(gD_raw.x[-1]), float(gD_raw.y[-1])), 
+                    (float(gD_raw.x[0]), float(gD_raw.y[-1]))]
 
             gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon, plot_flag=plot_flag, original_mask=original_mask)
             if gD_grid is None:

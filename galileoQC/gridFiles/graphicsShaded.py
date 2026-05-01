@@ -154,7 +154,7 @@ def graphicsShaded(
     ax.set_ylabel('Northings [m]')#, fontsize=8)
     ax.grid(gridlines)
     ax.axes.set_aspect('equal')
-    plt.tight_layout()
+    # plt.tight_layout()
     ax.xaxis.set_major_formatter(thou_format)
     ax.yaxis.set_major_formatter(thou_format)
     # for label in ax.get_xticklabels(): label.set_fontsize(6)

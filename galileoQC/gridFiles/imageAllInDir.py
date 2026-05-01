@@ -41,6 +41,8 @@ def imageAllInDir(path_name, max_file_size=256):
 
     """
     # get a list of the ers file paths
+    if type(path_name) is str:
+        path_name = Path(path_name)
     file_count = 0
     ersFiles = []
     folderFiles = path_name.iterdir()
