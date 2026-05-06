@@ -33,8 +33,8 @@ def craig_transform(
     cell_size=None, result_units='um/s/s', survey_polygon=None,
     pad_cells=None, padding_mode="regional", regional_grid_file=None,
     regional_grav_units='mGal', numstns=None, firstorder=False,
-    conforming=False, save_to_ers=False,
-    plot_flag=False, verbose=False
+    conforming=False, low_lambda=None, hi_lambda=None,
+    save_to_ers=False, plot_flag=False, verbose=False
 ):
     """
     Runs the Craig transform on gravity differential curvature data to
@@ -121,6 +121,16 @@ def craig_transform(
 
         If True, then high-pass filter the gD data before returning it.
         Default False.
+        
+    low_lambda : Float, optional
+
+        The short wavelength defining the cosine squared conforming filter. Defaults to a value
+        depending on the size of the local grid.
+    
+    hi_lambda : Float, optional
+
+        The long wavelength defining the cosine squared conforming filter. Defaults to 1.2 times
+        `low_lambda`.
 
     save_to_ers : bool, optional
 
@@ -265,7 +275,8 @@ def craig_transform(
                     (float(gD_raw.x[-1]), float(gD_raw.y[-1])), 
                     (float(gD_raw.x[0]), float(gD_raw.y[-1]))]
 
-            gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon, plot_flag=plot_flag, original_mask=original_mask)
+            gD_grid = conform(gD_raw, regional_grid, survey_polygon=survey_polygon,
+                low_lambda=low_lambda, hi_lambda=hi_lambda, plot_flag=plot_flag, original_mask=original_mask)
             if gD_grid is None:
                 return None
             if plot_flag:
