@@ -37,4 +37,4 @@ classifiers = [
 
 # Can add urls for home page, documentation, issue tracker and source code 
 [project.urls]
-"GitHub" = "https://github.com/GeoscienceAustralia/pegasusQC"
+"GitHub" = "https://github.com/GeoscienceAustralia/galileoQC"
