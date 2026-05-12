@@ -17,6 +17,8 @@ requires-python = ">=3.7"
 
 license = "CC-BY-SA-4.0"
 
+keywords = ["geophysics", "gravity", "airborne", "QC"]
+
 dependencies = ["aseg-gdf2==0.7", "colorcet", "filebrowser", "h5py", "ipympl", 
 "matplotlib", "netCDF4", "numba", "numpy", "pathlib", "pooch", 'pyarrow', "pyproj", 
 "rioxarray", "scikit-image", "scipy", "verde", "xarray", "xrft"]
@@ -37,4 +39,5 @@ classifiers = [
 
 # Can add urls for home page, documentation, issue tracker and source code 
 [project.urls]
-"GitHub" = "https://github.com/GeoscienceAustralia/galileoQC"
+Repository = "https://github.com/GeoscienceAustralia/galileoQC"
+Documentation = "https://geoscienceaustralia.github.io/galileoQC/index.html"
