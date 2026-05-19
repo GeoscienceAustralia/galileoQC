@@ -4,6 +4,8 @@ __galileoQC__ is a python package to assist in quality control of data from airb
 
 The documentation at <https://geoscienceaustralia.github.io/galileoQC/index.html> is detailed and contains tutorials in Jupyter-lab notebooks.
 
+The homepage is at <https://pypi.org/project/galileoQC>.
+
 ## Normal Installation
 
 For installations on PCs running Win10, Win11, macos, Debian, Fedora, or Ubuntu.
