@@ -2,7 +2,7 @@
 
 __galileoQC__ is a python package to assist in quality control of data from airborne gravimetry and airborne gravity gradiometry surveys.
 
-The documentation is detailed and contains tutorials in Jupyter-lab notebooks.
+The [^documentation]: <https://geoscienceaustralia.github.io/galileoQC/index.html> is detailed and contains tutorials in Jupyter-lab notebooks.
 
 ## Normal Installation
 
@@ -16,6 +16,6 @@ Installation is known to work using pip:
 pip install galileoQC
 ```
 
-More information will be available when the package is published. In the meantime, contact Mark Dransfield if help is required.
+More install information will be available when the package is published. In the meantime, contact Mark Dransfield if help is required.
 
 
