@@ -22,7 +22,7 @@ author = 'Mark Helm Dransfield'
 try:
     version = release = importlib.metadata.version('galileoQC')
 except importlib.metadata.PackageNotFoundError:
-    version = release = '0.0.5'  # fallback version
+    version = release = '0.0.6'  # fallback version
 
 
 # version = release = importlib.metadata.version('galileoQC')
@@ -106,8 +106,8 @@ if False:
 if True:
     html_theme = "alabaster"
     html_theme_options = {
-        # 'logo': './_logo_light.png',
-        # 'logo_name': True,
+        'logo': './galileo_logo.png',
+        'logo_name': True,
         'description': 'Quality control for airborne gravity surveys.',
         'fixed_sidebar': 'true',
         'show_relbars': 'true',
