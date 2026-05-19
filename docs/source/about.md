@@ -26,7 +26,7 @@ __galileoQC__ is at early stage of development and will keep improving in the fu
 
 ## Acknowledgements
 
-A massive amount of help, encouragement and support from many people at Geoscience Australia, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine. The minimum curvature code was copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025 and the graphical imaging code from graphics (https://github.com/jobar8/graphics) sometime in 2020. Grateful thanks to the authors of those codes as well as all the contributors to all the packages used.
+A massive amount of help, encouragement and support from many people at Geoscience Australia, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine. The minimum curvature code was copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025 and the graphical imaging code from graphics (https://github.com/jobar8/graphics) sometime in 2020. Grateful thanks to the authors of those codes as well as all the contributors to all the packages used. The idea of using tutorials as the key technical documentation is partly based on Des Fitzgerald's "cookbooks" for Intrepid.
 
 ## Testing
 
