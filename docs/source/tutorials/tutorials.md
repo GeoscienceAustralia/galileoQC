@@ -5,7 +5,9 @@ This section provides links to the tutorial notebooks (in Jupyter-lab format).
 
 The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules-target).
 
-You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __galileoQC__ installed and running. The notebooks are at <https://github.com/GeoscienceAustralia/galileoQC/tree/main/docs/source/tutorials>.
+You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __galileoQC__ installed and running. Once you have copied a notebook, you can modify it and use it on your own data.
+
+The notebooks are at <https://github.com/GeoscienceAustralia/galileoQC/tree/main/docs/source/tutorials>.
 
 ## Prepare XYZ data
 
@@ -13,7 +15,7 @@ The Geosoft XYZ data format file is commonly used in geophysics to transmit geop
 
 We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format [here](#geowhizz-target).)
 
-For three of the example data sets (Eastern Victoria, Vinton Dome, and the Melbourne Aeromagnetic), the field data were supplied in Geosoft XYZ format. This tutorial demonstrates the preparation of these XYZ data files as geowhizz HDF5 files for later use in quality control checks.
+For three of the example data sets (Eastern Victoria gravimetry, Melbourne magnetometry, and Vinton Dome), the field data are supplied in Geosoft XYZ format. This tutorial demonstrates the preparation of these XYZ data files as geowhizz HDF5 files for later use in quality control checks.
 
 The appropriate `Prepare_*` tutorial should be run before running any of the other tutorials that utilise the relevant data.
 
