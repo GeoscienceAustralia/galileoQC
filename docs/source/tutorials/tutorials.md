@@ -1,13 +1,13 @@
 (tutorials-target)=
 # Tutorials
 
-This section provides links to the tutorial notebooks (in Jupyter-lab format).
+This section provides links to the tutorial JupyterLab notebooks.
 
 The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the [API](modules-target).
 
 You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have __galileoQC__ installed and running. Once you have copied a notebook, you can modify it and use it on your own data.
 
-The notebooks are at <https://github.com/GeoscienceAustralia/galileoQC/tree/main/docs/source/tutorials>.
+The notebooks are available at the [__galileoQC__ repository](https://github.com/GeoscienceAustralia/galileoQC/tree/main/docs/source/tutorials).
 
 ## Prepare XYZ data
 

@@ -16,7 +16,7 @@ __galileoQC__ provides functions to:
 
 These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. galileoQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
 
-The tested, and preferred, method of using __galileoQC__ is via a Jupyter-lab notebook. Some examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
+The tested, and preferred, method of using __galileoQC__ is via a JupyterLab notebook. Some examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
 
 *Mark Dransfield* {sub-ref}`today`
 
@@ -30,7 +30,7 @@ A massive amount of help, encouragement and support from many people at Geoscien
 
 ## Testing
 
-The __galileoQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook except for the testing under macos which used the JupyterLab Desktop app.
+The __galileoQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook (the JupyterLab Desktop app was used often in development but its maintenance ceased in Aug2025).
 
 Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.
 

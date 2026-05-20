@@ -53,7 +53,7 @@ ph = px.with_suffix('.hdf5')
 
 The variables `dx`, `dh`, `px` and `ph` are often used to represent the four key data filenames. Of course, you can use any variable names for your projects but it is worth noting these because you will see them occasionally in the documentation.
 
-If you want to see how to use __galileoQC__, go to [Tutorials](#tutorials-target) and follow along with the examples. You can also download the python tutorial notebooks and example data from github and experiment with the functions yourself.
+If you want to see how to use __galileoQC__, go to [Tutorials](#tutorials-target) and follow along with the examples. You can also download the python tutorial notebooks and example data from [github](https://github.com/GeoscienceAustralia/galileoQC/tree/main/docs/source/tutorials) and experiment with the functions yourself.
 
 Now you are ready to QC your data!
 
@@ -64,7 +64,9 @@ Now you are ready to QC your data!
 
 ## Installation on NCI Australia
 
-Finally, some users might want to install __galileoQC__ on their **NCI** (National Computational InfraStructure) environment. The following notes might prove useful. WARNING - some of the following information might be out of date.
+Finally, some users might want to install __galileoQC__ on their **NCI** (National Computational InfraStructure) environment. The following notes might prove useful.
+
+__WARNING - some of the following information might be out of date.__
 
 Using the instructions in this [link](https://opus.nci.org.au/display/Help/3.3+Using+a+custom+Python+virtual+environment+in+JupyterLab), set up a `python3` environment in your specific location. Due to memory/space limitations for each user, it is suggested that you make this custom python environment in your project directory in NCI. The environment will have a folder with the same name in your working directory after it is built:
 
