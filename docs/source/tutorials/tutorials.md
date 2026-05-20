@@ -13,14 +13,13 @@ The Geosoft XYZ data format file is commonly used in geophysics to transmit geop
 
 We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format [here](#geowhizz-target).)
 
-For three of the example data sets (Eastern Victoria, Canobie, and Vinton Dome), the field data were supplied in Geosoft XYZ format. This tutorial demonstrates the preparation of these XYZ data files as geowhizz HDF5 files for later use in quality control checks.
+For three of the example data sets (Eastern Victoria, Vinton Dome, and the Melbourne Aeromagnetic), the field data were supplied in Geosoft XYZ format. This tutorial demonstrates the preparation of these XYZ data files as geowhizz HDF5 files for later use in quality control checks.
 
 The appropriate `Prepare_*` tutorial should be run before running any of the other tutorials that utilise the relevant data.
 
 ```{toctree}
 Prepare_EastVicData.ipynb
 Prepare_VintonDomeData.ipynb
-Prepare_CanobieData.ipynb
 Prepare_AeromagData.ipynb
 ```
 
