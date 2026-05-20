@@ -148,7 +148,7 @@ Running the galileoQC Odd - Even Analysis tutorial.
 You can explicitly provide the version number at installation with `pip`:
 
 ```bat
-(whizz) > pip install galileoQC==0.0.8
+(whizz) > pip install galileoQC==1.0.0
 ```
 
 Then follow the steps above to download the current version and install it.
