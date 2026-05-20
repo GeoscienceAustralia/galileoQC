@@ -1,0 +1,33 @@
+# {py:mod}`galileoQC.transforms`
+
+```{py:module} galileoQC.transforms
+```
+
+```{autodoc2-docstring} galileoQC.transforms
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.transforms.grav_of_Kurvs
+galileoQC.transforms._calc_gridcell_size
+galileoQC.transforms.craig_transform
+galileoQC.transforms.cos2_filter
+galileoQC.transforms._pad_grids
+galileoQC.transforms._grid_match
+galileoQC.transforms.spheretest
+galileoQC.transforms.conform
+galileoQC.transforms._pad_grid_nans
+galileoQC.transforms._pad_mean
+galileoQC.transforms.Kurvs_of_grav
+galileoQC.transforms._trim_rectangle
+galileoQC.transforms._check_extension
+galileoQC.transforms._pad_regional
+galileoQC.transforms._pad_simple
+galileoQC.transforms._calc_padcells
+galileoQC.transforms.gravity_from_curv
+```

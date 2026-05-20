@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Navigation and Position QC &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Intersection Analysis" href="Intersection_Analysis.html" />
+    <link rel="prev" title="Prepare 2012 Kauring AirGrav ASEG-GDF2 data" href="Prepare_2012KauringData.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Navigation and Position QC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Prepare_2012KauringData.html" title="previous chapter">Prepare 2012 Kauring AirGrav ASEG-GDF2 data</a></li>
+      <li>Next: <a href="Intersection_Analysis.html" title="next chapter">Intersection Analysis</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="navigation-and-position-qc">
+<h1>Navigation and Position QC<a class="headerlink" href="#navigation-and-position-qc" title="Link to this heading">¶</a></h1>
+<div class="alert alert-block alert-warning">
+This notebook expects the geowhizz HDF5 files to be already prepared. You should run the `Prepare_XYZ` notebook first.
+<div><hr class="docutils" />
+<p>Import the required modules, and set the path to the geowhizz files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">EastVicHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./EastVicData/EastVic.hdf5&#39;</span><span class="p">)</span>
+<span class="n">EastVicTestHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./EastVicData/EastVicTest.hdf5&#39;</span><span class="p">)</span>
+<span class="n">EastVicRepHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./EastVicData/EastVicRepeats.hdf5&#39;</span><span class="p">)</span>
+<span class="n">EastVicHDF_plan</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./EastVicData/EastVicPlan.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">EastVicHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">EastVicTestHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">EastVicRepHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">EastVicHDF_plan</span><span class="o">.</span><span class="n">exists</span><span class="p">()):</span>
+    <span class="o">%</span><span class="k">run</span> ./Prepare_EastVicData.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>GNSS</strong></p>
+<p>Accurate knowledge of the sensor position is important. In gravimetry, it is critical for calculating the kinematic accelerations that must be removed from the gravimeter measurements. In gradiometry the accuracy requirement is not quite as demanding but it is still important since it limits the accuracy of the terrain corrections.</p>
+<p>The accuracy of GNSS (Global Navigation Satellite System) positions is usually better when the number of visible satellites, <code class="docutils literal notranslate"><span class="pre">NSATS</span></code>, is large and the position, vertical and horizontal dilutions of position (PDOP, <code class="docutils literal notranslate"><span class="pre">VDOP</span></code> and <code class="docutils literal notranslate"><span class="pre">HDOP</span></code> respectively) are small. Contracts will often stipulate the minimum number of satellites, and maximum values for PDOP, VDOP and HDOP. The requirements tend to be a little more demanding for gravimetry than for gradiometry.</p>
+<p>Typical values might be:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>airborne gravimetry - a minimum of 6 GNSS satellites visible, and PDOP, HDOP and VDOP to not exceed 4;
+airborne gradi0metry - a minimum of 5 GNSS satellites visible, and PDOP, HDOP and VDOP to not exceed 4.   
+</pre></div>
+</div>
+<p>The values of these variables (number of satellites, HDOP, VDOP and PDOP) must be recorded as channels in the data, for each data point. The values in these channels are checked:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkGNSS</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="s1">&#39;NSATS&#39;</span><span class="p">,</span> <span class="s1">&#39;PDOP&#39;</span><span class="p">,</span> <span class="s1">&#39;VDOP&#39;</span><span class="p">,</span> <span class="s1">&#39;HDOP&#39;</span><span class="p">,</span> <span class="n">nsats_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_pdop</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                  <span class="n">max_hdop</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_vdop</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>In EastVic, checked num sats, PDOP, VDOP and HDOP. Found 0 errors.
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Horizontal Position</strong></p>
+<p>Typically surveys are planned so that the aircraft traverses a series of parallel lines, collecting data along each. The line spacing is an important determinant of the spatial resolution of the survey. Furthermore, the data are usually gridded at a cell spacing approximately one-fifth of the planned line spacing.</p>
+<p>If the actual flight path deviates significantly from the planned path, then there will be areas of the survey where the spatial resolution of the data may be poorer than desired, and there will be areas where the gridding must interpolate over more grid cells between measurements than planned. Interpolation errors will be accordingly greater in those areas as a consequence.</p>
+<p>The aircraft position is allowed to deviate horizontally from the planned survey line by more than <code class="docutils literal notranslate"><span class="pre">allowance</span></code> metres for a distance no greater than <code class="docutils literal notranslate"><span class="pre">maxDistance</span></code> metres. Options exist to limit the distance to that traversed in a given <code class="docutils literal notranslate"><span class="pre">maxDuration</span></code> number of seconds, or a given <code class="docutils literal notranslate"><span class="pre">maxCounter</span></code> number of fiducials.</p>
+<p>Ideally the <code class="docutils literal notranslate"><span class="pre">allowance</span></code> would be much smaller than the intended grid cell width, and the <code class="docutils literal notranslate"><span class="pre">maxDistance</span></code> no greater than about one cell width. For gravimetry and gravity gradiometry these ideal restrictions can lead, with typical survey aircraft, to situations in which the instrumentation experiences significant accelerations as the aircraft path is corrected. These large aircraft accelerations can result in increased sensor error so it is better to allow a larger <code class="docutils literal notranslate"><span class="pre">maxDistance</span></code> and optimise for gentle corrections to the flight path. A 1 km distance is appropriate.</p>
+<p>The check in this example requires that all flown lines are within <span class="math notranslate nohighlight">\(40\,m\)</span> of the planned line, with any exceedances persisting for less than <span class="math notranslate nohighlight">\(1000\,m\)</span>. The check is repeated for just line <code class="docutils literal notranslate"><span class="pre">2345.510</span></code> to demonstrate the plotting that occurs should a line fail the check.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkXYPlan</span><span class="p">(</span><span class="n">EastVicHDF_plan</span><span class="p">,</span> <span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="n">allowance</span><span class="o">=</span><span class="mf">40.0</span><span class="p">,</span> <span class="n">maxCounter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="n">maxDistance</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 exceedances previously known in the database.
+
+All lines in plan and checked.
+
+1 horizontal exceedances.
+
+8 lines checked: 1 with horizontal exceedances.
+
+L 2345.51:1018 deviates more than 40.0 m for 85 fids (2380 m), max exceedance = 265 m.
+  From (463608 E 5766708 N) to (461732 E 5765243 N).
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkXYPlan</span><span class="p">(</span><span class="n">EastVicHDF_plan</span><span class="p">,</span> <span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="n">allowance</span><span class="o">=</span><span class="mf">40.0</span><span class="p">,</span> <span class="n">maxCounter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="n">maxDistance</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;2345.510&#39;</span><span class="p">],</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 exceedances previously known in the database.
+
+All lines in plan and checked.
+
+1 horizontal exceedances.
+
+1 lines checked: 1 with horizontal exceedances.
+
+L 2345.51:1018 deviates more than 40.0 m for 85 fids (2380 m), max exceedance = 265 m.
+  From (463608 E 5766708 N) to (461732 E 5765243 N).
+</pre></div>
+</div>
+<img alt="../_images/3b95e4efa7fe78ee57852daab831266f0d28da571bb39de7b8f9192f3ca2f34a.png" src="../_images/3b95e4efa7fe78ee57852daab831266f0d28da571bb39de7b8f9192f3ca2f34a.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Vertical Position</strong></p>
+<p>The vertical positions of the measurements are also constrained. The spatial resolution of the data is affected by the ground clearance, the sample spacing, and the filtering applied to the data. It is desirable to fly sufficiently low that the spatial resolution is not limited by survey height. The climb rate of the aircraft, as well as the presence of any obstacles limits this in practice.</p>
+<p>Specifications might require the position to be close to a given height above the ground, or some constant altitude relative to a datum (geoid or ellipsoidal altitude) but often the requirement is that the aircraft remain within a given distance of a preplanned survey height, often called the drape.</p>
+<p>Here we check that the aircraft remains within <span class="math notranslate nohighlight">\(20\,m\)</span> of the planned height, with no exceedances persisting for more than <span class="math notranslate nohighlight">\(1000\,m\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkVertPlan</span><span class="p">(</span><span class="n">EastVicHDF_plan</span><span class="p">,</span> <span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="n">allowance</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">maxCounter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">maxDistance</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All lines in plan and checked.
+
+Total number of exceedances = 3 over 3 erroneous lines.
+
+0 exceedances known in the database.
+
+
+L 2343.51:1018 deviates more than 20.0 m for 154 fids (4484 m), max exceedance = 152.3 m.
+  From (461807 E, 5763982 N) to (465341 E, 5766742 N).
+L 2345.5:1018 deviates more than 20.0 m for 179 fids (5170 m), max exceedance = 219.0 m.
+  From (464003 E, 5766952 N) to (459909 E, 5763794 N).
+L 2345.51:1018 deviates more than 20.0 m for 201 fids (5849 m), max exceedance = 158.2 m.
+  From (465460 E, 5768099 N) to (460853 E, 5764497 N).
+</pre></div>
+</div>
+<img alt="../_images/3bd6bdf09a35a67ec65bbe349832ce4880ab7b30c3b560907c7490669249f29e.png" src="../_images/3bd6bdf09a35a67ec65bbe349832ce4880ab7b30c3b560907c7490669249f29e.png" />
+<img alt="../_images/f523f2a5b9b47e611af1e4c112f95be40cf1856791014dad4944efc65ef85a59.png" src="../_images/f523f2a5b9b47e611af1e4c112f95be40cf1856791014dad4944efc65ef85a59.png" />
+<img alt="../_images/416cd53798c677f495290470b46d9dac12069f9cef141ade698b0767b004b293.png" src="../_images/416cd53798c677f495290470b46d9dac12069f9cef141ade698b0767b004b293.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Segment Lengths</strong></p>
+<p>For operational reasons, a single planned survey line might be flown as a series of line segments, or as one segment. The length of all individually flown segments must exceed some minimum length. There are several reasons for setting a minimum. Where data are to be tie-line levelled, the segment must cross several control lines and so must be longer than two or three control line separations. For analysis of the spectral content or the statistics of the data, the segment length should be much longer than the spatial resolution of the data. And, for gradiometer surveys, the segment length should be large enough to allow for the noise reduction using regression against dynamic variables.</p>
+<p>Typically the minimum length might around <span class="math notranslate nohighlight">\(10\,km\)</span> for gradiometry and around <span class="math notranslate nohighlight">\(40\,km\)</span> for gravimetry. This gravimetry analysis sets the minimum at <span class="math notranslate nohighlight">\(38\,km\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkLineLengths</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mf">38.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number failed lines = 0
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Line Overlaps</strong></p>
+<p>When a survey line is flown as more than one segment, the segments must overlap by some minimum amount in order to avoid any end-of-line effects (including those due to filtering).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkOverlaps</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="n">min_overlap</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 coincident lines found.
+All overlaps meet requirement (&gt;10.0 km).
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Heading</strong></p>
+<p>Occasionally contracts will set a specification on aircraft heading. Some care is required here because there is some risk of confusion about definitions. The track is the angle made between North and the line of motion of the aircraft (imagined as a track projected onto flat ground). The angle between North and the line defined by the nose-to-tail of the aircraft is the heading. Any cross wind will mean that the heading is different to the track. Nevertheless sometimes heading is reported as track, or vice versa.</p>
+<p>Another potential cause of confusion is the distinction between magnetic North and true North. Here we mean true North.</p>
+<p>And sometimes heading is called bearing.</p>
+<p>The checkHeading function checks the given <code class="docutils literal notranslate"><span class="pre">heading</span></code> channel against the given allowed angles (in degrees) and reports any differences greater than some allowed difference. If the <code class="docutils literal notranslate"><span class="pre">heading</span></code> channel contains track data, then that is what is checked. If the name of the <code class="docutils literal notranslate"><span class="pre">heading</span></code> channel is not supplied, then <code class="docutils literal notranslate"><span class="pre">checkHeading</span></code> calculates the <strong>track</strong> angle from the position data and checks against that.</p>
+<p><strong>Be warned</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkHeading</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="p">[</span><span class="mf">232.0</span><span class="p">,</span> <span class="mi">52</span><span class="p">],</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Checked 8 lines for heading - nominal &gt; tolerance 10.0; 1 failed.
+
+Line 2345.510: at least one sample failed. Min 215.10, Max 252.32 deg, Mean 232.08 deg.
+</pre></div>
+</div>
+<img alt="../_images/3c4193f81f13f7eca67460282915499652497c7320d55e47a243744b78088b0e.png" src="../_images/3c4193f81f13f7eca67460282915499652497c7320d55e47a243744b78088b0e.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Ground Speed</strong></p>
+<p>The data are measured at constant sample rate in time but we are interested in the location of the data in space and the data will be at a constant spacing on the ground only if the aircraft ground speed is constant. Tail winds and head winds make this difficult and some variation is inevitable.</p>
+<p>When the aircraft flies slower (into a head wind) the data have better spatial resolution, but a tail wind causes a faster ground speed and consequently poorer spatial resolution. In most conditions, a survey aircraft can fly within <span class="math notranslate nohighlight">\(15\%\)</span> - <span class="math notranslate nohighlight">\(20\%\)</span> of nominal, although nominal can vary significantly with aircraft.</p>
+<p>This example requires the data to be within <span class="math notranslate nohighlight">\(15\%\)</span> of <span class="math notranslate nohighlight">\(60\,ms^{-2}\)</span>, with exceedances to persist for no further than <span class="math notranslate nohighlight">\(1000\,m\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkSpeeds</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="n">nominalSpeed</span><span class="o">=</span><span class="mf">60.</span><span class="p">,</span> <span class="n">allowance</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">maxDistance</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Velocities not known - will calculate from positions
+Nominal ground speed 60.0 m/s; allowed 51.0 : 69.0 for &lt; 1000.0 m.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Checked 8 lines and 0 had some short exceedance(s).
+ 0 lines failed for exceedance &gt; allowed.
+ Total number of full exceedances = 0.
+
+0 exceedances known in the database.
+
+Mean speed over all lines = 59.4.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Prepare_2012KauringData.html" title="Previous document">Prepare 2012 Kauring AirGrav ASEG-GDF2 data</a>
+        </li>
+        <li>
+          <a href="Intersection_Analysis.html" title="Next document">Intersection Analysis</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Navigation_and_Position.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

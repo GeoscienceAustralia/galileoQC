@@ -1,0 +1,130 @@
+# {py:mod}`galileoQC.qualitycontrol.psdChannelDiff`
+
+```{py:module} galileoQC.qualitycontrol.psdChannelDiff
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`psdChannelDiff <galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff
+    :summary:
+    ```
+* - {py:obj}`psdChannel <galileoQC.qualitycontrol.psdChannelDiff.psdChannel>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.psdChannel
+    :summary:
+    ```
+* - {py:obj}`psdChannelGain <galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain
+    :summary:
+    ```
+* - {py:obj}`_costaper <galileoQC.qualitycontrol.psdChannelDiff._costaper>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._costaper
+    :summary:
+    ```
+* - {py:obj}`_period_to_dist <galileoQC.qualitycontrol.psdChannelDiff._period_to_dist>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._period_to_dist
+    :summary:
+    ```
+* - {py:obj}`_dist_to_period <galileoQC.qualitycontrol.psdChannelDiff._dist_to_period>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._dist_to_period
+    :summary:
+    ```
+* - {py:obj}`_time_frequency <galileoQC.qualitycontrol.psdChannelDiff._time_frequency>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._time_frequency
+    :summary:
+    ```
+* - {py:obj}`_mean_line_speed <galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.psdChannelDiff.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.psdChannelDiff.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.groupName
+```
+
+````
+
+````{py:function} psdChannelDiff(whizzFile, channel1, channel2, flightLines=[])
+:canonical: galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff
+```
+````
+
+````{py:function} psdChannel(whizzFile, channel, flightLines=[], shortestPeriod=0.0, minlinelenkm=None, verbose=False)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff.psdChannel
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.psdChannel
+```
+````
+
+````{py:function} psdChannelGain(whizzFile, rawchan, filchan, flightLines=[], nominalPeriod=0.0, shortestPeriod=0.0, minlinelenkm=None, verbose=False)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain
+```
+````
+
+````{py:function} _costaper(freq, nominalPeriod)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff._costaper
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._costaper
+```
+````
+
+````{py:function} _period_to_dist(p)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff._period_to_dist
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._period_to_dist
+```
+````
+
+````{py:function} _dist_to_period(x)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff._dist_to_period
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._dist_to_period
+```
+````
+
+````{py:function} _time_frequency(group)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff._time_frequency
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._time_frequency
+```
+````
+
+````{py:function} _mean_line_speed(group, line)
+:canonical: galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed
+```
+````

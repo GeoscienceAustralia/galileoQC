@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Repeat Line Analysis &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Odd - Even Analysis" href="Odd_Even_Analysis.html" />
+    <link rel="prev" title="Intersection Analysis" href="Intersection_Analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Repeat Line Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Intersection_Analysis.html" title="previous chapter">Intersection Analysis</a></li>
+      <li>Next: <a href="Odd_Even_Analysis.html" title="next chapter">Odd - Even Analysis</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="repeat-line-analysis">
+<h1>Repeat Line Analysis<a class="headerlink" href="#repeat-line-analysis" title="Link to this heading">¶</a></h1>
+<p>For gravimeter surveys it is common to set a requirement on the gravity data repeatability.</p>
+<p><strong>galileoQC</strong> provides the <code class="docutils literal notranslate"><span class="pre">checkRepeatLines</span></code> function for repeat-line analysis.</p>
+<p>Here we demonstrate its use on the East Victorian airborne gravimetry survey data.</p>
+<p>Ensure you have run the <code class="docutils literal notranslate"><span class="pre">Prepare_EastVicData</span></code> notebook first so that the data are prepared for review.</p>
+<hr class="docutils" />
+<p>Import the required modules, and set the path to the geowhizz files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./EastVicData/EastVicRepeats.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">dh</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="o">%</span><span class="k">run</span> ./Prepare_EastVicData.ipynb
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accessing XYZ data in EastVicData/EastVicPlan.xyz.
+First few records are:
+/Clearance_m    Drape_m       Line  Terrain_m W84_Latitude_deg
+W84_Longitude_deg W84_UTM_55S_X_m W84_UTM_55S_Y_m
+//Flight 0
+//Date 2022/03/11
+Line  2340
+
+  Found 41 header records
+  Found 20 lines
+  Found 8 fields
+
+Channel precisions (number of decimal places):
+[2 2 2 2 8 8 2 2]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating:  EastVicData/EastVicPlan.hdf5
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting BlockID = Survey Plan for EastVicPlan.hdf5.
+Setting Acquirer = Sander Geophysics for EastVicPlan.hdf5.
+Changed CoordFrame attribute(s) for EastVicPlan.hdf5.
+Changed channel attribute(s) for W84_UTM_55S_X_m in EastVicPlan.hdf5.
+Changed channel attribute(s) for W84_UTM_55S_Y_m in EastVicPlan.hdf5.
+Changed channel attribute(s) for Drape_m in EastVicPlan.hdf5.
+Changed channel attribute(s) for Clearance_m in EastVicPlan.hdf5.
+Changed channel attribute(s) for Terrain_m in EastVicPlan.hdf5.
+Changed channel attribute(s) for W84_Latitude_deg in EastVicPlan.hdf5.
+Changed channel attribute(s) for W84_Longitude_deg in EastVicPlan.hdf5.
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: Survey Plan
+    ProjectName: EastVic
+
+Coordinates
+    AltitudeChannel: Drape_m
+    GeoDatum: WGS84
+    Projection: UTM
+    UTMZone: 55
+    XChannel: W84_UTM_55S_X_m
+    YChannel: W84_UTM_55S_Y_m
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20 lines: total distance flown [km] = 2,770.8
+
+20 lines:
+[&#39;2340.000&#39;, &#39;2341.000&#39;, &#39;2341.100&#39;, &#39;2341.500&#39;, &#39;2342.000&#39;,
+&#39;2343.000&#39;, &#39;2343.100&#39;, &#39;2343.500&#39;, &#39;2344.000&#39;, &#39;2345.000&#39;,
+&#39;2345.100&#39;, &#39;2345.500&#39;, &#39;2346.000&#39;, &#39;2347.000&#39;, &#39;2347.100&#39;,
+&#39;2347.500&#39;, &#39;2348.000&#39;, &#39;2349.000&#39;, &#39;2349.100&#39;, &#39;2349.500&#39;]
+
+8 channels:
+[&#39;Clearance_m&#39;, &#39;Drape_m&#39;, &#39;Line&#39;, &#39;Terrain_m&#39;, &#39;W84_Latitude_deg&#39;,
+&#39;W84_Longitude_deg&#39;, &#39;W84_UTM_55S_X_m&#39;, &#39;W84_UTM_55S_Y_m&#39;]
+Accessing XYZ data in EastVicData/EastVic.xyz.
+First few records are:
+/    ATMCOR B100s_267_GEOID B100s_267_GRS80 B56s_267_GEOID
+B56s_267_GRS80    DEM        DOY     EOTCOR FA100s_GEOID FA100s_GRS80
+FA56s_GEOID FA56s_GRS80 FACOR_GEOID FACOR_GRS80     FLIGHT      FTIME
+FX         FY         FZ       HDOP   LALT            LAT     LATCOR
+LINE           LONG      MGA_X      MGA_Y   MGA_Z   MSL_Z      NSATS
+PDOP    RALT    STATCOR      TACOR     V_EAST    V_NORTH       VDOP
+YEAR
+//Flight 0
+//Date 2022/07/13
+Line  2341.50
+
+  Found 17 header records
+  Found 8 lines
+  Found 38 fields
+
+Channel precisions (number of decimal places):
+[2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 8 2 2 8 2 2 2 2 2 2 2 2 2 2
+2 2  2]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating:  EastVicData/EastVic.hdf5
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting BlockID = EastVic Field Data for EastVic.hdf5.
+Setting Acquirer = Sander Geophysics for EastVic.hdf5.
+Changed CoordFrame attribute(s) for EastVic.hdf5.
+Setting Line attributes for EastVicData/EastVic.hdf5 to include flight numbers from FLIGHT.
+Setting Line attributes for EastVicData/EastVic.hdf5 to include date values from DOY.
+
+Setting Line attributes for EastVic.hdf5 according to the SGL_GA scheme.
+Verifying planned line numbers against provided plan file(s).
+Changed channel attribute(s) for FTIME in EastVic.hdf5.
+Changed channel attribute(s) for MGA_X in EastVic.hdf5.
+Changed channel attribute(s) for MGA_Y in EastVic.hdf5.
+Changed channel attribute(s) for MGA_Z in EastVic.hdf5.
+Changed channel attribute(s) for MSL_Z in EastVic.hdf5.
+Changed channel attribute(s) for LAT in EastVic.hdf5.
+Changed channel attribute(s) for LONG in EastVic.hdf5.
+Changed channel attribute(s) for DEM in EastVic.hdf5.
+Changed channel attribute(s) for RALT in EastVic.hdf5.
+Changed channel attribute(s) for LALT in EastVic.hdf5.
+Changed channel attribute(s) for FX in EastVic.hdf5.
+Changed channel attribute(s) for FY in EastVic.hdf5.
+Changed channel attribute(s) for FZ in EastVic.hdf5.
+Changed channel attribute(s) for V_EAST in EastVic.hdf5.
+Changed channel attribute(s) for V_NORTH in EastVic.hdf5.
+Changed channel attribute(s) for EOTCOR in EastVic.hdf5.
+Changed channel attribute(s) for LATCOR in EastVic.hdf5.
+Changed channel attribute(s) for STATCOR in EastVic.hdf5.
+Changed channel attribute(s) for ATMCOR in EastVic.hdf5.
+Changed channel attribute(s) for FACOR_GRS80 in EastVic.hdf5.
+Changed channel attribute(s) for FACOR_GEOID in EastVic.hdf5.
+Changed channel attribute(s) for TACOR in EastVic.hdf5.
+Changed channel attribute(s) for FA56s_GRS80 in EastVic.hdf5.
+Changed channel attribute(s) for FA56s_GEOID in EastVic.hdf5.
+Changed channel attribute(s) for FA100s_GRS80 in EastVic.hdf5.
+Changed channel attribute(s) for FA100s_GEOID in EastVic.hdf5.
+Changed channel attribute(s) for B56s_267_GRS80 in EastVic.hdf5.
+Changed channel attribute(s) for B56s_267_GEOID in EastVic.hdf5.
+Changed channel attribute(s) for B100s_267_GRS80 in EastVic.hdf5.
+Changed channel attribute(s) for B100s_267_GEOID in EastVic.hdf5.
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Field Data
+    ProjectName: EastVic
+
+Coordinates
+    AltitudeChannel: MGA_Z
+    GeoDatum: GDA2020
+    HeightDatum: GRS80
+    LatitudeChannel: LAT
+    LongitudeChannel: LONG
+    Projection: MGA
+    TimeChannel: FTIME
+    UTMZone: 55
+    XChannel: MGA_X
+    YChannel: MGA_Y
+8 lines: total distance flown [km] = 981.3
+
+8 lines:
+[&#39;2341.500&#39;, &#39;2343.500&#39;, &#39;2343.510&#39;, &#39;2345.500&#39;, &#39;2345.510&#39;,
+&#39;2347.500&#39;, &#39;2349.500&#39;, &#39;2349.510&#39;]
+
+38 channels:
+[&#39;ATMCOR&#39;, &#39;B100s_267_GEOID&#39;, &#39;B100s_267_GRS80&#39;, &#39;B56s_267_GEOID&#39;,
+&#39;B56s_267_GRS80&#39;, &#39;DEM&#39;, &#39;DOY&#39;, &#39;EOTCOR&#39;, &#39;FA100s_GEOID&#39;,
+&#39;FA100s_GRS80&#39;, &#39;FA56s_GEOID&#39;, &#39;FA56s_GRS80&#39;, &#39;FACOR_GEOID&#39;,
+&#39;FACOR_GRS80&#39;, &#39;FLIGHT&#39;, &#39;FTIME&#39;, &#39;FX&#39;, &#39;FY&#39;, &#39;FZ&#39;, &#39;HDOP&#39;, &#39;LALT&#39;,
+&#39;LAT&#39;, &#39;LATCOR&#39;, &#39;LINE&#39;, &#39;LONG&#39;, &#39;MGA_X&#39;, &#39;MGA_Y&#39;, &#39;MGA_Z&#39;, &#39;MSL_Z&#39;,
+&#39;NSATS&#39;, &#39;PDOP&#39;, &#39;RALT&#39;, &#39;STATCOR&#39;, &#39;TACOR&#39;, &#39;VDOP&#39;, &#39;V_EAST&#39;,
+&#39;V_NORTH&#39;, &#39;YEAR&#39;]
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Field Data
+    ProjectName: EastVic
+
+Coordinates
+    AltitudeChannel: MGA_Z
+    GeoDatum: GDA2020
+    HeightDatum: GRS80
+    LatitudeChannel: LAT
+    LongitudeChannel: LONG
+    Projection: MGA
+    TimeChannel: FTIME
+    UTMZone: 55
+    XChannel: MGA_X
+    YChannel: MGA_Y
+
+Line &lt;HDF5 group &quot;/Whizz Version 1.0/Lines/2341.500&quot; (38 members)&gt;
+1 lines: total distance flown [km] = 192.3
+    Date: 106.0
+    Flight: 1012.0
+    LineNumber: 2341.5
+    LineType: SGL_GA
+    LineVariety: Traverse
+    PlannedLine: 2341.5
+    ReflightNumber: 0
+    Segment: 5
+[&#39;2341.500&#39;, &#39;2343.500&#39;, &#39;2343.510&#39;, &#39;2345.500&#39;, &#39;2345.510&#39;,
+&#39;2347.500&#39;, &#39;2349.500&#39;, &#39;2349.510&#39;]
+
+38 channels:
+[&#39;ATMCOR&#39;, &#39;B100s_267_GEOID&#39;, &#39;B100s_267_GRS80&#39;, &#39;B56s_267_GEOID&#39;,
+&#39;B56s_267_GRS80&#39;, &#39;DEM&#39;, &#39;DOY&#39;, &#39;EOTCOR&#39;, &#39;FA100s_GEOID&#39;,
+&#39;FA100s_GRS80&#39;, &#39;FA56s_GEOID&#39;, &#39;FA56s_GRS80&#39;, &#39;FACOR_GEOID&#39;,
+&#39;FACOR_GRS80&#39;, &#39;FLIGHT&#39;, &#39;FTIME&#39;, &#39;FX&#39;, &#39;FY&#39;, &#39;FZ&#39;, &#39;HDOP&#39;, &#39;LALT&#39;,
+&#39;LAT&#39;, &#39;LATCOR&#39;, &#39;LINE&#39;, &#39;LONG&#39;, &#39;MGA_X&#39;, &#39;MGA_Y&#39;, &#39;MGA_Z&#39;, &#39;MSL_Z&#39;,
+&#39;NSATS&#39;, &#39;PDOP&#39;, &#39;RALT&#39;, &#39;STATCOR&#39;, &#39;TACOR&#39;, &#39;VDOP&#39;, &#39;V_EAST&#39;,
+&#39;V_NORTH&#39;, &#39;YEAR&#39;]
+
+Channel &lt;HDF5 dataset &quot;ATMCOR&quot;: shape (6449,), type &quot;&lt;f8&quot;&gt;
+    Name: ATMCOR
+    Units: mGal
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Field Data
+    ProjectName: EastVic
+
+5 flights including 8 lines.
+
+Flights
+    1012
+      L2341.500 
+    1014
+      L2343.500 
+    1018
+      L2343.510 L2345.500 L2345.510 L2347.500 
+    1021
+      L2349.500 
+    1022
+      L2349.510 
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Field Data
+    ProjectName: EastVic
+
+Sample time and distance statistics
+  Min   = 0.500 s, 26.2 m
+  Max   = 0.500 s, 32.4 m
+  Mean  = 0.500 s, 29.7 m
+  Stdev = 0 s, 0.9 m
+Whizz Version 1.0
+
+38 channels:
+
+
+38 channels:
+[&#39;ATMCOR&#39;, &#39;B100s_267_GEOID&#39;, &#39;B100s_267_GRS80&#39;, &#39;B56s_267_GEOID&#39;,
+&#39;B56s_267_GRS80&#39;, &#39;DEM&#39;, &#39;DOY&#39;, &#39;EOTCOR&#39;, &#39;FA100s_GEOID&#39;,
+&#39;FA100s_GRS80&#39;, &#39;FA56s_GEOID&#39;, &#39;FA56s_GRS80&#39;, &#39;FACOR_GEOID&#39;,
+&#39;FACOR_GRS80&#39;, &#39;FLIGHT&#39;, &#39;FTIME&#39;, &#39;FX&#39;, &#39;FY&#39;, &#39;FZ&#39;, &#39;HDOP&#39;, &#39;LALT&#39;,
+&#39;LAT&#39;, &#39;LATCOR&#39;, &#39;LINE&#39;, &#39;LONG&#39;, &#39;MGA_X&#39;, &#39;MGA_Y&#39;, &#39;MGA_Z&#39;, &#39;MSL_Z&#39;,
+&#39;NSATS&#39;, &#39;PDOP&#39;, &#39;RALT&#39;, &#39;STATCOR&#39;, &#39;TACOR&#39;, &#39;VDOP&#39;, &#39;V_EAST&#39;,
+&#39;V_NORTH&#39;, &#39;YEAR&#39;]
+Accessing XYZ data in EastVicData/EastVicTest.xyz.
+First few records are:
+/
+/
+/   LINE FLIGHT  YEAR  DOY      FTIME       MGA-X       MGA-Y
+MGA-Z      MSL-Z           LAT          LONG    PDOP    VDOP    HDOP
+NSATS         DEM        RALT        LALT           FX           FY
+FZ       V_EAST      V_NORTH       EOTCOR       LATCOR      STATCOR
+ATMCOR  FACOR_GRS80  FACOR_GEOID        TACOR  FA56s_GRS80
+FA56s_GEOID FA100s_GRS80 FA100s_GEOID B56s-267_GRS80 B56s-267_GEOID
+B100s-267_GRS80 B100s-267_GEOID
+ Line       8001.04
+
+  Found 3 header records
+  Found 4 lines
+  Found 38 fields
+
+Channel precisions (number of decimal places):
+[2 0 0 0 2 2 2 2 2 7 7 2 2 2 0 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+3 3  3]
+Creating:  EastVicData/EastVicTest.hdf5
+Setting BlockID = EastVic Test Line Data for EastVicTest.hdf5.
+Setting Acquirer = Sander Geophysics for EastVicTest.hdf5.
+Changed CoordFrame attribute(s) for EastVicTest.hdf5.
+Setting Line attributes for EastVicData/EastVicTest.hdf5 to include flight numbers from FLIGHT.
+Setting Line attributes for EastVicData/EastVicTest.hdf5 to include date values from DOY.
+
+Setting Line attributes for EastVicTest.hdf5 according to the SGL_GA scheme.
+Verifying planned line numbers against provided plan file(s).
+Changed channel attribute(s) for FTIME in EastVicTest.hdf5.
+Changed channel attribute(s) for MGA-X in EastVicTest.hdf5.
+Changed channel attribute(s) for MGA-Y in EastVicTest.hdf5.
+Changed channel attribute(s) for MGA-Z in EastVicTest.hdf5.
+Changed channel attribute(s) for MSL-Z in EastVicTest.hdf5.
+Changed channel attribute(s) for LAT in EastVicTest.hdf5.
+Changed channel attribute(s) for LONG in EastVicTest.hdf5.
+Changed channel attribute(s) for DEM in EastVicTest.hdf5.
+Changed channel attribute(s) for RALT in EastVicTest.hdf5.
+Changed channel attribute(s) for LALT in EastVicTest.hdf5.
+Changed channel attribute(s) for FX in EastVicTest.hdf5.
+Changed channel attribute(s) for FY in EastVicTest.hdf5.
+Changed channel attribute(s) for FZ in EastVicTest.hdf5.
+Changed channel attribute(s) for V_EAST in EastVicTest.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for V_NORTH in EastVicTest.hdf5.
+Changed channel attribute(s) for EOTCOR in EastVicTest.hdf5.
+Changed channel attribute(s) for LATCOR in EastVicTest.hdf5.
+Changed channel attribute(s) for STATCOR in EastVicTest.hdf5.
+Changed channel attribute(s) for ATMCOR in EastVicTest.hdf5.
+Changed channel attribute(s) for FACOR_GRS80 in EastVicTest.hdf5.
+Changed channel attribute(s) for FACOR_GEOID in EastVicTest.hdf5.
+Changed channel attribute(s) for TACOR in EastVicTest.hdf5.
+Changed channel attribute(s) for FA56s_GRS80 in EastVicTest.hdf5.
+Changed channel attribute(s) for FA56s_GEOID in EastVicTest.hdf5.
+Changed channel attribute(s) for FA100s_GRS80 in EastVicTest.hdf5.
+Changed channel attribute(s) for FA100s_GEOID in EastVicTest.hdf5.
+Changed channel attribute(s) for B56s-267_GRS80 in EastVicTest.hdf5.
+Changed channel attribute(s) for B56s-267_GEOID in EastVicTest.hdf5.
+Changed channel attribute(s) for B100s-267_GRS80 in EastVicTest.hdf5.
+Changed channel attribute(s) for B100s-267_GEOID in EastVicTest.hdf5.
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Test Line Data
+    ProjectName: EastVic
+
+Coordinates
+    AltitudeChannel: MGA-Z
+    GeoDatum: GDA2020
+    HeightDatum: GRS80
+    LatitudeChannel: LAT
+    LongitudeChannel: LONG
+    Projection: MGA
+    TimeChannel: FTIME
+    UTMZone: 55
+    XChannel: MGA-X
+    YChannel: MGA-Y
+4 lines: total distance flown [km] = 200.4
+
+4 lines:
+[&#39;8001.040&#39;, &#39;8001.050&#39;, &#39;8001.060&#39;, &#39;8001.070&#39;]
+
+38 channels:
+[&#39;ATMCOR&#39;, &#39;B100s-267_GEOID&#39;, &#39;B100s-267_GRS80&#39;, &#39;B56s-267_GEOID&#39;,
+&#39;B56s-267_GRS80&#39;, &#39;DEM&#39;, &#39;DOY&#39;, &#39;EOTCOR&#39;, &#39;FA100s_GEOID&#39;,
+&#39;FA100s_GRS80&#39;, &#39;FA56s_GEOID&#39;, &#39;FA56s_GRS80&#39;, &#39;FACOR_GEOID&#39;,
+&#39;FACOR_GRS80&#39;, &#39;FLIGHT&#39;, &#39;FTIME&#39;, &#39;FX&#39;, &#39;FY&#39;, &#39;FZ&#39;, &#39;HDOP&#39;, &#39;LALT&#39;,
+&#39;LAT&#39;, &#39;LATCOR&#39;, &#39;LINE&#39;, &#39;LONG&#39;, &#39;MGA-X&#39;, &#39;MGA-Y&#39;, &#39;MGA-Z&#39;, &#39;MSL-Z&#39;,
+&#39;NSATS&#39;, &#39;PDOP&#39;, &#39;RALT&#39;, &#39;STATCOR&#39;, &#39;TACOR&#39;, &#39;VDOP&#39;, &#39;V_EAST&#39;,
+&#39;V_NORTH&#39;, &#39;YEAR&#39;]
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Test Line Data
+    ProjectName: EastVic
+
+1 flights including 4 lines.
+
+Flights
+    2019 
+
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Test Line Data
+    ProjectName: EastVic
+
+Sample time and distance statistics
+  Min   = 0.500 s, 27.3 m
+  Max   = 0.500 s, 33.2 m
+  Mean  = 0.500 s, 30.3 m
+  Stdev = 0 s, 1 m
+Accessing XYZ data in EastVicData/EastVicRepeats.xyz.
+First few records are:
+/
+/
+/   LINE FLIGHT  YEAR  DOY      FTIME       MGA-X       MGA-Y
+MGA-Z      MSL-Z           LAT          LONG    PDOP    VDOP    HDOP
+NSATS         DEM        RALT        LALT           FX           FY
+FZ       V_EAST      V_NORTH       EOTCOR       LATCOR      STATCOR
+ATMCOR  FACOR_GRS80  FACOR_GEOID        TACOR  FA56s_GRS80
+FA56s_GEOID FA100s_GRS80 FA100s_GEOID B56s-267_GRS80 B56s-267_GEOID
+B100s-267_GRS80 B100s-267_GEOID
+ Line       7001.16
+
+  Found 3 header records
+  Found 10 lines
+  Found 38 fields
+
+Channel precisions (number of decimal places):
+[2 0 0 0 2 2 2 2 2 7 7 2 2 2 0 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+3 3  3]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating:  EastVicData/EastVicRepeats.hdf5
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting BlockID = EastVic Repeat Line Data for EastVicRepeats.hdf5.
+Setting Acquirer = Sander Geophysics for EastVicRepeats.hdf5.
+Changed CoordFrame attribute(s) for EastVicRepeats.hdf5.
+Changed CoordFrame attribute(s) for EastVicRepeats.hdf5.
+Setting Line attributes for EastVicData/EastVicRepeats.hdf5 to include flight numbers from FLIGHT.
+Setting Line attributes for EastVicData/EastVicRepeats.hdf5 to include date values from DOY.
+
+Setting Line attributes for EastVicRepeats.hdf5 according to the SGL_GA scheme.
+Verifying planned line numbers against provided plan file(s).
+Changed channel attribute(s) for FTIME in EastVicRepeats.hdf5.
+Changed channel attribute(s) for MGA-X in EastVicRepeats.hdf5.
+Changed channel attribute(s) for MGA-Y in EastVicRepeats.hdf5.
+Changed channel attribute(s) for MGA-Z in EastVicRepeats.hdf5.
+Changed channel attribute(s) for MSL-Z in EastVicRepeats.hdf5.
+Changed channel attribute(s) for LAT in EastVicRepeats.hdf5.
+Changed channel attribute(s) for LONG in EastVicRepeats.hdf5.
+Changed channel attribute(s) for DEM in EastVicRepeats.hdf5.
+Changed channel attribute(s) for RALT in EastVicRepeats.hdf5.
+Changed channel attribute(s) for LALT in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FX in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FY in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FZ in EastVicRepeats.hdf5.
+Changed channel attribute(s) for V_EAST in EastVicRepeats.hdf5.
+Changed channel attribute(s) for V_NORTH in EastVicRepeats.hdf5.
+Changed channel attribute(s) for EOTCOR in EastVicRepeats.hdf5.
+Changed channel attribute(s) for LATCOR in EastVicRepeats.hdf5.
+Changed channel attribute(s) for STATCOR in EastVicRepeats.hdf5.
+Changed channel attribute(s) for ATMCOR in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FACOR_GRS80 in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FACOR_GEOID in EastVicRepeats.hdf5.
+Changed channel attribute(s) for TACOR in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FA56s_GRS80 in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FA56s_GEOID in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FA100s_GRS80 in EastVicRepeats.hdf5.
+Changed channel attribute(s) for FA100s_GEOID in EastVicRepeats.hdf5.
+Changed channel attribute(s) for B56s-267_GRS80 in EastVicRepeats.hdf5.
+Changed channel attribute(s) for B56s-267_GEOID in EastVicRepeats.hdf5.
+Changed channel attribute(s) for B100s-267_GRS80 in EastVicRepeats.hdf5.
+Changed channel attribute(s) for B100s-267_GEOID in EastVicRepeats.hdf5.
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Repeat Line Data
+    ProjectName: EastVic
+
+Coordinates
+    AltitudeChannel: MGA-Z
+    GeoDatum: GDA2020
+    HeightDatum: GRS80
+    LatitudeChannel: LAT
+    LongitudeChannel: LONG
+    Projection: MGA
+    TimeChannel: FTIME
+    UTMZone: 55
+    XChannel: MGA-X
+    YChannel: MGA-Y
+10 lines: total distance flown [km] = 501.3
+
+10 lines:
+[&#39;7001.160&#39;, &#39;7001.170&#39;, &#39;7001.180&#39;, &#39;7001.190&#39;, &#39;7001.200&#39;,
+&#39;7001.210&#39;, &#39;7001.220&#39;, &#39;7001.230&#39;, &#39;7001.240&#39;, &#39;7001.250&#39;]
+
+38 channels:
+[&#39;ATMCOR&#39;, &#39;B100s-267_GEOID&#39;, &#39;B100s-267_GRS80&#39;, &#39;B56s-267_GEOID&#39;,
+&#39;B56s-267_GRS80&#39;, &#39;DEM&#39;, &#39;DOY&#39;, &#39;EOTCOR&#39;, &#39;FA100s_GEOID&#39;,
+&#39;FA100s_GRS80&#39;, &#39;FA56s_GEOID&#39;, &#39;FA56s_GRS80&#39;, &#39;FACOR_GEOID&#39;,
+&#39;FACOR_GRS80&#39;, &#39;FLIGHT&#39;, &#39;FTIME&#39;, &#39;FX&#39;, &#39;FY&#39;, &#39;FZ&#39;, &#39;HDOP&#39;, &#39;LALT&#39;,
+&#39;LAT&#39;, &#39;LATCOR&#39;, &#39;LINE&#39;, &#39;LONG&#39;, &#39;MGA-X&#39;, &#39;MGA-Y&#39;, &#39;MGA-Z&#39;, &#39;MSL-Z&#39;,
+&#39;NSATS&#39;, &#39;PDOP&#39;, &#39;RALT&#39;, &#39;STATCOR&#39;, &#39;TACOR&#39;, &#39;VDOP&#39;, &#39;V_EAST&#39;,
+&#39;V_NORTH&#39;, &#39;YEAR&#39;]
+Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Repeat Line Data
+    ProjectName: EastVic
+
+7 flights including 10 lines.
+
+Flights
+    2004 2006 2009 2011 2013 2015 9501 
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+    Acquirer: Sander Geophysics
+    BlockID: EastVic Repeat Line Data
+    ProjectName: EastVic
+
+Sample time and distance statistics
+  Min   = 0.500 s, 26.4 m
+  Max   = 0.500 s, 34.5 m
+  Mean  = 0.500 s, 30.7 m
+  Stdev = 0 s, 1 m
+</pre></div>
+</div>
+<img alt="../_images/b6d0b99df6e6dbd4650bcb774eb6d5365ff507db5eaedcc1c75d7ed289f88363.png" src="../_images/b6d0b99df6e6dbd4650bcb774eb6d5365ff507db5eaedcc1c75d7ed289f88363.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No file of planned data provided.
+</pre></div>
+</div>
+<img alt="../_images/4099d1242b46387274648d2687797ef705f9f9cdc1050cc50f62ce72ce45e4ba.png" src="../_images/4099d1242b46387274648d2687797ef705f9f9cdc1050cc50f62ce72ce45e4ba.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportLines</span><span class="p">(</span><span class="n">dh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 even lines, 0 odd lines.
+10 traverse lines, 0 control lines, 0 not classified.
+0 planned lines, 10 unplanned lines, total 10.
+
+ Whizz Version 1.0
+
+Odd Lines:
+[]
+
+Even Lines:
+[]
+
+Traverse Lines:
+[&#39;7001.160&#39;, &#39;7001.170&#39;, &#39;7001.180&#39;, &#39;7001.190&#39;, &#39;7001.200&#39;,
+&#39;7001.210&#39;, &#39;7001.220&#39;, &#39;7001.230&#39;, &#39;7001.240&#39;, &#39;7001.250&#39;]
+
+Control Lines:
+[]
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Here is a repeat line check against the Bouguer gravity (filtered at <span class="math notranslate nohighlight">\(100\,s\)</span>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;7001.160&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.170&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.180&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.190&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.200&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.210&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;7001.220&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.230&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.240&#39;</span><span class="p">,</span> <span class="s1">&#39;7001.250&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkRepeatLines</span><span class="p">([</span><span class="n">dh</span><span class="p">],</span> <span class="s1">&#39;B100s-267_GEOID&#39;</span><span class="p">,</span> <span class="n">all_lines</span><span class="p">,</span> <span class="n">xOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysing line data to work out size of interpolated output arrays.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10 of 10 lines analysed, interpolant length set to 1582 samples.
+
+    Line 7001.160 heading = 134.7 deg.
+    Line 7001.170 heading = -45.3 deg.
+    Line 7001.180 heading = 134.7 deg.
+    Line 7001.190 heading = -45.3 deg.
+    Line 7001.200 heading = 134.7 deg.
+    Line 7001.210 heading = -45.3 deg.
+    Line 7001.220 heading = 134.7 deg.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Line 7001.230 heading = -45.3 deg.
+    Line 7001.240 heading = -45.3 deg.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Line 7001.250 heading = 134.7 deg.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Summary Statistics
+All lines: stdev(B100s-267_GEOID) = 0.85 mGal
+    Line 7001.160: stdev(B100s-267_GEOID) = 0.62 mGal
+    Line 7001.170: stdev(B100s-267_GEOID) = 0.63 mGal
+    Line 7001.180: stdev(B100s-267_GEOID) = 0.59 mGal
+    Line 7001.190: stdev(B100s-267_GEOID) = 0.45 mGal
+    Line 7001.200: stdev(B100s-267_GEOID) = 0.80 mGal
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Line 7001.210: stdev(B100s-267_GEOID) = 0.76 mGal
+    Line 7001.220: stdev(B100s-267_GEOID) = 0.93 mGal
+    Line 7001.230: stdev(B100s-267_GEOID) = 0.78 mGal
+    Line 7001.240: stdev(B100s-267_GEOID) = 1.12 mGal
+    Line 7001.250: stdev(B100s-267_GEOID) = 1.03 mGal
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All lines: stdev(MGA-Z) = 4.2 m
+    Line 7001.160: stdev(MGA-Z) = 3.8 m
+    Line 7001.170: stdev(MGA-Z) = 4.1 m
+    Line 7001.180: stdev(MGA-Z) = 4.5 m
+    Line 7001.190: stdev(MGA-Z) = 3.9 m
+    Line 7001.200: stdev(MGA-Z) = 4.1 m
+    Line 7001.210: stdev(MGA-Z) = 4.5 m
+    Line 7001.220: stdev(MGA-Z) = 3.2 m
+    Line 7001.230: stdev(MGA-Z) = 4.3 m
+    Line 7001.240: stdev(MGA-Z) = 4.5 m
+    Line 7001.250: stdev(MGA-Z) = 4.1 m
+</pre></div>
+</div>
+<img alt="../_images/77786ee743eade02d9e96b1e9cb42b92df2569f0cc251fb40ce8d717a1115f53.png" src="../_images/77786ee743eade02d9e96b1e9cb42b92df2569f0cc251fb40ce8d717a1115f53.png" />
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Intersection_Analysis.html" title="Previous document">Intersection Analysis</a>
+        </li>
+        <li>
+          <a href="Odd_Even_Analysis.html" title="Next document">Odd - Even Analysis</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/CheckRepeats_Analysis.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

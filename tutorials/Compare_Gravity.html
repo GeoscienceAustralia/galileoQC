@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Compare to Ground Gravity &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Statistical analyses" href="Statistical_Analysis.html" />
+    <link rel="prev" title="FTG Noise Analysis" href="FTG_Noise_Analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Compare to Ground Gravity</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="FTG_Noise_Analysis.html" title="previous chapter">FTG Noise Analysis</a></li>
+      <li>Next: <a href="Statistical_Analysis.html" title="next chapter">Statistical analyses</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="compare-to-ground-gravity">
+<h1>Compare to Ground Gravity<a class="headerlink" href="#compare-to-ground-gravity" title="Link to this heading">¶</a></h1>
+<p>Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by plotLinesOnGroundStns.</p>
+<hr class="docutils" />
+<p>We access the Canobie data for an example data set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+
+<span class="n">data_root</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;./CanobieData/&#39;</span>
+<span class="n">canobieHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./CanobieData/Canobie.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>We need to know the line number of at least one line, so here we report all the line numbers so that we can select one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportLines</span><span class="p">(</span><span class="n">canobieHDF_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">qc</span><span class="o">.</span><span class="n">reportLines</span><span class="p">(</span><span class="n">canobieHDF_file</span><span class="p">)</span>
+
+<span class="nn">File ~/.local/lib/python3.12/site-packages/galileoQC/whizzFiles/reportData.py:116,</span> in <span class="ni">reportLines</span><span class="nt">(whizzFile)</span>
+<span class="g g-Whitespace">    </span><span class="mi">100</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">101</span><span class="sd"> Prints a short summary of the flight-lines in a HDF5 Whizz file.</span>
+<span class="g g-Whitespace">    </span><span class="mi">102</span><span class="sd"> </span>
+<span class="sd">   (...)    112 </span>
+<span class="g g-Whitespace">    </span><span class="mi">113</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">114</span> <span class="n">filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">whizzFile</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">116</span> <span class="n">oddlines</span><span class="p">,</span> <span class="n">evenlines</span> <span class="o">=</span> <span class="n">_getOddEvenLines</span><span class="p">(</span><span class="n">whizzFile</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">117</span> <span class="n">travlines</span><span class="p">,</span> <span class="n">ctrllines</span> <span class="o">=</span> <span class="n">_getTravCtrlLines</span><span class="p">(</span><span class="n">whizzFile</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="n">plandlines</span><span class="p">,</span> <span class="n">unplandlines</span> <span class="o">=</span> <span class="n">_getPlannedLines</span><span class="p">(</span><span class="n">whizzFile</span><span class="p">)</span>
+
+<span class="nn">File ~/.local/lib/python3.12/site-packages/galileoQC/gridFiles/oddeven.py:352,</span> in <span class="ni">_getOddEvenLines</span><span class="nt">(whizz_file)</span>
+<span class="g g-Whitespace">    </span><span class="mi">349</span> <span class="n">numodds</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">    </span><span class="mi">350</span> <span class="n">oddlines</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">--&gt; </span><span class="mi">352</span> <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">353</span>     <span class="n">lines_group</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">groupName</span><span class="p">][</span><span class="s1">&#39;Lines&#39;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">354</span>     <span class="n">lines</span> <span class="o">=</span> <span class="n">lines_group</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+<span class="nn">File ~/.local/lib/python3.12/site-packages/h5py/_hl/files.py:555,</span> in <span class="ni">File.__init__</span><span class="nt">(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, track_times, **kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">546</span>     <span class="n">fapl</span> <span class="o">=</span> <span class="n">make_fapl</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">libver</span><span class="p">,</span> <span class="n">rdcc_nslots</span><span class="p">,</span> <span class="n">rdcc_nbytes</span><span class="p">,</span> <span class="n">rdcc_w0</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">547</span>                      <span class="n">locking</span><span class="p">,</span> <span class="n">page_buf_size</span><span class="p">,</span> <span class="n">min_meta_keep</span><span class="p">,</span> <span class="n">min_raw_keep</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">548</span>                      <span class="n">alignment_threshold</span><span class="o">=</span><span class="n">alignment_threshold</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">549</span>                      <span class="n">alignment_interval</span><span class="o">=</span><span class="n">alignment_interval</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">550</span>                      <span class="n">meta_block_size</span><span class="o">=</span><span class="n">meta_block_size</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">551</span>                      <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">552</span>     <span class="n">fcpl</span> <span class="o">=</span> <span class="n">make_fcpl</span><span class="p">(</span><span class="n">track_order</span><span class="o">=</span><span class="n">track_order</span><span class="p">,</span> <span class="n">track_times</span><span class="o">=</span><span class="n">track_times</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">553</span>                      <span class="n">fs_strategy</span><span class="o">=</span><span class="n">fs_strategy</span><span class="p">,</span> <span class="n">fs_persist</span><span class="o">=</span><span class="n">fs_persist</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">554</span>                      <span class="n">fs_threshold</span><span class="o">=</span><span class="n">fs_threshold</span><span class="p">,</span> <span class="n">fs_page_size</span><span class="o">=</span><span class="n">fs_page_size</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">555</span>     <span class="n">fid</span> <span class="o">=</span> <span class="n">make_fid</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">userblock_size</span><span class="p">,</span> <span class="n">fapl</span><span class="p">,</span> <span class="n">fcpl</span><span class="p">,</span> <span class="n">swmr</span><span class="o">=</span><span class="n">swmr</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">557</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">libver</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">558</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_libver</span> <span class="o">=</span> <span class="n">libver</span>
+
+<span class="nn">File ~/.local/lib/python3.12/site-packages/h5py/_hl/files.py:232,</span> in <span class="ni">make_fid</span><span class="nt">(name, mode, userblock_size, fapl, fcpl, swmr)</span>
+<span class="g g-Whitespace">    </span><span class="mi">230</span>     <span class="k">if</span> <span class="n">swmr</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">231</span>         <span class="n">flags</span> <span class="o">|=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">ACC_SWMR_READ</span>
+<span class="ne">--&gt; </span><span class="mi">232</span>     <span class="n">fid</span> <span class="o">=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">fapl</span><span class="o">=</span><span class="n">fapl</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;r+&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">234</span>     <span class="n">fid</span> <span class="o">=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">h5f</span><span class="o">.</span><span class="n">ACC_RDWR</span><span class="p">,</span> <span class="n">fapl</span><span class="o">=</span><span class="n">fapl</span><span class="p">)</span>
+
+<span class="nn">File h5py/_objects.pyx:54,</span> in <span class="ni">h5py._objects.with_phil.wrapper</span><span class="nt">()</span>
+<span class="ne">---&gt; </span><span class="mi">54</span> <span class="s1">&#39;Could not get source, probably due dynamically evaluated source code.&#39;</span>
+
+<span class="nn">File h5py/_objects.pyx:55,</span> in <span class="ni">h5py._objects.with_phil.wrapper</span><span class="nt">()</span>
+<span class="ne">---&gt; </span><span class="mi">55</span> <span class="s1">&#39;Could not get source, probably due dynamically evaluated source code.&#39;</span>
+
+<span class="nn">File h5py/h5f.pyx:106,</span> in <span class="ni">h5py.h5f.open</span><span class="nt">()</span>
+<span class="ne">--&gt; </span><span class="mi">106</span> <span class="s1">&#39;Could not get source, probably due dynamically evaluated source code.&#39;</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] Unable to synchronously open file (unable to open file: name = &#39;CanobieData/Canobie.hdf5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 0, o_flags = 0)
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>And now we plot our flight-line over scatter plots of the ground gravity, and its accuracy, station reliability, and height error. The data are read from the Geoscience Australia site via <code class="docutils literal notranslate"><span class="pre">pooch</span></code>.</p>
+<p>In this case, gravity accuracy is rated pretty good and height errors small; The data in dark colours (upper right plot) are of poor reliability; these look to be from some small exploration surveys and some data collected along roads. The regularly spaced gravity (yellow dots) are rated of high reliability.</p>
+<p>Overall, it seems that the ground gravity data here are pretty good.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">plotLinesOnGroundStns</span><span class="p">(</span><span class="n">canobieHDF_file</span><span class="p">,</span> <span class="s1">&#39;100020.000&#39;</span><span class="p">,</span> 
+	<span class="n">fig_title</span><span class="o">=</span><span class="s1">&#39;My Test Line over Ground Gravity Stations&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f2d12102c59de5f5ba4770b95dc4be495a07c912bae97e64e394891c83a959ee.png" src="../_images/f2d12102c59de5f5ba4770b95dc4be495a07c912bae97e64e394891c83a959ee.png" />
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="FTG_Noise_Analysis.html" title="Previous document">FTG Noise Analysis</a>
+        </li>
+        <li>
+          <a href="Statistical_Analysis.html" title="Next document">Statistical analyses</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Compare_Gravity.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,144 @@
+# {py:mod}`galileoQC.whizzFiles.colReader`
+
+```{py:module} galileoQC.whizzFiles.colReader
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`colsToHDF <galileoQC.whizzFiles.colReader.colsToHDF>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader.colsToHDF
+    :summary:
+    ```
+* - {py:obj}`save_rec_lists <galileoQC.whizzFiles.colReader.save_rec_lists>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader.save_rec_lists
+    :summary:
+    ```
+* - {py:obj}`_decimal_degrees <galileoQC.whizzFiles.colReader._decimal_degrees>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader._decimal_degrees
+    :summary:
+    ```
+* - {py:obj}`_decimal_year <galileoQC.whizzFiles.colReader._decimal_year>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader._decimal_year
+    :summary:
+    ```
+* - {py:obj}`_leap <galileoQC.whizzFiles.colReader._leap>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader._leap
+    :summary:
+    ```
+* - {py:obj}`record_list_to_float <galileoQC.whizzFiles.colReader.record_list_to_float>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader.record_list_to_float
+    :summary:
+    ```
+* - {py:obj}`_getChannels <galileoQC.whizzFiles.colReader._getChannels>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader._getChannels
+    :summary:
+    ```
+* - {py:obj}`_ascii_check <galileoQC.whizzFiles.colReader._ascii_check>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader._ascii_check
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.colReader.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.colReader.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.colReader.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.colReader.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.colReader.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader.projectName
+```
+
+````
+
+````{py:function} colsToHDF(col_datfile, lineColumn, dateColumn, latColumn, lonColumn, dumstr='*', whizzFile='')
+:canonical: galileoQC.whizzFiles.colReader.colsToHDF
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader.colsToHDF
+```
+````
+
+````{py:function} save_rec_lists(wizLines, current_line, channelNames, record_lists, dumstr)
+:canonical: galileoQC.whizzFiles.colReader.save_rec_lists
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader.save_rec_lists
+```
+````
+
+````{py:function} _decimal_degrees(angles, dumstr)
+:canonical: galileoQC.whizzFiles.colReader._decimal_degrees
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader._decimal_degrees
+```
+````
+
+````{py:function} _decimal_year(dates, dumstr)
+:canonical: galileoQC.whizzFiles.colReader._decimal_year
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader._decimal_year
+```
+````
+
+````{py:function} _leap(year)
+:canonical: galileoQC.whizzFiles.colReader._leap
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader._leap
+```
+````
+
+````{py:function} record_list_to_float(record_lists, pytypes, nulls)
+:canonical: galileoQC.whizzFiles.colReader.record_list_to_float
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader.record_list_to_float
+```
+````
+
+````{py:function} _getChannels(datafile)
+:canonical: galileoQC.whizzFiles.colReader._getChannels
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader._getChannels
+```
+````
+
+````{py:function} _ascii_check(col_datfile)
+:canonical: galileoQC.whizzFiles.colReader._ascii_check
+
+```{autodoc2-docstring} galileoQC.whizzFiles.colReader._ascii_check
+```
+````

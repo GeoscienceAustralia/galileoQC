@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkPhase &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.ilsNoiseAnalysis" href="galileoQC.qualitycontrol.ilsNoiseAnalysis.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.diffChanStats" href="galileoQC.qualitycontrol.diffChanStats.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.diffChanStats.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.diffChanStats</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.ilsNoiseAnalysis.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.ilsNoiseAnalysis</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkPhase">
+<span id="galileoqc-qualitycontrol-checkphase"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkPhase" title="galileoQC.qualitycontrol.checkPhase"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkPhase</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkPhase" title="Link to this heading">¶</a></h1>
+<p>Report the phase shift required to match two channels.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkPhase.checkPhase" title="galileoQC.qualitycontrol.checkPhase.checkPhase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkPhase</span></code></a></p></td>
+<td><p>For every survey line in a geoWhizz HDF5 file, given two channels, calculate
+the phase shift (in seconds if time data is available, or number of samples otherwise)
+required to maximise the correlation between the two channels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkPhase._interpolateCorr" title="galileoQC.qualitycontrol.checkPhase._interpolateCorr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_interpolateCorr</span></code></a></p></td>
+<td><p>Interpolates <code class="docutils literal notranslate"><span class="pre">ybase</span></code>, sampled at <code class="docutils literal notranslate"><span class="pre">xbase</span></code>, onto the new vector <code class="docutils literal notranslate"><span class="pre">xnew</span></code>.
+These three input arrays are pre-processed to ensure that <code class="docutils literal notranslate"><span class="pre">xbase</span></code>
+and <code class="docutils literal notranslate"><span class="pre">xnew</span></code> are monotonically increasing, whilst keeping <code class="docutils literal notranslate"><span class="pre">ybase</span></code>
+synchronised with <code class="docutils literal notranslate"><span class="pre">xbase</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkPhase.groupName" title="galileoQC.qualitycontrol.checkPhase.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkPhase.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkPhase.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkPhase.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkPhase.checkPhase">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkPhase.</span></span><span class="sig-name descname"><span class="pre">checkPhase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkPhase.checkPhase" title="Link to this definition">¶</a></dt>
+<dd><p>For every survey line in a geoWhizz HDF5 file, given two channels, calculate
+the phase shift (in seconds if time data is available, or number of samples otherwise)
+required to maximise the correlation between the two channels.</p>
+<p>If the result is greater than the tolerance and plot_flag=True, the correlation is plotted.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>whizzFile : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a geoWhizz HDF5 file.
+</pre></div>
+</div>
+<p>channel1 : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the first channel.
+</pre></div>
+</div>
+<p>channel2 : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the second channel.
+</pre></div>
+</div>
+<p>tChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the time channel. The default, &#39;&#39;, uses the &#39;TimeChannel&#39; in
+the whizzFile attributes.
+</pre></div>
+</div>
+<p>tolerance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The maximum allowed phase shift (in seconds if time data are available, else in number of samples).
+</pre></div>
+</div>
+<p>lines : String list, optional.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line numbers to be checked. Default is all lines in the whizzFile.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, report status of all lines, else only report errors. Default False.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, plot exceedances for each failed line.
+</pre></div>
+</div>
+<p class="rubric" id="id4">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkPhase._interpolateCorr">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkPhase.</span></span><span class="sig-name descname"><span class="pre">_interpolateCorr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xbase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ybase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xnew</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkPhase._interpolateCorr" title="Link to this definition">¶</a></dt>
+<dd><p>Interpolates <code class="docutils literal notranslate"><span class="pre">ybase</span></code>, sampled at <code class="docutils literal notranslate"><span class="pre">xbase</span></code>, onto the new vector <code class="docutils literal notranslate"><span class="pre">xnew</span></code>.
+These three input arrays are pre-processed to ensure that <code class="docutils literal notranslate"><span class="pre">xbase</span></code>
+and <code class="docutils literal notranslate"><span class="pre">xnew</span></code> are monotonically increasing, whilst keeping <code class="docutils literal notranslate"><span class="pre">ybase</span></code>
+synchronised with <code class="docutils literal notranslate"><span class="pre">xbase</span></code>.</p>
+<p>For use interpolating phase correlations in <code class="docutils literal notranslate"><span class="pre">checkPhase</span></code>.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>xbase : 1D numpy float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The independent variable of the inputs to be interpolated.
+</pre></div>
+</div>
+<p>ybase : 1D numpy float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The dependent variable of the inputs to be interpolated.
+</pre></div>
+</div>
+<p>xnew : 1D numpy float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The independent variable to interpolate onto.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>out : 1D numpy float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The values of ybase interpolated onto xnew.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.diffChanStats.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.diffChanStats</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.ilsNoiseAnalysis.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.ilsNoiseAnalysis</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkPhase.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

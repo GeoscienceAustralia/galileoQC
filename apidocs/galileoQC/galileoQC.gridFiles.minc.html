@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.gridFiles.minc &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.gridFiles.imageAllInDir" href="galileoQC.gridFiles.imageAllInDir.html" />
+    <link rel="prev" title="galileoQC.gridFiles.xarray_to_grid" href="galileoQC.gridFiles.xarray_to_grid.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.gridFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.gridFiles.xarray_to_grid.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.xarray_to_grid</span></code></a></li>
+      <li>Next: <a href="galileoQC.gridFiles.imageAllInDir.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.imageAllInDir</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.gridFiles.minc">
+<span id="galileoqc-gridfiles-minc"></span><h1><a class="reference internal" href="#module-galileoQC.gridFiles.minc" title="galileoQC.gridFiles.minc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.minc</span></code></a><a class="headerlink" href="#module-galileoQC.gridFiles.minc" title="Link to this heading">¶</a></h1>
+<p>Minimum Curvature Gridding Routine.</p>
+<p>Based on the work by:</p>
+<p>Briggs, I. C., 1974, Machine contouring using minimum curvature, Geophysics
+vol. 39, No. 1, pp. 39-48</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.minc" title="galileoQC.gridFiles.minc.minc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minc</span></code></a></p></td>
+<td><p>Minimum Curvature Gridding.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.u_normal" title="galileoQC.gridFiles.minc.u_normal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_normal</span></code></a></p></td>
+<td><p>Minimum curvature smoothing for normal cases.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.u_edge" title="galileoQC.gridFiles.minc.u_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_edge</span></code></a></p></td>
+<td><p>Minimum curvature smoothing for edges.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.u_one_row_from_edge" title="galileoQC.gridFiles.minc.u_one_row_from_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_one_row_from_edge</span></code></a></p></td>
+<td><p>Minimum curvature smoothing for one row from edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.u_corner" title="galileoQC.gridFiles.minc.u_corner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_corner</span></code></a></p></td>
+<td><p>Minimum curvature smoothing for corner point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.u_next_to_corner" title="galileoQC.gridFiles.minc.u_next_to_corner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_next_to_corner</span></code></a></p></td>
+<td><p>Minimum curvature smoothing for next to corner.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.u_edge_next_to_corner" title="galileoQC.gridFiles.minc.u_edge_next_to_corner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_edge_next_to_corner</span></code></a></p></td>
+<td><p>Minimum curvature smoothing for edge next to corner.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.off_grid" title="galileoQC.gridFiles.minc.off_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">off_grid</span></code></a></p></td>
+<td><p>Node value calculation when data value is too far from node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.get_b" title="galileoQC.gridFiles.minc.get_b"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_b</span></code></a></p></td>
+<td><p>Get b values for input data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.mcurv" title="galileoQC.gridFiles.minc.mcurv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mcurv</span></code></a></p></td>
+<td><p>Minimum curvature smoothing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc.morg" title="galileoQC.gridFiles.minc.morg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morg</span></code></a></p></td>
+<td><p>Organise coordinates and calculate b values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.minc._testfn" title="galileoQC.gridFiles.minc._testfn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_testfn</span></code></a></p></td>
+<td><p>Test routine.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.minc">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">minc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dxy</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">showlog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">print</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bdist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.minc" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum Curvature Gridding.</p>
+<p class="rubric" id="id21">Parameters</p>
+<p>x : numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1D array with x coordinates.
+</pre></div>
+</div>
+<p>y : numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1D array with y coordinates.
+</pre></div>
+</div>
+<p>z : numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1D array with z coordinates.
+</pre></div>
+</div>
+<p>dxy : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Cell x and y dimension.
+</pre></div>
+</div>
+<p>showlog : function, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Routine to show text messages. The default is print.
+</pre></div>
+</div>
+<p>extent : list, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Extent defined as (left, right, bottom, top). The default is None.
+</pre></div>
+</div>
+<p>bdist : float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Blanking distance in units of cell. The default is None.
+</pre></div>
+</div>
+<p>maxiters : int, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum number of iterations. The default is 100.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, then prints out details. Default = False.
+</pre></div>
+</div>
+<p class="rubric" id="id22">Returns</p>
+<p>u : numpy array
+2D numpy array with gridding z values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.u_normal">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">u_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.u_normal" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing for normal cases.</p>
+<p>It is defined as:</p>
+<p>u[i+2, j] + u[i, j+2] + u[i-2, j] + u[i, j-2] +
+2*(u[i+1, j+1] + u[i-1, j+1] + u[i+1, j-1] + u[i-1, j-1]) -
+8*(u[i+1, j]+u[i-1, j]+u[i, j+1]+u[i, j-1]) + 20*u[i, j] = 0</p>
+<p class="rubric" id="id23">Parameters</p>
+<p>u : numpy array
+2D grid of z values.
+i : int
+Current row.
+j : int
+Current Column.</p>
+<p class="rubric" id="id24">Returns</p>
+<p>uij : float
+Smoothed value to replace in master grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.u_edge">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">u_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.u_edge" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing for edges.</p>
+<p>It is defined as:</p>
+<p>u[i-2, j] + u[i+2, j] + u[i, j+2] + u[i-1, j+1] + u[i+1, j+1] -
+4*(u[i-1, j] + u[i, j+1] + u[i+1, j]) + 7*u[i, j] = 0</p>
+<p class="rubric" id="id25">Parameters</p>
+<p>u : numpy array
+2D grid of z values.
+i : int
+Current row.</p>
+<p class="rubric" id="id26">Returns</p>
+<p>uij : float
+Smoothed value to replace in master grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.u_one_row_from_edge">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">u_one_row_from_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.u_one_row_from_edge" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing for one row from edge.</p>
+<p>It is defined as:</p>
+<p>u[i-2, j] + u[i+2, j] + u[i, j+2] +
+2*(u[i-1, j+1] + u[i+1, j+1]) + u[i-1, j-1]+u[i+1, j-1] -
+8*([i-1, j]+u[i, j+1]+u[i+1, j]) - 4<em>u[i, j-1] + 19</em>u[i, j] = 0</p>
+<p class="rubric" id="id27">Parameters</p>
+<p>u : numpy array
+2D grid of z values.
+i : int
+Current row.</p>
+<p class="rubric" id="id28">Returns</p>
+<p>uij : float
+Smoothed value to replace in master grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.u_corner">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">u_corner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.u_corner" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing for corner point.</p>
+<p>It is defined as:</p>
+<p>2<em>u[i, j]+u[i, j+2] + u[i+2, j] - 2</em>(u[i, j+1] + u[i+1, j] = 0</p>
+<p class="rubric" id="id29">Parameters</p>
+<p>u : numpy array
+2D grid of z values.</p>
+<p class="rubric" id="id30">Returns</p>
+<p>uij : float
+Smoothed value to replace in master grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.u_next_to_corner">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">u_next_to_corner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.u_next_to_corner" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing for next to corner.</p>
+<p>It is defined as:</p>
+<p>u[i, j+2] + u[i+2, j] + u[i-1, j+1] + u[i+1, j-1] + 2<em>u[i+1, j+1] -
+8</em>(u[i, j+1] + u[i+1, j]) - 4*([i, j-1]+u[i-1, j]) + 18*u[i, j] = 0</p>
+<p class="rubric" id="id31">Parameters</p>
+<p>u : numpy array
+2D grid of z values.</p>
+<p class="rubric" id="id32">Returns</p>
+<p>uij : float
+Smoothed value to replace in master grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.u_edge_next_to_corner">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">u_edge_next_to_corner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.u_edge_next_to_corner" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing for edge next to corner.</p>
+<p>It is defined as:</p>
+<p>u[i, j+2] + u[i+1, j+1] + u[i-1, j+1] + u[i+2, j] - 2<em>u[i-1, j] -
+4</em>(u[i+1, j] + u[i, j+1]) + 6*u[i, j] = 0</p>
+<p class="rubric" id="id33">Parameters</p>
+<p>u : numpy array
+2D grid of z values.</p>
+<p class="rubric" id="id34">Returns</p>
+<p>uij : float
+Smoothed value to replace in master grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.off_grid">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">off_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.off_grid" title="Link to this definition">¶</a></dt>
+<dd><p>Node value calculation when data value is too far from node.</p>
+<p class="rubric" id="id35">Parameters</p>
+<p>u : numpy array
+2D grid of z values.
+i : int
+Current row.
+j : int
+Current Column.
+wn : float
+Data value.
+b : list
+List of b values for calculation.</p>
+<p class="rubric" id="id36">Returns</p>
+<p>uij : float
+Output value.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.get_b">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">get_b</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.get_b" title="Link to this definition">¶</a></dt>
+<dd><p>Get b values for input data.</p>
+<p>Calculates the b values based on the distance between the data point and
+the nearest node. Distances are expressed in units of cell.</p>
+<p class="rubric" id="id37">Parameters</p>
+<p>e5 : float
+x distance error.
+n5 : float
+y distance error.</p>
+<p class="rubric" id="id38">Returns</p>
+<p>b1 : float
+b1 value.
+b2 : float
+b2 value.
+b3 : float
+b3 value.
+b4 : float
+b4 value.
+b5 : float
+b5 value.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.mcurv">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">mcurv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ufixed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.mcurv" title="Link to this definition">¶</a></dt>
+<dd><p>Minimum curvature smoothing.</p>
+<p>This routine smooths the data between fixed data nodes.</p>
+<p class="rubric" id="id39">Parameters</p>
+<p>u : numpy array
+2D grid of z values.
+ufixed : numpy array
+2D grid of fixed node values.</p>
+<p class="rubric" id="id40">Returns</p>
+<p>u : numpy array
+2D grid of z values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc.morg">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">morg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc.morg" title="Link to this definition">¶</a></dt>
+<dd><p>Organise coordinates and calculate b values.</p>
+<p class="rubric" id="id41">Parameters</p>
+<p>x2 : numpy array
+1D array with x coordinates.
+y2 : numpy array
+1D array with y coordinates.
+z2 : numpy array
+1D array with z coordinates.
+extent : list
+Extent defined as (left, right, bottom, top).
+dxy : float
+Cell x and y dimension.
+rows : int
+Number of rows.
+cols : int
+Number of columns.</p>
+<p class="rubric" id="id42">Returns</p>
+<p>coords : list
+List containing iint, jint, r and zval.
+b : list
+List of b values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.minc._testfn">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.minc.</span></span><span class="sig-name descname"><span class="pre">_testfn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.minc._testfn" title="Link to this definition">¶</a></dt>
+<dd><p>Test routine.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.gridFiles.xarray_to_grid.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.xarray_to_grid</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.gridFiles.imageAllInDir.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.imageAllInDir</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.gridFiles.minc.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

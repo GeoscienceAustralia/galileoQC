@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Install Details &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="_static/documentation_options.js?v=53b53b71"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials/tutorials.html" />
+    <link rel="prev" title="Getting Started" href="starting.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="starting.html">Getting Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="starting.html#installation">Installation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Install Details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="starting.html#session-setup">Session Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="starting.html#installation-on-nci-australia">Installation on NCI Australia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="starting.html">Getting Started</a><ul>
+      <li>Previous: <a href="starting.html" title="previous chapter">Getting Started</a></li>
+      <li>Next: <a href="tutorials/tutorials.html" title="next chapter">Tutorials</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="install-details">
+<span id="installs-target"></span><h1>Install Details<a class="headerlink" href="#install-details" title="Link to this heading">¶</a></h1>
+<p>This document describes the steps for installing <strong>galileoQC</strong> in a variety of operating systems. The steps include those for installing python and setting up the environment.</p>
+<p>There are many ways to accomplish these steps. Here one way is documented, together with a little explanation. Feel free to use a different way if you have the expertise (or at least can find the knowledge on the web).</p>
+<p>These instructions use the python venv environment manager and <code class="docutils literal notranslate"><span class="pre">pip</span></code> installer.</p>
+<p>It is important to have a single virtual environment set up, with <strong>galileoQC</strong> and <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> installed in that environment. Throughout this installation guide, the environment used for <strong>galileoQC</strong> is named <code class="docutils literal notranslate"><span class="pre">whizz</span></code>. If you use a different name, just replace <code class="docutils literal notranslate"><span class="pre">whizz</span></code> with that name.</p>
+<p>For each operating system, the steps are:</p>
+<ol class="arabic simple">
+<li><p>create a python virtual environment;</p></li>
+<li><p>install <strong>galileoQC</strong>;</p></li>
+<li><p>install jupyterlab.</p></li>
+</ol>
+<p>For Windows installations, you may need to install python first. This can be done in several ways; the <code class="docutils literal notranslate"><span class="pre">winget</span></code> method is given here.</p>
+<section id="windows-10-and-windows-11-pip-install">
+<h2>Windows 10 and Windows 11 <code class="docutils literal notranslate"><span class="pre">pip</span></code> install<a class="headerlink" href="#windows-10-and-windows-11-pip-install" title="Link to this heading">¶</a></h2>
+<p>Go into Settings -&gt; Apps -&gt; Advanced app settings -&gt; App execution aliases, and turn off the App Installers for python.exe and python3.exe.</p>
+<p>The following commands must all be entered from the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> window (not the Powershell).</p>
+<p>Firstly install Python (the example is version 3.13 but the latest version is recommended), then create a virtual environment <code class="docutils literal notranslate"><span class="pre">whizz</span></code>, and then activate the virtual environment.</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">&gt;</span> winget install Python.Python.3.13
+<span class="p">&gt;</span> python -m venv whizz
+<span class="p">&gt;</span> whizz\Scripts\activate
+</pre></div>
+</div>
+<p>The prompt shows that you are in the <code class="docutils literal notranslate"><span class="pre">whizz</span></code> environment, ready to install <strong>galileoQC</strong>. Now use <code class="docutils literal notranslate"><span class="pre">pip</span></code> to install it.</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>whizz<span class="p">)</span> <span class="p">&gt;</span> pip install galileoQC
+</pre></div>
+</div>
+<p>And then install <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code>.</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>whizz<span class="p">)</span> <span class="p">&gt;</span> pip install jupyterlab
+</pre></div>
+</div>
+<p>Now everything is installed and you should be able to run <strong>galileoQC</strong>. To see how this is done, browse some of the tutorials in the documentation.</p>
+<p>You can also download some of the tutorial notebooks from the github repository to your working directory, and then modify them for your own use.</p>
+<p>Start <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> in order to run <strong>galileoQC</strong>.</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>whizz<span class="p">)</span> <span class="p">&gt;</span> jupyter lab
+</pre></div>
+</div>
+<p>The Jupyterlab web app should open in your browser.</p>
+</section>
+<section id="linux-pip-install-macos-fedora-debian-and-ubuntu">
+<h2>Linux pip install (macos, fedora, debian and ubuntu)<a class="headerlink" href="#linux-pip-install-macos-fedora-debian-and-ubuntu" title="Link to this heading">¶</a></h2>
+<p>First, you will need a working version of <code class="docutils literal notranslate"><span class="pre">python3</span></code>, as well as the <code class="docutils literal notranslate"><span class="pre">pip</span></code> installer and the <code class="docutils literal notranslate"><span class="pre">venv</span></code> virtual environment manager. These should be readily available on any linux system. If not, a search on the web will provide instructions for installing them (some brief notes are included further below). The installations are different for different operating systems. On macos, this needs some care because there is usually an older version of python already installed but the python install instructions will help you here.</p>
+<p>Next, create an environment called <code class="docutils literal notranslate"><span class="pre">whizz</span></code> within which <strong>galileoQC</strong> will be installed and run.</p>
+<p>Open a terminal window and enter the following commands.</p>
+<p>Create the <code class="docutils literal notranslate"><span class="pre">whizz</span></code> environment and activate it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>whizz
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>whizz/bin/activate
+</pre></div>
+</div>
+<p>The prompt shows that you are in the <code class="docutils literal notranslate"><span class="pre">whizz</span></code> environment, ready to install . Now use <code class="docutils literal notranslate"><span class="pre">pip</span></code> to install it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>whizz<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>galileoQC
+</pre></div>
+</div>
+<p>Now you need <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> to run <strong>galileoQC</strong>. This is easily installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>whizz<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>jupyterlab
+</pre></div>
+</div>
+<p>Now everything is installed and you should be able to run <strong>galileoQC</strong>. To see how this is done, browse some of the tutorials in the documentation.</p>
+<p>You can also download some of the tutorial notebooks from the github repository to your working directory, and then modify them for your own use.</p>
+<p>Start <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> in order to run <strong>galileoQC</strong>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>whizz<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>jupyter<span class="w"> </span>lab
+</pre></div>
+</div>
+<p>The Jupyterlab web app should open in your browser.</p>
+<section id="preparing-linux">
+<h3>Preparing linux<a class="headerlink" href="#preparing-linux" title="Link to this heading">¶</a></h3>
+<p>The following commands might be useful in preparing your system for the <strong>galileoQC</strong> and <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> installations.</p>
+<p><strong>DEBIAN</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade
+$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.11-venv
+</pre></div>
+</div>
+<p><strong>UBUNTU</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade
+$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.10-venv
+</pre></div>
+</div>
+<p><strong>FEDORA</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">venv</span></code> is installed with python3.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>dnf<span class="w"> </span>upgrade
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-galileoqc">
+<h2>Running <strong>galileoQC</strong><a class="headerlink" href="#running-galileoqc" title="Link to this heading">¶</a></h2>
+<p>The Jupyterlab web app should look something like this screenshot:</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="_images/jupyterlab_start.png"><img alt="" height="329" src="_images/jupyterlab_start.png" width="631" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Start page for galileoQC in jupyterlab.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Navigate to your working folder and run one or more of the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> files there, or start a new notebook from the <code class="docutils literal notranslate"><span class="pre">File</span></code> menu. Here is the Odd - Even Analysis notebook from the tutorials.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="_images/jupyterlab_tutorial.png"><img alt="" height="468" src="_images/jupyterlab_tutorial.png" width="629" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Running the galileoQC Odd - Even Analysis tutorial.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="specific-versions-of-galileoqc">
+<h2>Specific versions of <strong>galileoQC</strong><a class="headerlink" href="#specific-versions-of-galileoqc" title="Link to this heading">¶</a></h2>
+<p>You can explicitly provide the version number at installation with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>whizz<span class="p">)</span> <span class="p">&gt;</span> pip install galileoQC==1.0.0
+</pre></div>
+</div>
+<p>Then follow the steps above to download the current version and install it.</p>
+</section>
+<section id="uninstalls">
+<h2>Uninstalls<a class="headerlink" href="#uninstalls" title="Link to this heading">¶</a></h2>
+<section id="remove-galileoqc-and-the-whole-environment">
+<h3>Remove <strong>galileoQC</strong> and the whole environment<a class="headerlink" href="#remove-galileoqc-and-the-whole-environment" title="Link to this heading">¶</a></h3>
+<p>If you have a problem with the installation and want to get rid of everything and start again (or if you just want to remove <strong>galileoQC</strong> completely), you can remove the <code class="docutils literal notranslate"><span class="pre">whizz</span></code> environment. (<strong>This is not advisable if you have installed other packages in the environment that you want to use</strong>).</p>
+<p>To remove only <strong>galileoQC</strong> is eaily done in any of our tested operating systems. Navigate to the working directory with <code class="docutils literal notranslate"><span class="pre">whizz</span></code> activated and use <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>whizz<span class="p">)</span> <span class="p">&gt;</span> pip uninstall galileoQC
+</pre></div>
+</div>
+<p>If you want to uninstall the <code class="docutils literal notranslate"><span class="pre">whizz</span></code> environment and all of its contents:</p>
+<p><strong>Windows</strong></p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>whizz<span class="p">)</span> <span class="p">&gt;</span> deactivate
+<span class="p">&gt;</span> rmdir /s /q whizz
+</pre></div>
+</div>
+<p><strong>linux</strong> and <strong>macos</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>whizz<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>deactivate
+<span class="o">(</span>base<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>whizz
+</pre></div>
+</div>
+<p>You may be asked to confirm the remove. Accept.</p>
+<p>This removes <strong>galileoQC</strong>, <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code>, and all other packages in the <code class="docutils literal notranslate"><span class="pre">whizz</span></code> environment. To recover, you will need to create a new environment, and install <strong>galileoQC</strong> and <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> in the environment, following the installation steps.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="starting.html" title="Previous document">Getting Started</a>
+        </li>
+        <li>
+          <a href="tutorials/tutorials.html" title="Next document">Tutorials</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/install_details.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

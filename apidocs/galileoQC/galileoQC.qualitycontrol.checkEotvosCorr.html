@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkEotvosCorr &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.qualityAnalysis" href="galileoQC.qualitycontrol.qualityAnalysis.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkDifference" href="galileoQC.qualitycontrol.checkDifference.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkDifference.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDifference</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.qualityAnalysis.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkEotvosCorr">
+<span id="galileoqc-qualitycontrol-checkeotvoscorr"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkEotvosCorr" title="galileoQC.qualitycontrol.checkEotvosCorr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkEotvosCorr" title="Link to this heading">¶</a></h1>
+<p>Check the calculation of the Eotvos correction.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkEotvosCorr.checkEotvosCorr" title="galileoQC.qualitycontrol.checkEotvosCorr.checkEotvosCorr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkEotvosCorr</span></code></a></p></td>
+<td><p>Subtracts the eotvos correction in the data file from one calculated using
+Jekeli (2016, slide 51) and the latitude and position data in the data file.
+The min, max, mean and standard deviation of the difference is calculated
+for each line and presented in an extended whisker plot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkEotvosCorr._calc_speed" title="galileoQC.qualitycontrol.checkEotvosCorr._calc_speed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_calc_speed</span></code></a></p></td>
+<td><p>Returns the (e_speed, n_speed) velocity given the (e, n) positions as
+a function of t (time). Uses a simple numpy.diff approach.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkEotvosCorr._eotvosCorrection" title="galileoQC.qualitycontrol.checkEotvosCorr._eotvosCorrection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_eotvosCorrection</span></code></a></p></td>
+<td><p>Calculates the Eotvos correction for moving-base gravimetry. Uses the exact
+equation (see for example Jekeli (2016), slide 51)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkEotvosCorr.groupName" title="galileoQC.qualitycontrol.checkEotvosCorr.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkEotvosCorr.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkEotvosCorr.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkEotvosCorr.checkEotvosCorr">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr.</span></span><span class="sig-name descname"><span class="pre">checkEotvosCorr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eotCorr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GRS80_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">east_vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">north_vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">changesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkEotvosCorr.checkEotvosCorr" title="Link to this definition">¶</a></dt>
+<dd><p>Subtracts the eotvos correction in the data file from one calculated using
+Jekeli (2016, slide 51) and the latitude and position data in the data file.
+The min, max, mean and standard deviation of the difference is calculated
+for each line and presented in an extended whisker plot.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>eotCorr : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the eotvos correction.
+</pre></div>
+</div>
+<p>latitude : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the latitude. The
+default is to read the latitude field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>x : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the x position. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>y : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the y position. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>GRS80_height : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the GRS80_height. The
+default is to read the altitudeChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>time : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the time. The
+default is to read the timeChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>east_vel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the velocity in the
+east direction. The default (&#39;&#39;) is to calculate this from the x and time
+channels.
+</pre></div>
+</div>
+<p>north_vel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the velocity in the
+north direction. The default (&#39;&#39;) is to calculate this from the y and time
+channels.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p>changesign : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, adds the calculated result to the data channel, instead of subtracting.
+Default False.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If true, plot details where the difference is large. Summary plot is always done. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkEotvosCorr._calc_speed">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr.</span></span><span class="sig-name descname"><span class="pre">_calc_speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkEotvosCorr._calc_speed" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the (e_speed, n_speed) velocity given the (e, n) positions as
+a function of t (time). Uses a simple numpy.diff approach.</p>
+<p class="rubric" id="id7">Parameters</p>
+<p>e : Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The easting data.
+</pre></div>
+</div>
+<p>n : Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The northing data.
+</pre></div>
+</div>
+<p>t : Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The time data.
+</pre></div>
+</div>
+<p class="rubric" id="id8">Returns</p>
+<p>e_speed : Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The velocity in the east direction.
+</pre></div>
+</div>
+<p>n_speed : Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The velocity in the north direction.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkEotvosCorr._eotvosCorrection">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr.</span></span><span class="sig-name descname"><span class="pre">_eotvosCorrection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eSpeed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSpeed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkEotvosCorr._eotvosCorrection" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the Eotvos correction for moving-base gravimetry. Uses the exact
+equation (see for example Jekeli (2016), slide 51)</p>
+<p class="rubric" id="id9">Parameters</p>
+<p>eSpeed : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the aircraft speed in the East direction in m/s/s.
+</pre></div>
+</div>
+<p>nSpeed : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the aircraft speed in the North direction in m/s/s.
+</pre></div>
+</div>
+<p>latitude : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>latitude in degrees (N pos, S neg).
+</pre></div>
+</div>
+<p>height : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the height in metres above the GRS80 ellipsoid; optional, default 0.0.
+</pre></div>
+</div>
+<p class="rubric" id="id10">Returns</p>
+<p>eotvos : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the eotvos correction for gravity in um/s/s.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkDifference.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDifference</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.qualityAnalysis.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkEotvosCorr.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

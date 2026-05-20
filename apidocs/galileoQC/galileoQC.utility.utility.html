@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.utility.utility &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.transforms" href="galileoQC.transforms.html" />
+    <link rel="prev" title="galileoQC.utility" href="galileoQC.utility.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.utility.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.utility</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.utility.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.utility</span></code></a></li>
+      <li>Next: <a href="galileoQC.transforms.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.utility.utility">
+<span id="galileoqc-utility-utility"></span><h1><a class="reference internal" href="#module-galileoQC.utility.utility" title="galileoQC.utility.utility"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.utility.utility</span></code></a><a class="headerlink" href="#module-galileoQC.utility.utility" title="Link to this heading">¶</a></h1>
+<p>A collection of utility functions for internal use.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Sat Aug 14 20:28:20 2021</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._getCoordFrameAttr" title="galileoQC.utility.utility._getCoordFrameAttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getCoordFrameAttr</span></code></a></p></td>
+<td><p>If it exists, returns the information corresponding to the given
+attribute name from the CoordinateFrame sub-group os a whizz file.
+Otherwise ERROR.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._distance" title="galileoQC.utility.utility._distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_distance</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._length" title="galileoQC.utility.utility._length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_length</span></code></a></p></td>
+<td><p>Returns a 1D numpy array where the i-th element is the length of the vector from
+(x[0], y[0]) to (x[i], y[i]).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._displacement2" title="galileoQC.utility.utility._displacement2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_displacement2</span></code></a></p></td>
+<td><p>The displacement distance from (xo, y0) to (x1, y1).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._butter_bandpass" title="galileoQC.utility.utility._butter_bandpass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_butter_bandpass</span></code></a></p></td>
+<td><p>Calculates the parameters of a Butterworth bandpass filter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._butter_bandpass_filter" title="galileoQC.utility.utility._butter_bandpass_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_butter_bandpass_filter</span></code></a></p></td>
+<td><p>Uses a Butterworth bandpass filter [<code class="docutils literal notranslate"><span class="pre">lowcut</span></code>, <code class="docutils literal notranslate"><span class="pre">highcut</span></code>] to filter data
+(sampled at <code class="docutils literal notranslate"><span class="pre">fs</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._space_thou" title="galileoQC.utility.utility._space_thou"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_space_thou</span></code></a></p></td>
+<td><p>Formatter function takes tick label and tick position</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._get_lineName" title="galileoQC.utility.utility._get_lineName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_lineName</span></code></a></p></td>
+<td><p>Returns the line number and, if extant, the flight number as a
+formatted string, suitable for reporting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._rotateCoords" title="galileoQC.utility.utility._rotateCoords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_rotateCoords</span></code></a></p></td>
+<td><p>Rotates Cartesian vectors x and y, by <code class="docutils literal notranslate"><span class="pre">angle</span></code> to xr and yr.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._exceedance_fail" title="galileoQC.utility.utility._exceedance_fail"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_exceedance_fail</span></code></a></p></td>
+<td><p>Given a specification, maxCounter, on number of fids and, maxDistance,
+on distance, checks to see if either  num_fids_in_exceedance &gt; maxCounter
+or len_exceedance &gt; maxDistance. If either is True, returns True.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._failsDeviation" title="galileoQC.utility.utility._failsDeviation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_failsDeviation</span></code></a></p></td>
+<td><p>Checks data, testing for more than <code class="docutils literal notranslate"><span class="pre">nSamples</span></code> consecutive instances where
+the data values are outside the range [-limit, limit].</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._inLineSum" title="galileoQC.utility.utility._inLineSum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_inLineSum</span></code></a></p></td>
+<td><p>Calculates the filtered in-line sum of the in-line components.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._get_line_planfiles" title="galileoQC.utility.utility._get_line_planfiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_line_planfiles</span></code></a></p></td>
+<td><p>verbose : Bool, optional</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility.getPlannedLine" title="galileoQC.utility.utility.getPlannedLine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlannedLine</span></code></a></p></td>
+<td><p>Given the single line group, <code class="docutils literal notranslate"><span class="pre">gLineMeas</span></code>, for a line in a whizzfile of measured
+data, returns the corresponding line group, ‘gpline’, from the lines group,
+<code class="docutils literal notranslate"><span class="pre">gPlan</span></code>, of a whizzfile of planned data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility.getLineNumberInGroup" title="galileoQC.utility.utility.getLineNumberInGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getLineNumberInGroup</span></code></a></p></td>
+<td><p>Given the single line group, <code class="docutils literal notranslate"><span class="pre">gLineMeas</span></code>, for a line in a whizzfile of measured
+data, returns the corresponding line group, ‘gpline’, from the lines group,
+<code class="docutils literal notranslate"><span class="pre">gPlan</span></code>, of a whizzfile of planned data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility.e2norm" title="galileoQC.utility.utility.e2norm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">e2norm</span></code></a></p></td>
+<td><p>Returns the Euclidean norm of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility.controls_lessthan_1000" title="galileoQC.utility.utility.controls_lessthan_1000"><code class="xref py py-obj docutils literal notranslate"><span class="pre">controls_lessthan_1000</span></code></a></p></td>
+<td><p>Separates line numbers on the basis that those less than 999.99
+are control lines, and the rest are traverse lines.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility.controls_nineteen" title="galileoQC.utility.utility.controls_nineteen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">controls_nineteen</span></code></a></p></td>
+<td><p>Separates line numbers on the basis that those that start with
+“19” are control lines, and the rest are traverse lines.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility.convertUTMtoGeo" title="galileoQC.utility.utility.convertUTMtoGeo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convertUTMtoGeo</span></code></a></p></td>
+<td><p>Return the latitude and longitude for projected coordinates with a common datum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._mean_1std" title="galileoQC.utility.utility._mean_1std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_mean_1std</span></code></a></p></td>
+<td><p>Calculate the mean of the values in x that fall in the range of +/- stdev(x).
+This is a simplistic “mean excluding outliers”.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility._calc_bearing" title="galileoQC.utility.utility._calc_bearing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_calc_bearing</span></code></a></p></td>
+<td><p>arctan(mean(diff(x) / mean(diff(y))))</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.utility.utility._print_wrappedlist" title="galileoQC.utility.utility._print_wrappedlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_print_wrappedlist</span></code></a></p></td>
+<td><p>Prints a list of strings, wrapping the output
+to <code class="docutils literal notranslate"><span class="pre">width</span></code> characters per line.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.utility.utility.groupName" title="galileoQC.utility.utility.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.utility.utility.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._getCoordFrameAttr">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_getCoordFrameAttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizz_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._getCoordFrameAttr" title="Link to this definition">¶</a></dt>
+<dd><p>If it exists, returns the information corresponding to the given
+attribute name from the CoordinateFrame sub-group os a whizz file.
+Otherwise ERROR.</p>
+<p class="rubric" id="id33">Parameters</p>
+<p>whizz_group : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The group in a whizz file with name `groupName`. All subgroups 
+in a whizz file are subgroups of this main group.
+</pre></div>
+</div>
+<p>attr_name : str</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the desired attribute.
+</pre></div>
+</div>
+<p class="rubric" id="id34">Returns</p>
+<p>name of channel : str</p>
+<p class="rubric" id="id35">Example</p>
+<p>Suppose one wants the name of the channel containing the standard time
+field. Then the call would be:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>time_chan = _getCoordFrameAttr(whizz_group, &#39;TimeChannel&#39;)
+</pre></div>
+</div>
+<p>With this information, one could extract time data for the flight-line,
+<code class="docutils literal notranslate"><span class="pre">line</span></code>, from the LinesGroup <code class="docutils literal notranslate"><span class="pre">g</span></code>, with:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>time = getLineData(g[line], time_chan)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._distance">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._distance" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._length">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._length" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a 1D numpy array where the i-th element is the length of the vector from
+(x[0], y[0]) to (x[i], y[i]).</p>
+<p class="rubric" id="id36">Parameters</p>
+<p>x : numpy Float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>y : numpy Float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p class="rubric" id="id37">Returns</p>
+<p>numpy Float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._displacement2">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_displacement2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._displacement2" title="Link to this definition">¶</a></dt>
+<dd><p>The displacement distance from (xo, y0) to (x1, y1).</p>
+<p class="rubric" id="id38">Parameters</p>
+<p>x0 : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>x1 : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>y0 : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>y1 : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p class="rubric" id="id39">Returns</p>
+<p>TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._butter_bandpass">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_butter_bandpass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowcut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highcut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._butter_bandpass" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the parameters of a Butterworth bandpass filter.</p>
+<p class="rubric" id="id40">Parameters</p>
+<p>lowcut : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The lowpass cutoff frequency or wavenumber.
+</pre></div>
+</div>
+<p>highcut : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The highpass cutoff frequency or wavenumber.
+</pre></div>
+</div>
+<p>fs : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The sample frequency or wavenumber.
+</pre></div>
+</div>
+<p>order : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The filter order. Default 5.
+</pre></div>
+</div>
+<p class="rubric" id="id41">Returns</p>
+<p>b : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>a : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._butter_bandpass_filter">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_butter_bandpass_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowcut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highcut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._butter_bandpass_filter" title="Link to this definition">¶</a></dt>
+<dd><p>Uses a Butterworth bandpass filter [<code class="docutils literal notranslate"><span class="pre">lowcut</span></code>, <code class="docutils literal notranslate"><span class="pre">highcut</span></code>] to filter data
+(sampled at <code class="docutils literal notranslate"><span class="pre">fs</span></code>).</p>
+<p class="rubric" id="id42">Parameters</p>
+<p>data : Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The input data.
+</pre></div>
+</div>
+<p>lowcut : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The lowpass cutoff frequency or wavenumber.
+</pre></div>
+</div>
+<p>highcut : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The highpass cutoff frequency or wavenumber.
+</pre></div>
+</div>
+<p>fs : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The sample frequency or wavenumber.
+</pre></div>
+</div>
+<p>order : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The filter order. Default 5.
+</pre></div>
+</div>
+<p class="rubric" id="id43">Returns</p>
+<p>Numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The output data.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._space_thou">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_space_thou</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._space_thou" title="Link to this definition">¶</a></dt>
+<dd><p>Formatter function takes tick label and tick position</p>
+<p class="rubric" id="id44">Parameters</p>
+<p>x :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tick label.
+</pre></div>
+</div>
+<p>y :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tick position.
+</pre></div>
+</div>
+<p class="rubric" id="id45">Returns</p>
+<p>Integer number formatted as string with spaces as a thousands separator.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._get_lineName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_get_lineName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linegroup</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._get_lineName" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the line number and, if extant, the flight number as a
+formatted string, suitable for reporting.</p>
+<p class="rubric" id="id46">Parameters</p>
+<p>linegroup : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The subgroup containing the line.
+</pre></div>
+</div>
+<p class="rubric" id="id47">Returns</p>
+<p>lineName : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line number and flight number formatted like LLLL.LL:FFF.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._rotateCoords">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_rotateCoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._rotateCoords" title="Link to this definition">¶</a></dt>
+<dd><p>Rotates Cartesian vectors x and y, by <code class="docutils literal notranslate"><span class="pre">angle</span></code> to xr and yr.</p>
+<p class="rubric" id="id48">Parameters</p>
+<p>x : numpy Float 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>y : numpy Float 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>angle : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Angle in radians by which coordinates are to be rotated.
+</pre></div>
+</div>
+<p class="rubric" id="id49">Returns</p>
+<p>xr : numpy Float 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>yr : numpy Float 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._exceedance_fail">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_exceedance_fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_fids_in_exceedance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">len_exceedance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxCounter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDistance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._exceedance_fail" title="Link to this definition">¶</a></dt>
+<dd><p>Given a specification, maxCounter, on number of fids and, maxDistance,
+on distance, checks to see if either  num_fids_in_exceedance &gt; maxCounter
+or len_exceedance &gt; maxDistance. If either is True, returns True.</p>
+<p class="rubric" id="id50">Parameters</p>
+<p>num_fids_in_exceedance : Integer</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>len_exceedance : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>maxCounter : Integer</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>maxDistance : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p class="rubric" id="id51">Returns</p>
+<p>Bool.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._failsDeviation">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_failsDeviation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSamples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._failsDeviation" title="Link to this definition">¶</a></dt>
+<dd><p>Checks data, testing for more than <code class="docutils literal notranslate"><span class="pre">nSamples</span></code> consecutive instances where
+the data values are outside the range [-limit, limit].</p>
+<p class="rubric" id="id52">Parameters</p>
+<p>data : Numpy 1D Float array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The data to be checked.
+</pre></div>
+</div>
+<p>limit : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The limit, assumed &gt; 0.
+</pre></div>
+</div>
+<p>nSamples : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum allowed number of deviations allowed.
+</pre></div>
+</div>
+<p class="rubric" id="id53">Returns</p>
+<p>Bool</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>True if the data failed.
+</pre></div>
+</div>
+<p>Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The number of exceedances (regardless of whether consecutive).
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._inLineSum">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_inLineSum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">il1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dontfilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._inLineSum" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the filtered in-line sum of the in-line components.</p>
+<p class="rubric" id="id54">Parameters</p>
+<p>il1 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The first in-line component data.
+</pre></div>
+</div>
+<p>il2 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The second in-line component data.
+</pre></div>
+</div>
+<p>il3 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The third in-line component data.
+</pre></div>
+</div>
+<p>fs : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The sample frequency.
+</pre></div>
+</div>
+<p>lowcut : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The low-pass frequency in Hz of the filter.
+</pre></div>
+</div>
+<p>highcut : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The high-pass frequency in Hz of the filter.
+</pre></div>
+</div>
+<p class="rubric" id="id55">Returns</p>
+<p>numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The filtered in-line sum.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._get_line_planfiles">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_get_line_planfiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planPaths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gLineMeas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._get_line_planfiles" title="Link to this definition">¶</a></dt>
+<dd><p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, reports details for a failed line.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.getPlannedLine">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">getPlannedLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gPlan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gLineMeas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility.getPlannedLine" title="Link to this definition">¶</a></dt>
+<dd><p>Given the single line group, <code class="docutils literal notranslate"><span class="pre">gLineMeas</span></code>, for a line in a whizzfile of measured
+data, returns the corresponding line group, ‘gpline’, from the lines group,
+<code class="docutils literal notranslate"><span class="pre">gPlan</span></code>, of a whizzfile of planned data.</p>
+<p>If successful, <code class="docutils literal notranslate"><span class="pre">planLineInPlan</span></code> is True, else it is False.</p>
+<p class="rubric" id="id56">Parameters</p>
+<p>gPlan : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The [&#39;Lines&#39;] group for all the survey lines in a survey plan file.
+</pre></div>
+</div>
+<p>gLineMeas : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The [&#39;Lines&#39;][line] group for a single survey line in a measured survey file.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, reports details for a failed line.
+</pre></div>
+</div>
+<p class="rubric" id="id57">Returns</p>
+<p>planLineInPlan : Bool</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>True if `gpline` found.
+</pre></div>
+</div>
+<p>gpline : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The desired line group in the plan lines group.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.getLineNumberInGroup">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">getLineNumberInGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linesgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineNumber</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility.getLineNumberInGroup" title="Link to this definition">¶</a></dt>
+<dd><p>Given the single line group, <code class="docutils literal notranslate"><span class="pre">gLineMeas</span></code>, for a line in a whizzfile of measured
+data, returns the corresponding line group, ‘gpline’, from the lines group,
+<code class="docutils literal notranslate"><span class="pre">gPlan</span></code>, of a whizzfile of planned data.</p>
+<p>If successful, <code class="docutils literal notranslate"><span class="pre">lineInGroup</span></code> is True, else it is False.</p>
+<p class="rubric" id="id58">Parameters</p>
+<p>linesgroup : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The [&#39;Lines&#39;] group for all the survey lines in a whizzfile.
+</pre></div>
+</div>
+<p>lineNumber : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The [&#39;Lines&#39;][line] group for a single survey line in a whizzfile.
+</pre></div>
+</div>
+<p class="rubric" id="id59">Returns</p>
+<p>lineInGroup : Bool</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>True if `gpline` found.
+</pre></div>
+</div>
+<p>gpline : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The desired line group in the plan lines group.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.e2norm">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">e2norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility.e2norm" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the Euclidean norm of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.controls_lessthan_1000">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">controls_lessthan_1000</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility.controls_lessthan_1000" title="Link to this definition">¶</a></dt>
+<dd><p>Separates line numbers on the basis that those less than 999.99
+are control lines, and the rest are traverse lines.</p>
+<p class="rubric" id="id60">Parameters</p>
+<p>all_lines : list of strings</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line numbers to be separated.
+</pre></div>
+</div>
+<p class="rubric" id="id61">Returns</p>
+<p>(trav_strs, ctrl_strs) : two lists of strings</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.controls_nineteen">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">controls_nineteen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility.controls_nineteen" title="Link to this definition">¶</a></dt>
+<dd><p>Separates line numbers on the basis that those that start with
+“19” are control lines, and the rest are traverse lines.</p>
+<p class="rubric" id="id62">Parameters</p>
+<p>all_lines : list of strings</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line numbers to be separated.
+</pre></div>
+</div>
+<p class="rubric" id="id63">Returns</p>
+<p>(trav_strs, ctrl_strs) : two lists of strings</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility.convertUTMtoGeo">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">convertUTMtoGeo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crs_epsg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_utm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_utm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility.convertUTMtoGeo" title="Link to this definition">¶</a></dt>
+<dd><p>Return the latitude and longitude for projected coordinates with a common datum.</p>
+<p class="rubric" id="id64">Parameters</p>
+<p>crs_epsg : Integer</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The common datum CRS EPSG code.
+</pre></div>
+</div>
+<p>x_utm : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The projected x or easting.
+</pre></div>
+</div>
+<p>y_utm : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The projected y or northing.
+</pre></div>
+</div>
+<p class="rubric" id="id65">Returns</p>
+<p>(latitude, longitude) : two Floats</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._mean_1std">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_mean_1std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._mean_1std" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the mean of the values in x that fall in the range of +/- stdev(x).
+This is a simplistic “mean excluding outliers”.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._calc_bearing">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_calc_bearing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._calc_bearing" title="Link to this definition">¶</a></dt>
+<dd><p>arctan(mean(diff(x) / mean(diff(y))))</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.utility.utility._print_wrappedlist">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.utility.utility.</span></span><span class="sig-name descname"><span class="pre">_print_wrappedlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mylist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.utility.utility._print_wrappedlist" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a list of strings, wrapping the output
+to <code class="docutils literal notranslate"><span class="pre">width</span></code> characters per line.</p>
+<p class="rubric" id="id66">Parameters</p>
+<p>mylist : list(str).</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A list of strings to be printed.
+</pre></div>
+</div>
+<p>width : int, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The wrapping width, default 70 characters.
+</pre></div>
+</div>
+<p class="rubric" id="id67">Returns</p>
+<p>None</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.utility.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.utility</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.transforms.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.utility.utility.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

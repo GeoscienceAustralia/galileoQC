@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorials &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Prepare Eastern Victoria gravimeter data" href="Prepare_EastVicData.html" />
+    <link rel="prev" title="Install Details" href="../install_details.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-xyz-data">Prepare XYZ data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Prepare_EastVicData.html">Prepare Eastern Victoria gravimeter data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Prepare_VintonDomeData.html">Prepare Vinton Dome FTG data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Prepare_AeromagData.html">Prepare Aeromagnetic data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Prepare_2012KauringData.html">Prepare 2012 Kauring AirGrav ASEG-GDF2 data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#navigation-and-position">Navigation and Position</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Navigation_and_Position.html">Navigation and Position QC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#intersection-analysis">Intersection Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intersection_Analysis.html">Intersection Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#repeat-lines">Repeat Lines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CheckRepeats_Analysis.html">Repeat Line Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#odd-even-grids">Odd - Even Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Odd_Even_Analysis.html">Odd - Even Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gravimetry-corrections">Gravimetry Corrections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Gravimeter_Corrections.html">Gravimetry corrections</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#falcon-noise-analysis">Falcon Noise Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Falcon_Noise_Analysis.html">Falcon Noise Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ftg-noise-analysis">FTG Noise Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="FTG_Noise_Analysis.html">FTG Noise Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ground-gravity-comparisons">Ground Gravity Comparisons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Compare_Gravity.html">Compare to Ground Gravity</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#statistical-analyses">Statistical Analyses</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Statistical_Analysis.html">Statistical analyses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#grid-imaging">Grid Imaging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Grid_Imaging.html">Grid Imaging and Checking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#craig-transform">Craig transform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Craig_transform.html">Craig Transform</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aeromagnetics">Aeromagnetics</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../install_details.html" title="previous chapter">Install Details</a></li>
+      <li>Next: <a href="Prepare_EastVicData.html" title="next chapter">Prepare Eastern Victoria gravimeter data</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="tutorials">
+<span id="tutorials-target"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<p>This section provides links to the tutorial JupyterLab notebooks.</p>
+<p>The examples show the necessary and common parameters passed to each function. There are other parameters available for many of the functions providing additional options. Further information can be seen in the <a class="reference internal" href="../modules.html#modules-target"><span class="std std-ref">API</span></a>.</p>
+<p>You can download any, or all, of the Jupyterlab notebooks from github and run them yourself once you have <strong>galileoQC</strong> installed and running. Once you have copied a notebook, you can modify it and use it on your own data.</p>
+<p>The notebooks are available at the <a class="reference external" href="https://github.com/GeoscienceAustralia/galileoQC/tree/main/docs/source/tutorials"><strong>galileoQC</strong> repository</a>.</p>
+<section id="prepare-xyz-data">
+<h2>Prepare XYZ data<a class="headerlink" href="#prepare-xyz-data" title="Link to this heading">¶</a></h2>
+<p>The Geosoft XYZ data format file is commonly used in geophysics to transmit geophysical survey data in a text-readable form.</p>
+<p>We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format <a class="reference internal" href="../geowhizz.html#geowhizz-target"><span class="std std-ref">here</span></a>.)</p>
+<p>For three of the example data sets (Eastern Victoria gravimetry, Melbourne magnetometry, and Vinton Dome), the field data are supplied in Geosoft XYZ format. This tutorial demonstrates the preparation of these XYZ data files as geowhizz HDF5 files for later use in quality control checks.</p>
+<p>The appropriate <code class="docutils literal notranslate"><span class="pre">Prepare_*</span></code> tutorial should be run before running any of the other tutorials that utilise the relevant data.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Prepare_EastVicData.html">Prepare Eastern Victoria gravimeter data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Prepare_VintonDomeData.html">Prepare Vinton Dome FTG data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Prepare_AeromagData.html">Prepare Aeromagnetic data</a></li>
+</ul>
+</div>
+</section>
+<section id="prepare-aseg-gdf2-data">
+<h2>Prepare ASEG-GDF2 data<a class="headerlink" href="#prepare-aseg-gdf2-data" title="Link to this heading">¶</a></h2>
+<p>One of the example data sets is supplied in ASEG-GDF2 format, a geophysical standard format used to transmit geophysical survey data in a text-readable form<a class="footnote-reference brackets" href="#pratt2003" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This tutorial demonstrates the preparation of these data as a geowhizz HDF5 files for quality control checks.</p>
+<p>For this example we are using the data from the Kauring airborne gravity survey flown by SGL in 2012<a class="footnote-reference brackets" href="#kauring2012" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p>This tutorial should be run before running any of the other tutorials that utilise these data.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Prepare_2012KauringData.html">Prepare 2012 Kauring AirGrav ASEG-GDF2 data</a></li>
+</ul>
+</div>
+</section>
+<section id="navigation-and-position">
+<h2>Navigation and Position<a class="headerlink" href="#navigation-and-position" title="Link to this heading">¶</a></h2>
+<p>A variety of requirements are set on navigation and position as demonstrated here.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Navigation_and_Position.html">Navigation and Position QC</a></li>
+</ul>
+</div>
+</section>
+<section id="intersection-analysis">
+<h2>Intersection Analysis<a class="headerlink" href="#intersection-analysis" title="Link to this heading">¶</a></h2>
+<p>An important analysis tool in airborne geophysics generally is intersection analysis which analyses the differences in some channel of data at the intersections of traverse and control flight-lines.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Intersection_Analysis.html">Intersection Analysis</a></li>
+</ul>
+</div>
+</section>
+<section id="repeat-lines">
+<h2>Repeat Lines<a class="headerlink" href="#repeat-lines" title="Link to this heading">¶</a></h2>
+<p>Another important analysis tool in airborne gravimetry in particular is repeat line analysis which analyses the repeatability in some channel of data over a series of flight-lines flown over the same planned line.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CheckRepeats_Analysis.html">Repeat Line Analysis</a></li>
+</ul>
+</div>
+</section>
+<section id="odd-even-grids">
+<h2>Odd - Even Grids<a class="headerlink" href="#odd-even-grids" title="Link to this heading">¶</a></h2>
+<p>For surveys where the flight-lines are more closely spaced than the low-pass filter wavelength, odd-even grid analysis (<a class="footnote-reference brackets" href="#sander-2002" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>) is useful for assessing the noise in gravimeter data.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Odd_Even_Analysis.html">Odd - Even Analysis</a></li>
+</ul>
+</div>
+</section>
+<section id="gravimetry-corrections">
+<h2>Gravimetry Corrections<a class="headerlink" href="#gravimetry-corrections" title="Link to this heading">¶</a></h2>
+<p>There are four standard corrections that must be made to airborne gravity data: atmospheric correction, free-air correction, Eotvos correction and latitude correction.  These corrections must be made using the modern standard formulae appropriate to airborne gravimetry. The formulae for the atmospheric, free-air and latitude corrections used here were taken from <a class="footnote-reference brackets" href="#hinze2005" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> where they appear in units of <span class="math notranslate nohighlight">\(mGal\)</span>. Here they are modified to be in <span class="math notranslate nohighlight">\(\mu ms^{-2}\)</span> but <strong>galileoQC</strong> uses the units of the measured data, either <span class="math notranslate nohighlight">\(mGal\)</span> or <span class="math notranslate nohighlight">\(\mu ms^{-2}\)</span>. The Eotvos correction formula was taken from <a class="footnote-reference brackets" href="#jekeli2016" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> and also appears in <a class="footnote-reference brackets" href="#zhao2015" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Gravimeter_Corrections.html">Gravimetry corrections</a></li>
+</ul>
+</div>
+</section>
+<section id="falcon-noise-analysis">
+<h2>Falcon Noise Analysis<a class="headerlink" href="#falcon-noise-analysis" title="Link to this heading">¶</a></h2>
+<p>The primary measure of noise in a Falcon survey is difference noise<a class="footnote-reference brackets" href="#dransfield2013" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a>, and its relationship to turbulence. High frequency noise<a class="footnote-reference brackets" href="#sunderland2022" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> is also a useful check for the QC of Falcon airborne survey data.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Falcon_Noise_Analysis.html">Falcon Noise Analysis</a></li>
+</ul>
+</div>
+</section>
+<section id="ftg-noise-analysis">
+<h2>FTG Noise Analysis<a class="headerlink" href="#ftg-noise-analysis" title="Link to this heading">¶</a></h2>
+<p>The FTG is a single-complement, three-axis gradiometer. On each axis, it measures (<span class="math notranslate nohighlight">\(\Gamma_{xy}^{i}\)</span> and <span class="math notranslate nohighlight">\(\Gamma_{uv}^{i}\)</span>) relative to that (<span class="math notranslate nohighlight">\(i\)</span>-th) axis. Theoretically, the sum of the three <span class="math notranslate nohighlight">\(\Gamma_{uv}^{i}\)</span> should equal zero and variations from zero reflect error in the measurement. The actual quantity, called the <em>in-line sum</em><a class="footnote-reference brackets" href="#murphy2010" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a>, must be scaled for the number of axes and is expressed as:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[ \eta = \frac{\Gamma_{uv}^{1} + \Gamma_{uv}^{2} + \Gamma_{uv}^{3}}{\sqrt{3}} \]</div>
+</div></blockquote>
+<p>The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence.</p>
+<p>In-line noise, and its relationship to turbulence, is the standard noise measure for FTG surveys.</p>
+<p>There are mechanisms <a class="footnote-reference brackets" href="#sunderland2022" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> by which gravity gradiometer noise at a frequency higher than the data frequency band can be down-converted to the data frequency band, resulting in errors in the data. This can occur in both AGG and FTG systems.</p>
+<p>The checkHighFreq function checks for periods of high amplitude, high frequency signal in the raw gradiometer channels. It highlights sections of a survey line with excess high-frequency signal which might result in high gradient error. It is important to know that these erroneous gradients are true acceleration gradients and can be difficult to see by other methods.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FTG_Noise_Analysis.html">FTG Noise Analysis</a></li>
+</ul>
+</div>
+</section>
+<section id="ground-gravity-comparisons">
+<h2>Ground Gravity Comparisons<a class="headerlink" href="#ground-gravity-comparisons" title="Link to this heading">¶</a></h2>
+<p>Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by <code class="docutils literal notranslate"><span class="pre">plotLinesOnGroundStns</span></code>. This code relies heavily on the data collection<a class="footnote-reference brackets" href="#wynne" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a> in its compiled form<a class="footnote-reference brackets" href="#uieda" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Compare_Gravity.html">Compare to Ground Gravity</a></li>
+</ul>
+</div>
+</section>
+<section id="statistical-analyses">
+<h2>Statistical Analyses<a class="headerlink" href="#statistical-analyses" title="Link to this heading">¶</a></h2>
+<p>Airborne survey data typically contain a large number of channels of data collected along a large number of flight-lines. It is useful, when reviewing any airborne geophysical survey, to be able to rapidly analyse and plot simple statistics so that any discrepancies or unusual behaviour can be rapidly found.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Statistical_Analysis.html">Statistical analyses</a></li>
+</ul>
+</div>
+</section>
+<section id="grid-imaging">
+<h2>Grid Imaging<a class="headerlink" href="#grid-imaging" title="Link to this heading">¶</a></h2>
+<p>Most of the QC work is done on a line-by-line basis across the survey data. It is also useful to review images of the survey data interpolated to a regular grid because problems or artefacts in the data can be easier to see in an image. The following tutorial demonstrates some of the gridding and imaging functions.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Grid_Imaging.html">Grid Imaging and Checking</a></li>
+</ul>
+</div>
+</section>
+<section id="craig-transform">
+<h2>Craig transform<a class="headerlink" href="#craig-transform" title="Link to this heading">¶</a></h2>
+<p>The Craig transform method transforms differential curvature components <span class="math notranslate nohighlight">\(G_{UV}\)</span> and <span class="math notranslate nohighlight">\(G_{NE}\)</span> into vertical gravity<a class="footnote-reference brackets" href="#dransfield2019" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a>. This is useful because gravity interpreters are used to working with the gravity data, and because there are often regional or other gravity data that cover part or all of the survey area with which the transformed gravity data can be compared.</p>
+<p>If regional gravity data are available, it is also possible to conform <a class="footnote-reference brackets" href="#dransfield2010" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a> the survey gravity, derived from the Craig transform , to the regional gravity.</p>
+<p>The following tutorial demonstrates the use of the Craig transform and the conforming process.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Craig_transform.html">Craig Transform</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Craig_transform.html#theory">Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Craig_transform.html#the-craig-transform">The Craig transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Craig_transform.html#masking">Masking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Craig_transform.html#conforming">Conforming</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Craig_transform.html#fosterville-example">Fosterville Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Craig_transform.html#telfer-example">Telfer Example</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="aeromagnetics">
+<h2>Aeromagnetics<a class="headerlink" href="#aeromagnetics" title="Link to this heading">¶</a></h2>
+<p>The following tutorial demonstrates some of the aeromag QC functions.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="data-acknowledgements">
+<h2>Data Acknowledgements<a class="headerlink" href="#data-acknowledgements" title="Link to this heading">¶</a></h2>
+<p>The tutorials use field data from airborne gravity surveys to demonstrate the use of <strong>galileoQC</strong> on real data. Permission to use field data has been kindly given by:</p>
+<p>Stephan Sander (Co-President, Sander Geophysics),</p>
+<p>Chris van Galder (Chief Geophysicist, Xcalibur Smart Mapping), and</p>
+<p>Colm Murphy (Chief Geoscientist, Bell Geospace)</p>
+<p>The Kauring AirGrav data were collected by Sander Geophysics in 2012 and are available, with report, at <a class="footnote-reference brackets" href="#kauring2012" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p>The Canobie Falcon field data were collected by Xcalibur Multiphysics in 2021. The final data and report are available at <a class="footnote-reference brackets" href="#canobierefs" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a>.</p>
+<p>The Vinton Dome FTG final data were supplied by Bell Geospace. The data are described in <a class="footnote-reference brackets" href="#murphy2004" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a>.</p>
+<p>The Eastern Victoria airborne gravimeter survey field data were supplied by Sander Geophysics in 2022-25. Details can be found at <a class="footnote-reference brackets" href="#eastvicrefs" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>16<span class="fn-bracket">]</span></a>.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="pratt2003" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>D. A. Pratt. Geophysicists, 2003.The ASEG-GDF2 standard for point located data. In
+https://www.aseg.org.au/public/200/files/ASEG-GDF2-REV4.pdf. Australian Society of Exploration</p>
+</aside>
+<aside class="footnote brackets" id="kauring2012" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id15">2</a>)</span>
+<p>https://researchdata.edu.au/kauring-airborne-gravity-wa-2012/3431742</p>
+</aside>
+<aside class="footnote brackets" id="sander-2002" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>S. Sander, S. Ferguson, L. Sander, V. Lavoie, and R. B. Charters. Measurement of noise in airborne gravity data using even and odd grids. First Break, 20(8):525–528, 2002.</p>
+</aside>
+<aside class="footnote brackets" id="hinze2005" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>W. J. Hinze, C. Aiken, J. M. Brozena, B. Coakley, D. Dater, G. Flanagan, R. Forsberg, T. G. Hildenbrand, G. R. Keller, J. Kellogg, R. Kucks, X. Li, A. Mainville, R. Morin, M. Pilkington, D. Plouff, D. Ravat, D. Roman, J. Urrutia-Fucugauchi, M. Véronneau}, M. Webring, and D. Winester. New standards for reducing gravity data: The North American gravity database. Geophysics, 70(4):J25, 2005.</p>
+</aside>
+<aside class="footnote brackets" id="jekeli2016" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
+<p>C. Jekeli. Theoretical Fundamentals of Airborne Gravimetry. In Airborne Gravity for Geodesy Summer School, 23-27 May, May 2016 (accessed 23 May 2025 at https://www.ngs.noaa.gov/grav-d/2016SummerSchool/history-fundamentals.shtml).</p>
+</aside>
+<aside class="footnote brackets" id="zhao2015" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">6</a><span class="fn-bracket">]</span></span>
+<p>L. Zhao, R. Forsberg, M. Wu, A. V. Olesen, K. Zhang, and J. Cao. A flight test of the strapdown airborne gravimeter sga-wz in greenland. Sensors, 15:13258–13269, 2015.</p>
+</aside>
+<aside class="footnote brackets" id="dransfield2013" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">7</a><span class="fn-bracket">]</span></span>
+<p>M. H. Dransfield and A. N. Christensen. Performance of airborne gravity gradiometers. The Leading Edge, 32(8):908–922, Aug. 2013.</p>
+</aside>
+<aside class="footnote brackets" id="sunderland2022" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id8">1</a>,<a role="doc-backlink" href="#id10">2</a>)</span>
+<p>A. Sunderland, Y. Naveh, L. Ju, D. G. Blair, B. Anderson, and M. Dransfield. Acoustic and vibration isolator for a gravity gradiometer. Review of Scientific Instruments, 93(6), 2022.</p>
+</aside>
+<aside class="footnote brackets" id="murphy2010" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">9</a><span class="fn-bracket">]</span></span>
+<p>C. A. Murphy. Recent developments with Air-FTG®. In R. Lane, editor, Airborne Gravity 2010 - Abstracts from theASEG-PESA Airborne Gravity 2010 Workshop: Published jointly by Geoscience Australia and the Geological Survey of New South Wales, Geoscience Australia Record 2010/23 and GSNSW File GS2010/0457., pages 142–151, June 2010.</p>
+</aside>
+<aside class="footnote brackets" id="wynne" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">10</a><span class="fn-bracket">]</span></span>
+<p>Wynne, P. (2018). NetCDF Ground Gravity Point Surveys Collection (Version 1.0). Commonwealth of Australia (Geoscience Australia). https://doi.org/10.26186/5C1987FA17078</p>
+</aside>
+<aside class="footnote brackets" id="uieda" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">11</a><span class="fn-bracket">]</span></span>
+<p>Uieda, L. (2021). Ground gravity data compilation for Australia version 2.0. figshare. https://doi.org/10.6084/m9.figshare.13643837</p>
+</aside>
+<aside class="footnote brackets" id="dransfield2019" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id13">12</a><span class="fn-bracket">]</span></span>
+<p>M. H. Dransfield and T. Chen. Heli-borne gravity gradiometry in rugged terrain. Geophysical Prospecting, 67(6):1626–1636, July 2019.</p>
+</aside>
+<aside class="footnote brackets" id="dransfield2010" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id14">13</a><span class="fn-bracket">]</span></span>
+<p>M. H. Dransfield. Conforming Falcon gravity and the global gravity anomaly. Geophysical Prospecting, 58(3):469–483, May 2010.</p>
+</aside>
+<aside class="footnote brackets" id="canobierefs" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id16">14</a><span class="fn-bracket">]</span></span>
+<p>https://geoscience.data.qld.gov.au/data/gravity-gradiometry/gg100099, or https://researchdata.edu.au/canobie-airborne-gravity-survey-2021/1959965, or https://ecat.ga.gov.au/geonetwork/srv/api/records/744d3146-af5a-4354-8edd-9633073d51c5</p>
+</aside>
+<aside class="footnote brackets" id="murphy2004" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id17">15</a><span class="fn-bracket">]</span></span>
+<p>C. A. Murphy and G. R. Mumaw. 3D Full Tensor Gradiometry: a high resolution gravity measuring instrument resolving ambiguous geological interpretations. In ASEG-PESA 17th Geophysical Conference and Exhibition, pages 1–4, Sydney, July 2004.</p>
+</aside>
+<aside class="footnote brackets" id="eastvicrefs" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id18">16</a><span class="fn-bracket">]</span></span>
+<p>https://www.land.vic.gov.au/surveying/projects-and-initiatives/airborne-gravity-survey, or http://earthresources.efirst.com.au/product.asp?pID=1337&amp;cID=37</p>
+</aside>
+</aside>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="../install_details.html" title="Previous document">Install Details</a>
+        </li>
+        <li>
+          <a href="Prepare_EastVicData.html" title="Next document">Prepare Eastern Victoria gravimeter data</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/tutorials.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

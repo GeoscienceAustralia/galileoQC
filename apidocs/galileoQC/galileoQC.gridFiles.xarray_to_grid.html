@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.gridFiles.xarray_to_grid &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.gridFiles.minc" href="galileoQC.gridFiles.minc.html" />
+    <link rel="prev" title="galileoQC.gridFiles.graphics" href="galileoQC.gridFiles.graphics.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.gridFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.gridFiles.graphics.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.graphics</span></code></a></li>
+      <li>Next: <a href="galileoQC.gridFiles.minc.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.minc</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.gridFiles.xarray_to_grid">
+<span id="galileoqc-gridfiles-xarray-to-grid"></span><h1><a class="reference internal" href="#module-galileoQC.gridFiles.xarray_to_grid" title="galileoQC.gridFiles.xarray_to_grid"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.xarray_to_grid</span></code></a><a class="headerlink" href="#module-galileoQC.gridFiles.xarray_to_grid" title="Link to this heading">¶</a></h1>
+<p>Interpolate point-located data from a 1-D to a 2-D xArray DataArray.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.xarray_to_grid.xarray_to_grid" title="galileoQC.gridFiles.xarray_to_grid.xarray_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xarray_to_grid</span></code></a></p></td>
+<td><p>Interpolates <code class="docutils literal notranslate"><span class="pre">my_data</span></code> onto a regular grid.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.xarray_to_grid.groupName" title="galileoQC.gridFiles.xarray_to_grid.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.xarray_to_grid.projectName" title="galileoQC.gridFiles.xarray_to_grid.projectName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projectName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.xarray_to_grid.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.xarray_to_grid.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.gridFiles.xarray_to_grid.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.xarray_to_grid.projectName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.xarray_to_grid.</span></span><span class="sig-name descname"><span class="pre">projectName</span></span><a class="headerlink" href="#galileoQC.gridFiles.xarray_to_grid.projectName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.xarray_to_grid.xarray_to_grid">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.xarray_to_grid.</span></span><span class="sig-name descname"><span class="pre">xarray_to_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neighbours'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_pixels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numneighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bdist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.xarray_to_grid.xarray_to_grid" title="Link to this definition">¶</a></dt>
+<dd><p>Interpolates <code class="docutils literal notranslate"><span class="pre">my_data</span></code> onto a regular grid.</p>
+<p class="rubric" id="id1">Parameters</p>
+<p>my_data : xArray Dataset</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains x, y, and z data dimensioned by fiducial.
+</pre></div>
+</div>
+<p>grid_space : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The distance between grid cell centres in grid distance units.
+</pre></div>
+</div>
+<p>region : Array of float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Coordinates of the corners of the bounding rectangle [West, East, South, North].
+Default uses the minimum and maximum coordinates.
+</pre></div>
+</div>
+<p>method : string, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+&quot;neighbours&quot;, &quot;bicubic&quot;, and &quot;biharmonic&quot;, the pygmi method &quot;minc&quot;,&quot; and the SciPy
+GridData &quot;linear&quot; method. The &quot;neighbours&quot; method is much faster if `pykdtree` is installed.
+Default &quot;neighbours&quot; method.
+</pre></div>
+</div>
+<p>mask_polygon : numpy 2D array, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If the size of mask_polygon &gt; 0, then data_array will be masked to the area
+within the polygon defined by it.
+</pre></div>
+</div>
+<p>mask_pixels : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If mask_pixels &gt; 0, then all pixels further than `mask_pixels * grid_space` from a data
+location will be masked out. Default 1.
+</pre></div>
+</div>
+<p>numneighbours : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If method=&#39;neighbours&#39;, then this is the number of neighbours to average. Default 5.
+</pre></div>
+</div>
+<p>bdist : float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If method is &quot;minc&quot;, then this is the blanking distance in units of cell. Default None.
+</pre></div>
+</div>
+<p>maxiters : int, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum number of iterations for the minimum curvature method. Default 100.
+</pre></div>
+</div>
+<p class="rubric" id="id2">Returns</p>
+<p>grid : xArray DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains the gridded data.
+</pre></div>
+</div>
+<p>region : tuple</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Four floating point values for xmin, xmax, ymin, ymax.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.gridFiles.graphics.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.graphics</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.gridFiles.minc.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.minc</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.gridFiles.xarray_to_grid.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

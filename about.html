@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>About &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="_static/documentation_options.js?v=53b53b71"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License Details" href="license.html" />
+    <link rel="prev" title="Airborne Gravity Quality Control" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citing">Citing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#licence">Licence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="license.html">License Details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-airborne-gravity-deed">The Airborne Gravity Deed</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Airborne Gravity Quality Control</a></li>
+      <li>Next: <a href="license.html" title="next chapter">License Details</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="about">
+<h1>About<a class="headerlink" href="#about" title="Link to this heading">¶</a></h1>
+<p><strong>galileoQC</strong> is a collection of functions for use in checking airborne gravity data under a quality control procedure. A number of assumptions underlie its development and use.</p>
+<p>The airborne data in question might be from a gravimeter, or gravity gradiometer, or both, carried on an aircraft together with other instruments as part of a survey to map the changes in gravity over some area. This is done by flying a series of nominally parallel and equally spaced survey lines covering the area. The flying height is either constant with respect to some height datum, or else it approximately and reasonably smoothly drapes over the terrain.</p>
+<p><strong>galileoQC</strong> provides functions to:</p>
+<ul class="simple">
+<li><p>check the navigation and positioning of the aircraft on the survey lines;</p></li>
+<li><p>calculate and display the statistics of the collected data;</p></li>
+<li><p>verify the accuracy of the calculated corrections to the gravimetry data;</p></li>
+<li><p>report on the noise characteristics of gradiometry data;</p></li>
+<li><p>report on the quality of aeromagnetic data;</p></li>
+<li><p>interpolate data to regular grids, and image and display those grids;</p></li>
+<li><p>check consistency of supplied data in various forms.</p></li>
+</ul>
+<p>These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. galileoQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.</p>
+<p>The tested, and preferred, method of using <strong>galileoQC</strong> is via a JupyterLab notebook. Some examples are available as JupyterLab notebooks in <a class="reference internal" href="tutorials/tutorials.html#tutorials-target"><span class="std std-ref">Tutorials</span></a>. The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.</p>
+<p><em>Mark Dransfield</em> 20 May 2026</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>galileoQC</strong> is at early stage of development and will keep improving in the future. The commonly used functions in the API should be quite stable, but minor utilities could change in the next version. If you find any bugs or would like to request any enhancements, please raise an issue on GitHub.</p>
+</div>
+<section id="acknowledgements">
+<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Link to this heading">¶</a></h2>
+<p>A massive amount of help, encouragement and support from many people at Geoscience Australia, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine. The minimum curvature code was copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025 and the graphical imaging code from graphics (https://github.com/jobar8/graphics) sometime in 2020. Grateful thanks to the authors of those codes as well as all the contributors to all the packages used. The idea of using tutorials as the key technical documentation is partly based on Des Fitzgerald’s “cookbooks” for Intrepid.</p>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
+<p>The <strong>galileoQC</strong> package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook (the JupyterLab Desktop app was used often in development but its maintenance ceased in Aug2025).</p>
+<p>Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.</p>
+</section>
+<section id="citing">
+<h2>Citing<a class="headerlink" href="#citing" title="Link to this heading">¶</a></h2>
+<p>M. H. Dransfield and R. Miller. Python code for quality control of airborne gravimetry and gravity
+gradiometry field data. Preview, 237:78, August 2025.</p>
+<p>R. Miller and M. H. Dransfield. Metrics for quality control of airborne gravity gradiometry field data. Preview, 237:91, August 2025.</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<p>Once this is properly set up, people are encouraged to contribute.</p>
+</section>
+<section id="licence">
+<h2>Licence<a class="headerlink" href="#licence" title="Link to this heading">¶</a></h2>
+<p>Creative Commons Attribution-ShareAlike 4.0 International</p>
+<p>This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, even for commercial purposes. If others remix, adapt, or build upon the material, they must license the modified material under identical terms. The full text is in <a class="reference internal" href="license.html#license-target"><span class="std std-ref">License</span></a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="the-airborne-gravity-deed">
+<h2>The Airborne Gravity Deed<a class="headerlink" href="#the-airborne-gravity-deed" title="Link to this heading">¶</a></h2>
+<p>Once published, there should be a reference here.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="index.html" title="Previous document">Airborne Gravity Quality Control</a>
+        </li>
+        <li>
+          <a href="license.html" title="Next document">License Details</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/about.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

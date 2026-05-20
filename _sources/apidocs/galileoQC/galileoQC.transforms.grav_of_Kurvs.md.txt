@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms.grav_of_Kurvs`
+
+```{py:module} galileoQC.transforms.grav_of_Kurvs
+```
+
+```{autodoc2-docstring} galileoQC.transforms.grav_of_Kurvs
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`grav_of_Kurvs <galileoQC.transforms.grav_of_Kurvs.grav_of_Kurvs>`
+  - ```{autodoc2-docstring} galileoQC.transforms.grav_of_Kurvs.grav_of_Kurvs
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None, plot_flag=False, verbose=False)
+:canonical: galileoQC.transforms.grav_of_Kurvs.grav_of_Kurvs
+
+```{autodoc2-docstring} galileoQC.transforms.grav_of_Kurvs.grav_of_Kurvs
+```
+````

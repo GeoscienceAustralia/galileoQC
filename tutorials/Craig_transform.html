@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Craig Transform &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geoWhizz" href="../geowhizz.html" />
+    <link rel="prev" title="Grid Imaging and Checking" href="Grid_Imaging.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Craig Transform</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Grid_Imaging.html" title="previous chapter">Grid Imaging and Checking</a></li>
+      <li>Next: <a href="../geowhizz.html" title="next chapter">geoWhizz</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="craig-transform">
+<h1>Craig Transform<a class="headerlink" href="#craig-transform" title="Link to this heading">¶</a></h1>
+<p>Transforming <span class="math notranslate nohighlight">\(G_{UV},\,G_{NE}\)</span> to <span class="math notranslate nohighlight">\(g_{D}\)</span></p>
+<section id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Link to this heading">¶</a></h2>
+<section id="the-craig-transform">
+<h3>The Craig transform<a class="headerlink" href="#the-craig-transform" title="Link to this heading">¶</a></h3>
+<p>The Craig transform provides functionality to generate gravity from differential curvatures.</p>
+<p>This tutorial demonstrates its use on publicly available data (resources.vic.gov.au) from the Fosterville Falcon airborne gravity gradiometer survey.</p>
+<p>The Craig transform calculates any or all components of the gravity gradient and the gravity acceleration from measured differential curvature gradients. The transform is performed in the wavenumber domain using the Fourier transform. The gravity gradient tensor is derived from:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{F}\left(\Gamma\right)=\frac{2}{\left(k_{N}+i k_{E}\right)^{2}}\begin{bmatrix}k_N^2 &amp; k_N k_E &amp; ik_N k \\ &amp; k_E^2 &amp; i k_E k \\  &amp;  &amp; -k^2 \\\end{bmatrix}\mathcal{F}\left(\Gamma_{UV}+i \Gamma_{NE}\right)\end{split}\]</div>
+<p>and the gravitational acceleration vector from</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{F}\left(\mathbf{g}\right)=\frac{2}{\left(k_{N}+i k_{E}\right)^{2}}\begin{bmatrix}-ik_N &amp; -ik_E &amp; -k \end{bmatrix}\mathcal{F}\left(\Gamma_{UV}+i \Gamma_{NE}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(k=\sqrt{k_N^2+k_E^2}\)</span> is the radial wavenumber on the horizontal plane.</p>
+<p>The implementation here only derives the vertical gravitational acceleration:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{F}\left(g_D\right)=\frac{-2k}{\left(k_{N}+i k_{E}\right)^{2}}\mathcal{F}\left(\Gamma_{UV}+i \Gamma_{NE}\right)\]</div>
+<p>The method proceeds in several steps.</p>
+<ol class="arabic simple">
+<li><p>The measured differential curvature (<span class="math notranslate nohighlight">\(\Gamma_{UV}\)</span> and <span class="math notranslate nohighlight">\(\Gamma_{NE}\)</span>) data are separately gridded. This is done by minimum curvature with a default cell size 1/4 of the line spacing although the user may select their own value. Grid cells further than 3 cells from a located data value are marked “missing”.</p></li>
+<li><p>Each grid is padded to extend the size of the grid in all four directions, and to fill any missing data. The padding may be done by sampling from a regional gravity grid, by filling with the mean value, or by a constant value. Regional gravity padding provides the best result. The regional grid is transformed by the reverse Craig transform to the differential curvature components and interpolated onto the locations of the measured differential curvature grids.</p></li>
+<li><p>The padded data are transformed to <span class="math notranslate nohighlight">\(g_D\)</span> using the bottom equation above. Then the cells that were padded for the transform are marked as missing since they did not originally have a measured value. The grid is then trimmed to the smallest rectangle possible without removing good data.</p></li>
+<li><p>This grid is sampled back to the <code class="docutils literal notranslate"><span class="pre">whizzFile</span></code> from which the differential curvature data originated.</p></li>
+</ol>
+<p>Note that the method treats all data as though it is located on a horizontal plane. This is a good approximation for many airborne gravity gradient surveys but will give inaccurate results for surveys draped to follow rugged terrain.</p>
+<p>For true potential fields, the inverse-transformed result is purely real. For real data however, the imaginary part is generally non-zero, reflecting errors in the data. It is useful therefore to check an image of the imaginary part of the output. It should be much smaller in amplitude than the real part.</p>
+</section>
+<section id="masking">
+<h3>Masking<a class="headerlink" href="#masking" title="Link to this heading">¶</a></h3>
+<p>It is worth making some comments describing the masking of the data. Several issues are relevant:</p>
+<ol class="arabic simple">
+<li><p>The survey boundary may be quite complex (as the Fosterville example shows). One cannot expect a simple rectangle, nor vene a polygon or other convex shape. There may be holes (mathematically, the survey area might not be simply connected).</p></li>
+<li><p>There may be missing data within the survey boundary.</p></li>
+<li><p>The interpolation to grid routine will generally interpolate into holes and into areas of missing data.</p></li>
+<li><p>The Craig transform requires a completely filled rectngle of data.</p></li>
+<li><p>The padding for the Craig transform extends the data to the borders of a rectangle that is well beyond the survey boundary.</p></li>
+<li><p>The final product should have missing data where the survey had missing data, and anywhere outside the survey boundary.</p></li>
+</ol>
+<p>Accordingly, the code remembers the missing value area of the gridded data (called internally the <code class="docutils literal notranslate"><span class="pre">nanmask</span></code>) and, if provided, the survey boundary. The current iteration of the code only allows polygonal survey boundaries so holes are ignored in the survey boundary. Holes will be honoured if they are filled with missing-data values or have no data provided, although the grid interpolation will encroach into holes.</p>
+<p>With regard to data coverage, the process looks like:</p>
+<ol class="arabic simple">
+<li><p>Interpolate Gne, Guv data to regular grid with missing data values at grid points further than some small fixed number of grid cells from located data.</p></li>
+<li><p>Store the missing data mask as <code class="docutils literal notranslate"><span class="pre">nanmask</span></code>.</p></li>
+<li><p>Pad the grids. Several methods are available but the recommended method pads to a large rectangle with regional Gne and Guv, using the regional data to also fill the missing data points.</p></li>
+<li><p>Expand the nanmask to the same area.</p></li>
+<li><p>Process the data to the final gD grid. This will cover the entire padded area.</p></li>
+<li><p>Mask the missing data values according to nanmask.</p></li>
+<li><p>If a survey boundary is provided, mask areas outside the survey boundary as missing value.</p></li>
+<li><p>Trim the grid back to the smallest cardinal rectangle possible by trimming only missing values</p></li>
+</ol>
+</section>
+<section id="conforming">
+<h3>Conforming<a class="headerlink" href="#conforming" title="Link to this heading">¶</a></h3>
+</section>
+</section>
+<section id="fosterville-example">
+<h2>Fosterville Example<a class="headerlink" href="#fosterville-example" title="Link to this heading">¶</a></h2>
+<p>The Fosterville data were downloaded from Resources Victoria. The located data were in ASEG-GDF2 format and these were written to <code class="docutils literal notranslate"><span class="pre">whizzFile</span></code> in HDF5 format. Most channels were omitted to reduce the data volume. It is this minimalist data set that is used here.</p>
+<p>The regional data were extracted and downloaded from GADDS.</p>
+<p>For no particular reason, this example uses the free-air data.</p>
+<hr class="docutils" />
+<p>Import the required modules, and set the path to the geowhizz files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+
+<span class="n">data_root</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;./FostervilleData/&#39;</span>
+<span class="n">FostervilleHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_root</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;Foster_craig.hdf5&#39;</span><span class="p">)</span>
+<span class="n">regional_fa_ers</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_root</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;Gravmap2019-grid-grv_fa.ers&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">FostervilleHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ask Mark for help!!!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the channel names for the free-air Gne and Guv data</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">reportChannels</span><span class="p">(</span><span class="n">FostervilleHDF_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+
+8 channels:
+
+
+8 channels:
+[&#39;Elevation_GNSS_GRS80&#39;, &#39;Falc_A_NE_0p00_0p18Hz_MeanLev&#39;,
+&#39;Falc_A_UV_0p00_0p18Hz_MeanLev&#39;, &#39;Falc_gD_0p00_0p18HzLP_ESD300m_SDS&#39;,
+&#39;GNSS_Easting_WGS84UTM55&#39;, &#39;GNSS_Northing_WGS84UTM55&#39;,
+&#39;Smooth_Drape_Surface_EGM96&#39;, &#39;Time_SSM_UTC1980&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we impose an artificial survey polygon to see the behaviour of the code.</span>
+<span class="n">gD_grid</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">craig_transform</span><span class="p">(</span>
+    <span class="n">whizzFile</span><span class="o">=</span><span class="n">FostervilleHDF_file</span><span class="p">,</span> 
+    <span class="n">gne_chan</span><span class="o">=</span><span class="s1">&#39;Falc_A_NE_0p00_0p18Hz_MeanLev&#39;</span><span class="p">,</span> 
+    <span class="n">guv_chan</span><span class="o">=</span><span class="s1">&#39;Falc_A_UV_0p00_0p18Hz_MeanLev&#39;</span><span class="p">,</span>
+    <span class="n">gd_chan</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">result_units</span><span class="o">=</span><span class="s1">&#39;um/s/s&#39;</span><span class="p">,</span>
+    <span class="n">survey_polygon</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="mi">260000</span><span class="p">,</span> <span class="mi">5941000</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">280000</span><span class="p">,</span> <span class="mi">5941000</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">280000</span><span class="p">,</span> <span class="mi">5969000</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">260000</span><span class="p">,</span> <span class="mi">5969000</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">pad_cells</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> 
+    <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;regional&quot;</span><span class="p">,</span> 
+    <span class="n">regional_grid_file</span><span class="o">=</span><span class="n">regional_fa_ers</span><span class="p">,</span>
+    <span class="n">regional_grav_units</span><span class="o">=</span><span class="s1">&#39;gu&#39;</span><span class="p">,</span>
+    <span class="n">conforming</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">plot_flag</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reading located data from whizz file.
+206 lines; total number of fids in whizz file = 366670.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Falc_A_NE_0p00_0p18Hz_MeanLev: min = -51.8, max = 39.8, mean = 0.0262.
+
+206 lines; total number of fids in whizz file = 366670.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Falc_A_UV_0p00_0p18Hz_MeanLev: min = -41.5, max = 67.7, mean = -0.312.
+
+
+Gridding Foster_craig data with cell size = 50.0.
+
+Reading in the regional data.
+
+Interpolating the local curvature gradients to grids.
+Processing (x, y, z) = (GNSS_Easting_WGS84UTM55, GNSS_Northing_WGS84UTM55, Falc_A_NE_0p00_0p18Hz_MeanLev).
+ Falc_A_NE_0p00_0p18Hz_MeanLev in unknown units.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing (x, y, z) = (GNSS_Easting_WGS84UTM55, GNSS_Northing_WGS84UTM55, Falc_A_UV_0p00_0p18Hz_MeanLev).
+ Falc_A_UV_0p00_0p18Hz_MeanLev in unknown units.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Padding the local curvature gradient grids.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Wavenumber resolution = 8.88e-06
+Equivalent wavelength = 7.07e+05 m.
+
+Transforming the local curvature gradient grids to gravity.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Wavenumber resolution = -1.45e-05
+Equivalent wavelength = -4.35e+05 m.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Conforming the local gravity to the regional.
+Parameters: low_lambda = 10000, hi_lambda = 12000, pad_cells = 200
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Regional grid Wavenumber resolution = -1.77e-05
+              Equivalent wavelength = -355653 m.
+Filter 2dB = 0.000576 per m.
+Filter 2dB = 1.09e+04 m.
+Low pass filtering at 0.000524, 0.000628 per m.
+Local grid Wavenumber resolution = 1.77e-05
+           Equivalent wavelength = 355653 m.
+High pass filtering at 0.000628, 0.000524 per m.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Final conformed and transformed grid stats:
+RMS of result = 17.51 um/s/s
+mean of result = 79.42 um/s/s
+min of result = 52.51 um/s/s
+max of result = 127.99 um/s/s
+Array shape = (560, 400); number of cells = 224000
+exscribed rectangle:
+  [260049, [5941023],
+  [279999, [5941023],
+  [279999, [5968973],
+  [260049, [5968973]
+cell spacing = 50.0
+number of NaNs = 52891
+
+  Final error grid stats:
+RMS of result = 4.12 um/s/s
+mean of result = -1.72 um/s/s
+min of result = -11.42 um/s/s
+max of result = 10.91 um/s/s
+Array shape = (560, 400); number of cells = 224000
+exscribed rectangle:
+  [260049, [5941023],
+  [279999, [5941023],
+  [279999, [5968973],
+  [260049, [5968973]
+cell spacing = 50.0
+number of NaNs = 52891
+</pre></div>
+</div>
+<img alt="../_images/42e0543ea4a54240963bed59a89dd645e0e9e18450fd0502910a5940c7efaef7.png" src="../_images/42e0543ea4a54240963bed59a89dd645e0e9e18450fd0502910a5940c7efaef7.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>It is a little easier to see the details if we image the final result as a shaded image (below). The results show a small imaginary part as expected, and the final gravity grid matches the regional gravity well while retaining the new short wavelength information from the survey.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">xdImage</span><span class="p">(</span><span class="n">gD_grid</span><span class="p">,</span> <span class="s1">&#39;derived BG&#39;</span><span class="p">,</span> <span class="n">hs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2e4cb35683401cf012c14651eeeacc1c96bca1065d65a1eefef8900840365550.png" src="../_images/2e4cb35683401cf012c14651eeeacc1c96bca1065d65a1eefef8900840365550.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regional</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">gridfile_to_xa</span><span class="p">(</span><span class="n">regional_fa_ers</span><span class="p">)</span>
+<span class="n">cropped_regional</span> <span class="o">=</span> <span class="n">regional</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">260000</span><span class="p">,</span> <span class="mi">280000</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">5940000</span><span class="p">,</span> <span class="mi">5970000</span><span class="p">))</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">xdImage</span><span class="p">(</span><span class="n">cropped_regional</span><span class="p">,</span> <span class="s1">&#39;regional BG&#39;</span><span class="p">,</span> <span class="n">hs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5236f1b85bc1a27f185748458f78e59fcf97a4671992a24650a2f34263c9f348.png" src="../_images/5236f1b85bc1a27f185748458f78e59fcf97a4671992a24650a2f34263c9f348.png" />
+</div>
+</div>
+</section>
+<section id="telfer-example">
+<h2>Telfer Example<a class="headerlink" href="#telfer-example" title="Link to this heading">¶</a></h2>
+<p>The Telfer survey data were downloaded from the Geological Survey of Western Australia at https://geodownloads.dmp.wa.gov.au/downloads/geophysics/71234/, and the regional grid from GADDS. The data are complete Bouguer gravity.</p>
+<p>They are currently disabled for reasons of data volume.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from pathlib import Path</span>
+<span class="c1"># import galileoQC as qc</span>
+
+<span class="c1"># data_root = r&#39;./TelferData/&#39;</span>
+<span class="c1"># TelferHDF_file = Path(data_root + r&#39;Telfer_craig.hdf5&#39;)</span>
+
+<span class="c1"># # Downloaded from GADDS (complete Bouguer grid, 2019)</span>
+<span class="c1"># regional_cb_ers = Path(data_root + r&#39;Gravmap2019-grid-grv_cscba.ers&#39;)</span>
+
+<span class="c1"># # The final conformed complete Bouguer by Xcalibur.</span>
+<span class="c1"># true_gd_ers = Path(data_root + r&#39;2131_1_Fourier_gD_2p67_conformed_final.ers&#39;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># if not TelferHDF_file.exists():</span>
+<span class="c1">#     print(&quot;Ask Mark for help!!!&quot;)</span>
+<span class="c1">#     # %run ./Prepare_EastVicData.ipynb</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Find the channel names for the Gne and Guv data</span>
+<span class="c1"># qc.reportChannels(TelferHDF_file)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># mask_polygon = [(410898 , 7622722), (453935, 7575693), (433181, 7557737), (390139, 7604799)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># gD_grid = qc.craig_transform(</span>
+<span class="c1">#     whizzFile=TelferHDF_file,</span>
+<span class="c1">#     gne_chan=&#39;A_NE_2p67&#39;,</span>
+<span class="c1">#     guv_chan=&#39;A_UV_2p67&#39;,</span>
+<span class="c1">#     gd_chan=None,</span>
+<span class="c1">#     cell_size=80.0,</span>
+<span class="c1">#     result_units=&#39;um/s/s&#39;,</span>
+<span class="c1">#     survey_polygon=mask_polygon,</span>
+<span class="c1">#     pad_cells=256,</span>
+<span class="c1">#     padding_mode=&quot;mean&quot;,</span>
+<span class="c1">#     regional_grid_file=regional_cb_ers,</span>
+<span class="c1">#     regional_grav_units=&#39;um/s/s&#39;,</span>
+<span class="c1">#     conforming=True,</span>
+<span class="c1"># )</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For Telfer, we have the final conformed complete Bouguer data as supplied by the survey provider so we can compare it with our result.</p>
+<p>Below are shaded images of the survey provider’s result (the “true BG”) multiplied by 10.0 to convert the data to um/s/s, and of our result. They look very similar but the colorbars suggest some difference.</p>
+<p>Below the images are grid reports. The “true” result has a very similar standard deviation and mean but a larger range. It also has a smaller cell size. It is reasonable to suppose that the smaller cell size has allowed more extreme values so this is a possible explanation for the larger range.</p>
+<p>Either way, our result is very similar and certainly acceptable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># true_bg, _ = qc.gridfile_to_xa(true_gd_ers)</span>
+<span class="c1"># qc.xdImage(true_bg*10, &#39;true BG [um/s/s]&#39;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># qc.xdImage(gD_grid, &#39;derived BG&#39;, hs=True)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from galileoQC.gridFiles.gridutility import report_gridStats</span>
+<span class="c1"># report_gridStats(gD_grid)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># report_gridStats(true_bg*10)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Grid_Imaging.html" title="Previous document">Grid Imaging and Checking</a>
+        </li>
+        <li>
+          <a href="../geowhizz.html" title="Next document">geoWhizz</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Craig_transform.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Odd - Even Analysis &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gravimetry corrections" href="Gravimeter_Corrections.html" />
+    <link rel="prev" title="Repeat Line Analysis" href="CheckRepeats_Analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Odd - Even Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="CheckRepeats_Analysis.html" title="previous chapter">Repeat Line Analysis</a></li>
+      <li>Next: <a href="Gravimeter_Corrections.html" title="next chapter">Gravimetry corrections</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="odd-even-analysis">
+<h1>Odd - Even Analysis<a class="headerlink" href="#odd-even-analysis" title="Link to this heading">¶</a></h1>
+<p>Odd - Even analysis consists of separating a survey into odd- and even-numbered flight-lines, gridding each separately and then calculating the RMS difference between the two resultant grids.</p>
+<p>We will use the 2012 Kauring gravimetry data in this notebook. If you haven’t already, run the <code class="docutils literal notranslate"><span class="pre">Prepare_ASEGGDF2</span></code> notebook so that the survey data are ready for QC.</p>
+<hr class="docutils" />
+<p>First, import the required modules, and set the path to the geowhizz file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span>  <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./Kauring_grv/GRAV.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">dh</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="o">%</span><span class="k">run</span> ./Prepare_2012KauringData.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>We can use <code class="docutils literal notranslate"><span class="pre">reportLines</span></code> to see that the traverse and control lines have been correctly classified. But we have not classified on the basis of odd or even line-numbering yet.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportLines</span><span class="p">(</span><span class="n">dh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 even lines, 0 odd lines.
+213 traverse lines, 11 control lines, 0 not classified.
+0 planned lines, 224 unplanned lines, total 224.
+
+ Whizz Version 1.0
+
+Odd Lines:
+[]
+
+Even Lines:
+[]
+
+Traverse Lines:
+[&#39;100100&#39;, &#39;100200&#39;, &#39;100300&#39;, &#39;100400&#39;, &#39;100500&#39;, &#39;100600&#39;, &#39;100700&#39;,
+&#39;100800&#39;, &#39;100900&#39;, &#39;101000&#39;, &#39;101100&#39;, &#39;101200&#39;, &#39;101300&#39;, &#39;101400&#39;,
+&#39;101500&#39;, &#39;101600&#39;, &#39;101700&#39;, &#39;101800&#39;, &#39;101900&#39;, &#39;102000&#39;, &#39;102100&#39;,
+&#39;102200&#39;, &#39;102300&#39;, &#39;102400&#39;, &#39;102500&#39;, &#39;102600&#39;, &#39;102700&#39;, &#39;102800&#39;,
+&#39;102900&#39;, &#39;103000&#39;, &#39;103100&#39;, &#39;103200&#39;, &#39;103300&#39;, &#39;103400&#39;, &#39;103500&#39;,
+&#39;103600&#39;, &#39;103700&#39;, &#39;103800&#39;, &#39;103900&#39;, &#39;104000&#39;, &#39;104100&#39;, &#39;104200&#39;,
+&#39;104300&#39;, &#39;104400&#39;, &#39;104500&#39;, &#39;104600&#39;, &#39;104700&#39;, &#39;104800&#39;, &#39;104900&#39;,
+&#39;105000&#39;, &#39;105100&#39;, &#39;105200&#39;, &#39;105300&#39;, &#39;105400&#39;, &#39;105500&#39;, &#39;105600&#39;,
+&#39;105700&#39;, &#39;105800&#39;, &#39;105900&#39;, &#39;106000&#39;, &#39;106100&#39;, &#39;106200&#39;, &#39;106300&#39;,
+&#39;106400&#39;, &#39;106500&#39;, &#39;106600&#39;, &#39;106700&#39;, &#39;106800&#39;, &#39;106900&#39;, &#39;107000&#39;,
+&#39;107100&#39;, &#39;107200&#39;, &#39;107300&#39;, &#39;107400&#39;, &#39;107500&#39;, &#39;107600&#39;, &#39;107700&#39;,
+&#39;107800&#39;, &#39;107900&#39;, &#39;108000&#39;, &#39;108100&#39;, &#39;108200&#39;, &#39;108300&#39;, &#39;108400&#39;,
+&#39;108500&#39;, &#39;108600&#39;, &#39;108700&#39;, &#39;108800&#39;, &#39;108900&#39;, &#39;109000&#39;, &#39;109100&#39;,
+&#39;109200&#39;, &#39;109300&#39;, &#39;109400&#39;, &#39;109500&#39;, &#39;109600&#39;, &#39;109700&#39;, &#39;109800&#39;,
+&#39;109900&#39;, &#39;110000&#39;, &#39;110100&#39;, &#39;110200&#39;, &#39;110300&#39;, &#39;110400&#39;, &#39;110500&#39;,
+&#39;110600&#39;, &#39;110700&#39;, &#39;110800&#39;, &#39;110900&#39;, &#39;200100&#39;, &#39;200201&#39;, &#39;200300&#39;,
+&#39;200400&#39;, &#39;200500&#39;, &#39;200600&#39;, &#39;200700&#39;, &#39;200801&#39;, &#39;200901&#39;, &#39;201000&#39;,
+&#39;201101&#39;, &#39;201200&#39;, &#39;201300&#39;, &#39;201400&#39;, &#39;201501&#39;, &#39;201601&#39;, &#39;201700&#39;,
+&#39;201800&#39;, &#39;201900&#39;, &#39;202000&#39;, &#39;202100&#39;, &#39;202200&#39;, &#39;202300&#39;, &#39;202400&#39;,
+&#39;202501&#39;, &#39;202600&#39;, &#39;202701&#39;, &#39;202800&#39;, &#39;202901&#39;, &#39;203001&#39;, &#39;203100&#39;,
+&#39;203201&#39;, &#39;203303&#39;, &#39;203401&#39;, &#39;203501&#39;, &#39;203601&#39;, &#39;203701&#39;, &#39;203801&#39;,
+&#39;203902&#39;, &#39;204001&#39;, &#39;204101&#39;, &#39;204200&#39;, &#39;204300&#39;, &#39;204401&#39;, &#39;204500&#39;,
+&#39;204600&#39;, &#39;204700&#39;, &#39;204800&#39;, &#39;204900&#39;, &#39;205001&#39;, &#39;205100&#39;, &#39;205200&#39;,
+&#39;205300&#39;, &#39;205401&#39;, &#39;205500&#39;, &#39;205600&#39;, &#39;205700&#39;, &#39;205800&#39;, &#39;205901&#39;,
+&#39;206000&#39;, &#39;206100&#39;, &#39;206200&#39;, &#39;206300&#39;, &#39;206400&#39;, &#39;206501&#39;, &#39;206600&#39;,
+&#39;206700&#39;, &#39;206800&#39;, &#39;206900&#39;, &#39;207000&#39;, &#39;207100&#39;, &#39;207200&#39;, &#39;207300&#39;,
+&#39;207400&#39;, &#39;207500&#39;, &#39;207600&#39;, &#39;207700&#39;, &#39;207800&#39;, &#39;207900&#39;, &#39;208000&#39;,
+&#39;208100&#39;, &#39;208200&#39;, &#39;208300&#39;, &#39;208400&#39;, &#39;208500&#39;, &#39;208601&#39;, &#39;208701&#39;,
+&#39;208800&#39;, &#39;208900&#39;, &#39;209001&#39;, &#39;209100&#39;, &#39;209201&#39;, &#39;209300&#39;, &#39;209401&#39;,
+&#39;209500&#39;, &#39;209601&#39;, &#39;209701&#39;, &#39;209801&#39;, &#39;209901&#39;, &#39;210000&#39;, &#39;210101&#39;,
+&#39;210200&#39;, &#39;210300&#39;, &#39;210400&#39;]
+
+Control Lines:
+[&#39;10100&#39;, &#39;10200&#39;, &#39;10300&#39;, &#39;10400&#39;, &#39;10500&#39;, &#39;10600&#39;, &#39;10700&#39;,
+&#39;10800&#39;, &#39;10900&#39;, &#39;11000&#39;, &#39;11100&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Furthermore, the flight-line map shows that there are two distinct blocks in the file. We don’t want the smaller block with closer line spacing and different line directions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">linesMap</span><span class="p">([</span><span class="n">dh</span><span class="p">],</span> <span class="n">whizzPlanFile</span><span class="o">=</span><span class="n">dh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/87d934d1eeddbcd155c13778c2ad843b411d1996961be795a03a73b81c0533ce.png" src="../_images/87d934d1eeddbcd155c13778c2ad843b411d1996961be795a03a73b81c0533ce.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>We want only the flight-lines whose line-number starts with a “1”. First, we copy and paste them from the <code class="docutils literal notranslate"><span class="pre">qc.reportLines</span></code> output, making sure we capture all traverse and control lines that start with a “1”, and no others.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gm_lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;100100&#39;</span><span class="p">,</span> <span class="s1">&#39;100200&#39;</span><span class="p">,</span> <span class="s1">&#39;100300&#39;</span><span class="p">,</span> <span class="s1">&#39;100400&#39;</span><span class="p">,</span> <span class="s1">&#39;100500&#39;</span><span class="p">,</span> <span class="s1">&#39;100600&#39;</span><span class="p">,</span> <span class="s1">&#39;100700&#39;</span><span class="p">,</span> <span class="s1">&#39;100800&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;100900&#39;</span><span class="p">,</span> <span class="s1">&#39;10100&#39;</span><span class="p">,</span> <span class="s1">&#39;101000&#39;</span><span class="p">,</span> <span class="s1">&#39;101100&#39;</span><span class="p">,</span> <span class="s1">&#39;101200&#39;</span><span class="p">,</span> <span class="s1">&#39;101300&#39;</span><span class="p">,</span> <span class="s1">&#39;101400&#39;</span><span class="p">,</span> <span class="s1">&#39;101500&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;101600&#39;</span><span class="p">,</span> <span class="s1">&#39;101700&#39;</span><span class="p">,</span> <span class="s1">&#39;101800&#39;</span><span class="p">,</span> <span class="s1">&#39;101900&#39;</span><span class="p">,</span> <span class="s1">&#39;10200&#39;</span><span class="p">,</span> <span class="s1">&#39;102000&#39;</span><span class="p">,</span> <span class="s1">&#39;102100&#39;</span><span class="p">,</span> <span class="s1">&#39;102200&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;102300&#39;</span><span class="p">,</span> <span class="s1">&#39;102400&#39;</span><span class="p">,</span> <span class="s1">&#39;102500&#39;</span><span class="p">,</span> <span class="s1">&#39;102600&#39;</span><span class="p">,</span> <span class="s1">&#39;102700&#39;</span><span class="p">,</span> <span class="s1">&#39;102800&#39;</span><span class="p">,</span> <span class="s1">&#39;102900&#39;</span><span class="p">,</span> <span class="s1">&#39;10300&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;103000&#39;</span><span class="p">,</span> <span class="s1">&#39;103100&#39;</span><span class="p">,</span> <span class="s1">&#39;103200&#39;</span><span class="p">,</span> <span class="s1">&#39;103300&#39;</span><span class="p">,</span> <span class="s1">&#39;103400&#39;</span><span class="p">,</span> <span class="s1">&#39;103500&#39;</span><span class="p">,</span> <span class="s1">&#39;103600&#39;</span><span class="p">,</span> <span class="s1">&#39;103700&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;103800&#39;</span><span class="p">,</span> <span class="s1">&#39;103900&#39;</span><span class="p">,</span> <span class="s1">&#39;10400&#39;</span><span class="p">,</span> <span class="s1">&#39;104000&#39;</span><span class="p">,</span> <span class="s1">&#39;104100&#39;</span><span class="p">,</span> <span class="s1">&#39;104200&#39;</span><span class="p">,</span> <span class="s1">&#39;104300&#39;</span><span class="p">,</span> <span class="s1">&#39;104400&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;104500&#39;</span><span class="p">,</span> <span class="s1">&#39;104600&#39;</span><span class="p">,</span> <span class="s1">&#39;104700&#39;</span><span class="p">,</span> <span class="s1">&#39;104800&#39;</span><span class="p">,</span> <span class="s1">&#39;104900&#39;</span><span class="p">,</span> <span class="s1">&#39;10500&#39;</span><span class="p">,</span> <span class="s1">&#39;105000&#39;</span><span class="p">,</span> <span class="s1">&#39;105100&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;105200&#39;</span><span class="p">,</span> <span class="s1">&#39;105300&#39;</span><span class="p">,</span> <span class="s1">&#39;105400&#39;</span><span class="p">,</span> <span class="s1">&#39;105500&#39;</span><span class="p">,</span> <span class="s1">&#39;105600&#39;</span><span class="p">,</span> <span class="s1">&#39;105700&#39;</span><span class="p">,</span> <span class="s1">&#39;105800&#39;</span><span class="p">,</span> <span class="s1">&#39;105900&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;10600&#39;</span><span class="p">,</span> <span class="s1">&#39;106000&#39;</span><span class="p">,</span> <span class="s1">&#39;106100&#39;</span><span class="p">,</span> <span class="s1">&#39;106200&#39;</span><span class="p">,</span> <span class="s1">&#39;106300&#39;</span><span class="p">,</span> <span class="s1">&#39;106400&#39;</span><span class="p">,</span> <span class="s1">&#39;106500&#39;</span><span class="p">,</span> <span class="s1">&#39;106600&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;106700&#39;</span><span class="p">,</span> <span class="s1">&#39;106800&#39;</span><span class="p">,</span> <span class="s1">&#39;106900&#39;</span><span class="p">,</span> <span class="s1">&#39;10700&#39;</span><span class="p">,</span> <span class="s1">&#39;107000&#39;</span><span class="p">,</span> <span class="s1">&#39;107100&#39;</span><span class="p">,</span> <span class="s1">&#39;107200&#39;</span><span class="p">,</span> <span class="s1">&#39;107300&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;107400&#39;</span><span class="p">,</span> <span class="s1">&#39;107500&#39;</span><span class="p">,</span> <span class="s1">&#39;107600&#39;</span><span class="p">,</span> <span class="s1">&#39;107700&#39;</span><span class="p">,</span> <span class="s1">&#39;107800&#39;</span><span class="p">,</span> <span class="s1">&#39;107900&#39;</span><span class="p">,</span> <span class="s1">&#39;10800&#39;</span><span class="p">,</span> <span class="s1">&#39;108000&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;108100&#39;</span><span class="p">,</span> <span class="s1">&#39;108200&#39;</span><span class="p">,</span> <span class="s1">&#39;108300&#39;</span><span class="p">,</span> <span class="s1">&#39;108400&#39;</span><span class="p">,</span> <span class="s1">&#39;108500&#39;</span><span class="p">,</span> <span class="s1">&#39;108600&#39;</span><span class="p">,</span> <span class="s1">&#39;108700&#39;</span><span class="p">,</span> <span class="s1">&#39;108800&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;108900&#39;</span><span class="p">,</span> <span class="s1">&#39;10900&#39;</span><span class="p">,</span> <span class="s1">&#39;109000&#39;</span><span class="p">,</span> <span class="s1">&#39;109100&#39;</span><span class="p">,</span> <span class="s1">&#39;109200&#39;</span><span class="p">,</span> <span class="s1">&#39;109300&#39;</span><span class="p">,</span> <span class="s1">&#39;109400&#39;</span><span class="p">,</span> <span class="s1">&#39;109500&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;109600&#39;</span><span class="p">,</span> <span class="s1">&#39;109700&#39;</span><span class="p">,</span> <span class="s1">&#39;109800&#39;</span><span class="p">,</span> <span class="s1">&#39;109900&#39;</span><span class="p">,</span> <span class="s1">&#39;11000&#39;</span><span class="p">,</span> <span class="s1">&#39;110000&#39;</span><span class="p">,</span> <span class="s1">&#39;110100&#39;</span><span class="p">,</span> <span class="s1">&#39;110200&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;110300&#39;</span><span class="p">,</span> <span class="s1">&#39;110400&#39;</span><span class="p">,</span> <span class="s1">&#39;110500&#39;</span><span class="p">,</span> <span class="s1">&#39;110600&#39;</span><span class="p">,</span> <span class="s1">&#39;110700&#39;</span><span class="p">,</span> <span class="s1">&#39;110800&#39;</span><span class="p">,</span> <span class="s1">&#39;110900&#39;</span><span class="p">,</span> <span class="s1">&#39;11100&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>The flight-line map shows that we have the ones we want.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">linesMap</span><span class="p">([</span><span class="n">dh</span><span class="p">],</span> <span class="n">whizzPlanFile</span><span class="o">=</span><span class="n">dh</span><span class="p">,</span> <span class="n">planLines</span><span class="o">=</span><span class="n">gm_lines</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f72f62fbb1f3881c7aee363fdeeeeb1435629803ef82b5e4cf4dbd7ebf45cfbd.png" src="../_images/f72f62fbb1f3881c7aee363fdeeeeb1435629803ef82b5e4cf4dbd7ebf45cfbd.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>Now, we write a short script to sort them into odd and even numbered line-lists.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">odd</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">even</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">gm_lines</span><span class="p">:</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">even</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="c1"># Even </span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">odd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="c1"># Odd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… and we update the survey meta-data with these lists, and report the lines so we can check we have what we want. (<code class="docutils literal notranslate"><span class="pre">updateOddOrEven</span></code> ignore control lines for assigning parity.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateOddOrEven</span><span class="p">(</span><span class="n">whizzFile</span><span class="o">=</span><span class="n">dh</span><span class="p">,</span> <span class="n">oddlines</span><span class="o">=</span><span class="n">odd</span><span class="p">,</span> <span class="n">evenlines</span><span class="o">=</span><span class="n">even</span><span class="p">,</span> <span class="n">planFile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">reportLines</span><span class="p">(</span><span class="n">dh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>54 even lines, 55 odd lines.
+213 traverse lines, 11 control lines, 0 not classified.
+0 planned lines, 224 unplanned lines, total 224.
+
+ Whizz Version 1.0
+
+Odd Lines:
+[&#39;100100&#39;, &#39;100300&#39;, &#39;100500&#39;, &#39;100700&#39;, &#39;100900&#39;, &#39;101100&#39;, &#39;101300&#39;,
+&#39;101500&#39;, &#39;101700&#39;, &#39;101900&#39;, &#39;102100&#39;, &#39;102300&#39;, &#39;102500&#39;, &#39;102700&#39;,
+&#39;102900&#39;, &#39;103100&#39;, &#39;103300&#39;, &#39;103500&#39;, &#39;103700&#39;, &#39;103900&#39;, &#39;104100&#39;,
+&#39;104300&#39;, &#39;104500&#39;, &#39;104700&#39;, &#39;104900&#39;, &#39;105100&#39;, &#39;105300&#39;, &#39;105500&#39;,
+&#39;105700&#39;, &#39;105900&#39;, &#39;106100&#39;, &#39;106300&#39;, &#39;106500&#39;, &#39;106700&#39;, &#39;106900&#39;,
+&#39;107100&#39;, &#39;107300&#39;, &#39;107500&#39;, &#39;107700&#39;, &#39;107900&#39;, &#39;108100&#39;, &#39;108300&#39;,
+&#39;108500&#39;, &#39;108700&#39;, &#39;108900&#39;, &#39;109100&#39;, &#39;109300&#39;, &#39;109500&#39;, &#39;109700&#39;,
+&#39;109900&#39;, &#39;110100&#39;, &#39;110300&#39;, &#39;110500&#39;, &#39;110700&#39;, &#39;110900&#39;]
+
+Even Lines:
+[&#39;100200&#39;, &#39;100400&#39;, &#39;100600&#39;, &#39;100800&#39;, &#39;101000&#39;, &#39;101200&#39;, &#39;101400&#39;,
+&#39;101600&#39;, &#39;101800&#39;, &#39;102000&#39;, &#39;102200&#39;, &#39;102400&#39;, &#39;102600&#39;, &#39;102800&#39;,
+&#39;103000&#39;, &#39;103200&#39;, &#39;103400&#39;, &#39;103600&#39;, &#39;103800&#39;, &#39;104000&#39;, &#39;104200&#39;,
+&#39;104400&#39;, &#39;104600&#39;, &#39;104800&#39;, &#39;105000&#39;, &#39;105200&#39;, &#39;105400&#39;, &#39;105600&#39;,
+&#39;105800&#39;, &#39;106000&#39;, &#39;106200&#39;, &#39;106400&#39;, &#39;106600&#39;, &#39;106800&#39;, &#39;107000&#39;,
+&#39;107200&#39;, &#39;107400&#39;, &#39;107600&#39;, &#39;107800&#39;, &#39;108000&#39;, &#39;108200&#39;, &#39;108400&#39;,
+&#39;108600&#39;, &#39;108800&#39;, &#39;109000&#39;, &#39;109200&#39;, &#39;109400&#39;, &#39;109600&#39;, &#39;109800&#39;,
+&#39;110000&#39;, &#39;110200&#39;, &#39;110400&#39;, &#39;110600&#39;, &#39;110800&#39;]
+
+Traverse Lines:
+[&#39;100100&#39;, &#39;100200&#39;, &#39;100300&#39;, &#39;100400&#39;, &#39;100500&#39;, &#39;100600&#39;, &#39;100700&#39;,
+&#39;100800&#39;, &#39;100900&#39;, &#39;101000&#39;, &#39;101100&#39;, &#39;101200&#39;, &#39;101300&#39;, &#39;101400&#39;,
+&#39;101500&#39;, &#39;101600&#39;, &#39;101700&#39;, &#39;101800&#39;, &#39;101900&#39;, &#39;102000&#39;, &#39;102100&#39;,
+&#39;102200&#39;, &#39;102300&#39;, &#39;102400&#39;, &#39;102500&#39;, &#39;102600&#39;, &#39;102700&#39;, &#39;102800&#39;,
+&#39;102900&#39;, &#39;103000&#39;, &#39;103100&#39;, &#39;103200&#39;, &#39;103300&#39;, &#39;103400&#39;, &#39;103500&#39;,
+&#39;103600&#39;, &#39;103700&#39;, &#39;103800&#39;, &#39;103900&#39;, &#39;104000&#39;, &#39;104100&#39;, &#39;104200&#39;,
+&#39;104300&#39;, &#39;104400&#39;, &#39;104500&#39;, &#39;104600&#39;, &#39;104700&#39;, &#39;104800&#39;, &#39;104900&#39;,
+&#39;105000&#39;, &#39;105100&#39;, &#39;105200&#39;, &#39;105300&#39;, &#39;105400&#39;, &#39;105500&#39;, &#39;105600&#39;,
+&#39;105700&#39;, &#39;105800&#39;, &#39;105900&#39;, &#39;106000&#39;, &#39;106100&#39;, &#39;106200&#39;, &#39;106300&#39;,
+&#39;106400&#39;, &#39;106500&#39;, &#39;106600&#39;, &#39;106700&#39;, &#39;106800&#39;, &#39;106900&#39;, &#39;107000&#39;,
+&#39;107100&#39;, &#39;107200&#39;, &#39;107300&#39;, &#39;107400&#39;, &#39;107500&#39;, &#39;107600&#39;, &#39;107700&#39;,
+&#39;107800&#39;, &#39;107900&#39;, &#39;108000&#39;, &#39;108100&#39;, &#39;108200&#39;, &#39;108300&#39;, &#39;108400&#39;,
+&#39;108500&#39;, &#39;108600&#39;, &#39;108700&#39;, &#39;108800&#39;, &#39;108900&#39;, &#39;109000&#39;, &#39;109100&#39;,
+&#39;109200&#39;, &#39;109300&#39;, &#39;109400&#39;, &#39;109500&#39;, &#39;109600&#39;, &#39;109700&#39;, &#39;109800&#39;,
+&#39;109900&#39;, &#39;110000&#39;, &#39;110100&#39;, &#39;110200&#39;, &#39;110300&#39;, &#39;110400&#39;, &#39;110500&#39;,
+&#39;110600&#39;, &#39;110700&#39;, &#39;110800&#39;, &#39;110900&#39;, &#39;200100&#39;, &#39;200201&#39;, &#39;200300&#39;,
+&#39;200400&#39;, &#39;200500&#39;, &#39;200600&#39;, &#39;200700&#39;, &#39;200801&#39;, &#39;200901&#39;, &#39;201000&#39;,
+&#39;201101&#39;, &#39;201200&#39;, &#39;201300&#39;, &#39;201400&#39;, &#39;201501&#39;, &#39;201601&#39;, &#39;201700&#39;,
+&#39;201800&#39;, &#39;201900&#39;, &#39;202000&#39;, &#39;202100&#39;, &#39;202200&#39;, &#39;202300&#39;, &#39;202400&#39;,
+&#39;202501&#39;, &#39;202600&#39;, &#39;202701&#39;, &#39;202800&#39;, &#39;202901&#39;, &#39;203001&#39;, &#39;203100&#39;,
+&#39;203201&#39;, &#39;203303&#39;, &#39;203401&#39;, &#39;203501&#39;, &#39;203601&#39;, &#39;203701&#39;, &#39;203801&#39;,
+&#39;203902&#39;, &#39;204001&#39;, &#39;204101&#39;, &#39;204200&#39;, &#39;204300&#39;, &#39;204401&#39;, &#39;204500&#39;,
+&#39;204600&#39;, &#39;204700&#39;, &#39;204800&#39;, &#39;204900&#39;, &#39;205001&#39;, &#39;205100&#39;, &#39;205200&#39;,
+&#39;205300&#39;, &#39;205401&#39;, &#39;205500&#39;, &#39;205600&#39;, &#39;205700&#39;, &#39;205800&#39;, &#39;205901&#39;,
+&#39;206000&#39;, &#39;206100&#39;, &#39;206200&#39;, &#39;206300&#39;, &#39;206400&#39;, &#39;206501&#39;, &#39;206600&#39;,
+&#39;206700&#39;, &#39;206800&#39;, &#39;206900&#39;, &#39;207000&#39;, &#39;207100&#39;, &#39;207200&#39;, &#39;207300&#39;,
+&#39;207400&#39;, &#39;207500&#39;, &#39;207600&#39;, &#39;207700&#39;, &#39;207800&#39;, &#39;207900&#39;, &#39;208000&#39;,
+&#39;208100&#39;, &#39;208200&#39;, &#39;208300&#39;, &#39;208400&#39;, &#39;208500&#39;, &#39;208601&#39;, &#39;208701&#39;,
+&#39;208800&#39;, &#39;208900&#39;, &#39;209001&#39;, &#39;209100&#39;, &#39;209201&#39;, &#39;209300&#39;, &#39;209401&#39;,
+&#39;209500&#39;, &#39;209601&#39;, &#39;209701&#39;, &#39;209801&#39;, &#39;209901&#39;, &#39;210000&#39;, &#39;210101&#39;,
+&#39;210200&#39;, &#39;210300&#39;, &#39;210400&#39;]
+
+Control Lines:
+[&#39;10100&#39;, &#39;10200&#39;, &#39;10300&#39;, &#39;10400&#39;, &#39;10500&#39;, &#39;10600&#39;, &#39;10700&#39;,
+&#39;10800&#39;, &#39;10900&#39;, &#39;11000&#39;, &#39;11100&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Now we can perform the odd-even analysis. The default gridding parameters have been accepted here so the grid is not great. However, the RMS difference between odd and even numbered lines is <span class="math notranslate nohighlight">\(0.57\,mGal\)</span> which is a good result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">oddevenlines</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;GRVBGL100S_267&#39;</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>54 even lines, 55 odd lines.
+54 lines; total number of fids in whizz file = 47038.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    GRVBGL100S_267: min = -42.3, max = -18.6, mean = -30.
+
+55 lines; total number of fids in whizz file = 47875.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    GRVBGL100S_267: min = -42, max = -18.9, mean = -30.
+
+Processing (x, y, z) = (EASTING, NORTHING, GRVBGL100S_267).
+ GRVBGL100S_267 in mGal.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing (x, y, z) = (EASTING, NORTHING, GRVBGL100S_267).
+ GRVBGL100S_267 in mGal.
+</pre></div>
+</div>
+<img alt="../_images/2cbb7252eb740684582e9f643000cbcfe62514d9d2c7e1cce4da07301c217db3.png" src="../_images/2cbb7252eb740684582e9f643000cbcfe62514d9d2c7e1cce4da07301c217db3.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    odd-even difference - Grid Statistics
+RMS of result = 0.57 mGal
+mean of result = 0.00 mGal
+min of result = -2.09 mGal
+max of result = 2.14 mGal
+Array shape = (105, 107); number of cells = 11235
+exscribed rectangle:
+  [494510, [6460130],
+  [515756, [6460130],
+  [515756, [6480897],
+  [494510, [6480897]
+X cell spacing = 200.430
+Y cell spacing = 199.688
+number of NaNs = 291
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Alternatively, you can always enter the lists of odd and even lines directly into the function call. This can be useful if, for example, you want to omit some lines from the analysis. Here is an example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First remove the control lines from the even and odd lines (`updateOddOrEven`</span>
+<span class="c1"># does this automatically for us in the previous example):</span>
+<span class="n">controls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;10100&#39;</span><span class="p">,</span> <span class="s1">&#39;10200&#39;</span><span class="p">,</span> <span class="s1">&#39;10300&#39;</span><span class="p">,</span> <span class="s1">&#39;10400&#39;</span><span class="p">,</span> <span class="s1">&#39;10500&#39;</span><span class="p">,</span> <span class="s1">&#39;10600&#39;</span><span class="p">,</span> <span class="s1">&#39;10700&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;10800&#39;</span><span class="p">,</span> <span class="s1">&#39;10900&#39;</span><span class="p">,</span> <span class="s1">&#39;11000&#39;</span><span class="p">,</span> <span class="s1">&#39;11100&#39;</span><span class="p">]</span>
+<span class="n">new_even</span> <span class="o">=</span> <span class="n">even</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">new_odd</span> <span class="o">=</span> <span class="n">odd</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">controls</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">new_even</span><span class="p">:</span>
+        <span class="n">new_even</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">new_odd</span><span class="p">:</span>
+        <span class="n">new_odd</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now remove the &quot;unwanted&quot; first even line:</span>
+<span class="n">modified_even</span> <span class="o">=</span> <span class="n">new_even</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">oddevenlines</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;GRVBGL100S_267&#39;</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="n">oddlines</span><span class="o">=</span><span class="n">new_odd</span><span class="p">,</span> <span class="n">evenlines</span><span class="o">=</span><span class="n">new_even</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>53 lines; total number of fids in whizz file = 46169.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    GRVBGL100S_267: min = -42.3, max = -18.6, mean = -30.2.
+
+55 lines; total number of fids in whizz file = 47875.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    GRVBGL100S_267: min = -42, max = -18.9, mean = -30.
+
+Processing (x, y, z) = (EASTING, NORTHING, GRVBGL100S_267).
+ GRVBGL100S_267 in mGal.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing (x, y, z) = (EASTING, NORTHING, GRVBGL100S_267).
+ GRVBGL100S_267 in mGal.
+</pre></div>
+</div>
+<img alt="../_images/c59d7d2d28b8be57a8b0d09f5a1dcec2c974a6c75d0b2c4cf8da622550cf4e4f.png" src="../_images/c59d7d2d28b8be57a8b0d09f5a1dcec2c974a6c75d0b2c4cf8da622550cf4e4f.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    odd-even difference - Grid Statistics
+RMS of result = 0.57 mGal
+mean of result = -0.00 mGal
+min of result = -2.09 mGal
+max of result = 2.14 mGal
+Array shape = (105, 105); number of cells = 11025
+exscribed rectangle:
+  [494912, [6460130],
+  [515756, [6460130],
+  [515756, [6480897],
+  [494912, [6480897]
+X cell spacing = 200.419
+Y cell spacing = 199.688
+number of NaNs = 295
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="CheckRepeats_Analysis.html" title="Previous document">Repeat Line Analysis</a>
+        </li>
+        <li>
+          <a href="Gravimeter_Corrections.html" title="Next document">Gravimetry corrections</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Odd_Even_Analysis.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

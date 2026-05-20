@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkSpeeds &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.diffGravVturb" href="galileoQC.qualitycontrol.diffGravVturb.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkRepeatLines" href="galileoQC.qualitycontrol.checkRepeatLines.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkRepeatLines.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.diffGravVturb.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.diffGravVturb</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkSpeeds">
+<span id="galileoqc-qualitycontrol-checkspeeds"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkSpeeds" title="galileoQC.qualitycontrol.checkSpeeds"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkSpeeds</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkSpeeds" title="Link to this heading">¶</a></h1>
+<p>Check that aircraft ground speed is within specification.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkSpeeds.checkSpeeds" title="galileoQC.qualitycontrol.checkSpeeds.checkSpeeds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkSpeeds</span></code></a></p></td>
+<td><p>Checks the data from Whizz HDF5 file for speed exceedances against a specification
+requiring ground speeds to be within a relative range (allowance) about a nominal
+value (nominalSpeed) over a particular distance (maxDistance).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkSpeeds._reportSpeeds" title="galileoQC.qualitycontrol.checkSpeeds._reportSpeeds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_reportSpeeds</span></code></a></p></td>
+<td><p>Checks the data from Whizz Line group for speed exceedances against a specification
+requiring ground speeds to be within a relative range (<code class="docutils literal notranslate"><span class="pre">allowance</span></code>) about a nominal
+value (<code class="docutils literal notranslate"><span class="pre">nominalSpeed</span></code>) over a specified distance (<code class="docutils literal notranslate"><span class="pre">maxDistance</span></code>). If <code class="docutils literal notranslate"><span class="pre">maxDistance</span></code> is
+not provided, and <code class="docutils literal notranslate"><span class="pre">maxDuration</span></code> is provided, then the check is instead over the
+specified duration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkSpeeds._get_speeddata" title="galileoQC.qualitycontrol.checkSpeeds._get_speeddata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_speeddata</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkSpeeds.groupName" title="galileoQC.qualitycontrol.checkSpeeds.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkSpeeds.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkSpeeds.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkSpeeds.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkSpeeds.checkSpeeds">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkSpeeds.</span></span><span class="sig-name descname"><span class="pre">checkSpeeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_north</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_east</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nominalSpeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDuration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minSafeSpeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkSpeeds.checkSpeeds" title="Link to this definition">¶</a></dt>
+<dd><p>Checks the data from Whizz HDF5 file for speed exceedances against a specification
+requiring ground speeds to be within a relative range (allowance) about a nominal
+value (nominalSpeed) over a particular distance (maxDistance).</p>
+<p>The positions (xChannel and yChannel) are assumed to be sampled uniformly in time
+and the first two time (tChannel) values for the first line in the file are
+differenced to obtain the sampling interval. From this, the number of samples, N,
+for the aircraft to travel maxDistance is calculated. The algorithm compares the
+actual distance flown in N samples with maxDistance. If the actual distance is
+greater than</p>
+<p><em>maxDistance + allowance * maxDistance</em></p>
+<p>or less than</p>
+<p><em>maxDistance - allowance * maxDistance</em></p>
+<p>an error is printed.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p>xChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured x positions. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>yChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured y positions. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>tChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured times. The
+default is to read the tChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>nominalSpeed : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The specified ground speed in m/s. The default is 60.0.
+</pre></div>
+</div>
+<p>maxDuration : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The time in seconds over which the speed estimate is determined.
+The default is 13.3.
+</pre></div>
+</div>
+<p>maxDistance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The distance in metres over which the speed estimate is determined.
+The default is 1000.0.
+</pre></div>
+</div>
+<p>allowance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The magnitude, relative to the nominalSpeed, of the range of allowed
+speeds. The default is to use `allowed_range` or, failing that, 0.1 (i.e. +/- 10% of nominal).
+</pre></div>
+</div>
+<p>allowed_range : [Float], optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The minimum and maximum allowed speeds as an array, `[min_allowed, max_allowed]`. The
+default is to use `allowance`.
+</pre></div>
+</div>
+<p>minSafeSpeed : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The minimum allowed instantaneous safe speed in m/s. The default is 42.0.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, plot exceedances for each failed line. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id4">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkSpeeds._reportSpeeds">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkSpeeds.</span></span><span class="sig-name descname"><span class="pre">_reportSpeeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDuration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'X'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_north</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_east</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nominalSpeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minSafeSpeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkSpeeds._reportSpeeds" title="Link to this definition">¶</a></dt>
+<dd><p>Checks the data from Whizz Line group for speed exceedances against a specification
+requiring ground speeds to be within a relative range (<code class="docutils literal notranslate"><span class="pre">allowance</span></code>) about a nominal
+value (<code class="docutils literal notranslate"><span class="pre">nominalSpeed</span></code>) over a specified distance (<code class="docutils literal notranslate"><span class="pre">maxDistance</span></code>). If <code class="docutils literal notranslate"><span class="pre">maxDistance</span></code> is
+not provided, and <code class="docutils literal notranslate"><span class="pre">maxDuration</span></code> is provided, then the check is instead over the
+specified duration.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">vel_north</span></code> and <code class="docutils literal notranslate"><span class="pre">vel_east</span></code> are both provided, then the data in those channels
+is used to calculate speed along the line. If not, then speeds are calculated
+by differencing the positions (<code class="docutils literal notranslate"><span class="pre">xChannel</span></code> and <code class="docutils literal notranslate"><span class="pre">yChannel</span></code>) and dividing by the
+difference of the first two time (<code class="docutils literal notranslate"><span class="pre">tChannel</span></code>) values for the first line in the
+group. This assumes that data are sampled uniformly in time.</p>
+<p>From this, the number of samples, N,
+for the aircraft to travel maxDistance is calculated. The algorithm compares the
+actual distance flown in N samples with maxDistance. If the actual distance is
+greater than
+maxDistance + allowance * maxDistance
+or less than
+maxDistance - allowance * maxDistance
+an error is printed.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>group : HDF5 Group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Whizz line group containing the survey line data.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p>maxDuration : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The time in seconds over which the speed estimate is determined.
+The default is 0.0.
+</pre></div>
+</div>
+<p>maxDistance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The distance in metres over which the speed estimate is determined.
+The default is 0.0.
+</pre></div>
+</div>
+<p>xChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The field in the line containing X positions. The default is &#39;X&#39;.
+</pre></div>
+</div>
+<p>yChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The field in the line containing Y positions. The default is &#39;Y&#39;.
+</pre></div>
+</div>
+<p>tChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The field in the line containing sample times. The default is &#39;time&#39;.
+</pre></div>
+</div>
+<p>vel_north : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The field in the line containing velocity north. The default is &#39;&#39;.
+</pre></div>
+</div>
+<p>vel_east : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The field in the line containing velocity east. The default is &#39;&#39;.
+</pre></div>
+</div>
+<p>nominalSpeed : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The specified ground speed in m/s. The default is 60.0.
+</pre></div>
+</div>
+<p>allowance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The magnitude, relative to the nominalSpeed, of the range of allowed
+speeds. The default is 0.1 (i.e. +/- 10% of nominal).
+</pre></div>
+</div>
+<p>allowed_range : [Float], optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The minimum and maximum allowed speeds as an array, `[min_allowed, max_allowed]`. The
+default is to use `allowance`.
+</pre></div>
+</div>
+<p>minSafeSpeed : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The minimum allowed instantaneous safe speed in m/s. The default is 42.0.
+</pre></div>
+</div>
+<p>title_str : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A title string for the plots. Default &#39;&#39;.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, plot exceedances for each failed line. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkSpeeds._get_speeddata">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkSpeeds.</span></span><span class="sig-name descname"><span class="pre">_get_speeddata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tChannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_north</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_east</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkSpeeds._get_speeddata" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkRepeatLines.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.diffGravVturb.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.diffGravVturb</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkSpeeds.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

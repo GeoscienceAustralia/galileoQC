@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.gridFiles.diff_n_image`
+
+```{py:module} galileoQC.gridFiles.diff_n_image
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.diff_n_image
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`diff_n_image <galileoQC.gridFiles.diff_n_image.diff_n_image>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.diff_n_image.diff_n_image
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1)
+:canonical: galileoQC.gridFiles.diff_n_image.diff_n_image
+
+```{autodoc2-docstring} galileoQC.gridFiles.diff_n_image.diff_n_image
+```
+````

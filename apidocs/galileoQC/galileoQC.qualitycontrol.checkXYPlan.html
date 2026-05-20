@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkXYPlan &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.psdChannelDiff" href="galileoQC.qualitycontrol.psdChannelDiff.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.qualityAnalysis" href="galileoQC.qualitycontrol.qualityAnalysis.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.qualityAnalysis.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.psdChannelDiff.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkXYPlan">
+<span id="galileoqc-qualitycontrol-checkxyplan"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkXYPlan" title="galileoQC.qualitycontrol.checkXYPlan"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkXYPlan</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkXYPlan" title="Link to this heading">¶</a></h1>
+<p>Check that horizontal deviations from the planned aircraft path are within specification.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkXYPlan.checkXYPlan" title="galileoQC.qualitycontrol.checkXYPlan.checkXYPlan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkXYPlan</span></code></a></p></td>
+<td><p>Reports exceedances of actual horizontal position from planned horizontal
+positions for an airborne survey Whizz database.
+The positions (planX, planY) of the start and end of each planned survey line
+are read from a planPath. The measured positions (measX, measY) are read from
+measPath and the perpendicular distance of each from the planned line is
+calculated. If this distance exceeds allowance for maxCounter consecutive
+fiducial, or maxDistance consecutive metres, then an out-of-specification
+exceedance is reported for that line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line" title="galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_plot_exceeding_line</span></code></a></p></td>
+<td><p>Plots a standard exceedance figure for checkXYPlan().</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkXYPlan.groupName" title="galileoQC.qualitycontrol.checkXYPlan.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkXYPlan.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkXYPlan.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkXYPlan.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkXYPlan.checkXYPlan">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkXYPlan.</span></span><span class="sig-name descname"><span class="pre">checkXYPlan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planPaths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxCounter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needConvertToGeodetic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crs_epsg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkXYPlan.checkXYPlan" title="Link to this definition">¶</a></dt>
+<dd><p>Reports exceedances of actual horizontal position from planned horizontal
+positions for an airborne survey Whizz database.
+The positions (planX, planY) of the start and end of each planned survey line
+are read from a planPath. The measured positions (measX, measY) are read from
+measPath and the perpendicular distance of each from the planned line is
+calculated. If this distance exceeds allowance for maxCounter consecutive
+fiducial, or maxDistance consecutive metres, then an out-of-specification
+exceedance is reported for that line.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>planPaths : array of String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Names of HDF5 Whizz files, including path and extension, with the survey
+positions plan.
+</pre></div>
+</div>
+<p>measPath : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension, with the survey
+measured data.
+</pre></div>
+</div>
+<p>lines : String list, optional.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line numbers to be checked. Default is all lines in the whizzFile.
+</pre></div>
+</div>
+<p>planX : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the planned x position. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>planY : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the planned y position. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>measX : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured x position. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>measY : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured y position. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>allowance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The allowed horizontal distance for the measured line from the planned
+line. If any portion of a measured line is further than this from the
+planned position for more than the maximum allowed number of fids or the
+maximum allowed distance, then the line fails. The default is 200.0.
+</pre></div>
+</div>
+<p>maxCounter : Int, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The maximum number of consecutive fids for which an exceedance
+greater than allowance is permitted. If 0, then the constraint is
+ignored. The default is 14.
+</pre></div>
+</div>
+<p>maxDistance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The maximum number of consecutive metres for which an exceedance
+greater than allowance is permitted. If 0, then the constraint is
+ignored. The default is 0.
+</pre></div>
+</div>
+<p>known : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If present, the name of the channel containing the &quot;known error&quot; flag.
+This is reported against any error so that known errors can be distinguished
+from unknown errors.
+</pre></div>
+</div>
+<p>needConvertToGeodetic : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, convert plan coordinates to geographic coordinates to match measured coordinates.
+</pre></div>
+</div>
+<p>crs_epsg : pyproj crs, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Ideally an EPSG integer code, eg 7854. Default 0, must be a real code if needConvertToGeodetic.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, plot exceedances for each failed line.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, reports details for each failed line.
+</pre></div>
+</div>
+<p class="rubric" id="id4">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkXYPlan.</span></span><span class="sig-name descname"><span class="pre">_plot_exceeding_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planLine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geoCoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line" title="Link to this definition">¶</a></dt>
+<dd><p>Plots a standard exceedance figure for checkXYPlan().</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>x : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>y : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>allowance : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>line : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>planLine : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>dirn : TYPE</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION.
+</pre></div>
+</div>
+<p>geoCoords : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, provide 5 decimal places on axis labelling, else 0.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.qualityAnalysis.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.psdChannelDiff.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkXYPlan.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkAtmosEffect &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.checkDuplicateLines" href="galileoQC.qualitycontrol.checkDuplicateLines.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkDiurnal" href="galileoQC.qualitycontrol.checkDiurnal.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkDiurnal.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDiurnal</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.checkDuplicateLines.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDuplicateLines</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkAtmosEffect">
+<span id="galileoqc-qualitycontrol-checkatmoseffect"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkAtmosEffect" title="galileoQC.qualitycontrol.checkAtmosEffect"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkAtmosEffect</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkAtmosEffect" title="Link to this heading">¶</a></h1>
+<p>Check atmospheric gravity effect calculation.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect" title="galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkAtmosEffect</span></code></a></p></td>
+<td><p>Subtracts the atomspheric correction in the data file from one calculated using
+Hinze et al (2005) and the height data in the data file.
+The min, max, mean and standard deviation of the difference is calculated
+for each line and presented in an extended whisker plot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect" title="galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_atmosEffect</span></code></a></p></td>
+<td><p>Returns the atmospheric gravity correction in um/s/s using Hinze et al (2005), eqn 3.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkAtmosEffect.groupName" title="galileoQC.qualitycontrol.checkAtmosEffect.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkAtmosEffect.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkAtmosEffect.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkAtmosEffect.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkAtmosEffect.</span></span><span class="sig-name descname"><span class="pre">checkAtmosEffect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmosCorr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GRS80_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect" title="Link to this definition">¶</a></dt>
+<dd><p>Subtracts the atomspheric correction in the data file from one calculated using
+Hinze et al (2005) and the height data in the data file.
+The min, max, mean and standard deviation of the difference is calculated
+for each line and presented in an extended whisker plot.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>atmosCorr : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the atmospheric correction. These
+data must be in units of &#39;gu&#39;, &#39;µm/s/s&#39;, &#39;um/s/s&#39; or &#39;um/s2&#39;.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p>GRS80_height : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the GRS80_height. The
+default is to read the altitudeChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p class="rubric" id="id4">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkAtmosEffect.</span></span><span class="sig-name descname"><span class="pre">_atmosEffect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the atmospheric gravity correction in um/s/s using Hinze et al (2005), eqn 3.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>height : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the height in metres above the GRS80 ellipsoid; optional, default 0.0.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>atmospheric correction (Float).</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkDiurnal.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDiurnal</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.checkDuplicateLines.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDuplicateLines</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkAtmosEffect.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

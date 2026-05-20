@@ -1,0 +1,152 @@
+# {py:mod}`galileoQC.gridFiles.minc`
+
+```{py:module} galileoQC.gridFiles.minc
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`minc <galileoQC.gridFiles.minc.minc>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.minc
+    :summary:
+    ```
+* - {py:obj}`u_normal <galileoQC.gridFiles.minc.u_normal>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.u_normal
+    :summary:
+    ```
+* - {py:obj}`u_edge <galileoQC.gridFiles.minc.u_edge>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.u_edge
+    :summary:
+    ```
+* - {py:obj}`u_one_row_from_edge <galileoQC.gridFiles.minc.u_one_row_from_edge>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.u_one_row_from_edge
+    :summary:
+    ```
+* - {py:obj}`u_corner <galileoQC.gridFiles.minc.u_corner>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.u_corner
+    :summary:
+    ```
+* - {py:obj}`u_next_to_corner <galileoQC.gridFiles.minc.u_next_to_corner>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.u_next_to_corner
+    :summary:
+    ```
+* - {py:obj}`u_edge_next_to_corner <galileoQC.gridFiles.minc.u_edge_next_to_corner>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.u_edge_next_to_corner
+    :summary:
+    ```
+* - {py:obj}`off_grid <galileoQC.gridFiles.minc.off_grid>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.off_grid
+    :summary:
+    ```
+* - {py:obj}`get_b <galileoQC.gridFiles.minc.get_b>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.get_b
+    :summary:
+    ```
+* - {py:obj}`mcurv <galileoQC.gridFiles.minc.mcurv>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.mcurv
+    :summary:
+    ```
+* - {py:obj}`morg <galileoQC.gridFiles.minc.morg>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc.morg
+    :summary:
+    ```
+* - {py:obj}`_testfn <galileoQC.gridFiles.minc._testfn>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.minc._testfn
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} minc(x, y, z, dxy, *, showlog=print, extent=None, bdist=None, maxiters=100, verbose=False)
+:canonical: galileoQC.gridFiles.minc.minc
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.minc
+```
+````
+
+````{py:function} u_normal(u, i, j)
+:canonical: galileoQC.gridFiles.minc.u_normal
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.u_normal
+```
+````
+
+````{py:function} u_edge(u, i)
+:canonical: galileoQC.gridFiles.minc.u_edge
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.u_edge
+```
+````
+
+````{py:function} u_one_row_from_edge(u, i)
+:canonical: galileoQC.gridFiles.minc.u_one_row_from_edge
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.u_one_row_from_edge
+```
+````
+
+````{py:function} u_corner(u)
+:canonical: galileoQC.gridFiles.minc.u_corner
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.u_corner
+```
+````
+
+````{py:function} u_next_to_corner(u)
+:canonical: galileoQC.gridFiles.minc.u_next_to_corner
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.u_next_to_corner
+```
+````
+
+````{py:function} u_edge_next_to_corner(u)
+:canonical: galileoQC.gridFiles.minc.u_edge_next_to_corner
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.u_edge_next_to_corner
+```
+````
+
+````{py:function} off_grid(u, i, j, wn, b)
+:canonical: galileoQC.gridFiles.minc.off_grid
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.off_grid
+```
+````
+
+````{py:function} get_b(e5, n5)
+:canonical: galileoQC.gridFiles.minc.get_b
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.get_b
+```
+````
+
+````{py:function} mcurv(u, ufixed)
+:canonical: galileoQC.gridFiles.minc.mcurv
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.mcurv
+```
+````
+
+````{py:function} morg(x2, y2, z2, extent, dxy, rows, cols)
+:canonical: galileoQC.gridFiles.minc.morg
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc.morg
+```
+````
+
+````{py:function} _testfn()
+:canonical: galileoQC.gridFiles.minc._testfn
+
+```{autodoc2-docstring} galileoQC.gridFiles.minc._testfn
+```
+````

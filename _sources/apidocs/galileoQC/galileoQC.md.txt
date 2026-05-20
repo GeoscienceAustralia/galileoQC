@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC`
+
+```{py:module} galileoQC
+```
+
+```{autodoc2-docstring} galileoQC
+:allowtitles:
+```
+
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+galileoQC.gridFiles
+galileoQC.whizzPlots
+galileoQC.whizzFiles
+galileoQC.qualitycontrol
+galileoQC.utility
+galileoQC.transforms
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.config
+```

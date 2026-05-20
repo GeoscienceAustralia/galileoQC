@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkClearance &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.checkRepeatLines" href="galileoQC.qualitycontrol.checkRepeatLines.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkDuplicateLines" href="galileoQC.qualitycontrol.checkDuplicateLines.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkDuplicateLines.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDuplicateLines</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.checkRepeatLines.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkClearance">
+<span id="galileoqc-qualitycontrol-checkclearance"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkClearance" title="galileoQC.qualitycontrol.checkClearance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkClearance</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkClearance" title="Link to this heading">¶</a></h1>
+<p>Check aircraft ground clearances.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkClearance.checkSafeClearance" title="galileoQC.qualitycontrol.checkClearance.checkSafeClearance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkSafeClearance</span></code></a></p></td>
+<td><p>Checks the data from Whizz HDF5 file for low clearance above the terrain (as a safety check).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkClearance.checkClearance" title="galileoQC.qualitycontrol.checkClearance.checkClearance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkClearance</span></code></a></p></td>
+<td><p>Reports exceedances from contract specifications of the height above terrain
+for an airborne survey Whizz database.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkClearance.checkDrape" title="galileoQC.qualitycontrol.checkClearance.checkDrape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkDrape</span></code></a></p></td>
+<td><p>Checks actual altitude flown against planned drape in drape channel.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkClearance.groupName" title="galileoQC.qualitycontrol.checkClearance.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkClearance.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkClearance.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkClearance.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkClearance.checkSafeClearance">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkClearance.</span></span><span class="sig-name descname"><span class="pre">checkSafeClearance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimumAllowedClearance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearance_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terrain_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkClearance.checkSafeClearance" title="Link to this definition">¶</a></dt>
+<dd><p>Checks the data from Whizz HDF5 file for low clearance above the terrain (as a safety check).</p>
+<p>The clearance (calculated as altitude - terrain if clearance_chan=’’), must be
+greater than minimumAllowedClearance or a warning is reported.
+If any samples along the line fail the test, then profiles are plotted
+for visual analysis.
+The positions (xChannel and yChannel) are only used for plotting.</p>
+<p>See also <code class="docutils literal notranslate"><span class="pre">checkClearance</span></code>, <code class="docutils literal notranslate"><span class="pre">checkDrape</span></code>, <code class="docutils literal notranslate"><span class="pre">checkVertPlan</span></code>.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>minimumAllowedClearance : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The planned clearance between above the terrain in metres.
+</pre></div>
+</div>
+<p>clearance_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the terrain clearance field in the Lines group
+of the Whizz HDF5 file.
+</pre></div>
+</div>
+<p>altitude_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the absolute altitude or height field in the Lines group
+of the Whizz HDF5 file.
+</pre></div>
+</div>
+<p>terrain_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the absolute terrain or DTM height field in the Lines group
+of the Whizz HDF5 file.
+</pre></div>
+</div>
+<p>xChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured x positions. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>yChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured y positions. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, plot a map of each pair of intersecting lines where the `zChannel`
+values differ by more than `max_allowed_deltaZ`. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkClearance.checkClearance">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkClearance.</span></span><span class="sig-name descname"><span class="pre">checkClearance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nominalClearance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearance_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terrain_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkClearance.checkClearance" title="Link to this definition">¶</a></dt>
+<dd><p>Reports exceedances from contract specifications of the height above terrain
+for an airborne survey Whizz database.</p>
+<p>The specification requires heights to be within a relative range (allowance) about a nominal
+value (nominalClearance) over a particular distance (maxDistance).</p>
+<p>The clearance (calculated as altitude - terrain if clearance_chan=’’), must be
+within +/- allowance of nominalClearance.
+For each line, the maximum absolute deviation of clearance from nominalClearance is
+reported.
+If any samples along the line exceed the allowance, then profiles are plotted
+for visual analysis. No use is made of maxDistance (yet).
+The positions (xChannel and yChannel) are only used for plotting.</p>
+<p>See also <code class="docutils literal notranslate"><span class="pre">checkSafeClearance</span></code>, <code class="docutils literal notranslate"><span class="pre">checkDrape</span></code>, <code class="docutils literal notranslate"><span class="pre">checkVertPlan</span></code>.</p>
+<p class="rubric" id="id7">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>clearance_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the terrain clearance field in the Lines group
+of the Whizz HDF5 file.
+</pre></div>
+</div>
+<p>altitude_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the absolute altitude or height field in the Lines group
+of the Whizz HDF5 file.
+</pre></div>
+</div>
+<p>terrain_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the absolute terrain or DTM height field in the Lines group
+of the Whizz HDF5 file.
+</pre></div>
+</div>
+<p>nominalClearance : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The planned clearance between above the terrain in metres.
+</pre></div>
+</div>
+<p>allowance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The absolute maximum deviation allowed from the planned clearance in
+metres. The default is 20.0.
+</pre></div>
+</div>
+<p>xChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured x positions. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>yChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured y positions. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p class="rubric" id="id8">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkClearance.checkDrape">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkClearance.</span></span><span class="sig-name descname"><span class="pre">checkDrape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drapeChannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warningClearance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkClearance.checkDrape" title="Link to this definition">¶</a></dt>
+<dd><p>Checks actual altitude flown against planned drape in drape channel.</p>
+<p>See also <code class="docutils literal notranslate"><span class="pre">checkClearance</span></code>, <code class="docutils literal notranslate"><span class="pre">checkSafeClearance</span></code>, <code class="docutils literal notranslate"><span class="pre">checkVertPlan</span></code>.</p>
+<p class="rubric" id="id9">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>altitude : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured altitudes.
+</pre></div>
+</div>
+<p>drapeChannel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured drape heights.
+</pre></div>
+</div>
+<p>warningClearance : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DESCRIPTION. The default is 20.0.
+</pre></div>
+</div>
+<p>xChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured x positions. The
+default is to read the xChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>yChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the geoWhizz field or channel containing the measured y positions. The
+default is to read the yChannel field name from the Coordinate Frame.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, plot a map of each pair of intersecting lines where the `zChannel`
+values differ by more than `max_allowed_deltaZ`. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id10">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkDuplicateLines.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkDuplicateLines</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.checkRepeatLines.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkClearance.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

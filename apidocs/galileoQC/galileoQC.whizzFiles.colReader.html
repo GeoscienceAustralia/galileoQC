@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.whizzFiles.colReader &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.whizzFiles.updateLineSpacing" href="galileoQC.whizzFiles.updateLineSpacing.html" />
+    <link rel="prev" title="galileoQC.whizzFiles.reportData" href="galileoQC.whizzFiles.reportData.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.whizzFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.whizzFiles.reportData.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.reportData</span></code></a></li>
+      <li>Next: <a href="galileoQC.whizzFiles.updateLineSpacing.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.updateLineSpacing</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.whizzFiles.colReader">
+<span id="galileoqc-whizzfiles-colreader"></span><h1><a class="reference internal" href="#module-galileoQC.whizzFiles.colReader" title="galileoQC.whizzFiles.colReader"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.colReader</span></code></a><a class="headerlink" href="#module-galileoQC.whizzFiles.colReader" title="Link to this heading">¶</a></h1>
+<p>Import columnar table ASCII data and write to <code class="docutils literal notranslate"><span class="pre">geoWhizz</span></code> format.
+Author: Mark Helm Dransfield
+Created: 2023
+License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader.colsToHDF" title="galileoQC.whizzFiles.colReader.colsToHDF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colsToHDF</span></code></a></p></td>
+<td><p>Reads the data from the ASCII survey file and writes it to a new Whizz
+HDF5 survey file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader.save_rec_lists" title="galileoQC.whizzFiles.colReader.save_rec_lists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_rec_lists</span></code></a></p></td>
+<td><p>Saves a full flight-line of data in the array of string arrays
+into the wizfid lines group. Returns the flight-line group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader._decimal_degrees" title="galileoQC.whizzFiles.colReader._decimal_degrees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_decimal_degrees</span></code></a></p></td>
+<td><p>Given an array of strings, each of the form ‘-10.12.45.12234’ implying
+-10 deg, 12 min, 45.12234 sec, returns a Numpy array of the equivalent
+values in decimal degrees.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader._decimal_year" title="galileoQC.whizzFiles.colReader._decimal_year"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_decimal_year</span></code></a></p></td>
+<td><p>Given an array of strings, each of the form ‘2013/03/09’ implying
+the date 9th March 2013, returns a Numpy array of the equivalent
+values in decimaly years.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader._leap" title="galileoQC.whizzFiles.colReader._leap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_leap</span></code></a></p></td>
+<td><p>Given a year, return True if it is a leap year, else False.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader.record_list_to_float" title="galileoQC.whizzFiles.colReader.record_list_to_float"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_list_to_float</span></code></a></p></td>
+<td><p>Convert the 2D string list into a 2D numpy float array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader._getChannels" title="galileoQC.whizzFiles.colReader._getChannels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getChannels</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader._ascii_check" title="galileoQC.whizzFiles.colReader._ascii_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_ascii_check</span></code></a></p></td>
+<td><p>Returns True if all characters in <code class="docutils literal notranslate"><span class="pre">col_datfile</span></code> are ASCII, otherwise False.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader.groupName" title="galileoQC.whizzFiles.colReader.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.colReader.projectName" title="galileoQC.whizzFiles.colReader.projectName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projectName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.whizzFiles.colReader.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader.projectName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">projectName</span></span><a class="headerlink" href="#galileoQC.whizzFiles.colReader.projectName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader.colsToHDF">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">colsToHDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col_datfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineColumn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dateColumn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latColumn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lonColumn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dumstr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader.colsToHDF" title="Link to this definition">¶</a></dt>
+<dd><p>Reads the data from the ASCII survey file and writes it to a new Whizz
+HDF5 survey file.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>col_datfile : pathlib.PurePath
+The pathlib Path to the input ASCII data file.
+whizzFile : pathlib.PurePath, optional
+The pathlib Path to the output Whizz HDF5 file. The default is ‘’ and
+the output file is then the same as the input file with the extension
+changed to ‘.hdf5’.
+lineColumn : Integer
+The column number containing the line numbers.</p>
+<p class="rubric" id="id4">Returns</p>
+<p>whizzFile : pathlib.PurePath
+The name of the created whizz file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader.save_rec_lists">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">save_rec_lists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wizLines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_lists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dumstr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader.save_rec_lists" title="Link to this definition">¶</a></dt>
+<dd><p>Saves a full flight-line of data in the array of string arrays
+into the wizfid lines group. Returns the flight-line group.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader._decimal_degrees">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">_decimal_degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dumstr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader._decimal_degrees" title="Link to this definition">¶</a></dt>
+<dd><p>Given an array of strings, each of the form ‘-10.12.45.12234’ implying
+-10 deg, 12 min, 45.12234 sec, returns a Numpy array of the equivalent
+values in decimal degrees.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader._decimal_year">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">_decimal_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dumstr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader._decimal_year" title="Link to this definition">¶</a></dt>
+<dd><p>Given an array of strings, each of the form ‘2013/03/09’ implying
+the date 9th March 2013, returns a Numpy array of the equivalent
+values in decimaly years.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader._leap">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">_leap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader._leap" title="Link to this definition">¶</a></dt>
+<dd><p>Given a year, return True if it is a leap year, else False.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader.record_list_to_float">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">record_list_to_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_lists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pytypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nulls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader.record_list_to_float" title="Link to this definition">¶</a></dt>
+<dd><p>Convert the 2D string list into a 2D numpy float array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader._getChannels">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">_getChannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datafile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader._getChannels" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.colReader._ascii_check">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.colReader.</span></span><span class="sig-name descname"><span class="pre">_ascii_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col_datfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.colReader._ascii_check" title="Link to this definition">¶</a></dt>
+<dd><p>Returns True if all characters in <code class="docutils literal notranslate"><span class="pre">col_datfile</span></code> are ASCII, otherwise False.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>col_datfile : Path
+The Path to the data file.</p>
+<p class="rubric" id="id6">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.whizzFiles.reportData.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.reportData</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.whizzFiles.updateLineSpacing.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.updateLineSpacing</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.whizzFiles.colReader.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

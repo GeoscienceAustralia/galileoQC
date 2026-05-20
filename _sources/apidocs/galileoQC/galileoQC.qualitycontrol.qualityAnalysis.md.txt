@@ -1,0 +1,108 @@
+# {py:mod}`galileoQC.qualitycontrol.qualityAnalysis`
+
+```{py:module} galileoQC.qualitycontrol.qualityAnalysis
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`calcDrift <galileoQC.qualitycontrol.qualityAnalysis.calcDrift>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.calcDrift
+    :summary:
+    ```
+* - {py:obj}`checkVertAcc <galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc
+    :summary:
+    ```
+* - {py:obj}`checkVertAccStats <galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats
+    :summary:
+    ```
+* - {py:obj}`checkStatcor <galileoQC.qualitycontrol.qualityAnalysis.checkStatcor>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.checkStatcor
+    :summary:
+    ```
+* - {py:obj}`lineStats <galileoQC.qualitycontrol.qualityAnalysis.lineStats>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.lineStats
+    :summary:
+    ```
+* - {py:obj}`statsChannelDiff <galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.qualityAnalysis.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.groupName
+```
+
+````
+
+````{py:function} calcDrift(whizzFile, time, gradient, lines=[])
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.calcDrift
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.calcDrift
+```
+````
+
+````{py:function} checkVertAcc(whizzFile, vertvelocity, lines=[])
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc
+```
+````
+
+````{py:function} checkVertAccStats(whizzFile, lines=[])
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats
+```
+````
+
+````{py:function} checkStatcor(whizzFile, statcor, flight='', lines=[])
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.checkStatcor
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.checkStatcor
+```
+````
+
+````{py:function} lineStats(whizzFile, channel, lines=[])
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.lineStats
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.lineStats
+```
+````
+
+````{py:function} statsChannelDiff(whizzFile, channel1, channel2, flightLines=[])
+:canonical: galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff
+```
+````

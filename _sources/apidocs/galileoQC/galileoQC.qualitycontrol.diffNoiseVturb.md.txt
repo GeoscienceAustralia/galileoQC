@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.diffNoiseVturb`
+
+```{py:module} galileoQC.qualitycontrol.diffNoiseVturb
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.diffNoiseVturb
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`diffNoiseVturb <galileoQC.qualitycontrol.diffNoiseVturb.diffNoiseVturb>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.diffNoiseVturb.diffNoiseVturb
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.diffNoiseVturb.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.diffNoiseVturb.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.diffNoiseVturb.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.diffNoiseVturb.groupName
+```
+
+````
+
+````{py:function} diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV='', eNE='', eUV='', error_spec=5.0, labelLines=False)
+:canonical: galileoQC.qualitycontrol.diffNoiseVturb.diffNoiseVturb
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.diffNoiseVturb.diffNoiseVturb
+```
+````

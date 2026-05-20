@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkHighFreq`
+
+```{py:module} galileoQC.qualitycontrol.checkHighFreq
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkHighFreq <galileoQC.qualitycontrol.checkHighFreq.checkHighFreq>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq.checkHighFreq
+    :summary:
+    ```
+* - {py:obj}`_subplot_hiF_analysis <galileoQC.qualitycontrol.checkHighFreq._subplot_hiF_analysis>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq._subplot_hiF_analysis
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkHighFreq.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkHighFreq.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq.groupName
+```
+
+````
+
+````{py:function} checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tChannel='', vertaccel='', vertvelocity='', vertdispl='', lines=[], verbose=False, plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkHighFreq.checkHighFreq
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq.checkHighFreq
+```
+````
+
+````{py:function} _subplot_hiF_analysis(fig, num_subplots, plotIdx, plotTitle, x1, y1, x2=np.array([]), y2=np.array([]), bounds=[])
+:canonical: galileoQC.qualitycontrol.checkHighFreq._subplot_hiF_analysis
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHighFreq._subplot_hiF_analysis
+```
+````

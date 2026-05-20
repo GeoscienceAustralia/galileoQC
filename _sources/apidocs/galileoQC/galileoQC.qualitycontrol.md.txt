@@ -1,0 +1,49 @@
+# {py:mod}`galileoQC.qualitycontrol`
+
+```{py:module} galileoQC.qualitycontrol
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.qualitycontrol.diffNoiseVturb
+galileoQC.qualitycontrol.checkErsHeaders
+galileoQC.qualitycontrol.checkOverlaps
+galileoQC.qualitycontrol.checkGNSS
+galileoQC.qualitycontrol.checkHighFreq
+galileoQC.qualitycontrol.checkSpikes
+galileoQC.qualitycontrol.checkIntersection
+galileoQC.qualitycontrol.checkHeading
+galileoQC.qualitycontrol.diffChanStats
+galileoQC.qualitycontrol.checkPhase
+galileoQC.qualitycontrol.ilsNoiseAnalysis
+galileoQC.qualitycontrol.checkBasemag
+galileoQC.qualitycontrol.allChanStats
+galileoQC.qualitycontrol.checkDifference
+galileoQC.qualitycontrol.checkEotvosCorr
+galileoQC.qualitycontrol.qualityAnalysis
+galileoQC.qualitycontrol.checkXYPlan
+galileoQC.qualitycontrol.psdChannelDiff
+galileoQC.qualitycontrol.checkFrobenius
+galileoQC.qualitycontrol.checkLatCorr
+galileoQC.qualitycontrol.checkFreeAirCorr
+galileoQC.qualitycontrol.checkVertPlan
+galileoQC.qualitycontrol.checkConstantSlope
+galileoQC.qualitycontrol.checkGaps
+galileoQC.qualitycontrol.checkDiurnal
+galileoQC.qualitycontrol.checkAtmosEffect
+galileoQC.qualitycontrol.checkDuplicateLines
+galileoQC.qualitycontrol.checkClearance
+galileoQC.qualitycontrol.checkRepeatLines
+galileoQC.qualitycontrol.checkSpeeds
+galileoQC.qualitycontrol.diffGravVturb
+galileoQC.qualitycontrol.diffGroundGrid
+galileoQC.qualitycontrol.checkLineLengths
+```

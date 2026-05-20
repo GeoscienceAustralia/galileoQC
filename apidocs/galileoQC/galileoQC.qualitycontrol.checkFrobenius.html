@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkFrobenius &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.checkLatCorr" href="galileoQC.qualitycontrol.checkLatCorr.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.psdChannelDiff" href="galileoQC.qualitycontrol.psdChannelDiff.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.psdChannelDiff.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.checkLatCorr.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkLatCorr</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkFrobenius">
+<span id="galileoqc-qualitycontrol-checkfrobenius"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkFrobenius" title="galileoQC.qualitycontrol.checkFrobenius"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkFrobenius</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkFrobenius" title="Link to this heading">¶</a></h1>
+<p>Checks the FTG Frobenius norm against a specification.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkFrobenius.checkFrobenius" title="galileoQC.qualitycontrol.checkFrobenius.checkFrobenius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkFrobenius</span></code></a></p></td>
+<td><p>Reports the noise for each line in lines from filename (a whizz file)
+which exceeds noiseLimit. Here the noise is calculated by <code class="docutils literal notranslate"><span class="pre">_FTGeigen</span></code> as
+the Frobenius norm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkFrobenius._FTGeigen" title="galileoQC.qualitycontrol.checkFrobenius._FTGeigen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_FTGeigen</span></code></a></p></td>
+<td><p>Returns the standard deviation of the Frobenius norm of the gravity gradient.
+Plots an analysis if this is larger than <code class="docutils literal notranslate"><span class="pre">noiseLimit</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkFrobenius._FTGTransform" title="galileoQC.qualitycontrol.checkFrobenius._FTGTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_FTGTransform</span></code></a></p></td>
+<td><p>Returns Txx, Txy, Txz, Tyy, Tyz, Tzz from an algebraic transform of
+the three inline and three cross components of the FTG gradiometer.
+Assumes, I believe, that the FTG is oriented so that the horizontal
+projection of the spin axis of GGI3 is north (the y-axis). From equation (5)
+in J. Brewster, Comparison of gravity gradiometer designs using the 3D
+sensitivity function. In SEG International Exposition and 86th Annual
+Meeting, 2016.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkFrobenius.groupName" title="galileoQC.qualitycontrol.checkFrobenius.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkFrobenius.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkFrobenius.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkFrobenius.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkFrobenius.checkFrobenius">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkFrobenius.</span></span><span class="sig-name descname"><span class="pre">checkFrobenius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inline1_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inline2_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il3</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inline3_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Cross1_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Cross2_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr3</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Cross3_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiselimit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkFrobenius.checkFrobenius" title="Link to this definition">¶</a></dt>
+<dd><p>Reports the noise for each line in lines from filename (a whizz file)
+which exceeds noiseLimit. Here the noise is calculated by <code class="docutils literal notranslate"><span class="pre">_FTGeigen</span></code> as
+the Frobenius norm.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension, to be checked.
+</pre></div>
+</div>
+<p>noiselimit : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The maximum allowable in-line noise on a line.
+</pre></div>
+</div>
+<p>lines : String list, optional.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line numbers to be checked. Default is all lines in the whizzFile.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkFrobenius._FTGeigen">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkFrobenius.</span></span><span class="sig-name descname"><span class="pre">_FTGeigen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Txx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Txy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Txz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tyy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tzz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiselimit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkFrobenius._FTGeigen" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the standard deviation of the Frobenius norm of the gravity gradient.
+Plots an analysis if this is larger than <code class="docutils literal notranslate"><span class="pre">noiseLimit</span></code>.</p>
+<p class="rubric" id="id7">Parameters</p>
+<p>Txx : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The xx component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Txy : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The xy component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Txz : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The xz component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Tyy : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The yy component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Tyz : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The yz component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Tzz : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The zz component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>line : String, optional.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line number containing the above data, just used for
+reporting. Default &#39;&#39;.
+</pre></div>
+</div>
+<p>noiselimit : Float, optional.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The maximum allowed standard deviation of the Frobenius norm.
+Default 30.0 E.
+</pre></div>
+</div>
+<p class="rubric" id="id8">Returns</p>
+<p>std_frob : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The standard deviation of the Frobenius norm of the gravity gradient.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkFrobenius._FTGTransform">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkFrobenius.</span></span><span class="sig-name descname"><span class="pre">_FTGTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">il1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">il3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkFrobenius._FTGTransform" title="Link to this definition">¶</a></dt>
+<dd><p>Returns Txx, Txy, Txz, Tyy, Tyz, Tzz from an algebraic transform of
+the three inline and three cross components of the FTG gradiometer.
+Assumes, I believe, that the FTG is oriented so that the horizontal
+projection of the spin axis of GGI3 is north (the y-axis). From equation (5)
+in J. Brewster, Comparison of gravity gradiometer designs using the 3D
+sensitivity function. In SEG International Exposition and 86th Annual
+Meeting, 2016.</p>
+<p class="rubric" id="id9">Parameters</p>
+<p>il1 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The first in-line component data.
+</pre></div>
+</div>
+<p>il2 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The second in-line component data.
+</pre></div>
+</div>
+<p>il3 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The third in-line component data.
+</pre></div>
+</div>
+<p>cr1 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The first cross component data.
+</pre></div>
+</div>
+<p>cr2 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The second cross component data.
+</pre></div>
+</div>
+<p>cr3 : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The third cross component data.
+</pre></div>
+</div>
+<p class="rubric" id="id10">Returns</p>
+<p>Txx : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The xx component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Txy : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The xy component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Txz : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The xz component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Tyy : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The yy component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Tyz : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The yz component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+<p>Tzz : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The zz component of the gravity gradient in ENU coordinates.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.psdChannelDiff.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.checkLatCorr.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkLatCorr</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkFrobenius.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

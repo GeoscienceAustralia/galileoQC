@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.whizzFiles.retrieveData &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.whizzFiles.gdfReader" href="galileoQC.whizzFiles.gdfReader.html" />
+    <link rel="prev" title="galileoQC.whizzFiles.whizzToXYZ" href="galileoQC.whizzFiles.whizzToXYZ.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.whizzFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.whizzFiles.whizzToXYZ.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.whizzToXYZ</span></code></a></li>
+      <li>Next: <a href="galileoQC.whizzFiles.gdfReader.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.gdfReader</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.whizzFiles.retrieveData">
+<span id="galileoqc-whizzfiles-retrievedata"></span><h1><a class="reference internal" href="#module-galileoQC.whizzFiles.retrieveData" title="galileoQC.whizzFiles.retrieveData"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.retrieveData</span></code></a><a class="headerlink" href="#module-galileoQC.whizzFiles.retrieveData" title="Link to this heading">¶</a></h1>
+<p>Retrieve data from a <code class="docutils literal notranslate"><span class="pre">geoWhizz</span></code> file.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.getWhizzData" title="galileoQC.whizzFiles.retrieveData.getWhizzData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getWhizzData</span></code></a></p></td>
+<td><p>Returns a numpy array containg the specified channel of
+data for the given line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.getLineData" title="galileoQC.whizzFiles.retrieveData.getLineData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getLineData</span></code></a></p></td>
+<td><p>Returns a numpy array containg the specified channel of
+data for the line in the given linegroup.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.getChannelAttrs" title="galileoQC.whizzFiles.retrieveData.getChannelAttrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getChannelAttrs</span></code></a></p></td>
+<td><p>Returns the requested attribute for the specified channel of
+data for the given line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.getLineXChannel" title="galileoQC.whizzFiles.retrieveData.getLineXChannel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getLineXChannel</span></code></a></p></td>
+<td><p>Returns 1D numpy arrays of x and channel in line from geoWhizz filename. The
+inputs are just two channels in the data and the names ‘x’ and ‘channel’ do
+not carry intrinsic meaning.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.getChannels" title="galileoQC.whizzFiles.retrieveData.getChannels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getChannels</span></code></a></p></td>
+<td><p>Returns an array of the channel names in a geoWhizz file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.getLines" title="galileoQC.whizzFiles.retrieveData.getLines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getLines</span></code></a></p></td>
+<td><p>Returns an array of the line names in a geoWhizz file.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.groupName" title="galileoQC.whizzFiles.retrieveData.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.retrieveData.projectName" title="galileoQC.whizzFiles.retrieveData.projectName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projectName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.projectName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">projectName</span></span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.projectName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.getWhizzData">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">getWhizzData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.getWhizzData" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a numpy array containg the specified channel of
+data for the given line.</p>
+<p class="rubric" id="id11">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>line : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A flightline, e.g. &#39;1000110.0&#39;.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The (case-sensitive) name of a channel in the database, e.g. &#39;EASTING&#39;.
+</pre></div>
+</div>
+<p class="rubric" id="id12">Returns</p>
+<p>my_data : numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The requested data.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.getLineData">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">getLineData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.getLineData" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a numpy array containg the specified channel of
+data for the line in the given linegroup.</p>
+<p class="rubric" id="id13">Parameters</p>
+<p>linegroup : HDF5 Group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A flight-line group.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a channel in the database, e.g. &#39;EASTING&#39;.
+</pre></div>
+</div>
+<p class="rubric" id="id14">Returns</p>
+<p>my_data : numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The requested data.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.getChannelAttrs">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">getChannelAttrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linegroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myattribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Units'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.getChannelAttrs" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the requested attribute for the specified channel of
+data for the given line.</p>
+<p class="rubric" id="id15">Parameters</p>
+<p>linegroup : HDF5 Group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A flight-line group.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a channel in the database, e.g. &#39;EASTING&#39;.
+</pre></div>
+</div>
+<p>myattribute : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the desired attribute, default &#39;Units&#39;.
+</pre></div>
+</div>
+<p class="rubric" id="id16">Returns</p>
+<p>attr_value : String
+The <code class="docutils literal notranslate"><span class="pre">Units</span></code> attribute for channel, empty string if <code class="docutils literal notranslate"><span class="pre">Units</span></code> was not found.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.getLineXChannel">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">getLineXChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.getLineXChannel" title="Link to this definition">¶</a></dt>
+<dd><p>Returns 1D numpy arrays of x and channel in line from geoWhizz filename. The
+inputs are just two channels in the data and the names ‘x’ and ‘channel’ do
+not carry intrinsic meaning.</p>
+<p>Intended use for analysis and plotting.</p>
+<p class="rubric" id="id17">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>line : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A flightline, e.g. &#39;1000110.0&#39;.
+</pre></div>
+</div>
+<p>x : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the x variable.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel.
+</pre></div>
+</div>
+<p class="rubric" id="id18">Returns</p>
+<p>xData : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A numpy array of data, float32 or float64.
+</pre></div>
+</div>
+<p>yData : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A numpy array of data, float32 or float64.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.getChannels">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">getChannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.getChannels" title="Link to this definition">¶</a></dt>
+<dd><p>Returns an array of the channel names in a geoWhizz file.</p>
+<p class="rubric" id="id19">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a geoWhizz file, including path and extension.
+</pre></div>
+</div>
+<p class="rubric" id="id20">Returns</p>
+<p>List of strings. The channel names.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.retrieveData.getLines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.retrieveData.</span></span><span class="sig-name descname"><span class="pre">getLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.retrieveData.getLines" title="Link to this definition">¶</a></dt>
+<dd><p>Returns an array of the line names in a geoWhizz file.</p>
+<p class="rubric" id="id21">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a geoWhizz file, including path and extension.
+</pre></div>
+</div>
+<p class="rubric" id="id22">Returns</p>
+<p>List of strings. The Line numbers.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.whizzFiles.whizzToXYZ.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.whizzToXYZ</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.whizzFiles.gdfReader.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.gdfReader</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.whizzFiles.retrieveData.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

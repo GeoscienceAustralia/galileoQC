@@ -1,0 +1,144 @@
+# {py:mod}`galileoQC.whizzFiles.pointfiles`
+
+```{py:module} galileoQC.whizzFiles.pointfiles
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_translate_date <galileoQC.whizzFiles.pointfiles._translate_date>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles._translate_date
+    :summary:
+    ```
+* - {py:obj}`_trim_ends <galileoQC.whizzFiles.pointfiles._trim_ends>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles._trim_ends
+    :summary:
+    ```
+* - {py:obj}`_trim_monotonic <galileoQC.whizzFiles.pointfiles._trim_monotonic>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles._trim_monotonic
+    :summary:
+    ```
+* - {py:obj}`updateProject <galileoQC.whizzFiles.pointfiles.updateProject>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.updateProject
+    :summary:
+    ```
+* - {py:obj}`updateCoordFrame <galileoQC.whizzFiles.pointfiles.updateCoordFrame>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.updateCoordFrame
+    :summary:
+    ```
+* - {py:obj}`addWhizzToWhizz <galileoQC.whizzFiles.pointfiles.addWhizzToWhizz>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.addWhizzToWhizz
+    :summary:
+    ```
+* - {py:obj}`addLineToWhizz <galileoQC.whizzFiles.pointfiles.addLineToWhizz>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.addLineToWhizz
+    :summary:
+    ```
+* - {py:obj}`doyToISO8601 <galileoQC.whizzFiles.pointfiles.doyToISO8601>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.doyToISO8601
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.pointfiles.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.pointfiles.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.pointfiles.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.pointfiles.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.projectName
+```
+
+````
+
+````{py:function} _translate_date(decimal_year)
+:canonical: galileoQC.whizzFiles.pointfiles._translate_date
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles._translate_date
+```
+````
+
+````{py:function} _trim_ends(x0, x1, y1)
+:canonical: galileoQC.whizzFiles.pointfiles._trim_ends
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles._trim_ends
+```
+````
+
+````{py:function} _trim_monotonic(data_in, sync=[])
+:canonical: galileoQC.whizzFiles.pointfiles._trim_monotonic
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles._trim_monotonic
+```
+````
+
+````{py:function} updateProject(whizzFile, projectName='', blockID='', acquirer='', acquirerProjectID='', reportName='')
+:canonical: galileoQC.whizzFiles.pointfiles.updateProject
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.updateProject
+```
+````
+
+````{py:function} updateCoordFrame(whizzFile, lat='', lon='', geoDatum='', alt='', htDatum='', x='', y='', projection='', utmz='', time='', timeDatum='', fid='')
+:canonical: galileoQC.whizzFiles.pointfiles.updateCoordFrame
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.updateCoordFrame
+```
+````
+
+````{py:function} addWhizzToWhizz(inputWhizzFile, outputWhizzFile, lines=[])
+:canonical: galileoQC.whizzFiles.pointfiles.addWhizzToWhizz
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.addWhizzToWhizz
+```
+````
+
+````{py:function} addLineToWhizz(hdf5FileId, databaseName, lineNo, lineType, plannedX=[], plannedY=[], plannedZ=[], distanceUnits='')
+:canonical: galileoQC.whizzFiles.pointfiles.addLineToWhizz
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.addLineToWhizz
+```
+````
+
+````{py:function} doyToISO8601(doy)
+:canonical: galileoQC.whizzFiles.pointfiles.doyToISO8601
+
+```{autodoc2-docstring} galileoQC.whizzFiles.pointfiles.doyToISO8601
+```
+````

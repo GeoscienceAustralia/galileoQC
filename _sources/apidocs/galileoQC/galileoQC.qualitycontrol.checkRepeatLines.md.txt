@@ -1,0 +1,97 @@
+# {py:mod}`galileoQC.qualitycontrol.checkRepeatLines`
+
+```{py:module} galileoQC.qualitycontrol.checkRepeatLines
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkRepeatLines <galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines
+    :summary:
+    ```
+* - {py:obj}`reportTrackDirection <galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection
+    :summary:
+    ```
+* - {py:obj}`_xBaseInterpolant <galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant
+    :summary:
+    ```
+* - {py:obj}`_plotRepeatAnalysis <galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis
+    :summary:
+    ```
+* - {py:obj}`_selectXchannel <galileoQC.qualitycontrol.checkRepeatLines._selectXchannel>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines._selectXchannel
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkRepeatLines.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkRepeatLines.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines.groupName
+```
+
+````
+
+````{py:function} checkRepeatLines(whizzFiles, channel, repeatLines, x='', z='', xOffset=True, verbose=False)
+:canonical: galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines
+```
+````
+
+````{py:function} reportTrackDirection(surveygroup, line, east='', north='')
+:canonical: galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection
+```
+````
+
+````{py:function} _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=False)
+:canonical: galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant
+```
+````
+
+````{py:function} _plotRepeatAnalysis(xBase, xOffset, nLines, xData, gData, zData, channel, flightLines, z, chan_z_units, chan_g_label, chan_g_units, chan_x_label, chan_x_units, baseLine=-1.0)
+:canonical: galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis
+```
+````
+
+````{py:function} _selectXchannel(whizzFile, repeatLines)
+:canonical: galileoQC.qualitycontrol.checkRepeatLines._selectXchannel
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkRepeatLines._selectXchannel
+```
+````

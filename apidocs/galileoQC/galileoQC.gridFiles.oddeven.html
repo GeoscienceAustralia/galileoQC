@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.gridFiles.oddeven &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.gridFiles.graphicsShaded" href="galileoQC.gridFiles.graphicsShaded.html" />
+    <link rel="prev" title="galileoQC.gridFiles.imageStats" href="galileoQC.gridFiles.imageStats.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.gridFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.gridFiles.imageStats.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.imageStats</span></code></a></li>
+      <li>Next: <a href="galileoQC.gridFiles.graphicsShaded.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.graphicsShaded</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.gridFiles.oddeven">
+<span id="galileoqc-gridfiles-oddeven"></span><h1><a class="reference internal" href="#module-galileoQC.gridFiles.oddeven" title="galileoQC.gridFiles.oddeven"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.oddeven</span></code></a><a class="headerlink" href="#module-galileoQC.gridFiles.oddeven" title="Link to this heading">¶</a></h1>
+<p>Perform odd-even analysis of a channel of data in a <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code>.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven.updateLineTracks" title="galileoQC.gridFiles.oddeven.updateLineTracks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateLineTracks</span></code></a></p></td>
+<td><p>Writes the mean line track direction as an attribute for each flight-line,
+writes it as a line attribute and sets the <code class="docutils literal notranslate"><span class="pre">LineVariety</span></code> attribute to ‘Control’
+or ‘Traverse’.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven.calcMeanTrack" title="galileoQC.gridFiles.oddeven.calcMeanTrack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calcMeanTrack</span></code></a></p></td>
+<td><p>Return the aircraft track for the flight-line. The track is the angle
+(in degrees) from North in a clockwise direction.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven.oddevenlines" title="galileoQC.gridFiles.oddeven.oddevenlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oddevenlines</span></code></a></p></td>
+<td><p>Performs odd-even analysis of the <code class="docutils literal notranslate"><span class="pre">channel</span></code> data in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code>. The data are
+sorted into two sets of odd and even lines. Each set is gridded and the difference
+of the grids is imaged, and its RMS value reported as an estimate of the error in
+the data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven._getOddEvenLines" title="galileoQC.gridFiles.oddeven._getOddEvenLines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getOddEvenLines</span></code></a></p></td>
+<td><p>Returns the flight-lines in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code> sorted into odd lines and even lines,
+according to the line attribute <code class="docutils literal notranslate"><span class="pre">Parity</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven._getPlannedLines" title="galileoQC.gridFiles.oddeven._getPlannedLines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getPlannedLines</span></code></a></p></td>
+<td><p>Returns the flight-lines in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code> sorted into those with,
+and those without, a PlannedLine attribute set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven._getTravCtrlLines" title="galileoQC.gridFiles.oddeven._getTravCtrlLines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getTravCtrlLines</span></code></a></p></td>
+<td><p>Returns the flight-lines in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code> sorted into traverse lines and control lines,
+according to the line attribute <code class="docutils literal notranslate"><span class="pre">LineVariety</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven.altsample_grid" title="galileoQC.gridFiles.oddeven.altsample_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">altsample_grid</span></code></a></p></td>
+<td><p>Performs odd-even analysis of the <code class="docutils literal notranslate"><span class="pre">channel</span></code> data in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code>. The data are
+sorted into two sets of odd and even lines. Each set is gridded and the difference
+of the grids is imaged, and its RMS value reported as an estimate of the error in
+the data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven.groupName" title="galileoQC.gridFiles.oddeven.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.oddeven.projectName" title="galileoQC.gridFiles.oddeven.projectName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projectName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.gridFiles.oddeven.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven.projectName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">projectName</span></span><a class="headerlink" href="#galileoQC.gridFiles.oddeven.projectName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven.updateLineTracks">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">updateLineTracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trackError</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven.updateLineTracks" title="Link to this definition">¶</a></dt>
+<dd><p>Writes the mean line track direction as an attribute for each flight-line,
+writes it as a line attribute and sets the <code class="docutils literal notranslate"><span class="pre">LineVariety</span></code> attribute to ‘Control’
+or ‘Traverse’.</p>
+<p class="rubric" id="id13">Parameters</p>
+<p>whizzFile : Path or String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Path to, or String name of, the whizz file in HDF5 format.
+</pre></div>
+</div>
+<p>lines : String Array, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>List of lines to have their track set. Default all lines.
+</pre></div>
+</div>
+<p>x : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the x (easting) channel in `whizz_file`. Default is to use
+the `XChannel` attribute.
+</pre></div>
+</div>
+<p>y : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the y (northing) channel in `whizz_file`. Default is to use
+the `YChannel` attribute.
+</pre></div>
+</div>
+<p>trackError : Float, optional IGNORED FOR NOW!</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Any track with +/- trackError degrees of another track is assumed to
+have the same nominal direction. Default is 5.0 degrees.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The verbosity of output. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id14">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven.calcMeanTrack">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">calcMeanTrack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">easting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">northing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven.calcMeanTrack" title="Link to this definition">¶</a></dt>
+<dd><p>Return the aircraft track for the flight-line. The track is the angle
+(in degrees) from North in a clockwise direction.</p>
+<p class="rubric" id="id15">Parameters</p>
+<p>linegroup : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A whizzFile line group.
+</pre></div>
+</div>
+<p>easting : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the x (easting) channel in `linegroup`.
+</pre></div>
+</div>
+<p>northing : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the y (northing) channel in `linegroup`.
+</pre></div>
+</div>
+<p class="rubric" id="id16">Returns</p>
+<p>track : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The mean aircraft track angle east of north in [0, 180] degrees.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven.oddevenlines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">oddevenlines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizz_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oddlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evenlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neighbours'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_pixels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numneighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bdist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven.oddevenlines" title="Link to this definition">¶</a></dt>
+<dd><p>Performs odd-even analysis of the <code class="docutils literal notranslate"><span class="pre">channel</span></code> data in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code>. The data are
+sorted into two sets of odd and even lines. Each set is gridded and the difference
+of the grids is imaged, and its RMS value reported as an estimate of the error in
+the data.</p>
+<p class="rubric" id="id17">Parameters</p>
+<p>whizz_file : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The channel or field name to analyse. Must exist in `whizz_file`.
+</pre></div>
+</div>
+<p>grid_space : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The width of the grid cell to be used in gridding. Recommend: 1/5 - 1/4 line spacing.
+</pre></div>
+</div>
+<p>oddlines : Array of String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An array of line numbers that will constitute the odd lines. The default is NOT WORKING! ...to take the first,
+and then every second traverse thereafter.
+</pre></div>
+</div>
+<p>evenlines : Array of String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An array of line numbers that will constitute the even lines. The default is NOT WORKING! ...to take every
+second traverse (alternates to the oddlines).
+</pre></div>
+</div>
+<p>method : string, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+&quot;neighbours&quot;, &quot;bicubic&quot;, and &quot;biharmonic&quot; as well as &quot;minc&quot; and the SciPy GridData &quot;linear&quot; method.
+The &quot;neighbours&quot; method is much faster if `pykdtree` is installed. Default `neighbours` method.
+</pre></div>
+</div>
+<p>mask_polygon : numpy 2D array, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If the size of mask_polygon &gt; 0, then data_array will be masked to the area
+within the polygon defined by it.
+</pre></div>
+</div>
+<p>mask_pixels : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If mask_pixels &gt; 0, then all pixels further than `mask_pixels * grid_space` from a data
+location will be masked out. Default 1.
+</pre></div>
+</div>
+<p>numneighbours : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If method=&#39;neighbours&#39;, then this is the number of neighbours to average. Default 5.
+</pre></div>
+</div>
+<p>bdist : float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If method is &quot;minc&quot;, then this is the blanking distance in units of cell. Default None.
+</pre></div>
+</div>
+<p>maxiters : int, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum number of iterations for minc method. The default is 100.
+</pre></div>
+</div>
+<p>hs : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True (the default), then the image is hill-shaded.
+</pre></div>
+</div>
+<p class="rubric" id="id18">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven._getOddEvenLines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">_getOddEvenLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizz_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven._getOddEvenLines" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the flight-lines in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code> sorted into odd lines and even lines,
+according to the line attribute <code class="docutils literal notranslate"><span class="pre">Parity</span></code>.</p>
+<p class="rubric" id="id19">Parameters</p>
+<p>whizz_file : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p class="rubric" id="id20">Returns</p>
+<p>oddlines : list of string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Odd survey lines.
+</pre></div>
+</div>
+<p>evenlines : list of string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Even survey lines.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven._getPlannedLines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">_getPlannedLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizz_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven._getPlannedLines" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the flight-lines in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code> sorted into those with,
+and those without, a PlannedLine attribute set.</p>
+<p class="rubric" id="id21">Parameters</p>
+<p>whizz_file : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p class="rubric" id="id22">Returns</p>
+<p>oddlines : list of string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Odd survey lines.
+</pre></div>
+</div>
+<p>evenlines : list of string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Even survey lines.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven._getTravCtrlLines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">_getTravCtrlLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizz_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven._getTravCtrlLines" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the flight-lines in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code> sorted into traverse lines and control lines,
+according to the line attribute <code class="docutils literal notranslate"><span class="pre">LineVariety</span></code>.</p>
+<p class="rubric" id="id23">Parameters</p>
+<p>whizz_file : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p class="rubric" id="id24">Returns</p>
+<p>travlines : list of string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Traverse survey lines.
+</pre></div>
+</div>
+<p>ctrllines : list of string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Control survey lines.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.oddeven.altsample_grid">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.oddeven.</span></span><span class="sig-name descname"><span class="pre">altsample_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizz_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neighbours'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_pixels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numneighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.oddeven.altsample_grid" title="Link to this definition">¶</a></dt>
+<dd><p>Performs odd-even analysis of the <code class="docutils literal notranslate"><span class="pre">channel</span></code> data in <code class="docutils literal notranslate"><span class="pre">whizz_file</span></code>. The data are
+sorted into two sets of odd and even lines. Each set is gridded and the difference
+of the grids is imaged, and its RMS value reported as an estimate of the error in
+the data.</p>
+<p class="rubric" id="id25">Parameters</p>
+<p>whizz_file : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The channel or field name to analyse. Must exist in `whizz_file`.
+</pre></div>
+</div>
+<p>filter_length : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The length in seconds of the filter applied to channel.
+</pre></div>
+</div>
+<p>grid_space : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The width of the grid cell to be used in gridding. Recommend: 1/5 - 1/4 line spacing.
+</pre></div>
+</div>
+<p>method : string, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+&quot;neighbours&quot;, &quot;bicubic&quot;, and &quot;biharmonic&quot; and the SciPy GridData &quot;linear&quot; method. &quot;neighbours&quot;
+is much faster if `pykdtree` is installed. Default `neighbours` method.
+</pre></div>
+</div>
+<p>mask_polygon : numpy 2D array, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If the size of mask_polygon &gt; 0, then data_array will be masked to the area
+within the polygon defined by it.
+</pre></div>
+</div>
+<p>mask_pixels : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If mask_pixels &gt; 0, then all pixels further than `mask_pixels * grid_space` from a data
+location will be masked out. Default 1.
+</pre></div>
+</div>
+<p>numneighbours : Integer, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If method=&#39;neighbours&#39;, then this is the number of neighbours to average. Default 5.
+</pre></div>
+</div>
+<p class="rubric" id="id26">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.gridFiles.imageStats.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.imageStats</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.gridFiles.graphicsShaded.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.graphicsShaded</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.gridFiles.oddeven.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

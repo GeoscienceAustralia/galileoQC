@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms.cos2_filter`
+
+```{py:module} galileoQC.transforms.cos2_filter
+```
+
+```{autodoc2-docstring} galileoQC.transforms.cos2_filter
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`cos_square_radial_filter <galileoQC.transforms.cos2_filter.cos_square_radial_filter>`
+  - ```{autodoc2-docstring} galileoQC.transforms.cos2_filter.cos_square_radial_filter
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} cos_square_radial_filter(k, k_zero, k_unity)
+:canonical: galileoQC.transforms.cos2_filter.cos_square_radial_filter
+
+```{autodoc2-docstring} galileoQC.transforms.cos2_filter.cos_square_radial_filter
+```
+````

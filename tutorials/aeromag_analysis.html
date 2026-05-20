@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Aeromagnetic data QC &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="aeromagnetic-data-qc">
+<h1>Aeromagnetic data QC<a class="headerlink" href="#aeromagnetic-data-qc" title="Link to this heading">¶</a></h1>
+<p>This notebook demonstrates the use of functions to perform QC of aeromagnetic data.</p>
+<p>Here we demonstrate their use on some aeromagnetic data from the Eastern Victoria survey.</p>
+<p>Ensure you have run the <code class="docutils literal notranslate"><span class="pre">Prepare_AeromagData</span></code> notebook first so that the data are prepared for review.</p>
+<hr class="docutils" />
+<p>First, import the required python packages, …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… then set the path to the geowhizz files.</p>
+<p>This is all very much step by step to illustrate the process, and you can certainly compress some of these steps in your own work.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./MagData/FD013_Mag.xyz&#39;</span><span class="p">)</span>
+<span class="n">dh</span> <span class="o">=</span> <span class="n">dx</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.hdf5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">dh</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="o">%</span><span class="k">run</span> ./Prepare_AeromagData.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will need channel names later so let’s report them now.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportChannels</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+
+17 channels:
+
+<span class=" -Color -Color-Bold">  channel              units          description</span>
+--------------------------------------------------
+  COMPMAG              nT             
+  DCMAG                nT             
+  DEM                  m              
+  DIURNAL              nT             
+  DOY                                 
+  FLIGHT                              
+  FTIME                               
+  IGRFMAG              nT             
+  LAT                  deg            
+  LINE                                
+  LONG                 deg            
+  LVLDMAG              nT             
+  MGA-X                m              
+  MGA-Y                m              
+  MGA-Z                m              
+  MSL-Z                m              
+  YEAR                                
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>A standard technical specification is the requirement that the basemag diurnal monitoring data, collected while each line is sampled, not deviate from a straight-line chord of a certain time span by more than a given number of nanoTesla.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">checkDiurnal</span></code> function checks the data for such deviations in the given channel, deviations being less than <code class="docutils literal notranslate"><span class="pre">rangeLimit</span></code> over chords whose time span is <code class="docutils literal notranslate"><span class="pre">nSamples</span></code> long (as number of fids or samples).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkDiurnal</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;DIURNAL&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">rangeLimit</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">nSamples</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Checked 12 lines, 1 failed.
+
+
+  L 2463.040: Diurnal for DIURNAL at sample number 3431 diverges from chord by 0.03,
+  exceeding 0.0 - FAIL
+</pre></div>
+</div>
+<img alt="../_images/905923f3bd047c160ea019e0ac888ad61f3368dc19a08ebce73a650b706c1420.png" src="../_images/905923f3bd047c160ea019e0ac888ad61f3368dc19a08ebce73a650b706c1420.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>The standard check for noise in aeromagnetic data is difference analysis. Very high frequency signal is assumed to be noise and this is measured by differencing the signal. Commonly the 4-th difference or 8-th difference is used.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">checkDiff</span></code> checks the total magnetic field n-th difference channel in a whizzFile against the specification that the peak to peak variation over a set number of samples must not exceed some peak value. If no n-th difference channel is supplied, then the raw magnetic data channel may be used, and its n-th difference will be calculated by the function.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">GA</span> <span class="pre">Magnetic</span> <span class="pre">Deed</span></code> sets a specification:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Magnetic noise on unfiltered magnetic data acquired during the survey must be less than 0.1 nT.
+The 8th difference will be used to assess the magnetic noise. If the signal of the 8th difference
+exceeds 0.1 nT over a distance of 1000 m the line will be re-flown at the contractor’s expense.
+</pre></div>
+</div>
+<p>For a joint gravity-magnetic survey n-th difference noise is typically higher than for a solely magnetometer survey and technical specifications might be relaxed.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">plot_flag</span></code> and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> Boolean parameters control whether the results are plotted, and whether a verbose report is given, as usual.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkDiff</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">diff_chan</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">raw_chan</span><span class="o">=</span><span class="s1">&#39;LVLDMAG&#39;</span><span class="p">,</span>
+             <span class="n">lines</span><span class="o">=</span><span class="p">[],</span>
+             <span class="n">limit</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">nSamples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">num_diff</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+             <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Checked 12 line(s), 1 failure(s) over 1 failed line(s).
+
+Line 2461.010: 2522 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2461.020: 657 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2461.030: 4955 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2463.000: 516 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+L 2463.020: 8-th difference &gt; 0.001 for 338 &gt; 300 fids; peak exceedance = 0.079 - FAIL
+Line 2463.040: 8485 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2465.000: 2888 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2465.020: 6079 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2467.010: 2893 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2467.020: 5972 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2469.000: 3128 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+Line 2469.010: 5978 exceedances, less than 300 (0.0 m -&gt; 300 fids) consecutively - PASS
+</pre></div>
+</div>
+<img alt="../_images/52c11994106a56cf3207c41597bc443d13f5bff50db364ce3a07b0eb49c669a4.png" src="../_images/52c11994106a56cf3207c41597bc443d13f5bff50db364ce3a07b0eb49c669a4.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkDiff</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">diff_chan</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">raw_chan</span><span class="o">=</span><span class="s1">&#39;LVLDMAG&#39;</span><span class="p">,</span>
+             <span class="n">lines</span><span class="o">=</span><span class="p">[],</span>
+             <span class="n">limit</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">maxDuration</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">num_diff</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+             <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Checked 12 line(s), 1 failure(s) over 1 failed line(s).
+30.0 seconds evaluated as 299 fids.
+Line 2461.010: 2522 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2461.020: 657 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2461.030: 4955 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2463.000: 516 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+L 2463.020: 8-th difference &gt; 0.001 for 338 &gt; 299 fids; peak exceedance = 0.079 - FAIL
+Line 2463.040: 8485 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2465.000: 2888 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2465.020: 6079 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2467.010: 2893 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2467.020: 5972 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2469.000: 3128 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+Line 2469.010: 5978 exceedances, less than 299 (0.0 m -&gt; 299 fids) consecutively - PASS
+</pre></div>
+</div>
+<img alt="../_images/52c11994106a56cf3207c41597bc443d13f5bff50db364ce3a07b0eb49c669a4.png" src="../_images/52c11994106a56cf3207c41597bc443d13f5bff50db364ce3a07b0eb49c669a4.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkDiff</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">diff_chan</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">raw_chan</span><span class="o">=</span><span class="s1">&#39;LVLDMAG&#39;</span><span class="p">,</span>
+             <span class="n">lines</span><span class="o">=</span><span class="p">[],</span>
+             <span class="n">limit</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">maxDistance</span><span class="o">=</span><span class="mf">1800.0</span><span class="p">,</span> <span class="n">num_diff</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+             <span class="n">plot_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Checked 12 line(s), 1 failure(s) over 1 failed line(s).
+
+Line 2461.010: 2522 exceedances, less than 302 (1800.0 m -&gt; 302 fids) consecutively - PASS
+Line 2461.020: 657 exceedances, less than 299 (1800.0 m -&gt; 299 fids) consecutively - PASS
+Line 2461.030: 4955 exceedances, less than 301 (1800.0 m -&gt; 301 fids) consecutively - PASS
+Line 2463.000: 516 exceedances, less than 300 (1800.0 m -&gt; 300 fids) consecutively - PASS
+L 2463.020: 8-th difference &gt; 0.001 for 338 &gt; 292 fids; peak exceedance = 0.079 - FAIL
+Line 2463.040: 8485 exceedances, less than 297 (1800.0 m -&gt; 297 fids) consecutively - PASS
+Line 2465.000: 2888 exceedances, less than 307 (1800.0 m -&gt; 307 fids) consecutively - PASS
+Line 2465.020: 6079 exceedances, less than 302 (1800.0 m -&gt; 302 fids) consecutively - PASS
+Line 2467.010: 2893 exceedances, less than 295 (1800.0 m -&gt; 295 fids) consecutively - PASS
+Line 2467.020: 5972 exceedances, less than 296 (1800.0 m -&gt; 296 fids) consecutively - PASS
+Line 2469.000: 3128 exceedances, less than 306 (1800.0 m -&gt; 306 fids) consecutively - PASS
+Line 2469.010: 5978 exceedances, less than 303 (1800.0 m -&gt; 303 fids) consecutively - PASS
+</pre></div>
+</div>
+<img alt="../_images/52c11994106a56cf3207c41597bc443d13f5bff50db364ce3a07b0eb49c669a4.png" src="../_images/52c11994106a56cf3207c41597bc443d13f5bff50db364ce3a07b0eb49c669a4.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>It is useful to check the power spectrum of the magnetic data because periodic noise sources can occur and these are often not seen in the standard 4th difference measure. This can be performed at each stage of processing, or just on the raw magnetic data and the final magnetic data. The power spectrum should not have any signs of harmonic signal.</p>
+<p>In the example below, there are no spikes in the spectrum above <span class="math notranslate nohighlight">\(10^{-3}\)</span> so all okay.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">psdChannel</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;COMPMAG&#39;</span><span class="p">,</span> <span class="n">flightLines</span><span class="o">=</span><span class="p">[],</span> <span class="n">shortestPeriod</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">minlinelenkm</span><span class="o">=</span><span class="mf">15.0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Of 12 lines in database, 10 will be processed.
+The first 2634 samples from each line will be used.
+</pre></div>
+</div>
+<img alt="../_images/96ce9e9193212ea13d104f3be499a0fef8f96ba8b5847ca1069d155e0799eda5.png" src="../_images/96ce9e9193212ea13d104f3be499a0fef8f96ba8b5847ca1069d155e0799eda5.png" />
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/aeromag_analysis.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

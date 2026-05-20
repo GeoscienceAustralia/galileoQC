@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.transforms._grid_match &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.transforms.spheretest" href="galileoQC.transforms.spheretest.html" />
+    <link rel="prev" title="galileoQC.transforms._pad_grids" href="galileoQC.transforms._pad_grids.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.transforms.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.transforms._pad_grids.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_grids</span></code></a></li>
+      <li>Next: <a href="galileoQC.transforms.spheretest.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.spheretest</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.transforms._grid_match">
+<span id="galileoqc-transforms-grid-match"></span><h1><a class="reference internal" href="#module-galileoQC.transforms._grid_match" title="galileoQC.transforms._grid_match"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._grid_match</span></code></a><a class="headerlink" href="#module-galileoQC.transforms._grid_match" title="Link to this heading">¶</a></h1>
+<p>Interpolate one grid to the positions of another.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Oct 2025</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.transforms._grid_match._grid_match" title="galileoQC.transforms._grid_match._grid_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_grid_match</span></code></a></p></td>
+<td><p>Interpolates the data in the regular, rectangular grid <code class="docutils literal notranslate"><span class="pre">regional</span></code>
+onto the (x,y) locations of the regular, rectangular grid <code class="docutils literal notranslate"><span class="pre">local</span></code>.
+expanding it by (2 x <code class="docutils literal notranslate"><span class="pre">pad_cells</span></code>) in length and width. The additional
+cells all have data value NaN. The grid is also mean-corrected.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms._grid_match._grid_match">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms._grid_match.</span></span><span class="sig-name descname"><span class="pre">_grid_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regional</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms._grid_match._grid_match" title="Link to this definition">¶</a></dt>
+<dd><p>Interpolates the data in the regular, rectangular grid <code class="docutils literal notranslate"><span class="pre">regional</span></code>
+onto the (x,y) locations of the regular, rectangular grid <code class="docutils literal notranslate"><span class="pre">local</span></code>.
+expanding it by (2 x <code class="docutils literal notranslate"><span class="pre">pad_cells</span></code>) in length and width. The additional
+cells all have data value NaN. The grid is also mean-corrected.</p>
+<p class="rubric" id="id1">Parameters</p>
+<p>local : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Grid containing the reference locations (x,y).
+</pre></div>
+</div>
+<p>regional : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Grid to be interpolated onto (x,y).
+</pre></div>
+</div>
+<p class="rubric" id="id2">Returns</p>
+<p>xarray 2D DataArray :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Interpolated, mean-corrected grid.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.transforms._pad_grids.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_grids</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.transforms.spheretest.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.spheretest</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.transforms._grid_match.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

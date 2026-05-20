@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.diffGravVturb`
+
+```{py:module} galileoQC.qualitycontrol.diffGravVturb
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.diffGravVturb
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`diffGravVturb <galileoQC.qualitycontrol.diffGravVturb.diffGravVturb>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.diffGravVturb.diffGravVturb
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.diffGravVturb.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.diffGravVturb.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.diffGravVturb.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.diffGravVturb.groupName
+```
+
+````
+
+````{py:function} diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, measX='', measY='')
+:canonical: galileoQC.qualitycontrol.diffGravVturb.diffGravVturb
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.diffGravVturb.diffGravVturb
+```
+````

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.checkRepeatLines &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.checkSpeeds" href="galileoQC.qualitycontrol.checkSpeeds.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkClearance" href="galileoQC.qualitycontrol.checkClearance.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkClearance.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkClearance</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.checkSpeeds.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkSpeeds</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.checkRepeatLines">
+<span id="galileoqc-qualitycontrol-checkrepeatlines"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.checkRepeatLines" title="galileoQC.qualitycontrol.checkRepeatLines"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.checkRepeatLines" title="Link to this heading">¶</a></h1>
+<p>Check statistics of repeat flight-lines.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines" title="galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkRepeatLines</span></code></a></p></td>
+<td><p>For all repeatLines, plot (x, channel) and report stats of differences to mean.
+Each line is trimmed to [minX, maxX] and interpolated to common x.
+The analysis is repeated for the <code class="docutils literal notranslate"><span class="pre">z</span></code> channel (height).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection" title="galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reportTrackDirection</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant" title="galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_xBaseInterpolant</span></code></a></p></td>
+<td><p>For all <code class="docutils literal notranslate"><span class="pre">repeatLines</span></code> found in the <code class="docutils literal notranslate"><span class="pre">whizzFiles</span></code>, set up the data vectors
+and parameters for interpolations of both <code class="docutils literal notranslate"><span class="pre">channel</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code> over <code class="docutils literal notranslate"><span class="pre">x</span></code> to a
+single pseudo- flight-line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis" title="galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_plotRepeatAnalysis</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkRepeatLines._selectXchannel" title="galileoQC.qualitycontrol.checkRepeatLines._selectXchannel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_selectXchannel</span></code></a></p></td>
+<td><p>For all <code class="docutils literal notranslate"><span class="pre">repeatLines</span></code> found in the <code class="docutils literal notranslate"><span class="pre">whizzFiles</span></code>, set up the data vectors
+and parameters for interpolations of both <code class="docutils literal notranslate"><span class="pre">channel</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code> over <code class="docutils literal notranslate"><span class="pre">x</span></code> to a
+single pseudo- flight-line.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.checkRepeatLines.groupName" title="galileoQC.qualitycontrol.checkRepeatLines.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkRepeatLines.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.checkRepeatLines.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines.</span></span><span class="sig-name descname"><span class="pre">checkRepeatLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeatLines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkRepeatLines.checkRepeatLines" title="Link to this definition">¶</a></dt>
+<dd><p>For all repeatLines, plot (x, channel) and report stats of differences to mean.
+Each line is trimmed to [minX, maxX] and interpolated to common x.
+The analysis is repeated for the <code class="docutils literal notranslate"><span class="pre">z</span></code> channel (height).</p>
+<p>If there are more than 2 lines, then the standard deviation is calculated for
+each x over all the lines, and its mean is reported as the “All lines stdev”.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>whizzFiles : array of HDF5 Whizz file pathlib Paths</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Paths to the Whizz HDF5 files containing the survey repeat line data.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel or field to analyse and plot. Usually a gravity channel.
+</pre></div>
+</div>
+<p>repeatLines : [String], optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A list of flightlines, e.g. [&#39;1000110.0&#39;, &#39;1000210.0&#39;, &#39;1000310.0&#39;]. 
+</pre></div>
+</div>
+<p>x : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the independent variable for the analysis. Defaults to whichever of `XChannel`
+or &#39;YChannel&#39; has the largest range of values.
+</pre></div>
+</div>
+<p>y : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the independent variable for the analysis. Defaults to the `YChannel`.
+</pre></div>
+</div>
+<p>z : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the height variable for the analysis and plot. Defaults to the `AltitudeChannel`.
+</pre></div>
+</div>
+<p>xOffset : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, map x to x - x[0] before plotting. The default is True.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines.</span></span><span class="sig-name descname"><span class="pre">reportTrackDirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surveygroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">east</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">north</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkRepeatLines.reportTrackDirection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines.</span></span><span class="sig-name descname"><span class="pre">_xBaseInterpolant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeatLines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkRepeatLines._xBaseInterpolant" title="Link to this definition">¶</a></dt>
+<dd><p>For all <code class="docutils literal notranslate"><span class="pre">repeatLines</span></code> found in the <code class="docutils literal notranslate"><span class="pre">whizzFiles</span></code>, set up the data vectors
+and parameters for interpolations of both <code class="docutils literal notranslate"><span class="pre">channel</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code> over <code class="docutils literal notranslate"><span class="pre">x</span></code> to a
+single pseudo- flight-line.</p>
+<p class="rubric" id="id7">Parameters</p>
+<p>whizzFiles : Array of String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Names of HDF5 Whizz files, including path and extension.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel which forms the first dependent variable.
+Its start, end and length after removal of NaNs and dummies is required.
+</pre></div>
+</div>
+<p>repeatLines : Array of String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The flight-lines to be analysed.
+</pre></div>
+</div>
+<p>x : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the `x` data to form the independent
+variable. Defaults to the `XChannel` attribute of each whizzFile.
+</pre></div>
+</div>
+<p>z : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the altitude data which form the
+second dependent variable. Defaults to the `AltitudeChannel` attribute
+of each whizzFile.
+</pre></div>
+</div>
+<p class="rubric" id="id8">Returns</p>
+<p>xBase : numpy 1D array of float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The uniformly sampled `x` locations onto which all `z` and `channel` 
+data will be interpolated
+</pre></div>
+</div>
+<p>xData : numpy 2D array of float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Returned as NaNs but of the correct size to write the data to. 
+</pre></div>
+</div>
+<p>gData : numpy 2D array of float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Returned as NaNs but of the correct size to write the data to. 
+</pre></div>
+</div>
+<p>zData : numpy 2D array of float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Returned as NaNs but of the correct size to write the data to. 
+</pre></div>
+</div>
+<p>minBigX : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>For all flight-lines, the minimum of the largest value of `x`.
+</pre></div>
+</div>
+<p>maxSmallX : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>For all flight-lines, the maximum of the smallest value of `x`.
+</pre></div>
+</div>
+<p>deltaX : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The sampling spacing of the interpolant, `x`.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines.</span></span><span class="sig-name descname"><span class="pre">_plotRepeatAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xOffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nLines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flightLines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan_z_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan_g_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan_g_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan_x_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan_x_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseLine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkRepeatLines._plotRepeatAnalysis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.checkRepeatLines._selectXchannel">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.checkRepeatLines.</span></span><span class="sig-name descname"><span class="pre">_selectXchannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeatLines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.checkRepeatLines._selectXchannel" title="Link to this definition">¶</a></dt>
+<dd><p>For all <code class="docutils literal notranslate"><span class="pre">repeatLines</span></code> found in the <code class="docutils literal notranslate"><span class="pre">whizzFiles</span></code>, set up the data vectors
+and parameters for interpolations of both <code class="docutils literal notranslate"><span class="pre">channel</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code> over <code class="docutils literal notranslate"><span class="pre">x</span></code> to a
+single pseudo- flight-line.</p>
+<p class="rubric" id="id9">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>repeatLines : Array of String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The flight-lines to be analysed.
+</pre></div>
+</div>
+<p class="rubric" id="id10">Returns</p>
+<p>x : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel to be used as the independent variable.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkClearance.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkClearance</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.checkSpeeds.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkSpeeds</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.checkRepeatLines.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.psdChannelDiff &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.checkFrobenius" href="galileoQC.qualitycontrol.checkFrobenius.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkXYPlan" href="galileoQC.qualitycontrol.checkXYPlan.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkXYPlan.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkXYPlan</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.checkFrobenius.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkFrobenius</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.psdChannelDiff">
+<span id="galileoqc-qualitycontrol-psdchanneldiff"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.psdChannelDiff" title="galileoQC.qualitycontrol.psdChannelDiff"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.psdChannelDiff" title="Link to this heading">¶</a></h1>
+<p>Plot power spectral density of the difference between two channels.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: ca 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff" title="galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psdChannelDiff</span></code></a></p></td>
+<td><p>Plot the PSD (log-log Sqrt(Power) from welch method) of
+channel1 - channel2 in each flightLine.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff.psdChannel" title="galileoQC.qualitycontrol.psdChannelDiff.psdChannel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psdChannel</span></code></a></p></td>
+<td><p>Plot the PSD of channel averaged over the flightLines.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain" title="galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psdChannelGain</span></code></a></p></td>
+<td><p>Plot the FFT of filchan / rawchan averaged over the flightLines.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff._costaper" title="galileoQC.qualitycontrol.psdChannelDiff._costaper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_costaper</span></code></a></p></td>
+<td><p>Return the gain vector corresponding to the freq vector
+for a cosine taper low-pass filter with centre frequency
+corresponding to <code class="docutils literal notranslate"><span class="pre">nominalperiod</span></code> and pass frequency 2/3rd
+the 50% pass frequency; cut frequency 4/3rds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff._period_to_dist" title="galileoQC.qualitycontrol.psdChannelDiff._period_to_dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_period_to_dist</span></code></a></p></td>
+<td><p>Converts period (sec) to distance by multiplying by the GLOBAL
+mean speed (m/s).
+For use in creating a secondary wavelength axis for <code class="docutils literal notranslate"><span class="pre">psdChannelDiff</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff._dist_to_period" title="galileoQC.qualitycontrol.psdChannelDiff._dist_to_period"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dist_to_period</span></code></a></p></td>
+<td><p>Converts distance (metres) to period(sec) by dividing by the GLOBAL
+mean speed (m/s).
+For use in creating a secondary wavelength axis for <code class="docutils literal notranslate"><span class="pre">psdChannelDiff</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff._time_frequency" title="galileoQC.qualitycontrol.psdChannelDiff._time_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_time_frequency</span></code></a></p></td>
+<td><p>Returns the sample frequency of the data in the project group.
+Simply calculated as the inverse of the difference of the first
+two sample times in the first line. Relies on the TimeChannel
+attribute being set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed" title="galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_mean_line_speed</span></code></a></p></td>
+<td><p>Returns the mean line speed of the data in the line (which is
+in the given project group). Instantaneous speeds are calculated
+for each sample along the line and their average value returned.
+Relies on the XChaneel, YChannel and TimeChannel attributes being set.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.psdChannelDiff.groupName" title="galileoQC.qualitycontrol.psdChannelDiff.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">psdChannelDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flightLines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff.psdChannelDiff" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the PSD (log-log Sqrt(Power) from welch method) of
+channel1 - channel2 in each flightLine.</p>
+<p class="rubric" id="id13">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>flightLines : String List, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A list of flightline, e.g. [&#39;1000110.0&#39;]. Default is all lines in whizzFile.
+</pre></div>
+</div>
+<p>channel1 : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a channel.
+</pre></div>
+</div>
+<p>channel2 : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a channel.
+</pre></div>
+</div>
+<p class="rubric" id="id14">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff.psdChannel">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">psdChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flightLines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shortestPeriod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlinelenkm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff.psdChannel" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the PSD of channel averaged over the flightLines.</p>
+<p class="rubric" id="id15">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel to be analysed.
+</pre></div>
+</div>
+<p>flightLines : String List, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A list of flightline, e.g. [&#39;1000110.0&#39;]. Default is all lines in whizzFile.
+</pre></div>
+</div>
+<p>shortestPeriod : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
+</pre></div>
+</div>
+<p>minlinelenkm : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Flightlines shorter than this number of kilometres will be ignored in the calculation. Default is None.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, more information is printed. Default is False.
+</pre></div>
+</div>
+<p class="rubric" id="id16">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">psdChannelGain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rawchan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filchan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flightLines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nominalPeriod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shortestPeriod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlinelenkm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff.psdChannelGain" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the FFT of filchan / rawchan averaged over the flightLines.</p>
+<p class="rubric" id="id17">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>rawchan : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel to be the denominator in the gain.
+</pre></div>
+</div>
+<p>filchan : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel to be the numerator in the gain.
+</pre></div>
+</div>
+<p>flightLines : String List, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A list of flightline, e.g. [&#39;1000110.0&#39;]. Default is all lines in whizzFile.
+</pre></div>
+</div>
+<p>nominalPeriod : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>At this period in seconds, a vertical red line is drawn. Default (0.0) is to not draw the line.
+</pre></div>
+</div>
+<p>shortestPeriod : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The left hand limit of the x (period) axis of the plot in seconds. Default is 0.0.
+</pre></div>
+</div>
+<p>minlinelenkm : Float, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Flightlines shorter than this number of kilometres will be ignored in the calculation. Default is None.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, more information is printed. Default is False.
+</pre></div>
+</div>
+<p class="rubric" id="id18">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff._costaper">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">_costaper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nominalPeriod</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff._costaper" title="Link to this definition">¶</a></dt>
+<dd><p>Return the gain vector corresponding to the freq vector
+for a cosine taper low-pass filter with centre frequency
+corresponding to <code class="docutils literal notranslate"><span class="pre">nominalperiod</span></code> and pass frequency 2/3rd
+the 50% pass frequency; cut frequency 4/3rds.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff._period_to_dist">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">_period_to_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff._period_to_dist" title="Link to this definition">¶</a></dt>
+<dd><p>Converts period (sec) to distance by multiplying by the GLOBAL
+mean speed (m/s).
+For use in creating a secondary wavelength axis for <code class="docutils literal notranslate"><span class="pre">psdChannelDiff</span></code>.</p>
+<p class="rubric" id="id19">Parameters</p>
+<p>p : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The period in seconds.
+</pre></div>
+</div>
+<p class="rubric" id="id20">Returns</p>
+<p>Float. The distance in metres.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff._dist_to_period">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">_dist_to_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff._dist_to_period" title="Link to this definition">¶</a></dt>
+<dd><p>Converts distance (metres) to period(sec) by dividing by the GLOBAL
+mean speed (m/s).
+For use in creating a secondary wavelength axis for <code class="docutils literal notranslate"><span class="pre">psdChannelDiff</span></code>.</p>
+<p class="rubric" id="id21">Parameters</p>
+<p>x : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The distance in metres.
+</pre></div>
+</div>
+<p class="rubric" id="id22">Returns</p>
+<p>Float. The period in seconds.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff._time_frequency">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">_time_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff._time_frequency" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the sample frequency of the data in the project group.
+Simply calculated as the inverse of the difference of the first
+two sample times in the first line. Relies on the TimeChannel
+attribute being set.</p>
+<p class="rubric" id="id23">Parameters</p>
+<p>group : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Must be the project group (top level of hierarchy in whizz File).
+</pre></div>
+</div>
+<p class="rubric" id="id24">Returns</p>
+<p>Float. The sample frequency in Hz.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.psdChannelDiff.</span></span><span class="sig-name descname"><span class="pre">_mean_line_speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.psdChannelDiff._mean_line_speed" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the mean line speed of the data in the line (which is
+in the given project group). Instantaneous speeds are calculated
+for each sample along the line and their average value returned.
+Relies on the XChaneel, YChannel and TimeChannel attributes being set.</p>
+<p class="rubric" id="id25">Parameters</p>
+<p>group : HDF5 group</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Must be the project group (top level of hierarchy in whizz File).
+</pre></div>
+</div>
+<p>line : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line identifier.
+</pre></div>
+</div>
+<p class="rubric" id="id26">Returns</p>
+<p>Float. The mean speed along the line.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkXYPlan.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkXYPlan</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.checkFrobenius.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkFrobenius</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.psdChannelDiff.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

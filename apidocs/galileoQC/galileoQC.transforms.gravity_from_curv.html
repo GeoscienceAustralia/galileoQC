@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.transforms.gravity_from_curv &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.config" href="galileoQC.config.html" />
+    <link rel="prev" title="galileoQC.transforms._calc_padcells" href="galileoQC.transforms._calc_padcells.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.transforms.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.transforms._calc_padcells.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._calc_padcells</span></code></a></li>
+      <li>Next: <a href="galileoQC.config.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.config</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.transforms.gravity_from_curv">
+<span id="galileoqc-transforms-gravity-from-curv"></span><h1><a class="reference internal" href="#module-galileoQC.transforms.gravity_from_curv" title="galileoQC.transforms.gravity_from_curv"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.gravity_from_curv</span></code></a><a class="headerlink" href="#module-galileoQC.transforms.gravity_from_curv" title="Link to this heading">¶</a></h1>
+<p>Calculates the vertical gravity from the differential curvatures.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Oct 2025</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.transforms.gravity_from_curv.gravity_from_curv" title="galileoQC.transforms.gravity_from_curv.gravity_from_curv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gravity_from_curv</span></code></a></p></td>
+<td><p>Calculates the vertical gravity, gD, from the differential curvature
+gravity gradient components (in NED coordinates). The <code class="docutils literal notranslate"><span class="pre">Craig</span> <span class="pre">transform</span></code>
+is used.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms.gravity_from_curv.gravity_from_curv">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms.gravity_from_curv.</span></span><span class="sig-name descname"><span class="pre">gravity_from_curv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ane</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Auv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gd_chan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'um/s/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survey_polygon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regional'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regional_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms.gravity_from_curv.gravity_from_curv" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the vertical gravity, gD, from the differential curvature
+gravity gradient components (in NED coordinates). The <code class="docutils literal notranslate"><span class="pre">Craig</span> <span class="pre">transform</span></code>
+is used.</p>
+<p class="rubric" id="id1">Parameters</p>
+<p>Ane : xarray 1D DataSet</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Airborne survey line-based DataSet of the Gne component
+dimensioned by fiducial.
+</pre></div>
+</div>
+<p>Auv : xarray 1D DataSet</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Airborne survey line-based DataSet of the Guv component
+dimensioned by fiducial.
+</pre></div>
+</div>
+<p>cell_size : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the cell size for gridding.
+</pre></div>
+</div>
+<p>gd_chan : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The `long name` attribute of the gD output DataArray.
+Default None in which case, the code uses `gd_craig`.
+</pre></div>
+</div>
+<p>altitude : xarray 1D DataSet, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Airborne survey line-based DataSet of the altitude dimensioned
+by fiducial. These must be referenced to a fixed datum (not
+the varying ground surface). Default None in which case the Gne
+and Guv data are assumed at constant altitude.
+If given, altitude is not used. TBD
+</pre></div>
+</div>
+<p>result_units : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gravity units of the final resultant grid. Must be either &quot;mGal&quot; or
+&quot;gu&quot; or &quot;um/s/s&quot;. Default &quot;um/s/s&quot;.
+</pre></div>
+</div>
+<p>survey_polygon : numpy 1D array, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The polygon vertices of the survey boundary, as an array or sequence of (x,y)
+pairs, in either clockwise or counter-clockwise order around the boundary.
+For example, survey_polygon = [(0, 0), (1, 0), (1,1), (0,1)]. Final output will be
+trimmed to this polygon if provided. Default None.
+</pre></div>
+</div>
+<p>pad_cells : int, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The number of grid cells to pad the data. Default None in which case
+an optimum number is calculated internally.
+</pre></div>
+</div>
+<p>padding_mode : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The method to be used in filling padding around the grid before DFT.
+Choices are &quot;mean&quot; and &quot;regional&quot;. Default is &quot;regional&quot; which requires
+that `regional_grid_file` is provided.
+</pre></div>
+</div>
+<p>regional_grid_file : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of the ERS file containing the regional grid. Required if
+`padding_mode` == &quot;regional&quot;. Default None.
+</pre></div>
+</div>
+<p>regional_grav_units : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gravity units of the regional grid. Must be either &quot;mGal&quot; or
+&quot;gu&quot; or &quot;um/s/s&quot;. Required if `padding_mode` == &quot;regional&quot;.
+Default &quot;mGal&quot;.
+</pre></div>
+</div>
+<p>firstorder : bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, include first order Craig correction. Default False.
+</pre></div>
+</div>
+<p>plot_flag : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, images will be displayed of the grids at each stage of the processing. If False,
+then only the `local` input and output grids will be displayed. Default False.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, then prints out details. Default = False.
+</pre></div>
+</div>
+<p class="rubric" id="id2">Returns</p>
+<p>gD : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Grid of vertical gravity, gD.
+</pre></div>
+</div>
+<p>gD_err : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Grid of the imaginary component output of the Craig transform.
+Useful for error estimation.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.transforms._calc_padcells.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._calc_padcells</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.config.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.config</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.transforms.gravity_from_curv.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.whizzFiles.reportData &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.whizzFiles.colReader" href="galileoQC.whizzFiles.colReader.html" />
+    <link rel="prev" title="galileoQC.whizzFiles.gdfReader" href="galileoQC.whizzFiles.gdfReader.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.whizzFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.whizzFiles.gdfReader.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.gdfReader</span></code></a></li>
+      <li>Next: <a href="galileoQC.whizzFiles.colReader.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.colReader</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.whizzFiles.reportData">
+<span id="galileoqc-whizzfiles-reportdata"></span><h1><a class="reference internal" href="#module-galileoQC.whizzFiles.reportData" title="galileoQC.whizzFiles.reportData"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.reportData</span></code></a><a class="headerlink" href="#module-galileoQC.whizzFiles.reportData" title="Link to this heading">¶</a></h1>
+<p>Summarise contents of a <code class="docutils literal notranslate"><span class="pre">geoWhizz</span></code> file.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.reportWhizz" title="galileoQC.whizzFiles.reportData.reportWhizz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reportWhizz</span></code></a></p></td>
+<td><p>Prints a short summary of the data in a HDF5 Whizz file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.reportLines" title="galileoQC.whizzFiles.reportData.reportLines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reportLines</span></code></a></p></td>
+<td><p>Prints a short summary of the flight-lines in a HDF5 Whizz file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.reportChannels" title="galileoQC.whizzFiles.reportData.reportChannels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reportChannels</span></code></a></p></td>
+<td><p>Prints a short summary of the channel names in a HDF5 Whizz file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.reportFlights" title="galileoQC.whizzFiles.reportData.reportFlights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reportFlights</span></code></a></p></td>
+<td><p>Prints a summary of the flight numbers in a HDF5 Whizz file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.reportSampling" title="galileoQC.whizzFiles.reportData.reportSampling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reportSampling</span></code></a></p></td>
+<td><p>Prints a summary of the sample rate of the data in a HDF5 Whizz file.
+The sample rate in time are usually constant but the minimum, maximum and
+mean sample rates are reported for time and horizontal distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData._distanceFlown" title="galileoQC.whizzFiles.reportData._distanceFlown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_distanceFlown</span></code></a></p></td>
+<td><p>The total distance flown on the survey.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData._lineLength" title="galileoQC.whizzFiles.reportData._lineLength"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_lineLength</span></code></a></p></td>
+<td><p>Calculates the point-to-point length of a line defined by discrete (x,y) points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.whizzAttrExists" title="galileoQC.whizzFiles.reportData.whizzAttrExists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">whizzAttrExists</span></code></a></p></td>
+<td><p>True if <code class="docutils literal notranslate"><span class="pre">my_attr</span></code> is an attribute of the HDF5 <code class="docutils literal notranslate"><span class="pre">group</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.groupName" title="galileoQC.whizzFiles.reportData.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.whizzFiles.reportData.projectName" title="galileoQC.whizzFiles.reportData.projectName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projectName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.projectName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">projectName</span></span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.projectName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.reportWhizz">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">reportWhizz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.reportWhizz" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a short summary of the data in a HDF5 Whizz file.</p>
+<p class="rubric" id="id13">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>line : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The line number, formatted as a string, to report in detail. The default is &#39;&#39; and no line details.
+</pre></div>
+</div>
+<p>channel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The channel or field name to report in detail. The default is &#39;&#39; and no channel details.
+</pre></div>
+</div>
+<p class="rubric" id="id14">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.reportLines">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">reportLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.reportLines" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a short summary of the flight-lines in a HDF5 Whizz file.</p>
+<p class="rubric" id="id15">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p class="rubric" id="id16">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.reportChannels">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">reportChannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.reportChannels" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a short summary of the channel names in a HDF5 Whizz file.</p>
+<p class="rubric" id="id17">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>channel : string, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If provided, only the details of that channel are given, otherwise all.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, print all details, otherwise just the names. Default False.
+</pre></div>
+</div>
+<p class="rubric" id="id18">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.reportFlights">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">reportFlights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flightChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detailed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.reportFlights" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a summary of the flight numbers in a HDF5 Whizz file.</p>
+<p class="rubric" id="id19">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>flightChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the flight numbers. The default is &#39;&#39; (get the channel name from attributes).
+</pre></div>
+</div>
+<p>lines : String Array, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The array of line numbers, each formatted as a string, to report. The default is [] and all lines.
+</pre></div>
+</div>
+<p>detailed : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If true, report the line numbers flown in each flight. The default is False.
+</pre></div>
+</div>
+<p class="rubric" id="id20">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.reportSampling">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">reportSampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.reportSampling" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a summary of the sample rate of the data in a HDF5 Whizz file.
+The sample rate in time are usually constant but the minimum, maximum and
+mean sample rates are reported for time and horizontal distance.</p>
+<p class="rubric" id="id21">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>timeChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the time data.  The default is &#39;&#39; which
+causes the channel stored in the CoordinateFram groups TimeChannel attribute 
+to be used.
+</pre></div>
+</div>
+<p>xChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the x data.  The default is &#39;&#39; which
+causes the channel stored in the CoordinateFram groups XChannel attribute 
+to be used.
+</pre></div>
+</div>
+<p>yChannel : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the y data.  The default is &#39;&#39; which
+causes the channel stored in the CoordinateFram groups YChannel attribute 
+to be used.
+</pre></div>
+</div>
+<p class="rubric" id="id22">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData._distanceFlown">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">_distanceFlown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData._distanceFlown" title="Link to this definition">¶</a></dt>
+<dd><p>The total distance flown on the survey.</p>
+<p class="rubric" id="id23">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>x : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel of X positions (in metres). The default is &#39;&#39; which
+causes the channel stored in the CoordinateFram groups XChannel attribute 
+to be used.
+</pre></div>
+</div>
+<p>y : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel of Y positions (in metres). The default is &#39;&#39; which
+causes the channel stored in the CoordinateFram groups YChannel attribute 
+to be used.
+</pre></div>
+</div>
+<p>lines : array of strings, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An array of line identifiers whose total distance will be returned.
+Default all lines in whizzFile.
+</pre></div>
+</div>
+<p class="rubric" id="id24">Returns</p>
+<p>count : Integer</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The total number of lines in the file.
+</pre></div>
+</div>
+<p>Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The total distance in km flown over all lines in the survey.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData._lineLength">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">_lineLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData._lineLength" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the point-to-point length of a line defined by discrete (x,y) points.</p>
+<p class="rubric" id="id25">Parameters</p>
+<p>x : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a 1D array of x positions (units metres).
+</pre></div>
+</div>
+<p>y : numpy 1D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a 1D array of y positions (units metres).
+</pre></div>
+</div>
+<p class="rubric" id="id26">Returns</p>
+<p>lenOfLine : Float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the length of the line in metres.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzFiles.reportData.whizzAttrExists">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzFiles.reportData.</span></span><span class="sig-name descname"><span class="pre">whizzAttrExists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzFiles.reportData.whizzAttrExists" title="Link to this definition">¶</a></dt>
+<dd><p>True if <code class="docutils literal notranslate"><span class="pre">my_attr</span></code> is an attribute of the HDF5 <code class="docutils literal notranslate"><span class="pre">group</span></code>.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.whizzFiles.gdfReader.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.gdfReader</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.whizzFiles.colReader.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzFiles.colReader</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.whizzFiles.reportData.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

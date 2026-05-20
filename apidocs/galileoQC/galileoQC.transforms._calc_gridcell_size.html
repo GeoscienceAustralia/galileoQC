@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.transforms._calc_gridcell_size &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.transforms.craig_transform" href="galileoQC.transforms.craig_transform.html" />
+    <link rel="prev" title="galileoQC.transforms.grav_of_Kurvs" href="galileoQC.transforms.grav_of_Kurvs.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.transforms.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.transforms.grav_of_Kurvs.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.grav_of_Kurvs</span></code></a></li>
+      <li>Next: <a href="galileoQC.transforms.craig_transform.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.craig_transform</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.transforms._calc_gridcell_size">
+<span id="galileoqc-transforms-calc-gridcell-size"></span><h1><a class="reference internal" href="#module-galileoQC.transforms._calc_gridcell_size" title="galileoQC.transforms._calc_gridcell_size"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._calc_gridcell_size</span></code></a><a class="headerlink" href="#module-galileoQC.transforms._calc_gridcell_size" title="Link to this heading">¶</a></h1>
+<p>Calculate a sensible gridding cell size.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Oct 2025</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.transforms._calc_gridcell_size._calc_gridcell_size" title="galileoQC.transforms._calc_gridcell_size._calc_gridcell_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_calc_gridcell_size</span></code></a></p></td>
+<td><p>Returns a sensible grid cell size for gridding line-based data in xarray
+DataSet <code class="docutils literal notranslate"><span class="pre">ds</span></code>. Usefully provides a default for gridding functions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.transforms._calc_gridcell_size._nice_number" title="galileoQC.transforms._calc_gridcell_size._nice_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_nice_number</span></code></a></p></td>
+<td><p>Given any float, returns a reasonable value to be used for gridding. Currently
+just rounded to one decimal place.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.transforms._calc_gridcell_size.groupName" title="galileoQC.transforms._calc_gridcell_size.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.transforms._calc_gridcell_size.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms._calc_gridcell_size.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.transforms._calc_gridcell_size.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms._calc_gridcell_size._calc_gridcell_size">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms._calc_gridcell_size.</span></span><span class="sig-name descname"><span class="pre">_calc_gridcell_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms._calc_gridcell_size._calc_gridcell_size" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a sensible grid cell size for gridding line-based data in xarray
+DataSet <code class="docutils literal notranslate"><span class="pre">ds</span></code>. Usefully provides a default for gridding functions.</p>
+<p>The algorithm uses the “TraverseLineSpacing”, calling updateLineSpacing to
+set it if it does not exist in the whizzfile, and returns 1/4 of that value.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>whizzFile : Path or String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The Path to, or String name of, the whizz file in HDF5 format.
+</pre></div>
+</div>
+<p class="rubric" id="id4">Returns</p>
+<p>cell_size : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the recommended cell size for gridding.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms._calc_gridcell_size._nice_number">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms._calc_gridcell_size.</span></span><span class="sig-name descname"><span class="pre">_nice_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms._calc_gridcell_size._nice_number" title="Link to this definition">¶</a></dt>
+<dd><p>Given any float, returns a reasonable value to be used for gridding. Currently
+just rounded to one decimal place.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>number : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The number to be transformed.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>: float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the transformed value.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.transforms.grav_of_Kurvs.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.grav_of_Kurvs</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.transforms.craig_transform.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.craig_transform</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.transforms._calc_gridcell_size.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

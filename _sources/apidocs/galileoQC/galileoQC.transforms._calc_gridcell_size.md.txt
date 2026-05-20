@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.transforms._calc_gridcell_size`
+
+```{py:module} galileoQC.transforms._calc_gridcell_size
+```
+
+```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_calc_gridcell_size <galileoQC.transforms._calc_gridcell_size._calc_gridcell_size>`
+  - ```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size._calc_gridcell_size
+    :summary:
+    ```
+* - {py:obj}`_nice_number <galileoQC.transforms._calc_gridcell_size._nice_number>`
+  - ```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size._nice_number
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.transforms._calc_gridcell_size.groupName>`
+  - ```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.transforms._calc_gridcell_size.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size.groupName
+```
+
+````
+
+````{py:function} _calc_gridcell_size(whizzFile)
+:canonical: galileoQC.transforms._calc_gridcell_size._calc_gridcell_size
+
+```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size._calc_gridcell_size
+```
+````
+
+````{py:function} _nice_number(number)
+:canonical: galileoQC.transforms._calc_gridcell_size._nice_number
+
+```{autodoc2-docstring} galileoQC.transforms._calc_gridcell_size._nice_number
+```
+````

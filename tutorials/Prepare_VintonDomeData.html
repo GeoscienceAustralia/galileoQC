@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Prepare Vinton Dome FTG data &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Prepare Aeromagnetic data" href="Prepare_AeromagData.html" />
+    <link rel="prev" title="Prepare Eastern Victoria gravimeter data" href="Prepare_EastVicData.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Prepare_EastVicData.html">Prepare Eastern Victoria gravimeter data</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Prepare Vinton Dome FTG data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Prepare_AeromagData.html">Prepare Aeromagnetic data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Prepare_EastVicData.html" title="previous chapter">Prepare Eastern Victoria gravimeter data</a></li>
+      <li>Next: <a href="Prepare_AeromagData.html" title="next chapter">Prepare Aeromagnetic data</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="prepare-vinton-dome-ftg-data">
+<h1>Prepare Vinton Dome FTG data<a class="headerlink" href="#prepare-vinton-dome-ftg-data" title="Link to this heading">¶</a></h1>
+<p><strong><strong>See EastVic Data for latest organisation of Prepare tutorials</strong></strong></p>
+<p>The Geosoft XYZ data format file is commonly used in geophysics to transmit geophysical survey data in a text-readable form.</p>
+<p>This tutorial demonstrates the preparation of XYZ airborne gravity gradiometer data, from the Vinton Dome FTG survey, for QC. The preparation consists of converting the data to geoWhizz format and storing in a HDF5 file, compiling the project, line, and channel metadata.</p>
+<p>We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format elsewhere in the <strong>galileoQC</strong> documentation.)</p>
+<hr class="docutils" />
+<p>First, import the required modules, and set the path to the XYZ file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># There was no plan data supplied with the Vinton Dome project.</span>
+<span class="n">vintonXYZ_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./VintonData/VintonDome.xyz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>The Measured Survey Data</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vintonHDF_file</span> <span class="o">=</span> <span class="n">vintonXYZ_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.hdf5&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">vintonHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="n">vintonHDF_file</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">xyzToHDF</span><span class="p">(</span><span class="n">vintonXYZ_file</span><span class="p">,</span> <span class="n">projectName</span><span class="o">=</span><span class="s1">&#39;Vinton Dome&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">block_name</span> <span class="o">=</span> <span class="s1">&#39;Vinton Dome Data&#39;</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateProject</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="n">acquirer</span><span class="o">=</span><span class="s1">&#39;Bell Geospace&#39;</span><span class="p">,</span> <span class="n">blockID</span><span class="o">=</span><span class="n">block_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting BlockID = Vinton Dome Data for VintonDome.hdf5.
+Setting Acquirer = Bell Geospace for VintonDome.hdf5.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateCoordFrame</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> 
+                    <span class="n">lat</span><span class="o">=</span><span class="s1">&#39;Lat&#39;</span><span class="p">,</span> 
+                    <span class="n">lon</span><span class="o">=</span><span class="s1">&#39;Lon&#39;</span><span class="p">,</span> 
+                    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> 
+                    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> 
+                    <span class="n">time</span><span class="o">=</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> 
+                    <span class="n">alt</span><span class="o">=</span><span class="s1">&#39;Altitude&#39;</span><span class="p">,</span> 
+                    <span class="n">geoDatum</span><span class="o">=</span><span class="s1">&#39;WGS84&#39;</span><span class="p">,</span> 
+                    <span class="n">htDatum</span><span class="o">=</span><span class="s1">&#39;WGS84&#39;</span><span class="p">,</span> 
+                    <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;UTM&#39;</span><span class="p">,</span> 
+                    <span class="n">utmz</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed CoordFrame attribute(s) for VintonDome.hdf5.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Altitude&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Drape&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Planned Height&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Lat&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Lon&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Terrain&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;YYMMDD&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;HHMMSS&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;metre&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;metre&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Cross1_raw&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Cross2_raw&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Cross3_raw&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Inline1_raw&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Inline2_raw&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Inline3_raw&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;TC_Txx_100&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;TC_Txz_100&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;TC_Tyx_100&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;TC_Tyy_100&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;TC_Tyz_100&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;TC_Tzz_100&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Txx_slv&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Txz_slv&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Tyx_slv&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Tyy_slv&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Tyz_slv&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="s1">&#39;Tzz_slv&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;eotvos&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Altitude in VintonDome.hdf5.
+Changed channel attribute(s) for Drape in VintonDome.hdf5.
+Changed channel attribute(s) for Lat in VintonDome.hdf5.
+Changed channel attribute(s) for Lon in VintonDome.hdf5.
+Changed channel attribute(s) for Terrain in VintonDome.hdf5.
+Changed channel attribute(s) for Time in VintonDome.hdf5.
+No changes made.
+No changes made.
+Changed channel attribute(s) for X in VintonDome.hdf5.
+Changed channel attribute(s) for Y in VintonDome.hdf5.
+Changed channel attribute(s) for Cross1_raw in VintonDome.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Cross2_raw in VintonDome.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Cross3_raw in VintonDome.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Inline1_raw in VintonDome.hdf5.
+Changed channel attribute(s) for Inline2_raw in VintonDome.hdf5.
+Changed channel attribute(s) for Inline3_raw in VintonDome.hdf5.
+Changed channel attribute(s) for TC_Txx_100 in VintonDome.hdf5.
+Changed channel attribute(s) for TC_Txz_100 in VintonDome.hdf5.
+Changed channel attribute(s) for TC_Tyx_100 in VintonDome.hdf5.
+Changed channel attribute(s) for TC_Tyy_100 in VintonDome.hdf5.
+Changed channel attribute(s) for TC_Tyz_100 in VintonDome.hdf5.
+Changed channel attribute(s) for TC_Tzz_100 in VintonDome.hdf5.
+Changed channel attribute(s) for Txx_slv in VintonDome.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Txz_slv in VintonDome.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Tyx_slv in VintonDome.hdf5.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for Tyy_slv in VintonDome.hdf5.
+Changed channel attribute(s) for Tyz_slv in VintonDome.hdf5.
+Changed channel attribute(s) for Tzz_slv in VintonDome.hdf5.
+</pre></div>
+</div>
+</div>
+</div>
+<p>The line numbering for Vinton Dome is not obvious but we need to be able to distinguish between traverse and control lines for several purposes, including odd-even grid analysis. So let’s work it out and set the metadata appropriately for each flight-line.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateLineVariety</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="n">trav_lines</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;11.000&#39;</span><span class="p">,</span> <span class="s1">&#39;111.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;131.000&#39;</span><span class="p">,</span> <span class="s1">&#39;131.100&#39;</span><span class="p">,</span> <span class="s1">&#39;151.000&#39;</span><span class="p">,</span> <span class="s1">&#39;151.100&#39;</span><span class="p">,</span> <span class="s1">&#39;151.200&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;171.000&#39;</span><span class="p">,</span> <span class="s1">&#39;191.000&#39;</span><span class="p">,</span> <span class="s1">&#39;211.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;211.100&#39;</span><span class="p">,</span> <span class="s1">&#39;231.000&#39;</span><span class="p">,</span> <span class="s1">&#39;251.000&#39;</span><span class="p">,</span> <span class="s1">&#39;271.000&#39;</span><span class="p">,</span> <span class="s1">&#39;271.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;291.000&#39;</span><span class="p">,</span> <span class="s1">&#39;291.100&#39;</span><span class="p">,</span> <span class="s1">&#39;31.000&#39;</span><span class="p">,</span> <span class="s1">&#39;31.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;311.000&#39;</span><span class="p">,</span> <span class="s1">&#39;331.000&#39;</span><span class="p">,</span> <span class="s1">&#39;351.000&#39;</span><span class="p">,</span> <span class="s1">&#39;371.000&#39;</span><span class="p">,</span> <span class="s1">&#39;371.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;391.000&#39;</span><span class="p">,</span> <span class="s1">&#39;401.000&#39;</span><span class="p">,</span> <span class="s1">&#39;411.000&#39;</span><span class="p">,</span> <span class="s1">&#39;411.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;421.000&#39;</span><span class="p">,</span> <span class="s1">&#39;431.000&#39;</span><span class="p">,</span> <span class="s1">&#39;431.100&#39;</span><span class="p">,</span> <span class="s1">&#39;441.000&#39;</span><span class="p">,</span> <span class="s1">&#39;451.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;461.000&#39;</span><span class="p">,</span> <span class="s1">&#39;461.100&#39;</span><span class="p">,</span> <span class="s1">&#39;471.000&#39;</span><span class="p">,</span> <span class="s1">&#39;481.000&#39;</span><span class="p">,</span> <span class="s1">&#39;491.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;501.000&#39;</span><span class="p">,</span> <span class="s1">&#39;501.100&#39;</span><span class="p">,</span> <span class="s1">&#39;51.000&#39;</span><span class="p">,</span> <span class="s1">&#39;51.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;511.000&#39;</span><span class="p">,</span> <span class="s1">&#39;521.000&#39;</span><span class="p">,</span> <span class="s1">&#39;531.000&#39;</span><span class="p">,</span> <span class="s1">&#39;541.000&#39;</span><span class="p">,</span> <span class="s1">&#39;541.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;541.200&#39;</span><span class="p">,</span> <span class="s1">&#39;551.000&#39;</span><span class="p">,</span> <span class="s1">&#39;561.000&#39;</span><span class="p">,</span> <span class="s1">&#39;581.000&#39;</span><span class="p">,</span>  
+                       <span class="s1">&#39;601.000&#39;</span><span class="p">,</span> <span class="s1">&#39;601.100&#39;</span><span class="p">,</span> <span class="s1">&#39;621.000&#39;</span><span class="p">,</span> <span class="s1">&#39;641.000&#39;</span><span class="p">,</span> <span class="s1">&#39;641.100&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;661.000&#39;</span><span class="p">,</span> <span class="s1">&#39;661.100&#39;</span><span class="p">,</span> <span class="s1">&#39;681.000&#39;</span><span class="p">,</span> <span class="s1">&#39;701.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;71.000&#39;</span><span class="p">,</span> <span class="s1">&#39;721.000&#39;</span><span class="p">,</span> <span class="s1">&#39;741.000&#39;</span><span class="p">,</span> <span class="s1">&#39;741.100&#39;</span><span class="p">,</span> <span class="s1">&#39;761.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;761.100&#39;</span><span class="p">,</span> <span class="s1">&#39;781.000&#39;</span><span class="p">,</span> <span class="s1">&#39;801.000&#39;</span><span class="p">,</span> <span class="s1">&#39;821.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;841.000&#39;</span><span class="p">,</span> <span class="s1">&#39;841.100&#39;</span><span class="p">,</span> <span class="s1">&#39;861.000&#39;</span><span class="p">,</span> <span class="s1">&#39;881.000&#39;</span><span class="p">,</span>  
+                       <span class="s1">&#39;91.000&#39;</span><span class="p">],</span> <span class="n">ctrl_lines</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;10.000&#39;</span><span class="p">,</span> <span class="s1">&#39;100.000&#39;</span><span class="p">,</span> <span class="s1">&#39;110.000&#39;</span><span class="p">,</span>  
+                       <span class="s1">&#39;120.000&#39;</span><span class="p">,</span> <span class="s1">&#39;130.000&#39;</span><span class="p">,</span> <span class="s1">&#39;140.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;150.000&#39;</span><span class="p">,</span> <span class="s1">&#39;160.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;170.000&#39;</span><span class="p">,</span> <span class="s1">&#39;20.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;30.000&#39;</span><span class="p">,</span> <span class="s1">&#39;40.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;50.000&#39;</span><span class="p">,</span> <span class="s1">&#39;60.000&#39;</span><span class="p">,</span> 
+                       <span class="s1">&#39;70.000&#39;</span><span class="p">,</span> <span class="s1">&#39;80.000&#39;</span><span class="p">,</span> <span class="s1">&#39;90.000&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;Traverse&quot; line variety set for given flight-lines.
+&quot;Control&quot; line variety set for given flight-lines.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportWhizz</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+    Acquirer: Bell Geospace
+    BlockID: Vinton Dome Data
+    ProjectName: Vinton Dome
+
+Coordinates
+    AltitudeChannel: Altitude
+    GeoDatum: WGS84
+    HeightDatum: WGS84
+    LatitudeChannel: Lat
+    LongitudeChannel: Lon
+    Projection: UTM
+    TimeChannel: Time
+    UTMZone: 15
+    XChannel: X
+    YChannel: Y
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>91 lines: total distance flown [km] = 1,439.4
+
+91 lines:
+[&#39;10.000&#39;, &#39;100.000&#39;, &#39;11.000&#39;, &#39;110.000&#39;, &#39;111.000&#39;, &#39;120.000&#39;,
+&#39;130.000&#39;, &#39;131.000&#39;, &#39;131.100&#39;, &#39;140.000&#39;, &#39;150.000&#39;, &#39;151.000&#39;,
+&#39;151.100&#39;, &#39;151.200&#39;, &#39;160.000&#39;, &#39;170.000&#39;, &#39;171.000&#39;, &#39;191.000&#39;,
+&#39;20.000&#39;, &#39;211.000&#39;, &#39;211.100&#39;, &#39;231.000&#39;, &#39;251.000&#39;, &#39;271.000&#39;,
+&#39;271.100&#39;, &#39;291.000&#39;, &#39;291.100&#39;, &#39;30.000&#39;, &#39;31.000&#39;, &#39;31.100&#39;,
+&#39;311.000&#39;, &#39;331.000&#39;, &#39;351.000&#39;, &#39;371.000&#39;, &#39;371.100&#39;, &#39;391.000&#39;,
+&#39;40.000&#39;, &#39;401.000&#39;, &#39;411.000&#39;, &#39;411.100&#39;, &#39;421.000&#39;, &#39;431.000&#39;,
+&#39;431.100&#39;, &#39;441.000&#39;, &#39;451.000&#39;, &#39;461.000&#39;, &#39;461.100&#39;, &#39;471.000&#39;,
+&#39;481.000&#39;, &#39;491.000&#39;, &#39;50.000&#39;, &#39;501.000&#39;, &#39;501.100&#39;, &#39;51.000&#39;,
+&#39;51.100&#39;, &#39;511.000&#39;, &#39;521.000&#39;, &#39;531.000&#39;, &#39;541.000&#39;, &#39;541.100&#39;,
+&#39;541.200&#39;, &#39;551.000&#39;, &#39;561.000&#39;, &#39;581.000&#39;, &#39;60.000&#39;, &#39;601.000&#39;,
+&#39;601.100&#39;, &#39;621.000&#39;, &#39;641.000&#39;, &#39;641.100&#39;, &#39;661.000&#39;, &#39;661.100&#39;,
+&#39;681.000&#39;, &#39;70.000&#39;, &#39;701.000&#39;, &#39;71.000&#39;, &#39;721.000&#39;, &#39;741.000&#39;,
+&#39;741.100&#39;, &#39;761.000&#39;, &#39;761.100&#39;, &#39;781.000&#39;, &#39;80.000&#39;, &#39;801.000&#39;,
+&#39;821.000&#39;, &#39;841.000&#39;, &#39;841.100&#39;, &#39;861.000&#39;, &#39;881.000&#39;, &#39;90.000&#39;,
+&#39;91.000&#39;]
+
+28 channels:
+[&#39;Altitude&#39;, &#39;Cross1_raw&#39;, &#39;Cross2_raw&#39;, &#39;Cross3_raw&#39;, &#39;Drape&#39;,
+&#39;HHMMSS&#39;, &#39;Inline1_raw&#39;, &#39;Inline2_raw&#39;, &#39;Inline3_raw&#39;, &#39;Lat&#39;, &#39;Lon&#39;,
+&#39;TC_Txx_100&#39;, &#39;TC_Txz_100&#39;, &#39;TC_Tyx_100&#39;, &#39;TC_Tyy_100&#39;, &#39;TC_Tyz_100&#39;,
+&#39;TC_Tzz_100&#39;, &#39;Terrain&#39;, &#39;Time&#39;, &#39;Txx_slv&#39;, &#39;Txz_slv&#39;, &#39;Tyx_slv&#39;,
+&#39;Tyy_slv&#39;, &#39;Tyz_slv&#39;, &#39;Tzz_slv&#39;, &#39;X&#39;, &#39;Y&#39;, &#39;YYMMDD&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportFlights</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No flight data found in data file so no report possible.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportSampling</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+    Acquirer: Bell Geospace
+    BlockID: Vinton Dome Data
+    ProjectName: Vinton Dome
+
+Sample time and distance statistics
+  Min   = 1.000 s, 40.7 m
+  Max   = 1.000 s, 65.4 m
+  Mean  = 1.000 s, 51.8 m
+  Stdev = 0 s, 3 m
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>Make a survey flight-line map</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">linesMap</span><span class="p">([</span><span class="n">vintonHDF_file</span><span class="p">],</span> <span class="n">whizzPlanFile</span><span class="o">=</span><span class="n">vintonHDF_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1d1ba89ec1189b67e04162c6dbddc51fc693c37b4a31fb78af1f42890d2b4aa3.png" src="../_images/1d1ba89ec1189b67e04162c6dbddc51fc693c37b4a31fb78af1f42890d2b4aa3.png" />
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Prepare_EastVicData.html" title="Previous document">Prepare Eastern Victoria gravimeter data</a>
+        </li>
+        <li>
+          <a href="Prepare_AeromagData.html" title="Next document">Prepare Aeromagnetic data</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Prepare_VintonDomeData.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

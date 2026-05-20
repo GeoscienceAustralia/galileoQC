@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.gridFiles.graphics &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.gridFiles.xarray_to_grid" href="galileoQC.gridFiles.xarray_to_grid.html" />
+    <link rel="prev" title="galileoQC.gridFiles.whizz_to_xarray" href="galileoQC.gridFiles.whizz_to_xarray.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.gridFiles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.gridFiles.whizz_to_xarray.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.whizz_to_xarray</span></code></a></li>
+      <li>Next: <a href="galileoQC.gridFiles.xarray_to_grid.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.xarray_to_grid</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.gridFiles.graphics">
+<span id="galileoqc-gridfiles-graphics"></span><h1><a class="reference internal" href="#module-galileoQC.gridFiles.graphics" title="galileoQC.gridFiles.graphics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.graphics</span></code></a><a class="headerlink" href="#module-galileoQC.gridFiles.graphics" title="Link to this heading">¶</a></h1>
+<p>Collection of functions for creating and manipulating graphics, colormaps and
+plots with Python and matplotlib.</p>
+<p>These functions are essentially used to display 2D arrays with a modified
+version of pyplot.imshow. The new function is called imshow_hs and it accepts
+a number of parameters to add elements such as colorbar, contours and
+hillshading to the plot.</p>
+<p>Usage of imshow_hs:</p>
+<p>The best way to learn about the parameters of imshow_hs is to run the
+how_to_use_imshow_hs.ipynb jupyter notebook.</p>
+<p>This function is a combination of imshow with contours and LightSource for
+applying hillshading effects to the display of 2D arrays. The colormap can be
+normalised by equalisation or by clipping the extremes (autolevels). Most of
+the parameters of pyplot.imshow can be passed to imshow_hs as keyword
+arguments. The default usage is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import graphics
+
+graphics.imshow_hs(data)
+</pre></div>
+</div>
+<p>This produces a figure with the array (data) displayed with a colorbar and
+hillshading generated by a light source in the northeast corner. The default
+colormap is clra: it comes from Oasis Montaj by Geosoft and is widely used in
+exploration geophysics. Histogram equalization is applied by default to
+improve the contrast of the resulting image.</p>
+<p>&#64;author: Joseph Barraud, Geophysics Labs, http://geophysicslabs.com</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.stats_boundaries" title="galileoQC.gridFiles.graphics.stats_boundaries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stats_boundaries</span></code></a></p></td>
+<td><p>Return a list of statistical values ordered in increasing order that can
+be used for ticks or boundaries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.makeColormap" title="galileoQC.gridFiles.graphics.makeColormap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">makeColormap</span></code></a></p></td>
+<td><p>Return a LinearSegmentedColormap which is subsequently registered with
+plt.register_cmap(cmap=my_cmap)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.cmap_to_array" title="galileoQC.gridFiles.graphics.cmap_to_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cmap_to_array</span></code></a></p></td>
+<td><p>Return a Nx3 array of RGB values generated from a colormap.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.load_cmap" title="galileoQC.gridFiles.graphics.load_cmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_cmap</span></code></a></p></td>
+<td><p>Create and register a color map. The name must be selected from the
+colormaps available in the local colors module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.autolevels" title="galileoQC.gridFiles.graphics.autolevels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autolevels</span></code></a></p></td>
+<td><p>Rescale intensity of an image. For RGB images, the new limits are calculated
+per channel and then mean or median of these limits are applied to the whole
+image (if perChannel option is False).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.equalizeColormap" title="galileoQC.gridFiles.graphics.equalizeColormap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equalizeColormap</span></code></a></p></td>
+<td><p>Re-map a colormap according to a cumulative distribution. This is used to
+perform histogram equalization of an image by changing the colormap
+instead of the image. <em>This is not strictly speaking the equalization of the
+colormap itself</em>.
+The cdf and bins should be calculated from an input image, as if carrying out
+the histogram equalization of that image. In effect, the cdf becomes integrated<br />
+to the colormap as a mapping function by redistributing the indices of the
+input colormap.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.normalizeColormap" title="galileoQC.gridFiles.graphics.normalizeColormap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalizeColormap</span></code></a></p></td>
+<td><p>Apply a normalising function to a colormap. Only “autolevels” is implemented
+for the moment.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.alpha_blend" title="galileoQC.gridFiles.graphics.alpha_blend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alpha_blend</span></code></a></p></td>
+<td><p>Combines an RGB image with an intensity map using “alpha” transparent blending,
+see https://en.wikipedia.org/wiki/Alpha_compositing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.imshow_hs" title="galileoQC.gridFiles.graphics.imshow_hs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imshow_hs</span></code></a></p></td>
+<td><p>Display an array with optional hillshading and contours. The colormap can be
+normalised by equalisation or by clipping extremes (autolevels).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.gridFiles.graphics.saveMap" title="galileoQC.gridFiles.graphics.saveMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saveMap</span></code></a></p></td>
+<td><p>Save a Matplotlib figure as an image without borders or frames.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.stats_boundaries">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">stats_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmaStep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.stats_boundaries" title="Link to this definition">¶</a></dt>
+<dd><p>Return a list of statistical values ordered in increasing order that can
+be used for ticks or boundaries.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.makeColormap">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">makeColormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CustomMap'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.makeColormap" title="Link to this definition">¶</a></dt>
+<dd><p>Return a LinearSegmentedColormap which is subsequently registered with
+plt.register_cmap(cmap=my_cmap)</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>table : a sequence of RGB tuples.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Values need to be between 0 and 1.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.cmap_to_array">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">cmap_to_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.cmap_to_array" title="Link to this definition">¶</a></dt>
+<dd><p>Return a Nx3 array of RGB values generated from a colormap.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.load_cmap">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">load_cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geosoft'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.load_cmap" title="Link to this definition">¶</a></dt>
+<dd><p>Create and register a color map. The name must be selected from the
+colormaps available in the local colors module.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.autolevels">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">autolevels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minPercent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxPercent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">98</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funcName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perChannel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.autolevels" title="Link to this definition">¶</a></dt>
+<dd><p>Rescale intensity of an image. For RGB images, the new limits are calculated
+per channel and then mean or median of these limits are applied to the whole
+image (if perChannel option is False).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.equalizeColormap">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">equalizeColormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EqualizedMap'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.equalizeColormap" title="Link to this definition">¶</a></dt>
+<dd><p>Re-map a colormap according to a cumulative distribution. This is used to
+perform histogram equalization of an image by changing the colormap
+instead of the image. <em>This is not strictly speaking the equalization of the
+colormap itself</em>.
+The cdf and bins should be calculated from an input image, as if carrying out
+the histogram equalization of that image. In effect, the cdf becomes integrated<br />
+to the colormap as a mapping function by redistributing the indices of the
+input colormap.</p>
+<p class="rubric" id="id6">Parameters</p>
+<p>cmap : string or colormap object</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Input colormap to remap.
+</pre></div>
+</div>
+<p>bins : array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Centers of bins.
+</pre></div>
+</div>
+<p>cdf : array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Values of cumulative distribution function.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.normalizeColormap">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">normalizeColormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmapName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'autolevels'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.normalizeColormap" title="Link to this definition">¶</a></dt>
+<dd><p>Apply a normalising function to a colormap. Only “autolevels” is implemented
+for the moment.</p>
+<p>kwargs are passed to the normalising function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.alpha_blend">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">alpha_blend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rgb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.alpha_blend" title="Link to this definition">¶</a></dt>
+<dd><p>Combines an RGB image with an intensity map using “alpha” transparent blending,
+see https://en.wikipedia.org/wiki/Alpha_compositing.</p>
+<p class="rubric" id="id7">Parameters</p>
+<p>rgb : ndarray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An MxNx3 RGB array of floats ranging from 0 to 1 (color image).
+</pre></div>
+</div>
+<p>intensity : ndarray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An MxNx1 array of floats ranging from 0 to 1 (grayscale image).
+</pre></div>
+</div>
+<p>alpha : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>This controls the transparency of the rgb image. 1.0 is fully opaque 
+while 0.0 is fully transparent.
+</pre></div>
+</div>
+<p class="rubric" id="id8">Returns</p>
+<p>rgb : ndarray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An MxNx3 RGB array representing the combined images.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.imshow_hs">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">imshow_hs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geosoft'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equalize'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azdeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altdeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blend_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'alpha'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb_contours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.imshow_hs" title="Link to this definition">¶</a></dt>
+<dd><p>Display an array with optional hillshading and contours. The colormap can be
+normalised by equalisation or by clipping extremes (autolevels).</p>
+<p class="rubric" id="id9">Parameters</p>
+<p>data : 2D array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Grid to plot. Arrays with NaNs and masked arrays are supported.
+</pre></div>
+</div>
+<p>ax : matplotlib axes instance</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>This indicates where to draw the figure. Create new figure if absent.
+</pre></div>
+</div>
+<p>cmap : string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of the colormap to use to display the array. The default &#39;geosoft&#39; is
+the blue to pink clra colormap from Geosoft Oasis Montaj.
+</pre></div>
+</div>
+<p>cmap_norm : string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Type of normalisation of the colormap. 
+Possible values are:
+
+`equalize` (or `equalization`)
+
+Increases contrast by distributing intensities across all the 
+possible colours. With this option, it is not the data that is normalised 
+but the colormap, based on the data. 
+
+`auto` (or `autolevels`)
+
+Stretches the histogram of the colormap so that dark colours become
+darker and the bright colours become brighter. Two extra parameters control 
+the amount of clipping at the extremes: minPercent (default to 10%) and
+maxPercent (default to 90%)
+</pre></div>
+</div>
+<p>hs : boolean</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, the array is displayed in colours over a grey hillshaded version
+of the data.
+</pre></div>
+</div>
+<p>zf : number</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Vertical exaggeration (Z factor) for hillshading.
+</pre></div>
+</div>
+<p>azdeg : number</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The azimuth (0-360, degrees clockwise from North) of the light source.
+</pre></div>
+</div>
+<p>altdeg : number</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The altitude (0-90, degrees up from horizontal) of the light source.
+</pre></div>
+</div>
+<p>dx : number, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cell size in the x direction
+</pre></div>
+</div>
+<p>dy : number, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cell size in the y direction
+</pre></div>
+</div>
+<p>fraction : number</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Increases or decreases the contrast of the hillshade. 
+</pre></div>
+</div>
+<p>blend_mode :  {‘alpha’, ‘hsv’, ‘overlay’, ‘soft’}</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The type of blending used to combine the colormapped data values with the 
+illumination intensity. Default is &#39;alpha&#39; and the effect is controlled
+by the alpha parameter.
+</pre></div>
+</div>
+<p>alpha : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Controls the transparency of the data overlaid over the hillshade.
+1.0 is fully opaque while 0.0 is fully transparent.
+</pre></div>
+</div>
+<p>contours : Boolean</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, adds contours to the map. The number of calculated contours is 
+defined by `levels`.
+</pre></div>
+</div>
+<p>levels : integer</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The number of contour levels (for when `contours == True`).
+</pre></div>
+</div>
+<p>colorbar : Boolean</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, draw a colorbar on the right-hand side of the map. The colorbar
+shows the distribution of colors, as modified by the normalization algorithm.
+</pre></div>
+</div>
+<p>cb_contours : Boolean</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Add lines corresponding to contours on the colorbar.
+</pre></div>
+</div>
+<p>cb_ticks : string</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If left as default (&#39;linear&#39;) the ticks and labels on the colorbar are 
+spaced linearly in the standard way. Otherwise (any other keyword, for example
+&#39;stats&#39;), the mean and two ticks at + and - nSigma*(standard deviation) 
+are shown instead.
+</pre></div>
+</div>
+<p>nSigma : integer (default is 1)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Size of the interval to show between ticks on the colorbar.
+</pre></div>
+</div>
+<p>kwargs : other optional arguments</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Can be used to pass other arguments to imshow, such as &#39;origin&#39; and &#39;extent&#39;.
+</pre></div>
+</div>
+<p class="rubric" id="id10">Notes</p>
+<p>This function exploits the hillshading capabilities implemented in
+matplotlib.colors.LightSource. It adds additional blending mode (alpha compositing,
+see https://en.wikipedia.org/wiki/Alpha_compositing) and normalising functions
+for the data (equalization).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.gridFiles.graphics.saveMap">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.gridFiles.graphics.</span></span><span class="sig-name descname"><span class="pre">saveMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.gridFiles.graphics.saveMap" title="Link to this definition">¶</a></dt>
+<dd><p>Save a Matplotlib figure as an image without borders or frames.</p>
+<p class="rubric" id="id11">Parameters</p>
+<p>outfile : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Path to output file.
+</pre></div>
+</div>
+<p>fig : Matplotlib figure instance</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Figure you want to save as the image
+</pre></div>
+</div>
+<p>orig_size : tuple</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>width, height of the original image used to maintain aspect ratio.
+</pre></div>
+</div>
+<p>dpi : integer</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>image resolution.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.gridFiles.whizz_to_xarray.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.whizz_to_xarray</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.gridFiles.xarray_to_grid.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.gridFiles.xarray_to_grid</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.gridFiles.graphics.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,75 @@
+# {py:mod}`galileoQC.qualitycontrol.checkSpeeds`
+
+```{py:module} galileoQC.qualitycontrol.checkSpeeds
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkSpeeds <galileoQC.qualitycontrol.checkSpeeds.checkSpeeds>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds.checkSpeeds
+    :summary:
+    ```
+* - {py:obj}`_reportSpeeds <galileoQC.qualitycontrol.checkSpeeds._reportSpeeds>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds._reportSpeeds
+    :summary:
+    ```
+* - {py:obj}`_get_speeddata <galileoQC.qualitycontrol.checkSpeeds._get_speeddata>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds._get_speeddata
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkSpeeds.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkSpeeds.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds.groupName
+```
+
+````
+
+````{py:function} checkSpeeds(whizzFile, lines=[], xChannel='', yChannel='', tChannel='', vel_north='', vel_east='', nominalSpeed=60.0, maxDuration=0.0, maxDistance=0.0, allowance=0.1, allowed_range=[], minSafeSpeed=42.0, known='', plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkSpeeds.checkSpeeds
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds.checkSpeeds
+```
+````
+
+````{py:function} _reportSpeeds(group, lines=[], maxDuration=0.0, maxDistance=0.0, xChannel='X', yChannel='Y', tChannel='time', vel_north='', vel_east='', nominalSpeed=60.0, allowance=0.1, allowed_range=[], minSafeSpeed=42.0, title_str='', known='', plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkSpeeds._reportSpeeds
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds._reportSpeeds
+```
+````
+
+````{py:function} _get_speeddata(line_group, xChannel, yChannel, tChannel, vel_north, vel_east)
+:canonical: galileoQC.qualitycontrol.checkSpeeds._get_speeddata
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkSpeeds._get_speeddata
+```
+````

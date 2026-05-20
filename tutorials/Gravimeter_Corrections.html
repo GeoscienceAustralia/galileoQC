@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Gravimetry corrections &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Falcon Noise Analysis" href="Falcon_Noise_Analysis.html" />
+    <link rel="prev" title="Odd - Even Analysis" href="Odd_Even_Analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Gravimetry corrections</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Odd_Even_Analysis.html" title="previous chapter">Odd - Even Analysis</a></li>
+      <li>Next: <a href="Falcon_Noise_Analysis.html" title="next chapter">Falcon Noise Analysis</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="gravimetry-corrections">
+<h1>Gravimetry corrections<a class="headerlink" href="#gravimetry-corrections" title="Link to this heading">¶</a></h1>
+<p>The supplied data should include the correction data in separate channels, and these data can be checked with the four QC functions below.</p>
+<p>Here we use the Eastern Victoria airborne gravity survey data that was imported into a geowhizz file in the Data_Import notebook.</p>
+<hr class="docutils" />
+<p>Import the required modules, and set the path to the geowhizz files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+
+<span class="n">EastVicHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./EastVicData/EastVic.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">EastVicHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="o">%</span><span class="k">run</span> ./Prepare_EastVicData.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>As the aircraft changes height, the mass of atmosphere above the gravimeter changes and the consequent change in the measured gravity must be corrected for. The <strong>atmospheric correction</strong> should be:</p>
+<div class="math notranslate nohighlight">
+\[\delta g_{atm}=8.74 - 9.9 \times 10^{-4} h + 3.56 \times 10^{-8} h^{2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(h\)</span> is the ellipsoidal height in <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(\delta g_{atm}\)</span> is in <span class="math notranslate nohighlight">\(\mu ms^{-2}\)</span>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">checkAtmosEffect</span></code> relies on the knowing the units of the atmospheric correction channel. Usually one sets the units when the geowhizz file is created but it can be done at any time by the command (of course, using your own file name, and channel name, and units):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="s1">&#39;ATMCOR&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;mGal&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">checkAtmosEffect</span></code> is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied atmospheric correction data and that resulting from the use of the formula above.</p>
+<p>Typically there are differences of less than <span class="math notranslate nohighlight">\(0.1\,\mu ms^{-2}\)</span> due to the limited precision of the data. Errors up to even <span class="math notranslate nohighlight">\(1.0\,\mu ms^{-2}\)</span> are acceptable.</p>
+<p>In this example all results are consistent with the correct formula being used and consequently the data pass.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkAtmosEffect</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="s1">&#39;ATMCOR&#39;</span><span class="p">,</span> <span class="n">GRS80_height</span><span class="o">=</span><span class="s1">&#39;MGA_Z&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8e67ab19e7081106a05544349eabb3a247ff0adc7bc9dfe6b4bbb814c884b408.png" src="../_images/8e67ab19e7081106a05544349eabb3a247ff0adc7bc9dfe6b4bbb814c884b408.png" />
+</div>
+</div>
+<p>The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than <span class="math notranslate nohighlight">\(0.06\,\mu m s^{-2}\)</span> which can be attributed to the limited precision of the data in text format.</p>
+<hr class="docutils" />
+<p>The <strong>free-air, or height, correction</strong> must use the second-order approximation to correct for the vertical gravity effect due to height changes above the GRS80 ellipsoid:</p>
+<div class="math notranslate nohighlight">
+\[\delta g_{h}=-\left(3.087691 - 0.004398 \sin^2{\phi}\right) h + 7.2125 \times 10^{-7} h^{2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(h\)</span> is the ellipsoidal height in <span class="math notranslate nohighlight">\(m\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span> is the latitude in decimal degrees, and <span class="math notranslate nohighlight">\(\delta g_{h}\)</span> is in <span class="math notranslate nohighlight">\(\mu ms^{-2}\)</span>.</p>
+<p>As with <code class="docutils literal notranslate"><span class="pre">checkAtmosEffect</span></code>, <code class="docutils literal notranslate"><span class="pre">checkFreeAirCorr</span></code> relies on the units for the input correction channel being set in the geowhizz file.</p>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">checkFreeAirCorr</span></code> is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied atmospheric correction data and that resulting from the use of the formula above.</p>
+<p>Occasionally, the supplied free-air correction data will have the opposite sign to that in the equation, and <code class="docutils literal notranslate"><span class="pre">checkFreeAirCorr</span></code> provides an optional parameter <code class="docutils literal notranslate"><span class="pre">changesign</span></code> to allow for this possibility. If the results from <code class="docutils literal notranslate"><span class="pre">checkFreeAirCorr</span></code> are much larger than <span class="math notranslate nohighlight">\(1.0\)</span>, this may be the reason. In that case, simply set <code class="docutils literal notranslate"><span class="pre">changesign=True</span></code> and try again.</p>
+<p>Typically there are differences of less than <span class="math notranslate nohighlight">\(0.1\,\mu ms^{-2}\)</span> due to the limited precision of the data. Errors up to even <span class="math notranslate nohighlight">\(1.0\,\mu ms^{-2}\)</span> are acceptable.</p>
+<p>In this example all results are consistent with the correct formula being used and so the data pass.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkFreeAirCorr</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="s1">&#39;FACOR_GRS80&#39;</span><span class="p">,</span> <span class="n">changesign</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7db1d39099c36eedd865b422dd44c2f239ff6524897ed17e9bf4fe730e7ce20b.png" src="../_images/7db1d39099c36eedd865b422dd44c2f239ff6524897ed17e9bf4fe730e7ce20b.png" />
+</div>
+</div>
+<p>The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than <span class="math notranslate nohighlight">\(0.07\,\mu m s^{-2}\)</span> which can be attributed to the limited precision of the data in text format.</p>
+<hr class="docutils" />
+<p>The <strong>Eotvos correction</strong> removes the change in measured gravity due to the change in centrifugal acceleration resulting from the east-west component of the aircraft’s velocity. This effect is well-known in marine gravimetry but the higher velocity of an aircraft necessitate the use of a more accurate formula:</p>
+<div class="math notranslate nohighlight">
+\[\delta g_{Eotvos}=2\omega_{E} \nu_{E} \cos\left(\phi\right) + \frac{\nu_{N}^{2}}{R_{M}+h} + \frac{\nu_{E}^{2}}{R_{N}+h}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\omega_{E}\)</span> is the Earth’s rotation rate in radians per second, <span class="math notranslate nohighlight">\(\phi\)</span> is the latitude in decimal degrees, <span class="math notranslate nohighlight">\(h\)</span> is the ellipsoidal height in <span class="math notranslate nohighlight">\(m\)</span>, <span class="math notranslate nohighlight">\(R_{M}\)</span> and <span class="math notranslate nohighlight">\(R_{N}\)</span> are the prime vertical and meridian radii of curvature respectively (in <span class="math notranslate nohighlight">\(m\)</span>), <span class="math notranslate nohighlight">\(\nu_{N}\)</span> and <span class="math notranslate nohighlight">\(\nu_{E}\)</span> are the north and east components respectively of the aircraft velocity in <span class="math notranslate nohighlight">\(ms^{-2}\)</span> and <span class="math notranslate nohighlight">\(\delta g_{Eotvos}\)</span> is in <span class="math notranslate nohighlight">\(\mu ms^{-2}\)</span>.</p>
+<p>As with the other correction check functions, <code class="docutils literal notranslate"><span class="pre">checkEotvosCorr</span></code> relies on the units for the input correction channel being set in the geowhizz file.</p>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">checkEotvosCorr</span></code> is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied Eotvos correction data and that resulting from the use of the formula above.</p>
+<p>Typically there are differences of up to about <span class="math notranslate nohighlight">\(1.0\,\mu ms^{-2}\)</span> due to the limited precision of the data. Errors up to a few <span class="math notranslate nohighlight">\(\mu ms^{-2}\)</span> are acceptable.</p>
+<p>In this example all results are consistent with the correct formula being used and so the data pass.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkEotvosCorr</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="s1">&#39;EOTCOR&#39;</span><span class="p">,</span> <span class="n">east_vel</span><span class="o">=</span><span class="s1">&#39;V_EAST&#39;</span><span class="p">,</span> <span class="n">north_vel</span><span class="o">=</span><span class="s1">&#39;V_NORTH&#39;</span><span class="p">,</span> <span class="n">changesign</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/09d696bcf18f78a62fd47c14aa16a6d4fba96b02c14e3fe0728932850804b688.png" src="../_images/09d696bcf18f78a62fd47c14aa16a6d4fba96b02c14e3fe0728932850804b688.png" />
+</div>
+</div>
+<p>The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than <span class="math notranslate nohighlight">\(0.09\,\mu m s^{-2}\)</span> which can be attributed to the limited precision of the data in text format.</p>
+<hr class="docutils" />
+<p>The <strong>latitude, or normal, correction</strong> is the theoretical gravity <span class="math notranslate nohighlight">\(g_{T}\)</span> on the GRS80 ellipsoid at latitude (south or north) <span class="math notranslate nohighlight">\(\phi\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\delta g_{T}=\frac{g_{e} \left(1+k \sin^2\phi\right)}{\sqrt{\left(1-e^2 \sin^2 \phi\right)}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(g_{e}\)</span> is 978032.67715 mGal, <span class="math notranslate nohighlight">\(k\)</span> is 0.001931851353, and <span class="math notranslate nohighlight">\(e^{2}\)</span> is 0.0066943800229.</p>
+<p>As with the other gravimetry correction checks, <code class="docutils literal notranslate"><span class="pre">checkLatCorr</span></code> relies on the units for the input correction channel being set in the geowhizz file.</p>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">checkLatCorr</span></code> is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied latitude correction data and that resulting from the use of the formula above.</p>
+<p>Occasionally, the supplied latitude correction data will have the opposite sign to that in the equation, and <code class="docutils literal notranslate"><span class="pre">checkLatCorr</span></code> provides an optional parameter <code class="docutils literal notranslate"><span class="pre">changesign</span></code> to allow for this possibility. If the results from <code class="docutils literal notranslate"><span class="pre">checkLatCorr</span></code> are much larger than <span class="math notranslate nohighlight">\(1.0\)</span>, this may be the reason. In that case, simply set <code class="docutils literal notranslate"><span class="pre">changesign=True</span></code> and try again.</p>
+<p>Typically there are differences of less than <span class="math notranslate nohighlight">\(0.1\,\mu ms^{-2}\)</span> due to the limited precision of the data. Errors up to even <span class="math notranslate nohighlight">\(1.0\,\mu ms^{-2}\)</span> are acceptable.</p>
+<p>In this example all results are consistent with the correct formula being used and consequently the data pass.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkLatCorr</span><span class="p">(</span><span class="n">EastVicHDF_file</span><span class="p">,</span> <span class="s1">&#39;LATCOR&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0aadc99e6d147ffd79547bceb7dd42933fc9935786706008c00f15f31a0f5c9f.png" src="../_images/0aadc99e6d147ffd79547bceb7dd42933fc9935786706008c00f15f31a0f5c9f.png" />
+</div>
+</div>
+<p>The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than <span class="math notranslate nohighlight">\(0.06\,\mu m s^{-2}\)</span> which can be attributed to the limited precision of the data in text format.</p>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Odd_Even_Analysis.html" title="Previous document">Odd - Even Analysis</a>
+        </li>
+        <li>
+          <a href="Falcon_Noise_Analysis.html" title="Next document">Falcon Noise Analysis</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Gravimeter_Corrections.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

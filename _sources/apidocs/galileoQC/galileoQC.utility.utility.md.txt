@@ -1,0 +1,284 @@
+# {py:mod}`galileoQC.utility.utility`
+
+```{py:module} galileoQC.utility.utility
+```
+
+```{autodoc2-docstring} galileoQC.utility.utility
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_getCoordFrameAttr <galileoQC.utility.utility._getCoordFrameAttr>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._getCoordFrameAttr
+    :summary:
+    ```
+* - {py:obj}`_distance <galileoQC.utility.utility._distance>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._distance
+    :summary:
+    ```
+* - {py:obj}`_length <galileoQC.utility.utility._length>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._length
+    :summary:
+    ```
+* - {py:obj}`_displacement2 <galileoQC.utility.utility._displacement2>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._displacement2
+    :summary:
+    ```
+* - {py:obj}`_butter_bandpass <galileoQC.utility.utility._butter_bandpass>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._butter_bandpass
+    :summary:
+    ```
+* - {py:obj}`_butter_bandpass_filter <galileoQC.utility.utility._butter_bandpass_filter>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._butter_bandpass_filter
+    :summary:
+    ```
+* - {py:obj}`_space_thou <galileoQC.utility.utility._space_thou>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._space_thou
+    :summary:
+    ```
+* - {py:obj}`_get_lineName <galileoQC.utility.utility._get_lineName>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._get_lineName
+    :summary:
+    ```
+* - {py:obj}`_rotateCoords <galileoQC.utility.utility._rotateCoords>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._rotateCoords
+    :summary:
+    ```
+* - {py:obj}`_exceedance_fail <galileoQC.utility.utility._exceedance_fail>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._exceedance_fail
+    :summary:
+    ```
+* - {py:obj}`_failsDeviation <galileoQC.utility.utility._failsDeviation>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._failsDeviation
+    :summary:
+    ```
+* - {py:obj}`_inLineSum <galileoQC.utility.utility._inLineSum>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._inLineSum
+    :summary:
+    ```
+* - {py:obj}`_get_line_planfiles <galileoQC.utility.utility._get_line_planfiles>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._get_line_planfiles
+    :summary:
+    ```
+* - {py:obj}`getPlannedLine <galileoQC.utility.utility.getPlannedLine>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.getPlannedLine
+    :summary:
+    ```
+* - {py:obj}`getLineNumberInGroup <galileoQC.utility.utility.getLineNumberInGroup>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.getLineNumberInGroup
+    :summary:
+    ```
+* - {py:obj}`e2norm <galileoQC.utility.utility.e2norm>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.e2norm
+    :summary:
+    ```
+* - {py:obj}`controls_lessthan_1000 <galileoQC.utility.utility.controls_lessthan_1000>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.controls_lessthan_1000
+    :summary:
+    ```
+* - {py:obj}`controls_nineteen <galileoQC.utility.utility.controls_nineteen>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.controls_nineteen
+    :summary:
+    ```
+* - {py:obj}`convertUTMtoGeo <galileoQC.utility.utility.convertUTMtoGeo>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.convertUTMtoGeo
+    :summary:
+    ```
+* - {py:obj}`_mean_1std <galileoQC.utility.utility._mean_1std>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._mean_1std
+    :summary:
+    ```
+* - {py:obj}`_calc_bearing <galileoQC.utility.utility._calc_bearing>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._calc_bearing
+    :summary:
+    ```
+* - {py:obj}`_print_wrappedlist <galileoQC.utility.utility._print_wrappedlist>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility._print_wrappedlist
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.utility.utility.groupName>`
+  - ```{autodoc2-docstring} galileoQC.utility.utility.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.utility.utility.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.utility.utility.groupName
+```
+
+````
+
+````{py:function} _getCoordFrameAttr(whizz_group, attr_name)
+:canonical: galileoQC.utility.utility._getCoordFrameAttr
+
+```{autodoc2-docstring} galileoQC.utility.utility._getCoordFrameAttr
+```
+````
+
+````{py:function} _distance(x, y)
+:canonical: galileoQC.utility.utility._distance
+
+```{autodoc2-docstring} galileoQC.utility.utility._distance
+```
+````
+
+````{py:function} _length(x, y)
+:canonical: galileoQC.utility.utility._length
+
+```{autodoc2-docstring} galileoQC.utility.utility._length
+```
+````
+
+````{py:function} _displacement2(x0, x1, y0, y1)
+:canonical: galileoQC.utility.utility._displacement2
+
+```{autodoc2-docstring} galileoQC.utility.utility._displacement2
+```
+````
+
+````{py:function} _butter_bandpass(lowcut, highcut, fs, order=5)
+:canonical: galileoQC.utility.utility._butter_bandpass
+
+```{autodoc2-docstring} galileoQC.utility.utility._butter_bandpass
+```
+````
+
+````{py:function} _butter_bandpass_filter(data, lowcut, highcut, fs, order=5)
+:canonical: galileoQC.utility.utility._butter_bandpass_filter
+
+```{autodoc2-docstring} galileoQC.utility.utility._butter_bandpass_filter
+```
+````
+
+````{py:function} _space_thou(x, pos)
+:canonical: galileoQC.utility.utility._space_thou
+
+```{autodoc2-docstring} galileoQC.utility.utility._space_thou
+```
+````
+
+````{py:function} _get_lineName(linegroup)
+:canonical: galileoQC.utility.utility._get_lineName
+
+```{autodoc2-docstring} galileoQC.utility.utility._get_lineName
+```
+````
+
+````{py:function} _rotateCoords(x, y, angle)
+:canonical: galileoQC.utility.utility._rotateCoords
+
+```{autodoc2-docstring} galileoQC.utility.utility._rotateCoords
+```
+````
+
+````{py:function} _exceedance_fail(num_fids_in_exceedance, len_exceedance, maxCounter, maxDistance)
+:canonical: galileoQC.utility.utility._exceedance_fail
+
+```{autodoc2-docstring} galileoQC.utility.utility._exceedance_fail
+```
+````
+
+````{py:function} _failsDeviation(data, limit, nSamples)
+:canonical: galileoQC.utility.utility._failsDeviation
+
+```{autodoc2-docstring} galileoQC.utility.utility._failsDeviation
+```
+````
+
+````{py:function} _inLineSum(il1, il2, il3, fs=1.0, lowcut=0.03, highcut=0.1, dontfilter=False)
+:canonical: galileoQC.utility.utility._inLineSum
+
+```{autodoc2-docstring} galileoQC.utility.utility._inLineSum
+```
+````
+
+````{py:function} _get_line_planfiles(planPaths, gLineMeas, verbose=True)
+:canonical: galileoQC.utility.utility._get_line_planfiles
+
+```{autodoc2-docstring} galileoQC.utility.utility._get_line_planfiles
+```
+````
+
+````{py:function} getPlannedLine(gPlan, gLineMeas, verbose=True)
+:canonical: galileoQC.utility.utility.getPlannedLine
+
+```{autodoc2-docstring} galileoQC.utility.utility.getPlannedLine
+```
+````
+
+````{py:function} getLineNumberInGroup(linesgroup, lineNumber)
+:canonical: galileoQC.utility.utility.getLineNumberInGroup
+
+```{autodoc2-docstring} galileoQC.utility.utility.getLineNumberInGroup
+```
+````
+
+````{py:function} e2norm(x, y)
+:canonical: galileoQC.utility.utility.e2norm
+
+```{autodoc2-docstring} galileoQC.utility.utility.e2norm
+```
+````
+
+````{py:function} controls_lessthan_1000(all_lines)
+:canonical: galileoQC.utility.utility.controls_lessthan_1000
+
+```{autodoc2-docstring} galileoQC.utility.utility.controls_lessthan_1000
+```
+````
+
+````{py:function} controls_nineteen(all_lines)
+:canonical: galileoQC.utility.utility.controls_nineteen
+
+```{autodoc2-docstring} galileoQC.utility.utility.controls_nineteen
+```
+````
+
+````{py:function} convertUTMtoGeo(crs_epsg, x_utm, y_utm)
+:canonical: galileoQC.utility.utility.convertUTMtoGeo
+
+```{autodoc2-docstring} galileoQC.utility.utility.convertUTMtoGeo
+```
+````
+
+````{py:function} _mean_1std(x)
+:canonical: galileoQC.utility.utility._mean_1std
+
+```{autodoc2-docstring} galileoQC.utility.utility._mean_1std
+```
+````
+
+````{py:function} _calc_bearing(x, y)
+:canonical: galileoQC.utility.utility._calc_bearing
+
+```{autodoc2-docstring} galileoQC.utility.utility._calc_bearing
+```
+````
+
+````{py:function} _print_wrappedlist(mylist, width=70)
+:canonical: galileoQC.utility.utility._print_wrappedlist
+
+```{autodoc2-docstring} galileoQC.utility.utility._print_wrappedlist
+```
+````

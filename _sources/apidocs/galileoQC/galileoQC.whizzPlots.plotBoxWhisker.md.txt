@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.whizzPlots.plotBoxWhisker`
+
+```{py:module} galileoQC.whizzPlots.plotBoxWhisker
+```
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotBoxWhisker
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`plotBoxWhisker <galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, figtitle, titlestr, xlabelstr='Line Number', ylabelstr='', xaxis='linenumber')
+:canonical: galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker
+```
+````

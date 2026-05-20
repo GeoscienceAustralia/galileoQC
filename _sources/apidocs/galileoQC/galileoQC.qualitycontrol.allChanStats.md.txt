@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.allChanStats`
+
+```{py:module} galileoQC.qualitycontrol.allChanStats
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.allChanStats
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`allChanStats <galileoQC.qualitycontrol.allChanStats.allChanStats>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.allChanStats.allChanStats
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.allChanStats.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.allChanStats.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.allChanStats.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.allChanStats.groupName
+```
+
+````
+
+````{py:function} allChanStats(whizzFile, allChannels=[], lines=[], d1_chans=[], mr_chans=[], sin_chans=[], xaxis='linenumber')
+:canonical: galileoQC.qualitycontrol.allChanStats.allChanStats
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.allChanStats.allChanStats
+```
+````

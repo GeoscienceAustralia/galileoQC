@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.transforms.Kurvs_of_grav &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.transforms._trim_rectangle" href="galileoQC.transforms._trim_rectangle.html" />
+    <link rel="prev" title="galileoQC.transforms._pad_mean" href="galileoQC.transforms._pad_mean.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.transforms.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.transforms._pad_mean.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_mean</span></code></a></li>
+      <li>Next: <a href="galileoQC.transforms._trim_rectangle.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._trim_rectangle</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.transforms.Kurvs_of_grav">
+<span id="galileoqc-transforms-kurvs-of-grav"></span><h1><a class="reference internal" href="#module-galileoQC.transforms.Kurvs_of_grav" title="galileoQC.transforms.Kurvs_of_grav"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms.Kurvs_of_grav</span></code></a><a class="headerlink" href="#module-galileoQC.transforms.Kurvs_of_grav" title="Link to this heading">¶</a></h1>
+<p>Calculates the differential curvatures of gravity.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Oct 2025</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.transforms.Kurvs_of_grav.Kurvs_of_grav" title="galileoQC.transforms.Kurvs_of_grav.Kurvs_of_grav"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Kurvs_of_grav</span></code></a></p></td>
+<td><p>Calculates the differential curvatures of gravity, via
+FFT.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms.Kurvs_of_grav.Kurvs_of_grav">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms.Kurvs_of_grav.</span></span><span class="sig-name descname"><span class="pre">Kurvs_of_grav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gravity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms.Kurvs_of_grav.Kurvs_of_grav" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the differential curvatures of gravity, via
+FFT.</p>
+<p class="rubric" id="id1">Parameters</p>
+<p>gravity : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Grid to be transformed.
+</pre></div>
+</div>
+<p>firstorder : bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, include first order Craig correction. Default False.
+</pre></div>
+</div>
+<p>scale : float</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>After the transform is complete, the output grids are
+multiplied by scale. Usually, the input is gravity in
+mGal or um/s/s and the desired outputs are gradients
+in E. For mGal, scale = 10000.0; for E, 1000.0.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, then prints out details. Default = False.
+</pre></div>
+</div>
+<p class="rubric" id="id2">Returns</p>
+<p>gne, guv : list(xarray 2D DataArray)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The differential curvatures of gravity.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.transforms._pad_mean.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_mean</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.transforms._trim_rectangle.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._trim_rectangle</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.transforms.Kurvs_of_grav.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

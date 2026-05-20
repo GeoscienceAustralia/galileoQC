@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.checkDiurnal`
+
+```{py:module} galileoQC.qualitycontrol.checkDiurnal
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDiurnal
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkDiurnal <galileoQC.qualitycontrol.checkDiurnal.checkDiurnal>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDiurnal.checkDiurnal
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkDiurnal.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDiurnal.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkDiurnal.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDiurnal.groupName
+```
+
+````
+
+````{py:function} checkDiurnal(whizzFile, basemag, lines=[], rangeLimit=5.0, nSamples=3000, xChannel='', yChannel='', tChannel='', maxDuration=0.0, maxDistance=0.0, plot_flag=False, verbose=False)
+:canonical: galileoQC.qualitycontrol.checkDiurnal.checkDiurnal
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDiurnal.checkDiurnal
+```
+````

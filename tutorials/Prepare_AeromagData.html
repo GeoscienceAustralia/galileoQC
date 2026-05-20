@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Prepare Aeromagnetic data &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Prepare 2012 Kauring AirGrav ASEG-GDF2 data" href="Prepare_2012KauringData.html" />
+    <link rel="prev" title="Prepare Vinton Dome FTG data" href="Prepare_VintonDomeData.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Prepare_EastVicData.html">Prepare Eastern Victoria gravimeter data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Prepare_VintonDomeData.html">Prepare Vinton Dome FTG data</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Prepare Aeromagnetic data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Prepare_VintonDomeData.html" title="previous chapter">Prepare Vinton Dome FTG data</a></li>
+      <li>Next: <a href="Prepare_2012KauringData.html" title="next chapter">Prepare 2012 Kauring AirGrav ASEG-GDF2 data</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="prepare-aeromagnetic-data">
+<h1>Prepare Aeromagnetic data<a class="headerlink" href="#prepare-aeromagnetic-data" title="Link to this heading">¶</a></h1>
+<p>This tutorial demonstrates the preparation of XYZ airborne magnetic data for QC.</p>
+<hr class="docutils" />
+<p>First, import the required python packages, …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… then set the path to the geowhizz files.</p>
+<p>This is all very much step by step to illustrate the process, and you can certainly compress some of these steps in your own work.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./MagData/FD013_Mag.xyz&#39;</span><span class="p">)</span>
+<span class="n">dh</span> <span class="o">=</span> <span class="n">dx</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.hdf5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># asegToHdf fails if the file exists so delete it if it does. CHECK</span>
+<span class="k">if</span> <span class="n">dx</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span> 
+    <span class="n">dx</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>The Measured Survey Data</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">xyzToHDF</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">projectName</span><span class="o">=</span><span class="s1">&#39;Melbourne Aeromag&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accessing XYZ data in MagData/FD013_Mag.xyz.
+First few records are:
+/
+/
+/   LINE FLIGHT  YEAR  DOY     FTIME       MGA-X       MGA-Y
+MGA-Z      MSL-Z           LAT          LONG         DEM     DIURNAL
+COMPMAG       DCMAG     IGRFMAG     LVLDMAG
+Line      2461.01
+
+  Found 3 header records
+  Found 12 lines
+  Found 17 fields
+
+Channel precisions (number of decimal places):
+[2 0 0 0 2 2 2 2 2 7 7 2 3 3 3 3 3]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating:  MagData/FD013_Mag.hdf5
+  About to add data for line  2461.01  Lcount  1 / 12
+  About to add data for line  2461.02  Lcount  2 / 12
+  About to add data for line  2461.03  Lcount  3 / 12
+  About to add data for line  2463.0  Lcount  4 / 12
+  About to add data for line  2463.02  Lcount  5 / 12
+  About to add data for line  2463.04  Lcount  6 / 12
+  About to add data for line  2465.0  Lcount  7 / 12
+  About to add data for line  2465.02  Lcount  8 / 12
+  About to add data for line  2467.01  Lcount  9 / 12
+  About to add data for line  2467.02  Lcount  10 / 12
+  About to add data for line  2469.0  Lcount  11 / 12
+  About to add data for line  2469.01  Lcount  12 / 12 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">block_name</span> <span class="o">=</span> <span class="s1">&#39;FD013 field data&#39;</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateProject</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">acquirer</span><span class="o">=</span><span class="s1">&#39;SGL&#39;</span><span class="p">,</span> <span class="n">blockID</span><span class="o">=</span><span class="n">block_name</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateCoordFrame</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> 
+                    <span class="n">lat</span><span class="o">=</span><span class="s1">&#39;LAT&#39;</span><span class="p">,</span> 
+                    <span class="n">lon</span><span class="o">=</span><span class="s1">&#39;LONG&#39;</span><span class="p">,</span> 
+                    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;MGA-X&#39;</span><span class="p">,</span> 
+                    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;MGA-Y&#39;</span><span class="p">,</span> 
+                    <span class="n">time</span><span class="o">=</span><span class="s1">&#39;FTIME&#39;</span><span class="p">,</span> 
+                    <span class="n">alt</span><span class="o">=</span><span class="s1">&#39;MGA-Z&#39;</span><span class="p">,</span> 
+                    <span class="n">geoDatum</span><span class="o">=</span><span class="s1">&#39;GDA2020&#39;</span><span class="p">,</span> 
+                    <span class="n">htDatum</span><span class="o">=</span><span class="s1">&#39;GRS80&#39;</span><span class="p">,</span> 
+                    <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;UTM&#39;</span><span class="p">,</span> 
+                    <span class="n">utmz</span><span class="o">=</span><span class="s1">&#39;55&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting BlockID = FD013 field data for FD013_Mag.hdf5.
+Setting Acquirer = SGL for FD013_Mag.hdf5.
+Changed CoordFrame attribute(s) for FD013_Mag.hdf5.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateLineAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">line_type</span><span class="o">=</span><span class="s1">&#39;SGL_GA&#39;</span><span class="p">,</span> <span class="n">flight_chan</span><span class="o">=</span><span class="s1">&#39;FLIGHT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting Line attributes for MagData/FD013_Mag.hdf5 to include flight numbers from FLIGHT.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NO ACTION TAKEN ON LINE_TYPE - no plan file provided.
+
+Setting Line attributes for FD013_Mag.hdf5 according to the SGL_GA scheme.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;MGA-X&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;MGA-Y&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;MGA-Z&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;MSL-Z&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;DEM&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;LAT&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;deg&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;LONG&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;deg&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;DIURNAL&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;COMPMAG&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;DCMAG&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;IGRFMAG&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">updateChannelAttributes</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="s1">&#39;LVLDMAG&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;nT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Changed channel attribute(s) for MGA-X in FD013_Mag.hdf5.
+Changed channel attribute(s) for MGA-Y in FD013_Mag.hdf5.
+Changed channel attribute(s) for MGA-Z in FD013_Mag.hdf5.
+Changed channel attribute(s) for MSL-Z in FD013_Mag.hdf5.
+Changed channel attribute(s) for DEM in FD013_Mag.hdf5.
+Changed channel attribute(s) for LAT in FD013_Mag.hdf5.
+Changed channel attribute(s) for LONG in FD013_Mag.hdf5.
+Changed channel attribute(s) for DIURNAL in FD013_Mag.hdf5.
+Changed channel attribute(s) for COMPMAG in FD013_Mag.hdf5.
+Changed channel attribute(s) for DCMAG in FD013_Mag.hdf5.
+Changed channel attribute(s) for IGRFMAG in FD013_Mag.hdf5.
+Changed channel attribute(s) for LVLDMAG in FD013_Mag.hdf5.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportLines</span><span class="p">(</span><span class="n">dh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 even lines, 0 odd lines.
+12 traverse lines, 0 control lines, 0 not classified.
+0 planned lines, 12 unplanned lines, total 12.
+
+ Whizz Version 1.0
+
+Odd Lines:
+[]
+
+Even Lines:
+[]
+
+Traverse Lines:
+[&#39;2461.010&#39;, &#39;2461.020&#39;, &#39;2461.030&#39;, &#39;2463.000&#39;, &#39;2463.020&#39;,
+&#39;2463.040&#39;, &#39;2465.000&#39;, &#39;2465.020&#39;, &#39;2467.010&#39;, &#39;2467.020&#39;,
+&#39;2469.000&#39;, &#39;2469.010&#39;]
+
+Control Lines:
+[]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportSampling</span><span class="p">(</span><span class="n">dh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+    Acquirer: SGL
+    BlockID: FD013 field data
+    ProjectName: Melbourne Aeromag
+
+Sample time and distance statistics
+  Min   = 0.100 s, 5.1 m
+  Max   = 0.100 s, 6.6 m
+  Mean  = 0.100 s, 6.0 m
+  Stdev = 7.13e-12 s, 0.2 m
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportChannels</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+
+17 channels:
+
+<span class=" -Color -Color-Bold">  channel              units          description</span>
+--------------------------------------------------
+  COMPMAG              nT             
+  DCMAG                nT             
+  DEM                  m              
+  DIURNAL              nT             
+  DOY                                 
+  FLIGHT                              
+  FTIME                               
+  IGRFMAG              nT             
+  LAT                  deg            
+  LINE                                
+  LONG                 deg            
+  LVLDMAG              nT             
+  MGA-X                m              
+  MGA-Y                m              
+  MGA-Z                m              
+  MSL-Z                m              
+  YEAR                                
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Make a survey flight-line map</strong></p>
+<p>A map showing the flown lines (blue) against the planned lines (red). This provides a visual check that the lines are in about the right location and shows the amount of the survey flown so far. The map title, and the x and y axes are labelled using metadata stored in the <code class="docutils literal notranslate"><span class="pre">geoWhizz</span></code> file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">linesMap</span><span class="p">([</span><span class="n">Path</span><span class="p">(</span><span class="n">dh</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No file of planned data provided.
+</pre></div>
+</div>
+<img alt="../_images/1c866867651ad1c893a4d04468b8cc1e76cbd6c3b52be37971bd4d03797ee9b4.png" src="../_images/1c866867651ad1c893a4d04468b8cc1e76cbd6c3b52be37971bd4d03797ee9b4.png" />
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Prepare_VintonDomeData.html" title="Previous document">Prepare Vinton Dome FTG data</a>
+        </li>
+        <li>
+          <a href="Prepare_2012KauringData.html" title="Next document">Prepare 2012 Kauring AirGrav ASEG-GDF2 data</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Prepare_AeromagData.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

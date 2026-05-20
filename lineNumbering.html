@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Flight Line Numbering &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="_static/documentation_options.js?v=53b53b71"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Airborne Gravity Deed" href="deed.html" />
+    <link rel="prev" title="geoWhizz" href="geowhizz.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="geowhizz.html" title="previous chapter">geoWhizz</a></li>
+      <li>Next: <a href="deed.html" title="next chapter">Airborne Gravity Deed</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="flight-line-numbering">
+<span id="linenumbers-target"></span><h1>Flight Line Numbering<a class="headerlink" href="#flight-line-numbering" title="Link to this heading">¶</a></h1>
+<p>Airborne geophysical surveys are almost always flown as a series of line segments with each segment uniquely numbered. The numbering is used in planning, acquisition, processing and QC. The method of numbering the line varies across survey providers but is always designed to encode useful information about each segment.</p>
+<p>Survey flying follows planned lines and the planned lines are also numbered. The segment number always includes the planned line number.</p>
+<p>Occasionally, a segment, or part of a segment will need to be re-flown because of problems with the data or the aircraft track. This may need doing more than once. The segment number includes a re-flight number to indicate which re-flight it is.</p>
+<p>Most survey consist of traverse lines flown parallel to each other, and control lines (sometimes called tie-lines) flown perpendicular (or occasionally at some angle close to a right angle) to the traverse lines. The control lines are used to level the data and sometimes in QC. They are typically much more widely spaced than the traverse lines. Usually a part of the planned line number, and the corresponding part of the segment number will indicate whether the line is a traverse line or a control line.</p>
+<p>Some surveys are divided into blocks. This division might be because of spatial separation, because parts of the total area are to be flown in different traverse directions, because part of the survey are to be flown by different aircraft, because lines were added to the survey plan after acquisition had commenced, or for some other reason. The planned and segment numbers might include a numerical code to indicate which block the line is from.</p>
+<p>Sometimes a survey area has a hole in the middle. It might be most efficient to simply fly the aircraft across the gap and delete the data over the gap. Logistics might mean that the planned line number is the same on both sides of the gap. Part of the segment number might could be used to indicate which side of the gap it belongs to.</p>
+<p>There may be other pieces of information that are occasionally encoded into the segment numbering.</p>
+<p>The airborne geophysics industry has no common approach to encoding information in segment numbers so generally, every survey provider will use their own system. Sometimes the method will be different for different surveys flown by the same provider. Even during a single survey, circumstances might lead to a change in line numbering system. Some geophysical software requires that line numbers be integers, and some allows decimal line numbers and this difference leads to differences in survey providers approach to line numbering.</p>
+<p>For QC, the most critical requirement is to be able to identify the planned line, given the flown line segment. It is also useful for some QC functions to be able to identify a segment as a traverse or control line.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">updateLineAttributes</span></code> function writes the encoding format as metadata to the whizz file, allowing <strong>galileoQC</strong> to process the data efficiently for a number of purposes. It recognises several encoding formats for line numbering.</p>
+<p>For example, the encoding format can be set to “ARK”, causing each line to be identified as either a traverse or a control line, and setting the re-flight number for each line, according to the “ARK” line-numbering scheme. The following function call performs this task for the survey data in <code class="docutils literal notranslate"><span class="pre">whizzfile</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">updateLineAttributes</span><span class="p">(</span><span class="n">whizzFile</span><span class="p">,</span> <span class="n">line_type</span><span class="o">=</span><span class="s1">&#39;ARK&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following line number encoding formats are currently available:</p>
+<p><strong>ARK</strong>
+: Line Number convention “LLLLR” :</p>
+<ul class="simple">
+<li><p>“LLLL” is the planned line number (4 digits for both traverse and control lines). Control lines have the first digit equal to 9.</p></li>
+<li><p>“R” represents the particular occasion (repeat number) that a line/line segment was flown, starting from zero.</p></li>
+</ul>
+<p><strong>SGL_NSW</strong>
+: Line Number convention “LLLL.SR” :</p>
+<ul class="simple">
+<li><p>“LLLL” is the planned line number (4 digits: traverse lines, 3 digits: control/tie lines). Test lines have numbers
+greater than 6999.</p></li>
+<li><p>“S” represents the pre-planned segment number of the line. A planned line that is not continuous will have
+separate segments with different segment numbers.</p></li>
+<li><p>“R” represents the particular occasion that a line/line segment was flown, starting from zero.
+For example, 1245.20 would be the planned segment “2” of the planned line 1245 flown for the first time.
+If this line segment were flown as two partial lines, their identifying line numbers would be 1245.20 and 1245.21.</p></li>
+</ul>
+<p><strong>SGL_GA</strong></p>
+<p>: Line Number convention “LLLL.SR” :</p>
+<ul class="simple">
+<li><p>“LLLL” is the planned line number (4 digits: traverse lines, 3 digits: control/tie lines). Test lines have numbers
+greater than 6999.</p></li>
+<li><p>“S” represents the preplanned segment number of the line. A planned line that is not continuous will have separate segments with different segment numbers. Segment numbers are used to identify survey blocks.</p></li>
+<li><p>“R” represents the particular occasion that a line/line segment was flown, starting from zero.</p></li>
+</ul>
+<p><strong>Xcal_nsw</strong>
+: Line Number convention “LLLLSR” :</p>
+<ul class="simple">
+<li><p>If the second digit is “9”, then the line is a control, otherwise a traverse.</p></li>
+<li><p>The planned line number is “LLLL0”.</p></li>
+<li><p>The last digit “R” is the re-flight number.</p></li>
+<li><p>The second last number “S” is the segment number.</p></li>
+<li><p>If the line number has only 3 digits, then it is a test line.</p></li>
+</ul>
+<p><strong>Xcal_can</strong>
+: Line Number convention “LLLLR” :</p>
+<ul class="simple">
+<li><p>If the second digit is “9”, then the line is a control, otherwise a traverse.</p></li>
+<li><p>The planned line number is “LLLL0”.</p></li>
+<li><p>The last digit “R” is the re-flight number.</p></li>
+</ul>
+<p><strong>NRG</strong>
+: Line Number convention “LLLLR” :</p>
+<ul class="simple">
+<li><p>The first digit is “1” for traverses, “9” for control lines.</p></li>
+<li><p>The last digit is the re-flight number.</p></li>
+<li><p>The planned line number is the same as the flown line number with re-flight number “0”.</p></li>
+</ul>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geowhizz.html" title="Previous document">geoWhizz</a>
+        </li>
+        <li>
+          <a href="deed.html" title="Next document">Airborne Gravity Deed</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/lineNumbering.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.transforms._pad_regional &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.transforms._pad_simple" href="galileoQC.transforms._pad_simple.html" />
+    <link rel="prev" title="galileoQC.transforms._check_extension" href="galileoQC.transforms._check_extension.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.transforms.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.transforms._check_extension.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._check_extension</span></code></a></li>
+      <li>Next: <a href="galileoQC.transforms._pad_simple.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_simple</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.transforms._pad_regional">
+<span id="galileoqc-transforms-pad-regional"></span><h1><a class="reference internal" href="#module-galileoQC.transforms._pad_regional" title="galileoQC.transforms._pad_regional"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_regional</span></code></a><a class="headerlink" href="#module-galileoQC.transforms._pad_regional" title="Link to this heading">¶</a></h1>
+<p>Pad a grid with regional data.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Oct 2025</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.transforms._pad_regional._pad_regional" title="galileoQC.transforms._pad_regional._pad_regional"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_pad_regional</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Gne_grid</span></code> and <code class="docutils literal notranslate"><span class="pre">Guv_grid</span></code> are mean-corrected and padded by <code class="docutils literal notranslate"><span class="pre">pad_cells</span></code>
+pixels in all four directions using values calculated from the <code class="docutils literal notranslate"><span class="pre">regional_grid</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.transforms._pad_regional._scaling_doubtful" title="galileoQC.transforms._pad_regional._scaling_doubtful"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_scaling_doubtful</span></code></a></p></td>
+<td><p>If the ratio of the ranges (max - min) of the input grids is
+not nearly 1.0, then the scaling is doubtful.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms._pad_regional._pad_regional">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms._pad_regional.</span></span><span class="sig-name descname"><span class="pre">_pad_regional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Gne_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Guv_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regional_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms._pad_regional._pad_regional" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">Gne_grid</span></code> and <code class="docutils literal notranslate"><span class="pre">Guv_grid</span></code> are mean-corrected and padded by <code class="docutils literal notranslate"><span class="pre">pad_cells</span></code>
+pixels in all four directions using values calculated from the <code class="docutils literal notranslate"><span class="pre">regional_grid</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">Gne_grid</span></code> and <code class="docutils literal notranslate"><span class="pre">Guv_grid</span></code> are of terrain-corrected data, then the
+<code class="docutils literal notranslate"><span class="pre">regional_data</span></code> should be too. Similarly for free-air data.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">regional_grid</span></code> is too small to pad the required number of cells,
+then padding will be applied to the extent of <code class="docutils literal notranslate"><span class="pre">regional_grid</span></code>, and then
+mean padding will be used to achieve the remaining padding.</p>
+<p class="rubric" id="id3">Parameters</p>
+<p>Gne_grid : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Gne grid to be expanded.
+</pre></div>
+</div>
+<p>Guv_grid : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Guv grid to be expanded.
+</pre></div>
+</div>
+<p>pad_cells : int</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Number of cells to add to the grid along each of the four sides.
+The resultant grid is thus larger by `2 x pad_cells` in both directions.
+</pre></div>
+</div>
+<p>regional_grid : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Regional (vertical) gravity grid
+</pre></div>
+</div>
+<p>firstorder : bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, include first order Craig correction. Default False.
+</pre></div>
+</div>
+<p>verbose : Bool, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, then prints out details. Default = False.
+</pre></div>
+</div>
+<p class="rubric" id="id4">Returns</p>
+<p>Gne_x_grid, Guv_x_grid : (xarray 2D DataArray, xarray 2D DataArray)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>the expanded grids.
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.transforms._pad_regional._scaling_doubtful">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.transforms._pad_regional.</span></span><span class="sig-name descname"><span class="pre">_scaling_doubtful</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.transforms._pad_regional._scaling_doubtful" title="Link to this definition">¶</a></dt>
+<dd><p>If the ratio of the ranges (max - min) of the input grids is
+not nearly 1.0, then the scaling is doubtful.</p>
+<p class="rubric" id="id5">Parameters</p>
+<p>grid1 : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A grid for comparison.
+</pre></div>
+</div>
+<p>grid2 : xarray 2D DataArray</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A grid for comparison.
+</pre></div>
+</div>
+<p class="rubric" id="id6">Returns</p>
+<p>True if abs(log10(ratio of ranges)) &gt; 0.5, else False.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.transforms._check_extension.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._check_extension</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.transforms._pad_simple.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.transforms._pad_simple</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.transforms._pad_regional.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

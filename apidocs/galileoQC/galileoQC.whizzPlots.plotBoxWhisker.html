@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.whizzPlots.plotBoxWhisker &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.whizzPlots.linesMap" href="galileoQC.whizzPlots.linesMap.html" />
+    <link rel="prev" title="galileoQC.whizzPlots.plotLinesCompareChannels" href="galileoQC.whizzPlots.plotLinesCompareChannels.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.whizzPlots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzPlots</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.whizzPlots.plotLinesCompareChannels.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzPlots.plotLinesCompareChannels</span></code></a></li>
+      <li>Next: <a href="galileoQC.whizzPlots.linesMap.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzPlots.linesMap</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.whizzPlots.plotBoxWhisker">
+<span id="galileoqc-whizzplots-plotboxwhisker"></span><h1><a class="reference internal" href="#module-galileoQC.whizzPlots.plotBoxWhisker" title="galileoQC.whizzPlots.plotBoxWhisker"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzPlots.plotBoxWhisker</span></code></a><a class="headerlink" href="#module-galileoQC.whizzPlots.plotBoxWhisker" title="Link to this heading">¶</a></h1>
+<p>Plot a statistical analysis.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: 2023</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker" title="galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotBoxWhisker</span></code></a></p></td>
+<td><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Creates a box whisker plot showing the range, standard deviation and mean for each flight-line.
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.whizzPlots.plotBoxWhisker.</span></span><span class="sig-name descname"><span class="pre">plotBoxWhisker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chMin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chMax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chMean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chStd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineNo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figtitle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titlestr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabelstr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Line</span> <span class="pre">Number'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabelstr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xaxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linenumber'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.whizzPlots.plotBoxWhisker.plotBoxWhisker" title="Link to this definition">¶</a></dt>
+<dd><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Creates a box whisker plot showing the range, standard deviation and mean for each flight-line.
+</pre></div>
+</div>
+<p class="rubric" id="id1">Parameters</p>
+<p>chMin : Numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains the minimum value of some channel for all lines.
+</pre></div>
+</div>
+<p>chMax : Numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains the maximum value of some channel for all lines.
+</pre></div>
+</div>
+<p>chMean : Numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains the mean value of some channel for all lines.
+</pre></div>
+</div>
+<p>chStd : Numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains the standard deviation value of some channel for all lines.
+</pre></div>
+</div>
+<p>lineNo : Numpy array</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains line numbers.
+</pre></div>
+</div>
+<p>figtitle : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains figure title.
+</pre></div>
+</div>
+<p>titlestr : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains plot title.
+</pre></div>
+</div>
+<p>xlabelstr : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains x label.
+</pre></div>
+</div>
+<p>ylabelstr : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains y label. Defaults to &#39;Line Number&#39;.
+</pre></div>
+</div>
+<p>xaxis : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If &quot;linenumber&quot; then the x axis variable is line number;
+if &quot;ordinal&quot; then it is just ordinal.
+</pre></div>
+</div>
+<p class="rubric" id="id2">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.whizzPlots.plotLinesCompareChannels.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzPlots.plotLinesCompareChannels</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.whizzPlots.linesMap.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.whizzPlots.linesMap</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.whizzPlots.plotBoxWhisker.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

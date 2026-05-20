@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>galileoQC.qualitycontrol.qualityAnalysis &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="galileoQC.qualitycontrol.checkXYPlan" href="galileoQC.qualitycontrol.checkXYPlan.html" />
+    <link rel="prev" title="galileoQC.qualitycontrol.checkEotvosCorr" href="galileoQC.qualitycontrol.checkEotvosCorr.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">API</a><ul>
+  <li><a href="../index.html">API Reference</a><ul>
+  <li><a href="galileoQC.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC</span></code></a><ul>
+  <li><a href="galileoQC.qualitycontrol.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol</span></code></a><ul>
+      <li>Previous: <a href="galileoQC.qualitycontrol.checkEotvosCorr.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr</span></code></a></li>
+      <li>Next: <a href="galileoQC.qualitycontrol.checkXYPlan.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkXYPlan</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="module-galileoQC.qualitycontrol.qualityAnalysis">
+<span id="galileoqc-qualitycontrol-qualityanalysis"></span><h1><a class="reference internal" href="#module-galileoQC.qualitycontrol.qualityAnalysis" title="galileoQC.qualitycontrol.qualityAnalysis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis</span></code></a><a class="headerlink" href="#module-galileoQC.qualitycontrol.qualityAnalysis" title="Link to this heading">¶</a></h1>
+<p>A collection of possibly useful QC functions.</p>
+<p>Author: Mark Helm Dransfield</p>
+<p>Created: Sat Aug 14 20:28:20 2021</p>
+<p>License: CC BY-SA</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.calcDrift" title="galileoQC.qualitycontrol.qualityAnalysis.calcDrift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calcDrift</span></code></a></p></td>
+<td><p>NOT USED</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc" title="galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkVertAcc</span></code></a></p></td>
+<td><p>Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
+data (units of m/s) in the channel called <code class="docutils literal notranslate"><span class="pre">vertvelocity</span></code> in whizzFile. Plots the
+result (units of milli-g) for each survey line.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats" title="galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkVertAccStats</span></code></a></p></td>
+<td><p>Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
+data (units of m/s) in the channel called <code class="docutils literal notranslate"><span class="pre">vertvelocity</span></code> in whizzFile. Plots the
+min, max, mean and stdev (units of milli-g) for each survey line as a function of
+line.
+Assumes samples are 1 sec apart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.checkStatcor" title="galileoQC.qualitycontrol.qualityAnalysis.checkStatcor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkStatcor</span></code></a></p></td>
+<td><p>Plots <code class="docutils literal notranslate"><span class="pre">statcor</span></code> vs <code class="docutils literal notranslate"><span class="pre">flight</span></code> as a scatter plot. Used to compare with static gravimeter readings.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.lineStats" title="galileoQC.qualitycontrol.qualityAnalysis.lineStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lineStats</span></code></a></p></td>
+<td><p>Generate a statistical plot for the channel across all lines. The plot shows
+the min, mean, max and stdev for the channel as a function of line number.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff" title="galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statsChannelDiff</span></code></a></p></td>
+<td><p>Plot the statistics of channel1 - channel2 in each flightLine.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#galileoQC.qualitycontrol.qualityAnalysis.groupName" title="galileoQC.qualitycontrol.qualityAnalysis.groupName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupName</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.groupName">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">groupName</span></span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.groupName" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.calcDrift">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">calcDrift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.calcDrift" title="Link to this definition">¶</a></dt>
+<dd><p>NOT USED</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">checkVertAcc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertvelocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.checkVertAcc" title="Link to this definition">¶</a></dt>
+<dd><p>Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
+data (units of m/s) in the channel called <code class="docutils literal notranslate"><span class="pre">vertvelocity</span></code> in whizzFile. Plots the
+result (units of milli-g) for each survey line.</p>
+<p class="rubric" id="id9">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>vertvelocity :</p>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p class="rubric" id="id10">Returns</p>
+<p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">checkVertAccStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.checkVertAccStats" title="Link to this definition">¶</a></dt>
+<dd><p>Uses numpy.diff to estimate the vertical acceleration from the vertical velocity
+data (units of m/s) in the channel called <code class="docutils literal notranslate"><span class="pre">vertvelocity</span></code> in whizzFile. Plots the
+min, max, mean and stdev (units of milli-g) for each survey line as a function of
+line.
+Assumes samples are 1 sec apart.</p>
+<p class="rubric" id="id11">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p class="rubric" id="id12">Returns</p>
+<p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.checkStatcor">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">checkStatcor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statcor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.checkStatcor" title="Link to this definition">¶</a></dt>
+<dd><p>Plots <code class="docutils literal notranslate"><span class="pre">statcor</span></code> vs <code class="docutils literal notranslate"><span class="pre">flight</span></code> as a scatter plot. Used to compare with static gravimeter readings.</p>
+<p class="rubric" id="id13">Parameters</p>
+<p>whizzFile : HDF5 Whizz file pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The pathlib Path to the Whizz HDF5 file containing the survey line data.
+</pre></div>
+</div>
+<p>statcor : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the static corrections.
+</pre></div>
+</div>
+<p>flight : String, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel containing the flight number. The default is to use the line attribute.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p class="rubric" id="id14">Returns</p>
+<p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.lineStats">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">lineStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.lineStats" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a statistical plot for the channel across all lines. The plot shows
+the min, mean, max and stdev for the channel as a function of line number.</p>
+<p class="rubric" id="id15">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>channel : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of the channel to plot.
+</pre></div>
+</div>
+<p>lines : Array{String}, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Array of line numbers as strings. Default = [], meaning all lines are checked.
+</pre></div>
+</div>
+<p class="rubric" id="id16">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff">
+<span class="sig-prename descclassname"><span class="pre">galileoQC.qualitycontrol.qualityAnalysis.</span></span><span class="sig-name descname"><span class="pre">statsChannelDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whizzFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flightLines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#galileoQC.qualitycontrol.qualityAnalysis.statsChannelDiff" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the statistics of channel1 - channel2 in each flightLine.</p>
+<p class="rubric" id="id17">Parameters</p>
+<p>whizzFile : String or pathlib Path</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Name of a HDF5 Whizz file, including path and extension.
+</pre></div>
+</div>
+<p>flightLines : String List, optional</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A list of flightline, e.g. [&#39;1000110.0&#39;]. Default is all lines in whizzFile.
+</pre></div>
+</div>
+<p>channel1 : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a channel.
+</pre></div>
+</div>
+<p>channel2 : String</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The name of a channel.
+</pre></div>
+</div>
+<p class="rubric" id="id18">Returns</p>
+<p>None.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="galileoQC.qualitycontrol.checkEotvosCorr.html" title="Previous document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkEotvosCorr</span></code></a>
+        </li>
+        <li>
+          <a href="galileoQC.qualitycontrol.checkXYPlan.html" title="Next document"><code class="xref py py-mod docutils literal notranslate"><span class="pre">galileoQC.qualitycontrol.checkXYPlan</span></code></a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../../_sources/apidocs/galileoQC/galileoQC.qualitycontrol.qualityAnalysis.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
