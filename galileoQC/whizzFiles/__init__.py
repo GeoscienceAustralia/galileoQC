@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A collection of functions to manage `geoWhizz` files and report their contents.
+A collection of functions to create and manage `geoWhizz` files, and report their contents.
 
 Author: Mark Helm Dransfield
 

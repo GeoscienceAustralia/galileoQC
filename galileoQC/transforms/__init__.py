@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Craig transform Gne/Guv to gD.
+Functions to transform Gne/Guv to gD and to conform the data to regional gravity.
 
 Author: Mark Helm Dransfield
 

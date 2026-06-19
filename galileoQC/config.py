@@ -4,8 +4,11 @@
 Set the global constants (defaults for various functions) for galileoQC.
 This file can be edited to change plot fonts and default colormap and
 default project name, for example.
+
 Author: Mark Helm Dransfield
+
 Created: Sat Aug 14 19:08:29 2021
+
 License: CC BY-SA
 """
 

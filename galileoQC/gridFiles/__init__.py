@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Raster data analysis and imaging functions.
+Raster data analysis and imaging functions for gridded data.
 
 Author: Mark Helm Dransfield
 

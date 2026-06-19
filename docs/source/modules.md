@@ -1,5 +1,5 @@
 (modules-target)=
-# API
+# Functions
 
 This page contains auto-generated API reference documentation.
 
