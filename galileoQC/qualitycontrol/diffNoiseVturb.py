@@ -161,13 +161,12 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
                 failed_lines += 1
             count += 1
 
-        fig = plt.figure()
+        fig = plt.figure(layout="constrained")
         fig.suptitle(f'Noise vs Turbulence - {projName}', fontsize=12)
-        fig.subplots_adjust(top=0.85)
         ax = fig.add_subplot(1,1,1)
         ax.vlines(turbMean, errNEmean, errUVmean, 'k', lw=0.3)
-        neplot, = ax.plot(turbMean, errNEmean, 'bo', label=r'$E_{ne}$')
-        uvplot, = ax.plot(turbMean, errUVmean, 'go', label=r'$E_{uv}$')
+        neplot, = ax.plot(turbMean, errNEmean, 'bo', label=r"$E_{ne}$")
+        uvplot, = ax.plot(turbMean, errUVmean, 'go', label=r"$E_{uv}$")
         if labelLines:
             for ii in range(failed_lines):
                 plt.text(labelx[ii], labely[ii], labelt[ii], va='top', ha='right', size=6.0)
@@ -177,7 +176,6 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         ax.legend(handles=[neplot, uvplot])
         for label in ax.get_xticklabels(): label.set_fontsize(8)
         for label in ax.get_yticklabels(): label.set_fontsize(8)
-        fig.tight_layout()
         plt.show()
     print(report)
         

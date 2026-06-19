@@ -140,7 +140,7 @@ def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0, plot_fla
 
     if plot_flag and np.std(frob) > noiselimit:
         myTitle = 'Trace for Line ' + line
-        fig = plt.figure(figsize=(5,8))
+        fig = plt.figure(figsize=(5,8), layout="constrained")
         ax1 = fig.add_subplot(4,1,1)
         ax1.plot(trace, '.', ms=2)
         plt.ylabel('Trace', fontsize = 6)
@@ -180,7 +180,7 @@ def _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line = "", noiselimit=30.0, plot_fla
         for label in ax4.get_xticklabels(): label.set_fontsize(6)
         for label in ax4.get_yticklabels(): label.set_fontsize(6)
         
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
     return np.std(frob)
 

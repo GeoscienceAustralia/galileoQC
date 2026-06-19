@@ -167,9 +167,9 @@ def ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, 
                 report += f'Line {line}: in-line sum = {chStd[count]:.1f} exceeds specification of {noiseSpec}.\n'
             count += 1
         
-        fig = plt.figure()
+        fig = plt.figure(layout="constrained")
         fig.suptitle(f'In-line Sum Noise Analysis - {projName}', fontsize=10)
-        fig.subplots_adjust(top=0.85)
+        # fig.subplots_adjust(top=0.85)
         ax = fig.add_subplot(2,1,1)
         ax.plot(accStd, chStd, 'go')
         if labelLines:
@@ -183,7 +183,7 @@ def ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, 
 
         plotBoxWhisker(chMin, chMax, chMean, chStd, lineNo, '', 'In-line Sum Statistics', xlabelstr='Line Number', ylabelstr='Inline Sum [E]', xaxis='linenumber')
 
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
     print(report)
 

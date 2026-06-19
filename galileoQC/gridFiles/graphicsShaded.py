@@ -141,14 +141,14 @@ def graphicsShaded(
     #         ml.colormaps.register(colormap, name='myCmap')
     
     if ax == None:
-        fig, ax = plt.subplots()#figsize=(12,6))
+        fig, ax = plt.subplots(layout="constrained")#figsize=(12,6))
         fig.suptitle(mytitle)#, fontsize=10)
     else:
         fig = plt.gcf()
         ax.set_title(mytitle)
     
     thou_format = tkr.FuncFormatter(util._space_thou)
-    fig.subplots_adjust(top=0.85)
+    # fig.subplots_adjust(top=0.85)
     
     ax.set_xlabel('Eastings [m]')#, fontsize=8)
     ax.set_ylabel('Northings [m]')#, fontsize=8)

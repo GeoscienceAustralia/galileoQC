@@ -162,7 +162,7 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
                 report += f'\n  exceeding {rangeLimit:.1f} - FAIL'
                 num_failed_lines += 1
                 if plot_flag:
-                    fig = plt.figure()
+                    fig = plt.figure(layout="constrained")
                     ax = fig.add_subplot(1,1,1)
                     ax.plot(data)
                     plotTitle = f'Line {line} Channel {basemag}: reaches {bigExtremum:.2f} at {failedSample}, exceeding {rangeLimit} - FAIL'
@@ -170,7 +170,7 @@ def checkDiurnal(whizzFile, basemag, lines=[], rangeLimit = 5.0, nSamples = 3000
                     plt.grid(True)
                     for label in ax.get_xticklabels(): label.set_fontsize(6)
                     for label in ax.get_yticklabels(): label.set_fontsize(6)
-                    fig.tight_layout()
+                    # fig.tight_layout()
 
     print(f'  Checked {numLines} lines, {num_failed_lines} failed.\n')
     print(report)

@@ -112,9 +112,9 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
 
             count += 1
 
-        fig = plt.figure()
+        fig = plt.figure(layout="constrained")
         fig.suptitle(f'Noise vs Turbulence - {projName}', fontsize=12)
-        fig.subplots_adjust(top=0.85)
+        # fig.subplots_adjust(top=0.85)
         ax = fig.add_subplot(1,1,1)
         neplot, = ax.plot(turbMean, errmean, 'bo', label='$E_{D}$')
         for ii in range(0, len(turbMean)):
@@ -124,7 +124,7 @@ def diffGravVturb(whizzFile, turbulence, aD, bD, error_spec=5.0, low_cut=0.001, 
         plt.grid(True)
         for label in ax.get_xticklabels(): label.set_fontsize(8)
         for label in ax.get_yticklabels(): label.set_fontsize(8)
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
         report = f'{num_lines_failed} failed of {count} lines total.' + report
     print(report)

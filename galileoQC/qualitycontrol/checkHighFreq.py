@@ -138,7 +138,7 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
                     num_failed_lines += 1
                     reportStr += f'Line {line}: peak HF noise in {channel} = {np.max(myStd):.1f}.\n'
                     if plot_flag:
-                        fig = plt.figure()
+                        fig = plt.figure(layout="constrained")
                         y_maxscale = 5.0 * noiseLimit
                         plotTitle = f'Line {line}, Channel {channel}: orig and slope removed'
                         _subplot_hiF_analysis(fig, num_subplots, 1, plotTitle, time, data, x2=time, y2=noSlope)
@@ -154,7 +154,7 @@ def checkHighFreq(whizzFile, noiseLimit=50, channels=[], cutoffs=[0.15, 3.6], tC
                             plotTitle = 'Turbulence'
                             _subplot_hiF_analysis(fig, num_subplots, 4, plotTitle, time1, turb, bounds=[time[0], time[-1], 0.0, 2.0])
 
-                        fig.tight_layout()
+                        # fig.tight_layout()
         if num_failed_lines == 1:
             summary = f'Checked {num_lines} lines; 1 line had high frequency signal above {noiseLimit}.'
         elif num_failed_lines > 1:

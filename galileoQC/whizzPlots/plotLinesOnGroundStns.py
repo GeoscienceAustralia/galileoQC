@@ -144,9 +144,9 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
     plt.rc('figure', titlesize=MEDIUM_SIZE)  # fontsize of the figure title
 
-    fig = plt.figure(figsize=(14,7))
+    fig = plt.figure(figsize=(14,7), layout="constrained")
     fig.suptitle(fig_title, fontsize=BIGGER_SIZE)
-    fig.subplots_adjust(top=0.95)
+    # fig.subplots_adjust(top=0.95)
     
     ax = fig.add_subplot(2,2,1)
     new.plot.scatter(x='longitude',y='latitude',s=8,hue='gravity_accuracy',ax=ax)
@@ -168,6 +168,6 @@ def plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, 
     ax.plot(lon, lat, 'b', lw=1.0)
     ax.axis('equal')
     plt.grid()
-    plt.tight_layout()
+    # plt.tight_layout()
                                        
    
