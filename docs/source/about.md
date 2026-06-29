@@ -16,7 +16,7 @@ __galileoQC__ provides functions to:
 
 These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. galileoQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
 
-The tested, and preferred, method of using __galileoQC__ is via a JupyterLab notebook. Some examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
+The tested, and preferred, method of using __galileoQC__ is via a JupyterLab notebook. Many examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
 
 *Mark Dransfield* {sub-ref}`today`
 
@@ -26,15 +26,17 @@ __galileoQC__ is at early stage of development and will keep improving in the fu
 
 ## Acknowledgements
 
-A massive amount of help, encouragement and support from many people at Geoscience Australia, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine. The minimum curvature code was copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025 and the graphical imaging code from graphics (https://github.com/jobar8/graphics) sometime in 2020. Grateful thanks to the authors of those codes as well as all the contributors to all the packages used. The idea of using tutorials as the key technical documentation is partly based on Des Fitzgerald's "cookbooks" for Intrepid.
+A massive amount of help, encouragement and support from many people at Geoscience Australia, particularly Roger Miller, Yvette Poudjom Djomani, Negin Moghaddam, Mike Barlow, Anandaroop Ray, and Jack McCubbine. The minimum curvature code was copied from PyGMI (https://patrick-cole.github.io/pygmi/index.html) in July 2025 and the graphical imaging code from graphics (https://github.com/jobar8/graphics) sometime in 2020. Grateful thanks to the authors of those codes as well as all the contributors to all the packages used. The idea of using tutorials as the key technical documentation is partly based on Des Fitzgerald's "cookbooks" for Intrepid. Example data sets used in the tutorials are included with the kind permissions of Stephan Sander (Sander Geophysics), Chris van Galder (Xcalibur) and Colm Murphy (Bell Geospace).
 
 ## Testing
 
-The __galileoQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook (the JupyterLab Desktop app was used often in development but its maintenance ceased in Aug2025).
+The __galileoQC__ package has been tested on the following operating systems: Windows 10, Windows 11, macos 15, Debian 12, Fedora 38, and Ubuntu 22. All testing has been done using Jupyter Notebook (the JupyterLab Desktop app was used often in development but its maintenance ceased in August 2025).
 
 Data from a wide variety of gravity instruments, mounted on a wide variety of aircraft, have been reviewed from many surveys flown in several countries.
 
 ## Citing
+
+M. Dransfield. galileoQC. Commonwealth of Australia (Geoscience Australia), 2026. https://pid.geoscience.gov.au/dataset/ga/151012
 
 M. H. Dransfield and R. Miller. Python code for quality control of airborne gravimetry and gravity
 gradiometry field data. Preview, 237:78, August 2025.
@@ -59,4 +61,4 @@ license.md
 
 ## The Airborne Gravity Deed
 
-Once published, there should be a reference here.
+TBD

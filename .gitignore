@@ -157,3 +157,4 @@ docs/source/apidocs
 /examples/.jupyter/desktop-workspaces
 *.rst
 /dev
+docs/source/tutorials/dev_whizz
