@@ -29,7 +29,8 @@ groupName = config.groupName
 def plotWsLineChannel(whizzFile1, flightLine1, channel1,  
                       whizzFile2, flightLine2, channel2, 
                       x1='', x2='', y1='', y2='', h1='', h2='',
-                      plotTitle = '', xOffset=False):
+                      plotTitle = '', xOffset=False
+):
     """
     This is a one-off for the Vic/SA project(5371). Given flightLines from the Otway
     project and this project that are close to each spatially, compare them in plots.
