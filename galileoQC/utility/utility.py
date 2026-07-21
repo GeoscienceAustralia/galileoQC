@@ -15,7 +15,9 @@ import numpy as np
 import h5py
 from scipy.signal import butter, lfilter
 import textwrap
-
+import filebrowser as fb
+from pathlib import Path
+import pathlib
 
 import galileoQC.config as config
 
@@ -680,4 +682,40 @@ def _print_wrappedlist(mylist, width=70):
     mystr = f'{mylist}'
     wrapped = textwrap.fill(mystr, width=width)
     print(wrapped)
+
+
+def _filename_to_path(filename=''):
+    """
+    Returns the path to filename as a Path and as a String.
+    Caller function can then accept a filename in either type.
+
+    Parameters
+    ----------
+    filename : String or Path, optional
+
+        The filename. Default '' causes filebrowser to be
+        called to get the path.
+
+    Returns
+    -------
+    filePath, fileStr
+
+    """
+    if filename == '':
+        filename = fb.get_grid_filename()
+    if isinstance(filename, pathlib.Path):
+        fileStr = str(filename)
+        filePath = filename
+    elif isinstance(filename, str):
+        fileStr = filename
+        filePath = Path(fileStr)
+    else:
+        print('Error - type of filename not recognised. Must be Path or String')
+        return None, None
+    return filePath, fileStr
+
+
+
+
+
 

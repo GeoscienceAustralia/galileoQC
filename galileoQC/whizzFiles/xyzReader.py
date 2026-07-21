@@ -14,7 +14,6 @@ import numpy as np
 import h5py
 from pathlib import Path
 import pathlib
-import filebrowser as fb
 
 import galileoQC.utility.utility as util
 import galileoQC.config as config
@@ -60,27 +59,16 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
 
     """
         
-    if xyzFilePath == '':
-        xyzFilePath = fb.get_grid_filename()
-
-    if isinstance(xyzFilePath, pathlib.Path):
-        xyzFileStr = str(xyzFilePath)
-    elif isinstance(xyzFilePath, str):
-        xyzFileStr = xyzFilePath
-        xyzFilePath = Path(xyzFileStr)
-    else:
-        print('Error - type of xyzFilePath not recognised. Must be Path or String')
+    xyzFilePath, xyzFileStr = _filename_to_path(xyzFilePath)
+    if xyzFilePath is None:
         return
+
     if hdfFilePath == '':
         hdfFilePath = xyzFilePath.with_suffix('.hdf5')
         hdfFileStr = str(hdfFilePath)
-    elif isinstance(hdfFilePath, pathlib.Path):
-        hdfFileStr = str(hdfFilePath)
-    elif isinstance(hdfFilePath, str):
-        hdfFileStr = hdfFilePath
-        hdfFilePath = Path(hdfFileStr)
     else:
-        print('Error - type of hdfFilePath not recognised. Must be Path or String')
+        hdfFilePath, hdfFileStr = _filename_to_path(hdfFilePath)
+    if hdfFilePath is None:
         return
 
     # access the data via Geosoft XYZ
