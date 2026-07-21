@@ -26,7 +26,7 @@ def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nono
 
     Parameters
     ----------
-    gridFile : TYPE
+    gridFile : String or Path
 
         May be either an `ERS` or `NC` grid file. The default is ''.
 
@@ -35,7 +35,9 @@ def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nono
     None.
 
     """
-    (xa, _) = gridfile_to_xa(gridFile, bandout=0)
+    gridFilePath, _ = _filename_to_path(gridFile)
+
+    (xa, _) = gridfile_to_xa(gridFilePath, bandout=0)
     xdImage(xa, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
         minClip=minClip, maxClip=maxClip, gridlines=True, cb_ticks=cb_ticks, nSigma=nSigma,
         hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std,

@@ -31,6 +31,7 @@ from galileoQC.gridFiles.graphicsShaded import graphicsShaded
 from galileoQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from galileoQC.gridFiles.xarray_to_grid import xarray_to_grid
 from galileoQC.gridFiles.xdImage import xdImage
+from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xr
 import galileoQC.gridFiles.gridutility as gut
 
 groupName = config.groupName
@@ -82,101 +83,6 @@ def subtractImages(imagefile1, imagefile2, scale=1.0, band1=0, band2=0):
         return True, x1 - scale * x2
     except:
         return False, x1
-
-
-def gridfile_to_xr(whizzFile='', bandout=0):
-    """
-    Returns an xarray Dataset containing the geographically located data from a
-    gridfile in either ERS or NC format.
-
-    Parameters
-    ----------
-    whizzFile : Path
-
-        The Path to the grid file, must have extension `ers` or `nc`.
-
-    bandout : Int, optional
-
-        The band to be read if the grid file is `ERS`. The default is 0.
-
-    Returns
-    -------
-    xd : xarray Dataset
-
-        The data from `whizzFile`.
-
-    """
-    if whizzFile == '':
-        whizzFile = Path(fb.get_grid_filename(filetypes=(('NetCdf4 grid', '*.nc'),
-                                                         ('ERMapper grid', '*.ers'))))
-    if whizzFile.suffix.upper() == '.ERS':
-        e, n, z, datum, projection, units = ers.read_ers_image(whizzFile, bandout=bandout)
-        xa = xr.DataArray(data=z,#np.flip(z, 0), # DANGER!!!
-                          dims=["N", "E"],
-                          coords={"N": n, "E": e})
-        xa.dropna(dim='N',how='all')
-        xa.dropna(dim='E',how='all')
-        fname = whizzFile.with_suffix('').name
-        xd = xr.Dataset(data_vars={fname: xa})
-        xd.attrs["long_name"] = fname
-        xd.attrs["datum"] = datum
-        xd.attrs["projection"] = projection
-        if datum == 'WGS84' and projection == 'SUTM55':
-            xd.rio.write_crs("epsg:32755", inplace=True)
-        xd.attrs["Units"] = units
-    elif whizzFile.suffix.upper() == '.NC':
-        nc = nc4.Dataset(str(whizzFile), mode='r')
-        xd = xr.open_dataset(xr.backends.NetCDF4DataStore(nc))
-    else:
-        print(f'ERROR: whizzFile has suffix {Path(whizzFile).suffix.upper()} but must be `.nc` or `.ers`.')
-    return xd, whizzFile
-
-
-def gridfile_to_xa(whizzFile='', bandout=0):
-    """
-    Returns an xarray DataArray containing the geographically located data from a
-    gridfile in either ERS or NC format.
-
-    Parameters
-    ----------
-    whizzFile : Path
-
-        The Path to the grid file, must have extension `ers` or `nc`.
-
-    bandout : Int, optional
-
-        The band to be read if the grid file is `ERS`. The default is 0.
-
-    Returns
-    -------
-    xd : xarray Dataset
-
-        The data from `whizzFile`.
-
-    """
-    if whizzFile == '':
-        whizzFile = Path(fb.get_grid_filename(filetypes=(('NetCdf4 grid', '*.nc'),
-                                                         ('ERMapper grid', '*.ers'))))
-    if whizzFile.suffix.upper() == '.ERS':
-        e, n, z, datum, projection, units = ers.read_ers_image(whizzFile, bandout=bandout)
-        xa = xr.DataArray(data=np.flip(z, 0), # DANGER!!!
-                          dims=["N", "E"],
-                          coords={"N": n, "E": e})
-        xa.dropna(dim='N',how='all')
-        xa.dropna(dim='E',how='all')
-        fname = whizzFile.with_suffix('').name
-        xa.attrs["long_name"] = fname
-        xa.attrs["datum"] = datum
-        xa.attrs["projection"] = projection
-        if datum == 'WGS84' and projection == 'SUTM55':
-            xa.rio.write_crs("epsg:32755", inplace=True)
-        xa.attrs["Units"] = units
-    elif whizzFile.suffix.upper() == '.NC':
-        # nc = nc4.Dataset(str(whizzFile), mode='r')
-        xa = xr.load_dataarray(str(whizzFile))#xr.backends.NetCDF4DataStore(nc))
-    else:
-        print(f'ERROR: whizzFile has suffix {Path(whizzFile).suffix.upper()} but must be `.nc` or `.ers`.')
-    return xa, whizzFile
 
 
 def ers_to_netcdf4(ersFile='', ncFile='', datum='', projection='', long_name='', units=''):
