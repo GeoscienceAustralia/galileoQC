@@ -329,8 +329,8 @@ def _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, pl
         ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.5f}'))
     else:
         ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
-    ax.set_xlabel('deviation from planned line [m]', fontsize = 8)
-    ax.set_ylabel('distance along line', fontsize = 8)
+    ax.set_xlabel('distance along line', fontsize = 8)
+    ax.set_ylabel('deviation from planned line [m]', fontsize = 8)
     for label in ax.get_xticklabels(): label.set_fontsize(6)
     for label in ax.get_yticklabels(): label.set_fontsize(6)
     ax.grid()
