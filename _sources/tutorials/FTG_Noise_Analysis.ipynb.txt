@@ -1,0 +1,176 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "c517647d-3226-4224-bfac-5ebc53a64bbe",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "# FTG Noise Analysis"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d8939aa-84cf-4ed5-9de3-cf115acb5c9e",
+   "metadata": {},
+   "source": [
+    "The functions here are for the purpose of checking for high noise in FTG data.\n",
+    "\n",
+    "Here we demonstrate their use on the Vinton Dome airborne gravity gradiometer survey data.\n",
+    "\n",
+    "Ensure you have run the `Prepare_XYZ` notebook first so that the Vinton Dome data are prepared for review."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "633ad405-b2f8-4031-9cbd-bf861e6950d8",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "43dcceee-3807-438d-bfa9-c87d7458c729",
+   "metadata": {},
+   "source": [
+    "Import the required modules, and set the path to the geowhizz files."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6541a9e4-d579-44cf-839d-a97a80ef6513",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b0ec9460-4290-44bd-8840-e76d537ee3e0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "vintonHDF_file = Path(r'./VintonData/VintonDome.hdf5')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a5e570dd-26c5-4974-a8e0-9d1c68c07bb1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not vintonHDF_file.exists():\n",
+    "    %run ./Prepare_VintonDomeData.ipynb"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6655fb69-cc9d-44fd-99e2-cb4eabb28fea",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3ac0fca1-6614-4e8a-9cfd-f02b4eb37630",
+   "metadata": {},
+   "source": [
+    "The **in-line sum** of FTG data is defined as the sum of the three in-line component data divided by $\\sqrt{3}$, after bandpass filtering from $0.03\\,Hz$ to $0.1\\,Hz$, or similar frequencies.\n",
+    "\n",
+    "By construction, the in-line sum should ideally be zero and higher values are indicative of the noise in the data.\n",
+    "\n",
+    "The `ilsNoiseAnalysis` function reports flight-lines with in-line sum greater than the given threshold (the `noiseSpec`) and plots the in-line sum for each survey line against the turbulence for that line. Higher turbulence generally results in higher noise and the plot allows one to decide on a reasonable turbulence limit for the data. In addition, flight-lines with an in-line sum that is off the general trend (high in-line sum at low turbulence) should be questioned even if they meet specification.\n",
+    "\n",
+    "The Vinton Dome data used in testing did not include a turbulence channel but did have a vertical velocity channel. This is supplied to `ilsNoiseAnalysis` and differenced to form a vertical acceleration channel as a proxy for turbulence.\n",
+    "\n",
+    "In this example, we get very low noise estimates because we are inputting (despite the channel names) final transformed data. The check should be applied to raw data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a0ba1591-6043-41b7-aacd-dcdffccf75f0",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.ilsNoiseAnalysis(\n",
+    "    vintonHDF_file, 'Inline1_raw', 'Inline2_raw', 'Inline3_raw',\n",
+    "    noiseSpec=17.0, vertdispl='altitude')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5e843060-d797-441d-94c6-ba1b09bf8b9f",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2a701fab-b904-42d1-87ba-522dbebbb71a",
+   "metadata": {},
+   "source": [
+    "Any rectification process can down-convert high frequency vibration into the signal band of a sensor. Gravity gradiometers have an intrinsic rectification process via their sensitivity to products of rotational velocity so it is useful to check for excess high frequency signal since it may lead to error in the final data.\n",
+    "\n",
+    "The function **`checkHighFreq`** checks for unusually high amplitude, high frequency signal in the raw gradient channels. The input gradient channels are high-pass filtered and a rolling standard deviation is used to find periods of higher amplitudes. High turbulence is sometimes associated with high frequency noise so the turbulence is also plotted for comparison.\n",
+    "\n",
+    "Experience with FTG data suggests that sections of data where `checkHighFreq` finds high frequency noise above $50\\,E$ are of concern and ought to be followed up with the service provider.\n",
+    "\n",
+    "A plot showing where the high frequency noise occurs along line is shown for all lines that have excess high frequency signal. Despits the names of the input channels, the Vinton Dome data have been filtered and so the `noiseLimit` has been artifically set here to $14\\,E$ just to get a plot for the example."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "63e5ab1e-2a94-4e37-a076-492f29013fb6",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.checkHighFreq(\n",
+    "    vintonHDF_file, noiseLimit=14,\n",
+    "    channels=[\n",
+    "        'Cross1_raw', 'Cross2_raw', 'Cross3_raw',\n",
+    "        'Inline1_raw', 'Inline2_raw', 'Inline3_raw'\n",
+    "    ],cutoffs=[0.1, 0.48], vertdispl='altitude', verbose=False, plot_flag=True)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

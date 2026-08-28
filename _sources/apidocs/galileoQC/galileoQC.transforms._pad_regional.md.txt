@@ -1,0 +1,42 @@
+# {py:mod}`galileoQC.transforms._pad_regional`
+
+```{py:module} galileoQC.transforms._pad_regional
+```
+
+```{autodoc2-docstring} galileoQC.transforms._pad_regional
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_pad_regional <galileoQC.transforms._pad_regional._pad_regional>`
+  - ```{autodoc2-docstring} galileoQC.transforms._pad_regional._pad_regional
+    :summary:
+    ```
+* - {py:obj}`_scaling_doubtful <galileoQC.transforms._pad_regional._scaling_doubtful>`
+  - ```{autodoc2-docstring} galileoQC.transforms._pad_regional._scaling_doubtful
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _pad_regional(Gne_grid, Guv_grid, pad_cells, regional_grid, firstorder=False, verbose=False)
+:canonical: galileoQC.transforms._pad_regional._pad_regional
+
+```{autodoc2-docstring} galileoQC.transforms._pad_regional._pad_regional
+```
+````
+
+````{py:function} _scaling_doubtful(grid1, grid2)
+:canonical: galileoQC.transforms._pad_regional._scaling_doubtful
+
+```{autodoc2-docstring} galileoQC.transforms._pad_regional._scaling_doubtful
+```
+````

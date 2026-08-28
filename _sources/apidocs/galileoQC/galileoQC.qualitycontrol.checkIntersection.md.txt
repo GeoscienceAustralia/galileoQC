@@ -1,0 +1,130 @@
+# {py:mod}`galileoQC.qualitycontrol.checkIntersection`
+
+```{py:module} galileoQC.qualitycontrol.checkIntersection
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkIntersection <galileoQC.qualitycontrol.checkIntersection.checkIntersection>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.checkIntersection
+    :summary:
+    ```
+* - {py:obj}`lines_by_variety <galileoQC.qualitycontrol.checkIntersection.lines_by_variety>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.lines_by_variety
+    :summary:
+    ```
+* - {py:obj}`_ccw <galileoQC.qualitycontrol.checkIntersection._ccw>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._ccw
+    :summary:
+    ```
+* - {py:obj}`_intersect <galileoQC.qualitycontrol.checkIntersection._intersect>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._intersect
+    :summary:
+    ```
+* - {py:obj}`_intersection_height <galileoQC.qualitycontrol.checkIntersection._intersection_height>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._intersection_height
+    :summary:
+    ```
+* - {py:obj}`_lines_cross <galileoQC.qualitycontrol.checkIntersection._lines_cross>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._lines_cross
+    :summary:
+    ```
+* - {py:obj}`controls_lessthan_1000 <galileoQC.qualitycontrol.checkIntersection.controls_lessthan_1000>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.controls_lessthan_1000
+    :summary:
+    ```
+* - {py:obj}`controls_nineteen <galileoQC.qualitycontrol.checkIntersection.controls_nineteen>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.controls_nineteen
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkIntersection.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkIntersection.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.groupName
+```
+
+````
+
+````{py:function} checkIntersection(whizzFile, controls=[], travs=[], xChannel='', yChannel='', zChannel='', max_allowed_deltaZ=10.0, mode='RMS', verbose=False, plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkIntersection.checkIntersection
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.checkIntersection
+```
+````
+
+````{py:function} lines_by_variety(gLines, all_lines)
+:canonical: galileoQC.qualitycontrol.checkIntersection.lines_by_variety
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.lines_by_variety
+```
+````
+
+````{py:function} _ccw(x1, y1, x2, y2, x3, y3)
+:canonical: galileoQC.qualitycontrol.checkIntersection._ccw
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._ccw
+```
+````
+
+````{py:function} _intersect(cx1, cy1, cx2, cy2, tx1, ty1, tx2, ty2)
+:canonical: galileoQC.qualitycontrol.checkIntersection._intersect
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._intersect
+```
+````
+
+````{py:function} _intersection_height(x_ctrl, y_ctrl, z_ctrl, x_trav, y_trav, z_trav)
+:canonical: galileoQC.qualitycontrol.checkIntersection._intersection_height
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._intersection_height
+```
+````
+
+````{py:function} _lines_cross(x_ctrl, y_ctrl, x_trav, y_trav)
+:canonical: galileoQC.qualitycontrol.checkIntersection._lines_cross
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection._lines_cross
+```
+````
+
+````{py:function} controls_lessthan_1000(all_lines)
+:canonical: galileoQC.qualitycontrol.checkIntersection.controls_lessthan_1000
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.controls_lessthan_1000
+```
+````
+
+````{py:function} controls_nineteen(all_lines)
+:canonical: galileoQC.qualitycontrol.checkIntersection.controls_nineteen
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkIntersection.controls_nineteen
+```
+````

@@ -1,0 +1,23 @@
+# {py:mod}`galileoQC.whizzPlots`
+
+```{py:module} galileoQC.whizzPlots
+```
+
+```{autodoc2-docstring} galileoQC.whizzPlots
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.whizzPlots.plotBoxWhisker
+galileoQC.whizzPlots.plotLinesCompareChannels
+galileoQC.whizzPlots.plotChannelsLines
+galileoQC.whizzPlots.whizzPlot
+galileoQC.whizzPlots.plotLinesOnGroundStns
+galileoQC.whizzPlots.psdLineChannels
+galileoQC.whizzPlots.linesMap
+```

@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.ilsNoiseAnalysis`
+
+```{py:module} galileoQC.qualitycontrol.ilsNoiseAnalysis
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.ilsNoiseAnalysis
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`ilsNoiseAnalysis <galileoQC.qualitycontrol.ilsNoiseAnalysis.ilsNoiseAnalysis>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.ilsNoiseAnalysis.ilsNoiseAnalysis
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.ilsNoiseAnalysis.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.ilsNoiseAnalysis.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.ilsNoiseAnalysis.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.ilsNoiseAnalysis.groupName
+```
+
+````
+
+````{py:function} ilsNoiseAnalysis(whizzFile, diagComponent1, diagComponent2, diagComponent3, noiseSpec=17.0, vertaccel='', vertvelocity='', vertdispl='', lines=[], labelLines=False, lowcut=0.03, highcut=0.1, dontfilter=True, verbose=False)
+:canonical: galileoQC.qualitycontrol.ilsNoiseAnalysis.ilsNoiseAnalysis
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.ilsNoiseAnalysis.ilsNoiseAnalysis
+```
+````

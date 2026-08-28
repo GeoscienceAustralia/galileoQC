@@ -1,0 +1,38 @@
+# {py:mod}`galileoQC.gridFiles`
+
+```{py:module} galileoQC.gridFiles
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.gridFiles.read_ers
+galileoQC.gridFiles.grid_to_xarray
+galileoQC.gridFiles.gridToNc4
+galileoQC.gridFiles.gridutility
+galileoQC.gridFiles.traceImages
+galileoQC.gridFiles.graphicsShaded
+galileoQC.gridFiles.write_ers
+galileoQC.gridFiles.xdImage
+galileoQC.gridFiles.whizz_to_xarray
+galileoQC.gridFiles.xarray_to_grid
+galileoQC.gridFiles.imageStats
+galileoQC.gridFiles.oddeven
+galileoQC.gridFiles.diff_n_image
+galileoQC.gridFiles.graphics
+galileoQC.gridFiles.display_grid
+galileoQC.gridFiles.sample_grid_to_line
+galileoQC.gridFiles.gridfiles
+galileoQC.gridFiles.minc
+galileoQC.gridFiles.colors
+galileoQC.gridFiles.checkTCratio
+galileoQC.gridFiles.grid_n_image
+galileoQC.gridFiles.imageAllInDir
+```

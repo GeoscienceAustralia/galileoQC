@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.gridFiles.read_ers`
+
+```{py:module} galileoQC.gridFiles.read_ers
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.read_ers
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`read_ers_image <galileoQC.gridFiles.read_ers.read_ers_image>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.read_ers.read_ers_image
+    :summary:
+    ```
+* - {py:obj}`read_ers_header <galileoQC.gridFiles.read_ers.read_ers_header>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.read_ers.read_ers_header
+    :summary:
+    ```
+* - {py:obj}`_parse_header <galileoQC.gridFiles.read_ers._parse_header>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.read_ers._parse_header
+    :summary:
+    ```
+* - {py:obj}`_translate_value <galileoQC.gridFiles.read_ers._translate_value>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.read_ers._translate_value
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} read_ers_image(ersFile, bandout=0)
+:canonical: galileoQC.gridFiles.read_ers.read_ers_image
+
+```{autodoc2-docstring} galileoQC.gridFiles.read_ers.read_ers_image
+```
+````
+
+````{py:function} read_ers_header(imagefile)
+:canonical: galileoQC.gridFiles.read_ers.read_ers_header
+
+```{autodoc2-docstring} galileoQC.gridFiles.read_ers.read_ers_header
+```
+````
+
+````{py:function} _parse_header(imagefile, verbose=False)
+:canonical: galileoQC.gridFiles.read_ers._parse_header
+
+```{autodoc2-docstring} galileoQC.gridFiles.read_ers._parse_header
+```
+````
+
+````{py:function} _translate_value(rawvalue)
+:canonical: galileoQC.gridFiles.read_ers._translate_value
+
+```{autodoc2-docstring} galileoQC.gridFiles.read_ers._translate_value
+```
+````

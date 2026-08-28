@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkLatCorr`
+
+```{py:module} galileoQC.qualitycontrol.checkLatCorr
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkLatCorr <galileoQC.qualitycontrol.checkLatCorr.checkLatCorr>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr.checkLatCorr
+    :summary:
+    ```
+* - {py:obj}`_normalGravity <galileoQC.qualitycontrol.checkLatCorr._normalGravity>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr._normalGravity
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkLatCorr.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkLatCorr.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr.groupName
+```
+
+````
+
+````{py:function} checkLatCorr(whizzFile, latCorr, latitude='', lines=[], changeSign=False)
+:canonical: galileoQC.qualitycontrol.checkLatCorr.checkLatCorr
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr.checkLatCorr
+```
+````
+
+````{py:function} _normalGravity(latitude)
+:canonical: galileoQC.qualitycontrol.checkLatCorr._normalGravity
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLatCorr._normalGravity
+```
+````

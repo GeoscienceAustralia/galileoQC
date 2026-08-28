@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkPhase`
+
+```{py:module} galileoQC.qualitycontrol.checkPhase
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkPhase <galileoQC.qualitycontrol.checkPhase.checkPhase>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase.checkPhase
+    :summary:
+    ```
+* - {py:obj}`_interpolateCorr <galileoQC.qualitycontrol.checkPhase._interpolateCorr>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase._interpolateCorr
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkPhase.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkPhase.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase.groupName
+```
+
+````
+
+````{py:function} checkPhase(whizzFile, channel1, channel2, tChannel='', tolerance=1.0, lines=[], verbose=False, plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkPhase.checkPhase
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase.checkPhase
+```
+````
+
+````{py:function} _interpolateCorr(xbase, ybase, xnew)
+:canonical: galileoQC.qualitycontrol.checkPhase._interpolateCorr
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkPhase._interpolateCorr
+```
+````

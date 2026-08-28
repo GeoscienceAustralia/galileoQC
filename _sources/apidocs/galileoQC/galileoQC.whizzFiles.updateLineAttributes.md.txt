@@ -1,0 +1,97 @@
+# {py:mod}`galileoQC.whizzFiles.updateLineAttributes`
+
+```{py:module} galileoQC.whizzFiles.updateLineAttributes
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`updateLineAttributes <galileoQC.whizzFiles.updateLineAttributes.updateLineAttributes>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes.updateLineAttributes
+    :summary:
+    ```
+* - {py:obj}`_decode_linenumber <galileoQC.whizzFiles.updateLineAttributes._decode_linenumber>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._decode_linenumber
+    :summary:
+    ```
+* - {py:obj}`_updateFlightAttributes <galileoQC.whizzFiles.updateLineAttributes._updateFlightAttributes>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._updateFlightAttributes
+    :summary:
+    ```
+* - {py:obj}`_updateDateAttributes <galileoQC.whizzFiles.updateLineAttributes._updateDateAttributes>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._updateDateAttributes
+    :summary:
+    ```
+* - {py:obj}`_channelExists <galileoQC.whizzFiles.updateLineAttributes._channelExists>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._channelExists
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.updateLineAttributes.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.updateLineAttributes.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes.groupName
+```
+
+````
+
+````{py:function} updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', planned_line=0, flight_chan='', date_chan='', verbose=False)
+:canonical: galileoQC.whizzFiles.updateLineAttributes.updateLineAttributes
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes.updateLineAttributes
+```
+````
+
+````{py:function} _decode_linenumber(current_line, line_type)
+:canonical: galileoQC.whizzFiles.updateLineAttributes._decode_linenumber
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._decode_linenumber
+```
+````
+
+````{py:function} _updateFlightAttributes(whizzFile, flight_chan)
+:canonical: galileoQC.whizzFiles.updateLineAttributes._updateFlightAttributes
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._updateFlightAttributes
+```
+````
+
+````{py:function} _updateDateAttributes(whizzFile, date_chan)
+:canonical: galileoQC.whizzFiles.updateLineAttributes._updateDateAttributes
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._updateDateAttributes
+```
+````
+
+````{py:function} _channelExists(whizzFile, flight_chan)
+:canonical: galileoQC.whizzFiles.updateLineAttributes._channelExists
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineAttributes._channelExists
+```
+````

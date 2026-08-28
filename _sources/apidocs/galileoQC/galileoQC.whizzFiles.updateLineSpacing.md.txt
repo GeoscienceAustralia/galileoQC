@@ -1,0 +1,100 @@
+# {py:mod}`galileoQC.whizzFiles.updateLineSpacing`
+
+```{py:module} galileoQC.whizzFiles.updateLineSpacing
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`updateLineSpacing <galileoQC.whizzFiles.updateLineSpacing.updateLineSpacing>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing.updateLineSpacing
+    :summary:
+    ```
+* - {py:obj}`_calcLineEqn <galileoQC.whizzFiles.updateLineSpacing._calcLineEqn>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing._calcLineEqn
+    :summary:
+    ```
+* - {py:obj}`_calcSpacingStats <galileoQC.whizzFiles.updateLineSpacing._calcSpacingStats>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing._calcSpacingStats
+    :summary:
+    ```
+* - {py:obj}`_calcTrueSpacing <galileoQC.whizzFiles.updateLineSpacing._calcTrueSpacing>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing._calcTrueSpacing
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.updateLineSpacing.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.updateLineSpacing.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.updateLineSpacing.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.updateLineSpacing.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing.projectName
+```
+
+````
+
+````{py:function} updateLineSpacing(whizzFile, trav_spacing=None, ctrl_spacing=None, x='', y='', lines=[])
+:canonical: galileoQC.whizzFiles.updateLineSpacing.updateLineSpacing
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing.updateLineSpacing
+```
+````
+
+````{py:function} _calcLineEqn(gg, x, y, orig_x, orig_y)
+:canonical: galileoQC.whizzFiles.updateLineSpacing._calcLineEqn
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing._calcLineEqn
+```
+````
+
+````{py:function} _calcSpacingStats(data)
+:canonical: galileoQC.whizzFiles.updateLineSpacing._calcSpacingStats
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing._calcSpacingStats
+```
+````
+
+````{py:function} _calcTrueSpacing(spacing, data, rotated)
+:canonical: galileoQC.whizzFiles.updateLineSpacing._calcTrueSpacing
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineSpacing._calcTrueSpacing
+```
+````

@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.gridFiles.display_grid`
+
+```{py:module} galileoQC.gridFiles.display_grid
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.display_grid
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`display_grid <galileoQC.gridFiles.display_grid.display_grid>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.display_grid.display_grid
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', minClip=np.nan, maxClip=np.nan, cb_ticks='stats', nSigma=2, hs=True, azdeg=45, ax=None, clipTo3Std=True, whizzfile=None, e_chan='', n_chan='')
+:canonical: galileoQC.gridFiles.display_grid.display_grid
+
+```{autodoc2-docstring} galileoQC.gridFiles.display_grid.display_grid
+```
+````

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Grid Imaging and Checking &#8212; galileoQC</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=f6a572b4" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <script src="../_static/documentation_options.js?v=71272d9f"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Craig Transform" href="Craig_transform.html" />
+    <link rel="prev" title="Statistical analyses" href="Statistical_Analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/./galileo_logo.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">galileoQC</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Quality control for airborne gravity surveys.</p>
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-xyz-data">Prepare XYZ data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#prepare-aseg-gdf2-data">Prepare ASEG-GDF2 data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#navigation-and-position">Navigation and Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#intersection-analysis">Intersection Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#repeat-lines">Repeat Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#odd-even-grids">Odd - Even Grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#gravimetry-corrections">Gravimetry Corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#falcon-noise-analysis">Falcon Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ftg-noise-analysis">FTG Noise Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#ground-gravity-comparisons">Ground Gravity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#statistical-analyses">Statistical Analyses</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html#grid-imaging">Grid Imaging</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Grid Imaging and Checking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#craig-transform">Craig transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#aeromagnetics">Aeromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#data-acknowledgements">Data Acknowledgements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../geowhizz.html">geoWhizz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lineNumbering.html">Flight Line Numbering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deed.html">Airborne Gravity Deed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Statistical_Analysis.html" title="previous chapter">Statistical analyses</a></li>
+      <li>Next: <a href="Craig_transform.html" title="next chapter">Craig Transform</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="grid-imaging-and-checking">
+<h1>Grid Imaging and Checking<a class="headerlink" href="#grid-imaging-and-checking" title="Link to this heading">¶</a></h1>
+<p>Inspecting images of gridded data is a valuable way of checking for unusual or undesirable artefacts in the data and several functions are provided for this purpose. The main ones are shown here. Some checks are for delivered grids, and it is also possible to generate and image grids from the located data.</p>
+<p>This example uses delivered grids from the Canobie Falcon survey and the Vinton Dome FTG survey.</p>
+<p>Note that only grids in the <code class="docutils literal notranslate"><span class="pre">.ERS</span></code> format are able to be checked.</p>
+<hr class="docutils" />
+<p>Import the required python packages, and set the path to the Canobie geowhizz files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">galileoQC</span> <span class="k">as</span> <span class="nn">qc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_root</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;./CanobieData/&#39;</span>
+<span class="n">canobieHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./CanobieData/Canobie.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Ideally, the delivered grids from a survey should cover the same areal extent, have the same grid cell size, the same missing data value, the same geographic datum, and so forth. The <strong><code class="docutils literal notranslate"><span class="pre">checkErsHeaders</span></code></strong> function compares this information from the first <code class="docutils literal notranslate"><span class="pre">.ERS</span></code> file it encounters in the given directory with all the others, performing a quick and simple check for consistency.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">checkErsHeaders</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">data_root</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 8 .ers files ...
+in: CanobieData
+Comparing ERS files against FSF_GND_2p67_final.ERS.
+[301, 381, 1, -1e+32, &#39;float32&#39;, 0, -1e+32, &#39;ieee-le&#39;, &#39;EPSG:1168&#39;, &#39;EPSG:7854&#39;, &#39;METERS&#39;]
+Checking file FSF_GEE_2p67_final.ERS
+  Checked OK.
+Checking file FSF_gD_2P67_final.ERS
+  Checked OK.
+Checking file FSF_GDD_2p67_final.ERS
+  Checked OK.
+Checking file FSF_GUV_2p67_final.ERS
+  Checked OK.
+Checking file FSF_GNE_2p67_final.ERS
+  Checked OK.
+Checking file FSF_GNN_2p67_final.ERS
+  Checked OK.
+Checking file FSF_GED_2p67_final.ERS
+  Checked OK.
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>A single <code class="docutils literal notranslate"><span class="pre">.ERS</span></code> grid file can be imaged by the <strong><code class="docutils literal notranslate"><span class="pre">display_grid</span></code></strong> function. By default, this produces a shaded image.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gridfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_root</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;FSF_GDD_2p67_final.ERS&#39;</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">display_grid</span><span class="p">(</span><span class="n">gridfile</span><span class="p">,</span> <span class="s2">&quot;Final G_DD&quot;</span><span class="p">,</span> <span class="n">cmap_norm</span><span class="o">=</span><span class="s1">&#39;nonorm&#39;</span><span class="p">,</span> 
+    <span class="n">cb_ticks</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">,</span> <span class="n">nSigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">hs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">azdeg</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cdb6ae38e622023af450baa3fb4c03718a12f3f4b406ba38bca97d4d0d10a3d2.png" src="../_images/cdb6ae38e622023af450baa3fb4c03718a12f3f4b406ba38bca97d4d0d10a3d2.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>You can use any Matplotlib colormap, as well as “geosoft” and “parula”.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">display_grid</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">data_root</span> <span class="o">+</span> <span class="s2">&quot;FSF_GDD_2p67_final.ERS&quot;</span><span class="p">),</span> <span class="s1">&#39;Test colormaps&#39;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;geosoft&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>geosoft
+</pre></div>
+</div>
+<img alt="../_images/46e48fe2f18087073d3df45c94574a9ce6bd24c03b568f5f0a72df4b3c40965a.png" src="../_images/46e48fe2f18087073d3df45c94574a9ce6bd24c03b568f5f0a72df4b3c40965a.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>The <strong><code class="docutils literal notranslate"><span class="pre">imageAllInDir</span></code></strong> function images all <code class="docutils literal notranslate"><span class="pre">.ers</span></code> grids found in the given directory, using the file name as the plot title. The images use the default color look up table and are shaded. This allows a very quick check that all the grids look okay.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">imageAllInDir</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">data_root</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 8 .ers files ...
+in: CanobieData
+</pre></div>
+</div>
+<img alt="../_images/4e40c82896ece97a2e6c89b5bc6499df75752b219544ffa23ffdbdc4f22ebce1.png" src="../_images/4e40c82896ece97a2e6c89b5bc6499df75752b219544ffa23ffdbdc4f22ebce1.png" />
+<img alt="../_images/ea515db332a790e65fd84687cb0f2cb5198f702dac3a34784a40f3e63ea7a66b.png" src="../_images/ea515db332a790e65fd84687cb0f2cb5198f702dac3a34784a40f3e63ea7a66b.png" />
+<img alt="../_images/de1b0dcf39a877d5797c3cd0ee2218fef6e1a2b71b0c31615d2d050d17d8610e.png" src="../_images/de1b0dcf39a877d5797c3cd0ee2218fef6e1a2b71b0c31615d2d050d17d8610e.png" />
+<img alt="../_images/62dcf7a129eea87632376f675b0794e408e2ba6053bb4b91aff82bd030dcb38b.png" src="../_images/62dcf7a129eea87632376f675b0794e408e2ba6053bb4b91aff82bd030dcb38b.png" />
+<img alt="../_images/b366c6326cc6b6feff2fe3b212d3117146f2d3471f2b8c413cd7120355896b99.png" src="../_images/b366c6326cc6b6feff2fe3b212d3117146f2d3471f2b8c413cd7120355896b99.png" />
+<img alt="../_images/894ab74f7406cbd01b6cad67771e124057fae3f77399c4d3ae1376400fb78176.png" src="../_images/894ab74f7406cbd01b6cad67771e124057fae3f77399c4d3ae1376400fb78176.png" />
+<img alt="../_images/36cd80eccee0366838be72db0b7f1a1585ab8215021f0986dc7cad3d7ca2efb3.png" src="../_images/36cd80eccee0366838be72db0b7f1a1585ab8215021f0986dc7cad3d7ca2efb3.png" />
+<img alt="../_images/5b9461ed98abba294c2a47dbab7419f445b11182d695c57e7e0ae3fb126db004.png" src="../_images/5b9461ed98abba294c2a47dbab7419f445b11182d695c57e7e0ae3fb126db004.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p>Finally, we can use <strong><code class="docutils literal notranslate"><span class="pre">grid_n_image</span></code></strong> to create grids of any channels in the database and image them for viewing.</p>
+<p>Errors in the line number, flight number, fiducial, latitude, or any channel at all are possible and can often be easily seen in an image. Accordingly, <strong><code class="docutils literal notranslate"><span class="pre">grid_n_image</span></code></strong> is designed to interpolate every named channel to a regular grid and image the grid.</p>
+<p>The grid interpolation can be done by the SciPy <code class="docutils literal notranslate"><span class="pre">griddata</span></code> linear method, or by one of the Verde methods: <code class="docutils literal notranslate"><span class="pre">neighbours</span></code>, <code class="docutils literal notranslate"><span class="pre">bicubic</span></code>, or <code class="docutils literal notranslate"><span class="pre">biharmonic</span></code>, or by <code class="docutils literal notranslate"><span class="pre">minc</span></code> (minimum curvature using the implementation in the python pygmi package). Minimum curvature is the usual choice.</p>
+<p>Channels (for example, line number, flight number, day of year) might vary between lines but be constant along a line. Others might vary at a constant rate along a line but change dramatically between lines flown on different days or in different directions. And some might change sign depending on line direction (bearing, velocity, Eotvos correction).</p>
+<p>Two pre-filters are provided to deal with these situations: a mean-removal filter subtracts the mean of the channel for each line from the data on that line; and a first difference filter returns the difference between successive samples for the gridding algorithm.</p>
+<p>The gridded data are imaged on a linear colour stretch with no shading.</p>
+<p>The Canobie located data cover a long and thin area somewhat unsuitable for imaging so we will grid and image the Vinton Dome data instead.</p>
+<p>First, let us list the available channels. The default is to grid and image all channels in the database. For a demonstration of the key points above, we only need a few.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vintonHDF_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./VintonData/VintonDome.hdf5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">vintonHDF_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="o">%</span><span class="k">run</span> ./Prepare_VintonDomeData.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span><span class="o">.</span><span class="n">reportChannels</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Whizz Version 1.0
+
+28 channels:
+
+<span class=" -Color -Color-Bold">  channel              units          description</span>
+--------------------------------------------------
+  Altitude             m              
+  Cross1_raw           eotvos         
+  Cross2_raw           eotvos         
+  Cross3_raw           eotvos         
+  Drape                m              Planned Height
+  HHMMSS                              
+  Inline1_raw          eotvos         
+  Inline2_raw          eotvos         
+  Inline3_raw          eotvos         
+  Lat                  degree         
+  Lon                  degree         
+  TC_Txx_100           eotvos         
+  TC_Txz_100           eotvos         
+  TC_Tyx_100           eotvos         
+  TC_Tyy_100           eotvos         
+  TC_Tyz_100           eotvos         
+  TC_Tzz_100           eotvos         
+  Terrain              m              
+  Time                 s              
+  Txx_slv              eotvos         
+  Txz_slv              eotvos         
+  Tyx_slv              eotvos         
+  Tyy_slv              eotvos         
+  Tyz_slv              eotvos         
+  Tzz_slv              eotvos         
+  X                    metre          
+  Y                    metre          
+  YYMMDD                              
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">z_chans</span></code> is the list of channels to process. Those in <code class="docutils literal notranslate"><span class="pre">mr_chans</span></code> will have the mean value along each flight-line removed before gridding. Those in <code class="docutils literal notranslate"><span class="pre">d1_chans</span></code> will have the first difference along each flight-line gridded.</p>
+<p>The first option is very useful for un-leveled data, and also for channels like heading, or velocity, which are strongly dependent on direction of flight. Here the mean removal filter is applied to <code class="docutils literal notranslate"><span class="pre">Inline1_raw</span></code>. These data are unleveled, and the mean removal acts to level all the data as can be seen by comparing the <code class="docutils literal notranslate"><span class="pre">Inline1_raw</span></code> image with the following on for the <code class="docutils literal notranslate"><span class="pre">Inline2_raw</span></code> channel.</p>
+<p>The second option is very useful for data which are expected to vary uniformly with sample number. An example is the <code class="docutils literal notranslate"><span class="pre">Time</span></code> channel in these data. The imaged result shows the result: a completely flat image; any artefacts in the time channel would be very easily seen in this image.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">z_chans</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inline1_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;Inline2_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;Tzz_slv&#39;</span><span class="p">,</span> <span class="s1">&#39;Terrain&#39;</span><span class="p">,</span> <span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="s1">&#39;Lat&#39;</span><span class="p">]</span>
+<span class="n">mr_chans</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inline1_raw&#39;</span><span class="p">]</span>
+<span class="n">d1_chans</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">grid_n_image</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="n">z_chans</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="n">mr_chans</span><span class="o">=</span><span class="n">mr_chans</span><span class="p">,</span> <span class="n">d1_chans</span><span class="o">=</span><span class="n">d1_chans</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gridding and imaging Inline1_raw
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Inline1_raw (mr): min = -72.3, max = 47.8, mean = -1.55E-15.
+
+Processing (x, y, z) = (X, Y, MR_Inline1_raw).
+ MR_Inline1_raw in eotvos.
+</pre></div>
+</div>
+<img alt="../_images/fdcde4f27a2b57dbcd58f5e86f16aabaad36eb8c2228036998314243881fe4d5.png" src="../_images/fdcde4f27a2b57dbcd58f5e86f16aabaad36eb8c2228036998314243881fe4d5.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 10.34 eotvos
+mean of result = -0.04 eotvos
+min of result = -47.88 eotvos
+max of result = 46.17 eotvos
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+
+Gridding and imaging Inline2_raw
+91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Inline2_raw: min = -658, max = -74.8, mean = -418.
+
+Processing (x, y, z) = (X, Y, Inline2_raw).
+ Inline2_raw in eotvos.
+</pre></div>
+</div>
+<img alt="../_images/507cb70935a054356b7d5af05d204975b557cd1957c094f6b28eb87b038c01fe.png" src="../_images/507cb70935a054356b7d5af05d204975b557cd1957c094f6b28eb87b038c01fe.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 161.24 eotvos
+mean of result = -409.46 eotvos
+min of result = -645.05 eotvos
+max of result = -83.06 eotvos
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+
+Gridding and imaging Tzz_slv
+91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Tzz_slv: min = -86.1, max = 79.9, mean = 0.0023.
+
+Processing (x, y, z) = (X, Y, Tzz_slv).
+ Tzz_slv in eotvos.
+</pre></div>
+</div>
+<img alt="../_images/c8b5ee30c8e9c30a32a7335f983f682dd103f31cd02821b9733738539ea6c407.png" src="../_images/c8b5ee30c8e9c30a32a7335f983f682dd103f31cd02821b9733738539ea6c407.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 15.78 eotvos
+mean of result = 0.34 eotvos
+min of result = -64.42 eotvos
+max of result = 72.32 eotvos
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+
+Gridding and imaging Terrain
+91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Terrain: min = -3.87, max = 24.4, mean = 7.34.
+
+Processing (x, y, z) = (X, Y, Terrain).
+ Terrain in m.
+</pre></div>
+</div>
+<img alt="../_images/06652e069a468a7a773d2ed4a88940a9fe19ed20f380a39f70fadd3b4438a7b3.png" src="../_images/06652e069a468a7a773d2ed4a88940a9fe19ed20f380a39f70fadd3b4438a7b3.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 4.29 m
+mean of result = 7.49 m
+min of result = -1.65 m
+max of result = 23.91 m
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+
+Gridding and imaging Time
+91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Time (d1): min = 1, max = 1, mean = 1.
+
+Processing (x, y, z) = (X, Y, D1_Time).
+ D1_Time in s.
+</pre></div>
+</div>
+<img alt="../_images/94d3f220cc7dd7a090f4f3896e26348169dd3af24f6fa2993c8b97452bb1c194.png" src="../_images/94d3f220cc7dd7a090f4f3896e26348169dd3af24f6fa2993c8b97452bb1c194.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 0.00 s
+mean of result = 1.00 s
+min of result = 1.00 s
+max of result = 1.00 s
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+
+Gridding and imaging Lat
+91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Lat: min = 30.1, max = 30.2, mean = 30.2.
+
+Processing (x, y, z) = (X, Y, Lat).
+ Lat in degree.
+</pre></div>
+</div>
+<img alt="../_images/aa3db779a639e7528181ea54feda5a186ffe95b34ba8a97a5b2c10a8d158e716.png" src="../_images/aa3db779a639e7528181ea54feda5a186ffe95b34ba8a97a5b2c10a8d158e716.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 0.04 degree
+mean of result = 30.15 degree
+min of result = 30.08 degree
+max of result = 30.23 degree
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">z_chans</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Terrain&#39;</span><span class="p">]</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">grid_n_image</span><span class="p">(</span><span class="n">vintonHDF_file</span><span class="p">,</span> <span class="n">z_chans</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gridding and imaging Terrain
+91 lines; total number of fids in whizz file = 27865.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Terrain: min = -3.87, max = 24.4, mean = 7.34.
+
+Processing (x, y, z) = (X, Y, Terrain).
+ Terrain in m.
+</pre></div>
+</div>
+<img alt="../_images/06652e069a468a7a773d2ed4a88940a9fe19ed20f380a39f70fadd3b4438a7b3.png" src="../_images/06652e069a468a7a773d2ed4a88940a9fe19ed20f380a39f70fadd3b4438a7b3.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMS of result = 4.29 m
+mean of result = 7.49 m
+min of result = -1.65 m
+max of result = 23.91 m
+Array shape = (85, 60); number of cells = 5100
+exscribed rectangle:
+  [436298, [3327616],
+  [448077, [3327616],
+  [448077, [3344418],
+  [436298, [3344418]
+X cell spacing = 199.647
+Y cell spacing = 200.033
+number of NaNs = 186
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="Statistical_Analysis.html" title="Previous document">Statistical analyses</a>
+        </li>
+        <li>
+          <a href="Craig_transform.html" title="Next document">Craig Transform</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, Geoscience Australia.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/Grid_Imaging.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

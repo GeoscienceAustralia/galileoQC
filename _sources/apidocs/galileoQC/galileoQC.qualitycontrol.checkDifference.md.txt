@@ -1,0 +1,86 @@
+# {py:mod}`galileoQC.qualitycontrol.checkDifference`
+
+```{py:module} galileoQC.qualitycontrol.checkDifference
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkDiff <galileoQC.qualitycontrol.checkDifference.checkDiff>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference.checkDiff
+    :summary:
+    ```
+* - {py:obj}`_expanded_diff <galileoQC.qualitycontrol.checkDifference._expanded_diff>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference._expanded_diff
+    :summary:
+    ```
+* - {py:obj}`_odd <galileoQC.qualitycontrol.checkDifference._odd>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference._odd
+    :summary:
+    ```
+* - {py:obj}`_failsDiffTest <galileoQC.qualitycontrol.checkDifference._failsDiffTest>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference._failsDiffTest
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkDifference.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkDifference.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference.groupName
+```
+
+````
+
+````{py:function} checkDiff(whizzFile, diff_chan='', raw_chan='', lines=[], xChannel='', yChannel='', tChannel='', limit=0.02, nSamples=3000, maxDuration=0.0, maxDistance=0.0, num_diff=4, plot_flag=False, verbose=False)
+:canonical: galileoQC.qualitycontrol.checkDifference.checkDiff
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference.checkDiff
+```
+````
+
+````{py:function} _expanded_diff(data, num)
+:canonical: galileoQC.qualitycontrol.checkDifference._expanded_diff
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference._expanded_diff
+```
+````
+
+````{py:function} _odd(number)
+:canonical: galileoQC.qualitycontrol.checkDifference._odd
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference._odd
+```
+````
+
+````{py:function} _failsDiffTest(lineName, num_diff, data, limit, nSamples, num_exceed_lines, report)
+:canonical: galileoQC.qualitycontrol.checkDifference._failsDiffTest
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkDifference._failsDiffTest
+```
+````
