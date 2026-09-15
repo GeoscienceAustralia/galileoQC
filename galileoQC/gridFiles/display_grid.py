@@ -35,7 +35,7 @@ def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nono
     None.
 
     """
-    gridFilePath, _ = _filename_to_path(gridFile)
+    gridFilePath, _ = util._filename_to_path(gridFile)
 
     (xa, _) = gridfile_to_xa(gridFilePath, bandout=0)
     xdImage(xa, mytitle, colormap=colormap, cmap_norm=cmap_norm, 

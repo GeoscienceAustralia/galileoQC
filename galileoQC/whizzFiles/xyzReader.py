@@ -59,7 +59,7 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
 
     """
         
-    xyzFilePath, xyzFileStr = _filename_to_path(xyzFilePath)
+    xyzFilePath, xyzFileStr = util._filename_to_path(xyzFilePath)
     if xyzFilePath is None:
         return
 
@@ -67,7 +67,7 @@ def xyzToHDF(xyzFilePath = '', hdfFilePath = '', projectName = '', verbose=False
         hdfFilePath = xyzFilePath.with_suffix('.hdf5')
         hdfFileStr = str(hdfFilePath)
     else:
-        hdfFilePath, hdfFileStr = _filename_to_path(hdfFilePath)
+        hdfFilePath, hdfFileStr = util._filename_to_path(hdfFilePath)
     if hdfFilePath is None:
         return
 
