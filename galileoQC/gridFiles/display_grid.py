@@ -13,7 +13,7 @@ License: CC BY-SA
 import numpy as np
 import galileoQC.config as config
 from galileoQC.gridFiles.xdImage import xdImage
-from galileoQC.gridFiles.gridfiles import gridfile_to_xa
+from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 
     
 def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
