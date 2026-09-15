@@ -51,7 +51,7 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     line_type : TYPE, optional
 
         Either 'Xcal_nsw' or 'SGL_GA' or 'SGL_NSW' or SGL_GDF' or 'NRG' or 'Xcal_can'
-        or 'ARK'.
+        or 'ARK' or 'Xcal_qld'.
         The default is '' which causes the `line`s 'PlannedLine' attribute to be set
         to `planned_line`.
 
@@ -85,7 +85,7 @@ def updateLineAttributes(whizzFile, planfiles=None, line_type='', line='', plann
     None.
 
     """
-    line_types = ['Xcal_nsw', 'Xcal_can', 'SGL_GA', 'SGL_NSW', 'NRG', 'ARK', 'SGL_GDF', 'SGL_Kauring']
+    line_types = ['Xcal_nsw', 'Xcal_can', 'Xcal_qld', 'SGL_GA', 'SGL_NSW', 'NRG', 'ARK', 'SGL_GDF', 'SGL_Kauring']
 
     if flight_chan != '':
         if  _channelExists(whizzFile, flight_chan):
