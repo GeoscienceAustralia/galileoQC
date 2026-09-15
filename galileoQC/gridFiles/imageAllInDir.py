@@ -12,7 +12,7 @@ License: CC BY-SA
 
 from pathlib import Path
 import galileoQC.config as config
-from galileoQC.gridFiles.gridfiles import gridfile_to_xa
+from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from galileoQC import xdImage
 
 

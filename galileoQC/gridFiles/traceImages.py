@@ -11,7 +11,7 @@ License: CC BY-SA
 """
 
 from galileoQC.gridFiles.xdImage import xdImage
-from galileoQC.gridFiles.gridfiles import gridfile_to_xa
+from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 import galileoQC.config as config
 
 

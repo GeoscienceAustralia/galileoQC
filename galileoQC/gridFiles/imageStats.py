@@ -11,7 +11,7 @@ License: CC BY-SA
 """
 
 import numpy as np
-from galileoQC.gridFiles.gridfiles import gridfile_to_xa
+from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 
 
 def imageStats(whizzFile=''):
