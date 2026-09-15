@@ -191,6 +191,20 @@ def _decode_linenumber(current_line, line_type):
             variety_line = "Control"
         else:
             variety_line = "Traverse"
+    elif line_type == 'Xcal_qld':
+        if current_line < 8999999.0:
+            plan_line = np.floor(current_line / 10.0)
+            segment_line = 0
+            reflight_line = int(current_line - plan_line * 10)
+        else:
+            plan_line = np.floor(current_line / 10000.0)
+            segment_line = 0
+            reflight_line = int(current_line - np.floor(current_line / 10000.0) * 10000)
+        seconddigit = str(current_line)[1]
+        if seconddigit == '9':
+            variety_line = "Control"
+        else:
+            variety_line = "Traverse"
     elif line_type == 'Xcal_can':
         if current_line < 8999999.0:
             plan_line = np.floor(current_line / 10.0) * 10.0
