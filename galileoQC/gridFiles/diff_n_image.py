@@ -40,6 +40,13 @@ def diff_n_image(whizz_file, channel1, channel2, grid_space, *, method='neighbou
 
         The distance between grid cell centres in grid distance units.
 
+    method : string, optional
+
+        The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+        "neighbours", "bicubic", and "biharmonic", the pygmi method "minc"," and the SciPy
+        GridData "linear" method. The "neighbours" method is much faster if `pykdtree` is installed.
+        Default "neighbours" method.
+
     mask_polygon : numpy 2D array, optional
 
         If the size of mask_polygon > 0, then data_array will be masked to the area

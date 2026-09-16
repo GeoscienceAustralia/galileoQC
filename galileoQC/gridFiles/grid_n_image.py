@@ -79,9 +79,10 @@ def grid_n_image(whizz_file, z_chans, grid_space, *, lines=[], e_chan='', n_chan
 
     method : string, optional
 
-        The gridding algorithm to use in interpolating the data. Available is the Verde nearest
-        neighbour method - "neighbours" and the SciPy GridData "linear" method. "neighbours" is
-        much faster if `pykdtree` is installed. Default `neighbours` method.
+        The gridding algorithm to use in interpolating the data. Available are the Verde methods:
+        "neighbours", "bicubic", and "biharmonic", the pygmi method "minc"," and the SciPy
+        GridData "linear" method. The "neighbours" method is much faster if `pykdtree` is installed.
+        Default "neighbours" method.
 
     mask_polygon : numpy 2D array, optional
 
