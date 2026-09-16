@@ -108,7 +108,6 @@ def diffNoiseVturb(whizzFile, turbulence, lines=[], aNE='', aUV='', bNE='', bUV=
         turbMean = np.zeros((numLines,))
         errNEmean = np.zeros((numLines,))
         errUVmean = np.zeros((numLines,))
-        lineNo = np.chararray((numLines,))
         count = 0
         flightLine = list(g.keys())[0]
 
