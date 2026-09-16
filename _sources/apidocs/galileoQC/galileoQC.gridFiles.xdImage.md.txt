@@ -1,0 +1,78 @@
+# {py:mod}`galileoQC.gridFiles.xdImage`
+
+```{py:module} galileoQC.gridFiles.xdImage
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.xdImage
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`xdImage <galileoQC.gridFiles.xdImage.xdImage>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xdImage.xdImage
+    :summary:
+    ```
+* - {py:obj}`xdsImage <galileoQC.gridFiles.xdImage.xdsImage>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xdImage.xdsImage
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.xdImage.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xdImage.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.xdImage.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xdImage.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.xdImage.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.xdImage.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.xdImage.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.xdImage.projectName
+```
+
+````
+
+````{py:function} xdImage(data_array, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2, hs=True, azdeg=45, ax=None, clipTo3Std=False, mask_polygon=[], whizzfile=None, e_chan='', n_chan='')
+:canonical: galileoQC.gridFiles.xdImage.xdImage
+
+```{autodoc2-docstring} galileoQC.gridFiles.xdImage.xdImage
+```
+````
+
+````{py:function} xdsImage(data_set, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2, hs=True, azdeg=45, ax=None, clipTo3Std=True, mask_polygon=[])
+:canonical: galileoQC.gridFiles.xdImage.xdsImage
+
+```{autodoc2-docstring} galileoQC.gridFiles.xdImage.xdsImage
+```
+````

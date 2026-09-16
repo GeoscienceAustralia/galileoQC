@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.transforms.spheretest`
+
+```{py:module} galileoQC.transforms.spheretest
+```
+
+```{autodoc2-docstring} galileoQC.transforms.spheretest
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`sphereSurvey <galileoQC.transforms.spheretest.sphereSurvey>`
+  - ```{autodoc2-docstring} galileoQC.transforms.spheretest.sphereSurvey
+    :summary:
+    ```
+* - {py:obj}`sphere <galileoQC.transforms.spheretest.sphere>`
+  - ```{autodoc2-docstring} galileoQC.transforms.spheretest.sphere
+    :summary:
+    ```
+* - {py:obj}`_make_xr <galileoQC.transforms.spheretest._make_xr>`
+  - ```{autodoc2-docstring} galileoQC.transforms.spheretest._make_xr
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} sphereSurvey(numstns=20)
+:canonical: galileoQC.transforms.spheretest.sphereSurvey
+
+```{autodoc2-docstring} galileoQC.transforms.spheretest.sphereSurvey
+```
+````
+
+````{py:function} sphere(xm, xs, rs, ps)
+:canonical: galileoQC.transforms.spheretest.sphere
+
+```{autodoc2-docstring} galileoQC.transforms.spheretest.sphere
+```
+````
+
+````{py:function} _make_xr(data, name, units, n, e, n_chan='northing', e_chan='easting')
+:canonical: galileoQC.transforms.spheretest._make_xr
+
+```{autodoc2-docstring} galileoQC.transforms.spheretest._make_xr
+```
+````

@@ -1,0 +1,42 @@
+# {py:mod}`galileoQC.qualitycontrol.checkErsHeaders`
+
+```{py:module} galileoQC.qualitycontrol.checkErsHeaders
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkErsHeaders
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkErsHeaders <galileoQC.qualitycontrol.checkErsHeaders.checkErsHeaders>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkErsHeaders.checkErsHeaders
+    :summary:
+    ```
+* - {py:obj}`_commonErsHdrErrors <galileoQC.qualitycontrol.checkErsHeaders._commonErsHdrErrors>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkErsHeaders._commonErsHdrErrors
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} checkErsHeaders(folderPath='\\.')
+:canonical: galileoQC.qualitycontrol.checkErsHeaders.checkErsHeaders
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkErsHeaders.checkErsHeaders
+```
+````
+
+````{py:function} _commonErsHdrErrors(ncells, nrows, nbands, nullcell, precision, headerbytes, originalnullcell, byteorder, datum, projection, units)
+:canonical: galileoQC.qualitycontrol.checkErsHeaders._commonErsHdrErrors
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkErsHeaders._commonErsHdrErrors
+```
+````

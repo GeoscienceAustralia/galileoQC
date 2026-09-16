@@ -1,0 +1,145 @@
+# {py:mod}`galileoQC.config`
+
+```{py:module} galileoQC.config
+```
+
+```{autodoc2-docstring} galileoQC.config
+:allowtitles:
+```
+
+## Module Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`missingReal <galileoQC.config.missingReal>`
+  - ```{autodoc2-docstring} galileoQC.config.missingReal
+    :summary:
+    ```
+* - {py:obj}`missingInt <galileoQC.config.missingInt>`
+  - ```{autodoc2-docstring} galileoQC.config.missingInt
+    :summary:
+    ```
+* - {py:obj}`missingDate <galileoQC.config.missingDate>`
+  - ```{autodoc2-docstring} galileoQC.config.missingDate
+    :summary:
+    ```
+* - {py:obj}`groupName <galileoQC.config.groupName>`
+  - ```{autodoc2-docstring} galileoQC.config.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.config.projectName>`
+  - ```{autodoc2-docstring} galileoQC.config.projectName
+    :summary:
+    ```
+* - {py:obj}`SMALL_SIZE <galileoQC.config.SMALL_SIZE>`
+  - ```{autodoc2-docstring} galileoQC.config.SMALL_SIZE
+    :summary:
+    ```
+* - {py:obj}`MEDIUM_SIZE <galileoQC.config.MEDIUM_SIZE>`
+  - ```{autodoc2-docstring} galileoQC.config.MEDIUM_SIZE
+    :summary:
+    ```
+* - {py:obj}`BIGGER_SIZE <galileoQC.config.BIGGER_SIZE>`
+  - ```{autodoc2-docstring} galileoQC.config.BIGGER_SIZE
+    :summary:
+    ```
+* - {py:obj}`qc_colormap <galileoQC.config.qc_colormap>`
+  - ```{autodoc2-docstring} galileoQC.config.qc_colormap
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} missingReal
+:canonical: galileoQC.config.missingReal
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.config.missingReal
+```
+
+````
+
+````{py:data} missingInt
+:canonical: galileoQC.config.missingInt
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.config.missingInt
+```
+
+````
+
+````{py:data} missingDate
+:canonical: galileoQC.config.missingDate
+:value: <Multiline-String>
+
+```{autodoc2-docstring} galileoQC.config.missingDate
+```
+
+````
+
+````{py:data} groupName
+:canonical: galileoQC.config.groupName
+:value: >
+   'Whizz Version 1.0'
+
+```{autodoc2-docstring} galileoQC.config.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.config.projectName
+:value: >
+   'Unknown Project'
+
+```{autodoc2-docstring} galileoQC.config.projectName
+```
+
+````
+
+````{py:data} SMALL_SIZE
+:canonical: galileoQC.config.SMALL_SIZE
+:value: >
+   6
+
+```{autodoc2-docstring} galileoQC.config.SMALL_SIZE
+```
+
+````
+
+````{py:data} MEDIUM_SIZE
+:canonical: galileoQC.config.MEDIUM_SIZE
+:value: >
+   8
+
+```{autodoc2-docstring} galileoQC.config.MEDIUM_SIZE
+```
+
+````
+
+````{py:data} BIGGER_SIZE
+:canonical: galileoQC.config.BIGGER_SIZE
+:value: >
+   10
+
+```{autodoc2-docstring} galileoQC.config.BIGGER_SIZE
+```
+
+````
+
+````{py:data} qc_colormap
+:canonical: galileoQC.config.qc_colormap
+:value: >
+   'cet_linear_bgyw_20_98_c66'
+
+```{autodoc2-docstring} galileoQC.config.qc_colormap
+```
+
+````

@@ -1,0 +1,130 @@
+# {py:mod}`galileoQC.gridFiles.graphics`
+
+```{py:module} galileoQC.gridFiles.graphics
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`stats_boundaries <galileoQC.gridFiles.graphics.stats_boundaries>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.stats_boundaries
+    :summary:
+    ```
+* - {py:obj}`makeColormap <galileoQC.gridFiles.graphics.makeColormap>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.makeColormap
+    :summary:
+    ```
+* - {py:obj}`cmap_to_array <galileoQC.gridFiles.graphics.cmap_to_array>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.cmap_to_array
+    :summary:
+    ```
+* - {py:obj}`load_cmap <galileoQC.gridFiles.graphics.load_cmap>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.load_cmap
+    :summary:
+    ```
+* - {py:obj}`autolevels <galileoQC.gridFiles.graphics.autolevels>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.autolevels
+    :summary:
+    ```
+* - {py:obj}`equalizeColormap <galileoQC.gridFiles.graphics.equalizeColormap>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.equalizeColormap
+    :summary:
+    ```
+* - {py:obj}`normalizeColormap <galileoQC.gridFiles.graphics.normalizeColormap>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.normalizeColormap
+    :summary:
+    ```
+* - {py:obj}`alpha_blend <galileoQC.gridFiles.graphics.alpha_blend>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.alpha_blend
+    :summary:
+    ```
+* - {py:obj}`imshow_hs <galileoQC.gridFiles.graphics.imshow_hs>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.imshow_hs
+    :summary:
+    ```
+* - {py:obj}`saveMap <galileoQC.gridFiles.graphics.saveMap>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphics.saveMap
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} stats_boundaries(data, nSigma=1, sigmaStep=1)
+:canonical: galileoQC.gridFiles.graphics.stats_boundaries
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.stats_boundaries
+```
+````
+
+````{py:function} makeColormap(table, name='CustomMap')
+:canonical: galileoQC.gridFiles.graphics.makeColormap
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.makeColormap
+```
+````
+
+````{py:function} cmap_to_array(cmap, N=256)
+:canonical: galileoQC.gridFiles.graphics.cmap_to_array
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.cmap_to_array
+```
+````
+
+````{py:function} load_cmap(name='geosoft')
+:canonical: galileoQC.gridFiles.graphics.load_cmap
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.load_cmap
+```
+````
+
+````{py:function} autolevels(image, minPercent=2, maxPercent=98, funcName='mean', perChannel=False)
+:canonical: galileoQC.gridFiles.graphics.autolevels
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.autolevels
+```
+````
+
+````{py:function} equalizeColormap(cmap, bins, cdf, name='EqualizedMap')
+:canonical: galileoQC.gridFiles.graphics.equalizeColormap
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.equalizeColormap
+```
+````
+
+````{py:function} normalizeColormap(cmapName, norm='autolevels', **kwargs)
+:canonical: galileoQC.gridFiles.graphics.normalizeColormap
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.normalizeColormap
+```
+````
+
+````{py:function} alpha_blend(rgb, intensity, alpha=0.7)
+:canonical: galileoQC.gridFiles.graphics.alpha_blend
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.alpha_blend
+```
+````
+
+````{py:function} imshow_hs(data, ax=None, cmap='geosoft', cmap_norm='equalize', hs=True, zf=10, azdeg=45, altdeg=45, dx=1, dy=1, fraction=1.5, blend_mode='alpha', alpha=0.7, contours=False, levels=32, colorbar=True, cb_contours=False, cb_ticks='linear', nSigma=1, cb_title='', **kwargs)
+:canonical: galileoQC.gridFiles.graphics.imshow_hs
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.imshow_hs
+```
+````
+
+````{py:function} saveMap(outfile, fig=None, orig_size=None, dpi=100)
+:canonical: galileoQC.gridFiles.graphics.saveMap
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphics.saveMap
+```
+````

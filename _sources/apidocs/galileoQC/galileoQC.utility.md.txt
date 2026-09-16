@@ -1,0 +1,17 @@
+# {py:mod}`galileoQC.utility`
+
+```{py:module} galileoQC.utility
+```
+
+```{autodoc2-docstring} galileoQC.utility
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.utility.utility
+```

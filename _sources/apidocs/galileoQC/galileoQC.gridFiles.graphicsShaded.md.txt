@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.gridFiles.graphicsShaded`
+
+```{py:module} galileoQC.gridFiles.graphicsShaded
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`graphicsShaded <galileoQC.gridFiles.graphicsShaded.graphicsShaded>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded.graphicsShaded
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.graphicsShaded.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.graphicsShaded.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.graphicsShaded.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.graphicsShaded.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded.projectName
+```
+
+````
+
+````{py:function} graphicsShaded(e, n, z, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', minClip=np.nan, maxClip=np.nan, gridlines=True, cb_ticks='stats', nSigma=2, hs=True, azdeg=45, ax=None, origin='upper', cb_title='', whizzfile=None, e_chan='', n_chan='')
+:canonical: galileoQC.gridFiles.graphicsShaded.graphicsShaded
+
+```{autodoc2-docstring} galileoQC.gridFiles.graphicsShaded.graphicsShaded
+```
+````
