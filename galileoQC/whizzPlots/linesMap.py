@@ -127,9 +127,13 @@ def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanF
 
             with h5py.File(filename, 'r') as f:
                 if easting == '':
-                    easting = f[groupName]['CoordinateFrame'].attrs['XChannel']
+                    east = f[groupName]['CoordinateFrame'].attrs['XChannel']
+                else:
+                    east = easting
                 if northing == '':
-                    northing = f[groupName]['CoordinateFrame'].attrs['YChannel']
+                    north = f[groupName]['CoordinateFrame'].attrs['YChannel']
+                else:
+                    north = northing
                 g = f[groupName]['Lines']
                 if flight_lines == []:
                     lines_to_plot = list(g.keys())
@@ -143,8 +147,8 @@ def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanF
                             planned_line = f"{g[line].attrs['PlannedLine']:.3f}" ## AAARGH HACK
                             # When comparing with a plan, only show the planned lines ...
                             if planned_line in planLines:
-                                lX = rd.getLineData(g[line], easting)[0:]
-                                lY = rd.getLineData(g[line], northing)[0:]
+                                lX = rd.getLineData(g[line], east)[0:]
+                                lY = rd.getLineData(g[line], north)[0:]
                                 flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
                                 if not (colourchan == '' or colourvalue is None):
                                     coldata = rd.getLineData(g[line], colourchan)[0:]
@@ -152,8 +156,8 @@ def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanF
                                     colline, = ax.plot(lX, coly, color='orange', lw=0.8, alpha=0.9)
                     else:
                         # ... otherwise, show all observed lines.
-                        lX = rd.getLineData(g[line], easting)[0:]
-                        lY = rd.getLineData(g[line], northing)[0:]
+                        lX = rd.getLineData(g[line], east)[0:]
+                        lY = rd.getLineData(g[line], north)[0:]
                         flownline, = ax.plot(lX, lY, color='blue', lw=0.6, alpha=0.7)
                         if not (colourchan == '' or colourvalue is None):
                             coldata = rd.getLineData(g[line], colourchan)[0:]
@@ -163,8 +167,8 @@ def linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanF
     ax.set_aspect('equal')
     ax.xaxis.set_major_formatter(thou_format)
     ax.yaxis.set_major_formatter(thou_format)
-    plt.xlabel(f'{easting} [m]', fontsize = 10)
-    plt.ylabel(f'{northing} [m]', fontsize = 10)
+    plt.xlabel(f'{east} [m]', fontsize = 10)
+    plt.ylabel(f'{north} [m]', fontsize = 10)
     plt.suptitle(plotTitle, fontsize = 12)
     plt.title(plot_subtitle, fontsize = 10)
     plt.grid(True)
