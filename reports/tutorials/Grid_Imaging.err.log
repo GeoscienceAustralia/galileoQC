@@ -1,0 +1,53 @@
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 1323, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+gridfile = Path(data_root + r'FSF_GDD_2p67_final.ERS')
+qc.display_grid(gridfile, "Final G_DD", cmap_norm='nonorm', 
+    cb_ticks='stats', nSigma=2,
+    hs=True, azdeg=45)
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mNameError[39m                                 Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[4][39m[32m, line 2[39m
+[32m      1[39m gridfile = Path(data_root + [33mr'FSF_GDD_2p67_final.ERS'[39m)
+[32m----> [39m[32m2[39m qc.display_grid(gridfile, "Final G_DD", cmap_norm='nonorm', 
+[32m      3[39m     cb_ticks=[33m'stats'[39m, nSigma=[32m2[39m,
+[32m      4[39m     hs=[38;5;28;01mTrue[39;00m, azdeg=[32m45[39m)
+
+[36mFile [39m[32m~/.local/lib/python3.12/site-packages/galileoQC/gridFiles/display_grid.py:38[39m, in [36mdisplay_grid[39m[34m(gridFile, mytitle, colormap, cmap_norm, minClip, maxClip, cb_ticks, nSigma, hs, azdeg, ax, clipTo3Std, whizzfile, e_chan, n_chan)[39m
+[32m     19[39m [38;5;28;01mdef[39;00m [34mdisplay_grid[39m(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm=[33m'[39m[33mnonorm[39m[33m'[39m, 
+[32m     20[39m     minClip=np.nan, maxClip=np.nan, cb_ticks=[33m'[39m[33mstats[39m[33m'[39m, nSigma=[32m2[39m,
+[32m     21[39m     hs=[38;5;28;01mTrue[39;00m, azdeg=[32m45[39m, ax=[38;5;28;01mNone[39;00m, clipTo3Std = [38;5;28;01mTrue[39;00m, whizzfile=[38;5;28;01mNone[39;00m, e_chan=[33m'[39m[33m'[39m, n_chan=[33m'[39m[33m'[39m):
+[32m     22[39m [38;5;250m    [39m[33;03m"""[39;00m
+[32m     23[39m [33;03m    Uses `xdImage()` to display the gridded data array in gridFile. All[39;00m
+[32m     24[39m [33;03m    parameters after the name of the gridFile are just passed through[39;00m
+[32m   (...)[39m[32m     36[39m 
+[32m     37[39m [33;03m    """[39;00m
+[32m---> [39m[32m38[39m     gridFilePath, _ = [30;43mutil[39;49m._filename_to_path(gridFile)
+[32m     40[39m     (xa, _) = gridfile_to_xa(gridFilePath, bandout=[32m0[39m)
+[32m     41[39m     xdImage(xa, mytitle, colormap=colormap, cmap_norm=cmap_norm, 
+[32m     42[39m         minClip=minClip, maxClip=maxClip, gridlines=[38;5;28;01mTrue[39;00m, cb_ticks=cb_ticks, nSigma=nSigma,
+[32m     43[39m         hs=hs, azdeg=azdeg, ax=ax, clipTo3Std = clipTo3Std,
+[32m     44[39m         whizzfile=whizzfile, e_chan=e_chan, n_chan=n_chan)
+
+[31mNameError[39m: name 'util' is not defined
+

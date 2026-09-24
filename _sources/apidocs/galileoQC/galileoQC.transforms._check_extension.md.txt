@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms._check_extension`
+
+```{py:module} galileoQC.transforms._check_extension
+```
+
+```{autodoc2-docstring} galileoQC.transforms._check_extension
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_check_extension <galileoQC.transforms._check_extension._check_extension>`
+  - ```{autodoc2-docstring} galileoQC.transforms._check_extension._check_extension
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _check_extension(local, regional, pad_cells)
+:canonical: galileoQC.transforms._check_extension._check_extension
+
+```{autodoc2-docstring} galileoQC.transforms._check_extension._check_extension
+```
+````

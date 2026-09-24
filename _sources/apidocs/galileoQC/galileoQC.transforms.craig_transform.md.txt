@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms.craig_transform`
+
+```{py:module} galileoQC.transforms.craig_transform
+```
+
+```{autodoc2-docstring} galileoQC.transforms.craig_transform
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`craig_transform <galileoQC.transforms.craig_transform.craig_transform>`
+  - ```{autodoc2-docstring} galileoQC.transforms.craig_transform.craig_transform
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} craig_transform(whizzFile=None, gne_chan=None, guv_chan=None, gd_chan=None, cell_size=None, result_units='um/s/s', survey_polygon=None, pad_cells=None, padding_mode='regional', regional_grid_file=None, regional_grav_units='mGal', numstns=None, firstorder=False, conforming=False, low_lambda=None, hi_lambda=None, save_to_ers=False, plot_flag=False, verbose=False)
+:canonical: galileoQC.transforms.craig_transform.craig_transform
+
+```{autodoc2-docstring} galileoQC.transforms.craig_transform.craig_transform
+```
+````

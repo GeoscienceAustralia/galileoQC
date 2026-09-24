@@ -1,0 +1,49 @@
+# {py:mod}`galileoQC.qualitycontrol`
+
+```{py:module} galileoQC.qualitycontrol
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.qualitycontrol.checkVertPlan
+galileoQC.qualitycontrol.checkHighFreq
+galileoQC.qualitycontrol.checkSpeeds
+galileoQC.qualitycontrol.checkSpikes
+galileoQC.qualitycontrol.checkDuplicateLines
+galileoQC.qualitycontrol.checkAtmosEffect
+galileoQC.qualitycontrol.ilsNoiseAnalysis
+galileoQC.qualitycontrol.checkDiurnal
+galileoQC.qualitycontrol.diffGroundGrid
+galileoQC.qualitycontrol.checkBasemag
+galileoQC.qualitycontrol.checkFreeAirCorr
+galileoQC.qualitycontrol.checkIntersection
+galileoQC.qualitycontrol.diffNoiseVturb
+galileoQC.qualitycontrol.checkRepeatLines
+galileoQC.qualitycontrol.checkDifference
+galileoQC.qualitycontrol.checkEotvosCorr
+galileoQC.qualitycontrol.checkHeading
+galileoQC.qualitycontrol.psdChannelDiff
+galileoQC.qualitycontrol.checkConstantSlope
+galileoQC.qualitycontrol.allChanStats
+galileoQC.qualitycontrol.checkXYPlan
+galileoQC.qualitycontrol.checkLatCorr
+galileoQC.qualitycontrol.checkOverlaps
+galileoQC.qualitycontrol.checkFrobenius
+galileoQC.qualitycontrol.checkErsHeaders
+galileoQC.qualitycontrol.qualityAnalysis
+galileoQC.qualitycontrol.checkLineLengths
+galileoQC.qualitycontrol.checkGNSS
+galileoQC.qualitycontrol.checkPhase
+galileoQC.qualitycontrol.checkGaps
+galileoQC.qualitycontrol.checkClearance
+galileoQC.qualitycontrol.diffGravVturb
+galileoQC.qualitycontrol.diffChanStats
+```

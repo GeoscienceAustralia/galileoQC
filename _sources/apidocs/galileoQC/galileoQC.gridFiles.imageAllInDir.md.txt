@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.gridFiles.imageAllInDir`
+
+```{py:module} galileoQC.gridFiles.imageAllInDir
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`imageAllInDir <galileoQC.gridFiles.imageAllInDir.imageAllInDir>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir.imageAllInDir
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.imageAllInDir.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.imageAllInDir.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.imageAllInDir.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.imageAllInDir.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir.projectName
+```
+
+````
+
+````{py:function} imageAllInDir(path_name, max_file_size=256)
+:canonical: galileoQC.gridFiles.imageAllInDir.imageAllInDir
+
+```{autodoc2-docstring} galileoQC.gridFiles.imageAllInDir.imageAllInDir
+```
+````

@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.whizzPlots.linesMap`
+
+```{py:module} galileoQC.whizzPlots.linesMap
+```
+
+```{autodoc2-docstring} galileoQC.whizzPlots.linesMap
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`linesMap <galileoQC.whizzPlots.linesMap.linesMap>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.linesMap.linesMap
+    :summary:
+    ```
+* - {py:obj}`plotsurveyboundary <galileoQC.whizzPlots.linesMap.plotsurveyboundary>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.linesMap.plotsurveyboundary
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzPlots.linesMap.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.linesMap.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzPlots.linesMap.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzPlots.linesMap.groupName
+```
+
+````
+
+````{py:function} linesMap(whizzFiles=[], easting='', northing='', flight_lines=[], whizzPlanFile='', planLines=[], planEast='', planNorth='', blockpolygon=[], colourchan='', colourvalue=None)
+:canonical: galileoQC.whizzPlots.linesMap.linesMap
+
+```{autodoc2-docstring} galileoQC.whizzPlots.linesMap.linesMap
+```
+````
+
+````{py:function} plotsurveyboundary(ax, blockpolygon)
+:canonical: galileoQC.whizzPlots.linesMap.plotsurveyboundary
+
+```{autodoc2-docstring} galileoQC.whizzPlots.linesMap.plotsurveyboundary
+```
+````

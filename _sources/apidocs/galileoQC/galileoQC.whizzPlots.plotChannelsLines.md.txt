@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.whizzPlots.plotChannelsLines`
+
+```{py:module} galileoQC.whizzPlots.plotChannelsLines
+```
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotChannelsLines
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`plotChannelsLines <galileoQC.whizzPlots.plotChannelsLines.plotChannelsLines>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotChannelsLines.plotChannelsLines
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzPlots.plotChannelsLines.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotChannelsLines.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzPlots.plotChannelsLines.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotChannelsLines.groupName
+```
+
+````
+
+````{py:function} plotChannelsLines(whizzFile, channels, flightLines, x='', mean_remove=False, xOffset=True)
+:canonical: galileoQC.whizzPlots.plotChannelsLines.plotChannelsLines
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotChannelsLines.plotChannelsLines
+```
+````

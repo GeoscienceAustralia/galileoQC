@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.checkConstantSlope`
+
+```{py:module} galileoQC.qualitycontrol.checkConstantSlope
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkConstantSlope
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkConstantSlope <galileoQC.qualitycontrol.checkConstantSlope.checkConstantSlope>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkConstantSlope.checkConstantSlope
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkConstantSlope.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkConstantSlope.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkConstantSlope.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkConstantSlope.groupName
+```
+
+````
+
+````{py:function} checkConstantSlope(whizzFile, *, lines=[], channels=[])
+:canonical: galileoQC.qualitycontrol.checkConstantSlope.checkConstantSlope
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkConstantSlope.checkConstantSlope
+```
+````

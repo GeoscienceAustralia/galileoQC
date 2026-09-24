@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.whizzPlots.plotLinesOnGroundStns`
+
+```{py:module} galileoQC.whizzPlots.plotLinesOnGroundStns
+```
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesOnGroundStns
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`plotLinesOnGroundStns <galileoQC.whizzPlots.plotLinesOnGroundStns.plotLinesOnGroundStns>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesOnGroundStns.plotLinesOnGroundStns
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzPlots.plotLinesOnGroundStns.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesOnGroundStns.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzPlots.plotLinesOnGroundStns.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesOnGroundStns.groupName
+```
+
+````
+
+````{py:function} plotLinesOnGroundStns(whizzFile, line, minlon=-360, maxlon=360, minlat=-90, maxlat=90, min_reliability=0, fig_title='')
+:canonical: galileoQC.whizzPlots.plotLinesOnGroundStns.plotLinesOnGroundStns
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesOnGroundStns.plotLinesOnGroundStns
+```
+````
