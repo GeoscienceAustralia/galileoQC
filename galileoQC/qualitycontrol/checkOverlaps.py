@@ -78,7 +78,8 @@ def checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag
             if 'PlannedLine' in gMeas[line1].attrs:#.keys():
                 line1_plan = gMeas[line1].attrs['PlannedLine']
             else:
-                print(f'ERROR. The required PlannedLine attribute cannot be found for line {line1}. Skipping.')
+                if verbose:
+                    report += f'ERROR. The required PlannedLine attribute cannot be found for line {line1}. Skipping.'
                 continue
 
             for idx2 in range (idx1 + 1, len(lines)):#line2 in gMeas.keys():
@@ -86,17 +87,18 @@ def checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag
                 if 'PlannedLine' in gMeas[line2].attrs:#.keys():
                     line2_plan = gMeas[line2].attrs['PlannedLine']
                 else:
-                    print(f'ERROR. The required PlannedLine attribute cannot be found for line {line2}. Skipping.')
+                    if verbose:
+                        report += f'ERROR. The required PlannedLine attribute cannot be found for line {line2}. Skipping.'
                     continue
                 
                 # if the second line isn't the first line but has the same planned line no.
                 if line1 != line2 and line1_plan == line2_plan:
                     num_coinc_lines += 1
                     # extract positions
-                    n1 = rd.getLineData(gMeas[line1], nrth)# np.array(gMeas[line1][nrth])
+                    n1 = rd.getLineData(gMeas[line1], nrth)
                     e1 = rd.getLineData(gMeas[line1], east)
-                    n2 = rd.getLineData(gMeas[line1], nrth)
-                    e2 = rd.getLineData(gMeas[line1], east)
+                    n2 = rd.getLineData(gMeas[line2], nrth)
+                    e2 = rd.getLineData(gMeas[line2], east)
                     # get line direction in radians
                     dirn = np.arctan2((e1[-1] - e1[0]), (n1[-1] - n1[0]))
                     
