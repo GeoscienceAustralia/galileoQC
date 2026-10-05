@@ -31,6 +31,7 @@ from galileoQC.gridFiles.graphicsShaded import graphicsShaded
 from galileoQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from galileoQC.gridFiles.xarray_to_grid import xarray_to_grid
 from galileoQC.gridFiles.xdImage import xdImage
+from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
 from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xr
 import galileoQC.gridFiles.gridutility as gut
 

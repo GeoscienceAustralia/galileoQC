@@ -306,7 +306,14 @@ def _xBaseInterpolant(whizzFiles, channel, repeatLines, x='', z='', verbose=Fals
     return xBase, xData, gData, zData, minBigX, maxSmallX, deltaX
 
 
-def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, gData, zData, channel, flightLines, z, chan_z_units, chan_g_label, chan_g_units, chan_x_label, chan_x_units, baseLine=-1.0):
+def _plotRepeatAnalysis(
+    xBase, xOffset, nLines, xData, gData, zData, channel, flightLines, z, chan_z_units,
+    chan_g_label, chan_g_units, chan_x_label, chan_x_units, baseLine=-1.0
+    ):
+    plt.rcParams['text.usetex'] = True
+
+    texDelta = r'$\Delta$'
+
     xPlot = xBase
     if xOffset:
             xPlot = xPlot - xPlot[0]
@@ -378,7 +385,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, gData, zData, channel, fl
         print(f'    Line {flightLines[line]}: stdev({channel}) = {gStd:.2f} {chan_g_units}')
             
     plt.xlabel(f'{chan_x_label} {chan_x_units}', fontsize = 10)
-    plt.ylabel(f'$\Delta$ {chan_g_label}', fontsize = 10)
+    plt.ylabel(f'{texDelta} {chan_g_label}', fontsize = 10)
     plotTitle = f'{channel}: Differences to mean'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
@@ -407,7 +414,7 @@ def _plotRepeatAnalysis(xBase, xOffset, nLines, xData, gData, zData, channel, fl
         print(f'    Line {flightLines[line]}: stdev({z}) = {zStd:.1f} {chan_z_units}')
             
     plt.xlabel(f'{chan_x_label} {chan_x_units}', fontsize = 10)
-    plt.ylabel(f'$\Delta$ {z} {chan_z_units}', fontsize = 10)
+    plt.ylabel(f'{texDelta} {z} {chan_z_units}', fontsize = 10)
     plotTitle = f'{z}: Differences to mean'
     plt.title(plotTitle, fontsize = 12)
     plt.grid(True)
