@@ -14,6 +14,7 @@ import numpy as np
 import galileoQC.config as config
 from galileoQC.gridFiles.xdImage import xdImage
 from galileoQC.gridFiles.grid_to_xarray import gridfile_to_xa
+import galileoQC.utility.utility as util
 
     
 def display_grid(gridFile, mytitle, colormap=config.qc_colormap, cmap_norm='nonorm', 
