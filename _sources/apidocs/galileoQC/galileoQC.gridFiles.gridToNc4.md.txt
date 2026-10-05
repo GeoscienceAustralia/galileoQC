@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.gridFiles.gridToNc4`
+
+```{py:module} galileoQC.gridFiles.gridToNc4
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`gridToNc4 <galileoQC.gridFiles.gridToNc4.gridToNc4>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4.gridToNc4
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.gridToNc4.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.gridToNc4.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.gridToNc4.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.gridToNc4.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4.projectName
+```
+
+````
+
+````{py:function} gridToNc4(whizz_file, z_chans, grid_space, *, region=None, lines=[], e_chan='', n_chan='', mr_chans=[], d1_chans=[], gridlines=True, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, ncFile='', datum='', projection='', skipcontrols=False, controls=[])
+:canonical: galileoQC.gridFiles.gridToNc4.gridToNc4
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridToNc4.gridToNc4
+```
+````

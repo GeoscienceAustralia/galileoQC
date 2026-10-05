@@ -1,0 +1,42 @@
+# {py:mod}`galileoQC.gridFiles.write_ers`
+
+```{py:module} galileoQC.gridFiles.write_ers
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.write_ers
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`write_ers <galileoQC.gridFiles.write_ers.write_ers>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.write_ers.write_ers
+    :summary:
+    ```
+* - {py:obj}`_write_ers_header <galileoQC.gridFiles.write_ers._write_ers_header>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.write_ers._write_ers_header
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} write_ers(imagefile, data_array, nullcell=-999999)
+:canonical: galileoQC.gridFiles.write_ers.write_ers
+
+```{autodoc2-docstring} galileoQC.gridFiles.write_ers.write_ers
+```
+````
+
+````{py:function} _write_ers_header(headerFilePath, data_array, nullcell=-999999)
+:canonical: galileoQC.gridFiles.write_ers._write_ers_header
+
+```{autodoc2-docstring} galileoQC.gridFiles.write_ers._write_ers_header
+```
+````

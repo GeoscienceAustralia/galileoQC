@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.checkOverlaps`
+
+```{py:module} galileoQC.qualitycontrol.checkOverlaps
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkOverlaps
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkOverlaps <galileoQC.qualitycontrol.checkOverlaps.checkOverlaps>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkOverlaps.checkOverlaps
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkOverlaps.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkOverlaps.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkOverlaps.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkOverlaps.groupName
+```
+
+````
+
+````{py:function} checkOverlaps(whizzFile, min_overlap=7.6, lines=[], verbose=False, plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkOverlaps.checkOverlaps
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkOverlaps.checkOverlaps
+```
+````

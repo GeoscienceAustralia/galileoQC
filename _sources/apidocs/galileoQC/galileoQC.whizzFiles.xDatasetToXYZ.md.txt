@@ -1,0 +1,42 @@
+# {py:mod}`galileoQC.whizzFiles.xDatasetToXYZ`
+
+```{py:module} galileoQC.whizzFiles.xDatasetToXYZ
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xDatasetToXYZ
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_xDatasetToXYZ <galileoQC.whizzFiles.xDatasetToXYZ._xDatasetToXYZ>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xDatasetToXYZ._xDatasetToXYZ
+    :summary:
+    ```
+* - {py:obj}`_getchanstr <galileoQC.whizzFiles.xDatasetToXYZ._getchanstr>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xDatasetToXYZ._getchanstr
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _xDatasetToXYZ(xd, chans, wids, precisions, xyzFilePath, line='LINE', verbose=False)
+:canonical: galileoQC.whizzFiles.xDatasetToXYZ._xDatasetToXYZ
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xDatasetToXYZ._xDatasetToXYZ
+```
+````
+
+````{py:function} _getchanstr(xd, inputchans, omit='LINE')
+:canonical: galileoQC.whizzFiles.xDatasetToXYZ._getchanstr
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xDatasetToXYZ._getchanstr
+```
+````

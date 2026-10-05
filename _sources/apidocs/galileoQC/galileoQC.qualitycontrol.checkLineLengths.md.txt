@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.checkLineLengths`
+
+```{py:module} galileoQC.qualitycontrol.checkLineLengths
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLineLengths
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkLineLengths <galileoQC.qualitycontrol.checkLineLengths.checkLineLengths>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkLineLengths.checkLineLengths
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkLineLengths.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkLineLengths.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkLineLengths.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLineLengths.groupName
+```
+
+````
+
+````{py:function} checkLineLengths(whizzFile, min_len=50.0, measX='', measY='', lines=[])
+:canonical: galileoQC.qualitycontrol.checkLineLengths.checkLineLengths
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkLineLengths.checkLineLengths
+```
+````

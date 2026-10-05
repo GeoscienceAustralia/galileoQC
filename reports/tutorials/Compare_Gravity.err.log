@@ -1,0 +1,79 @@
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 1323, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/.local/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+qc.reportLines(canobieHDF_file)
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mFileNotFoundError[39m                         Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[2][39m[32m, line 1[39m
+[32m----> [39m[32m1[39m qc.reportLines(canobieHDF_file)
+
+[36mFile [39m[32m~/.local/lib/python3.12/site-packages/galileoQC/whizzFiles/reportData.py:116[39m, in [36mreportLines[39m[34m(whizzFile)[39m
+[32m    100[39m [38;5;250m[39m[33;03m"""[39;00m
+[32m    101[39m [33;03mPrints a short summary of the flight-lines in a HDF5 Whizz file.[39;00m
+[32m    102[39m 
+[32m   (...)[39m[32m    112[39m 
+[32m    113[39m [33;03m"""[39;00m
+[32m    114[39m filename = [38;5;28mstr[39m(whizzFile)
+[32m--> [39m[32m116[39m oddlines, evenlines = [30;43m_getOddEvenLines[39;49m[30;43m([39;49m[30;43mwhizzFile[39;49m[30;43m)[39;49m
+[32m    117[39m travlines, ctrllines = _getTravCtrlLines(whizzFile)
+[32m    118[39m plandlines, unplandlines = _getPlannedLines(whizzFile)
+
+[36mFile [39m[32m~/.local/lib/python3.12/site-packages/galileoQC/gridFiles/oddeven.py:352[39m, in [36m_getOddEvenLines[39m[34m(whizz_file)[39m
+[32m    349[39m numodds = [32m0[39m
+[32m    350[39m oddlines = []
+[32m--> [39m[32m352[39m [38;5;28;01mwith[39;00m [30;43mh5py[39;49m[30;43m.[39;49m[30;43mFile[39;49m[30;43m([39;49m[30;43mfilename[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43m'[39;49m[30;43mr[39;49m[30;43m'[39;49m[30;43m)[39;49m [38;5;28;01mas[39;00m f:
+[32m    353[39m     lines_group = f[groupName][[33m'[39m[33mLines[39m[33m'[39m]
+[32m    354[39m     lines = lines_group.keys()
+
+[36mFile [39m[32m~/.local/lib/python3.12/site-packages/h5py/_hl/files.py:555[39m, in [36mFile.__init__[39m[34m(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, track_times, **kwds)[39m
+[32m    546[39m     fapl = make_fapl(driver, libver, rdcc_nslots, rdcc_nbytes, rdcc_w0,
+[32m    547[39m                      locking, page_buf_size, min_meta_keep, min_raw_keep,
+[32m    548[39m                      alignment_threshold=alignment_threshold,
+[32m    549[39m                      alignment_interval=alignment_interval,
+[32m    550[39m                      meta_block_size=meta_block_size,
+[32m    551[39m                      **kwds)
+[32m    552[39m     fcpl = make_fcpl(track_order=track_order, track_times=track_times,
+[32m    553[39m                      fs_strategy=fs_strategy, fs_persist=fs_persist,
+[32m    554[39m                      fs_threshold=fs_threshold, fs_page_size=fs_page_size)
+[32m--> [39m[32m555[39m     fid = [30;43mmake_fid[39;49m[30;43m([39;49m[30;43mname[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43mmode[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43muserblock_size[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43mfapl[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43mfcpl[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43mswmr[39;49m[30;43m=[39;49m[30;43mswmr[39;49m[30;43m)[39;49m
+[32m    557[39m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(libver, [38;5;28mtuple[39m):
+[32m    558[39m     [38;5;28mself[39m._libver = libver
+
+[36mFile [39m[32m~/.local/lib/python3.12/site-packages/h5py/_hl/files.py:232[39m, in [36mmake_fid[39m[34m(name, mode, userblock_size, fapl, fcpl, swmr)[39m
+[32m    230[39m     [38;5;28;01mif[39;00m swmr:
+[32m    231[39m         flags |= h5f.ACC_SWMR_READ
+[32m--> [39m[32m232[39m     fid = [30;43mh5f[39;49m[30;43m.[39;49m[30;43mopen[39;49m[30;43m([39;49m[30;43mname[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43mflags[39;49m[30;43m,[39;49m[30;43m [39;49m[30;43mfapl[39;49m[30;43m=[39;49m[30;43mfapl[39;49m[30;43m)[39;49m
+[32m    233[39m [38;5;28;01melif[39;00m mode == [33m'[39m[33mr+[39m[33m'[39m:
+[32m    234[39m     fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+
+[36mFile [39m[32mh5py/_objects.pyx:54[39m, in [36mh5py._objects.with_phil.wrapper[39m[34m()[39m
+[32m---> [39m[32m54[39m [33m'Could not get source, probably due dynamically evaluated source code.'[39m
+
+[36mFile [39m[32mh5py/_objects.pyx:55[39m, in [36mh5py._objects.with_phil.wrapper[39m[34m()[39m
+[32m---> [39m[32m55[39m [33m'Could not get source, probably due dynamically evaluated source code.'[39m
+
+[36mFile [39m[32mh5py/h5f.pyx:106[39m, in [36mh5py.h5f.open[39m[34m()[39m
+[32m--> [39m[32m106[39m [33m'Could not get source, probably due dynamically evaluated source code.'[39m
+
+[31mFileNotFoundError[39m: [Errno 2] Unable to synchronously open file (unable to open file: name = 'CanobieData/Canobie.hdf5', errno = 2, error message = 'No such file or directory', flags = 0, o_flags = 0)
+

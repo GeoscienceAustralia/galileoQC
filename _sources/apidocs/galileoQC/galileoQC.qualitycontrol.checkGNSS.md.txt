@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.checkGNSS`
+
+```{py:module} galileoQC.qualitycontrol.checkGNSS
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkGNSS
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkGNSS <galileoQC.qualitycontrol.checkGNSS.checkGNSS>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkGNSS.checkGNSS
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkGNSS.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkGNSS.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkGNSS.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkGNSS.groupName
+```
+
+````
+
+````{py:function} checkGNSS(whizzFile, num_sats, pdop, vdop, hdop, nsats_min=4, max_pdop=6, max_vdop=4, max_hdop=4, lines=[])
+:canonical: galileoQC.qualitycontrol.checkGNSS.checkGNSS
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkGNSS.checkGNSS
+```
+````

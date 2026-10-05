@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.whizzPlots.plotLinesCompareChannels`
+
+```{py:module} galileoQC.whizzPlots.plotLinesCompareChannels
+```
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesCompareChannels
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`plotLinesCompareChannels <galileoQC.whizzPlots.plotLinesCompareChannels.plotLinesCompareChannels>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesCompareChannels.plotLinesCompareChannels
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzPlots.plotLinesCompareChannels.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesCompareChannels.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzPlots.plotLinesCompareChannels.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesCompareChannels.groupName
+```
+
+````
+
+````{py:function} plotLinesCompareChannels(whizzFile, flightLines, x, channels, xOffset=True, mean_remove=False)
+:canonical: galileoQC.whizzPlots.plotLinesCompareChannels.plotLinesCompareChannels
+
+```{autodoc2-docstring} galileoQC.whizzPlots.plotLinesCompareChannels.plotLinesCompareChannels
+```
+````

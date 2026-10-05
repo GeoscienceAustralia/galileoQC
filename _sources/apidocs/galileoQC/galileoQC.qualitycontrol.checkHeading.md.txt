@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkHeading`
+
+```{py:module} galileoQC.qualitycontrol.checkHeading
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkHeading <galileoQC.qualitycontrol.checkHeading.checkHeading>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading.checkHeading
+    :summary:
+    ```
+* - {py:obj}`angle_in_range <galileoQC.qualitycontrol.checkHeading.angle_in_range>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading.angle_in_range
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkHeading.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkHeading.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading.groupName
+```
+
+````
+
+````{py:function} checkHeading(whizzFile, nominalHeadings=[], headingchan='', x='', y='', tolerance=10.0, known='', lines=[], plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkHeading.checkHeading
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading.checkHeading
+```
+````
+
+````{py:function} angle_in_range(alpha, nominal, tolerance)
+:canonical: galileoQC.qualitycontrol.checkHeading.angle_in_range
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkHeading.angle_in_range
+```
+````

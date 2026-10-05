@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms._trim_rectangle`
+
+```{py:module} galileoQC.transforms._trim_rectangle
+```
+
+```{autodoc2-docstring} galileoQC.transforms._trim_rectangle
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_trim_rectangle <galileoQC.transforms._trim_rectangle._trim_rectangle>`
+  - ```{autodoc2-docstring} galileoQC.transforms._trim_rectangle._trim_rectangle
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _trim_rectangle(grid)
+:canonical: galileoQC.transforms._trim_rectangle._trim_rectangle
+
+```{autodoc2-docstring} galileoQC.transforms._trim_rectangle._trim_rectangle
+```
+````

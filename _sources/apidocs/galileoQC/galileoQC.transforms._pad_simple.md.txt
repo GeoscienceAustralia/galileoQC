@@ -1,0 +1,42 @@
+# {py:mod}`galileoQC.transforms._pad_simple`
+
+```{py:module} galileoQC.transforms._pad_simple
+```
+
+```{autodoc2-docstring} galileoQC.transforms._pad_simple
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_pad_simple <galileoQC.transforms._pad_simple._pad_simple>`
+  - ```{autodoc2-docstring} galileoQC.transforms._pad_simple._pad_simple
+    :summary:
+    ```
+* - {py:obj}`_scaling_doubtful <galileoQC.transforms._pad_simple._scaling_doubtful>`
+  - ```{autodoc2-docstring} galileoQC.transforms._pad_simple._scaling_doubtful
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _pad_simple(local_grid, regional_grid, verbose=False)
+:canonical: galileoQC.transforms._pad_simple._pad_simple
+
+```{autodoc2-docstring} galileoQC.transforms._pad_simple._pad_simple
+```
+````
+
+````{py:function} _scaling_doubtful(grid1, grid2)
+:canonical: galileoQC.transforms._pad_simple._scaling_doubtful
+
+```{autodoc2-docstring} galileoQC.transforms._pad_simple._scaling_doubtful
+```
+````

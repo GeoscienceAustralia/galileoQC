@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.whizzFiles.updateChannelAttributes`
+
+```{py:module} galileoQC.whizzFiles.updateChannelAttributes
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`updateChannelAttributes <galileoQC.whizzFiles.updateChannelAttributes.updateChannelAttributes>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes.updateChannelAttributes
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.updateChannelAttributes.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.updateChannelAttributes.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.updateChannelAttributes.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.updateChannelAttributes.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes.projectName
+```
+
+````
+
+````{py:function} updateChannelAttributes(whizzFile, channel, name='', units='', alias='', description='', chan_precision=-1)
+:canonical: galileoQC.whizzFiles.updateChannelAttributes.updateChannelAttributes
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateChannelAttributes.updateChannelAttributes
+```
+````
