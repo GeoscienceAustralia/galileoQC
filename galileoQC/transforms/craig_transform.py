@@ -243,7 +243,7 @@ def craig_transform(
             # regional_grid = _grid_clean(regional_grid)
 
         # main calculation
-        gD_grid, gD_err, gD_raw = gravity_from_curv(
+        gD_grid, gD_err, gD_raw, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd = gravity_from_curv(
             Ane, Auv, cell_size, gd_chan=gd_chan, altitude=None, 
             result_units=result_units, survey_polygon=survey_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode,
@@ -254,6 +254,7 @@ def craig_transform(
         )
         if plot_flag:
             xdImage(gD_grid, 'Post-gfc: gD_grid (um/s/s)', hs=False)
+            xdImage(g_dd, 'GDD (E)', hs=False)
 
         # conformed to regional if required.
         report_summary = '\n  Final transformed grids:'
@@ -322,4 +323,4 @@ def craig_transform(
             ersfilepath = whizzFilePath.with_name(my_long_name)
             write_ers(ersfilepath, gD_grid)
 
-    return gD_grid
+    return gD_grid, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd

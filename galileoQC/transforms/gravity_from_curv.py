@@ -213,7 +213,7 @@ def gravity_from_curv(Ane, Auv, cell_size,
         (intersectregion[1], intersectregion[3]),
         (intersectregion[0], intersectregion[3])
         ]
-    gD_grid, gD_err, gD_raw = grav_of_Kurvs(
+    gD_grid, gD_err, gD_raw, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd = grav_of_Kurvs(
         Ane_grid_pad, Auv_grid_pad,
         firstorder=firstorder, 
         survey_polygon=survey_polygon, 
@@ -223,6 +223,15 @@ def gravity_from_curv(Ane, Auv, cell_size,
         )
     if plot_flag:
         xdImage(gD_grid, 'Post-gok: gD_grid (Em)', hs=False)
+        xdImage(g_nn, 'Post-gok: g_nn (E)', hs=False)
+        xdImage(g_ne, 'Post-gok: g_ne (E)', hs=False)
+        xdImage(g_nd, 'Post-gok: g_nd (E)', hs=False)
+        xdImage(g_ee, 'Post-gok: g_ee (E)', hs=False)
+        xdImage(g_ed, 'Post-gok: g_ed (E)', hs=False)
+        xdImage(g_dd, 'Post-gok: g_dd (E)', hs=False)
+        trace = g_dd + g_nn + g_ee
+        report_gridStats(trace, title="trace")
+        xdImage(trace, 'Post-gok: trace (E)', hs=False, minClip=-0.5, maxClip=0.5)
 
     # ..., scale to desired units
     # ... 10,000 Em per mGal
@@ -246,20 +255,34 @@ def gravity_from_curv(Ane, Auv, cell_size,
         gd_chan = 'gD_craig'
     imag_chan = f'{gd_chan}_imag'
 
-    gD_grid.attrs['x_channel'] = e_chan
-    gD_grid.attrs['y_channel'] = n_chan
+    for my_grid in [gD_grid, gD_err, gD_raw, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd]:
+        my_grid.attrs['x_channel'] = e_chan
+        my_grid.attrs['y_channel'] = n_chan
+
     gD_grid.attrs['long_name'] = gd_chan
     gD_grid.attrs['title'] = 'gD via Craig transform'
 
-    gD_err.attrs['x_channel'] = e_chan
-    gD_err.attrs['y_channel'] = n_chan
     gD_err.attrs['long_name'] = imag_chan
     gD_err.attrs['title'] = 'gD imaginary part'
 
-    gD_raw.attrs['x_channel'] = e_chan
-    gD_raw.attrs['y_channel'] = n_chan
     gD_raw.attrs['long_name'] = 'gD_craig_raw'
     gD_raw.attrs['title'] = 'gD via Craig transform (unmasked)'
 
-    return gD_grid, gD_err, gD_raw
-    
+    for my_grid in [g_nn, g_ne, g_nd, g_ee, g_ed, g_dd]:
+        my_grid.attrs['Units'] = 'E'
+
+    g_nn.attrs['long_name'] = 'g_nn'
+    g_nn.attrs['title'] = 'g_nn via Craig transform'
+    g_ne.attrs['long_name'] = 'g_ne'
+    g_ne.attrs['title'] = 'g_ne via Craig transform'
+    g_nd.attrs['long_name'] = 'g_nd'
+    g_nd.attrs['title'] = 'g_nd via Craig transform'
+    g_ee.attrs['long_name'] = 'g_ee'
+    g_ee.attrs['title'] = 'g_ee via Craig transform'
+    g_ed.attrs['long_name'] = 'g_ed'
+    g_ed.attrs['title'] = 'g_ed via Craig transform'
+    g_dd.attrs['long_name'] = 'g_dd'
+    g_dd.attrs['title'] = 'g_dd via Craig transform'
+
+    return gD_grid, gD_err, gD_raw, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd
+
