@@ -38,8 +38,9 @@ def craig_transform(
 ):
     """
     Runs the Craig transform on gravity differential curvature data to
-    calculate the vertical component of gravitational acceleration. Also
-    reports statistics of results and plots relevant images.
+    calculate the vertical component of gravitational acceleration and
+    the components of the gravity gradient tensor. Also reports statistics
+    of results and plots relevant images.
 
     Parameters
     ----------
@@ -151,7 +152,31 @@ def craig_transform(
     
     gd_grid : xarray DataArray
 
-        The resultant grid from the transform.
+        The gravity grid from the transform.
+        
+    g_nn : xarray 2D DataArray
+
+        the transformed NN component of the gravity gradient tensor
+        
+    g_ne : xarray 2D DataArray
+
+        the transformed NE component of the gravity gradient tensor
+        
+    g_nd : xarray 2D DataArray
+
+        the transformed ND component of the gravity gradient tensor
+        
+    g_ee : xarray 2D DataArray
+
+        the transformed EE component of the gravity gradient tensor
+        
+    g_ed : xarray 2D DataArray
+
+        the transformed ED component of the gravity gradient tensor
+        
+    g_dd : xarray 2D DataArray
+
+        the transformed DD component of the gravity gradient tensor
     """
     if not whizzFile is None and (padding_mode == "regional" or conforming == True):
         if regional_grid_file is None:

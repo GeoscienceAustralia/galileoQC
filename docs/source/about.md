@@ -12,6 +12,7 @@ __galileoQC__ provides functions to:
 - report on the noise characteristics of gradiometry data;
 - report on the quality of aeromagnetic data;
 - interpolate data to regular grids, and image and display those grids;
+- transform curvature data ($\Gamma_{uv}$, $\Gamma_{ne}$) to gravity and all tensor components;
 - check consistency of supplied data in various forms.
 
 These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. galileoQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.

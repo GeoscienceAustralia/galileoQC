@@ -35,9 +35,9 @@ def gravity_from_curv(Ane, Auv, cell_size,
                     verbose=False
 ):
     """
-    Calculates the vertical gravity, gD, from the differential curvature
-    gravity gradient components (in NED coordinates). The `Craig transform`
-    is used.
+    Calculates the vertical gravity, gD, and the components of the gravity
+    gradient tensor from the differential curvature gravity gradient
+    components (in NED coordinates). The `Craig transform` is used.
     
     Parameters
     ----------
@@ -125,6 +125,30 @@ def gravity_from_curv(Ane, Auv, cell_size,
 
         Grid of the imaginary component output of the Craig transform.
         Useful for error estimation.
+        
+    g_nn : xarray 2D DataArray
+
+        the transformed NN component of the gravity gradient tensor
+        
+    g_ne : xarray 2D DataArray
+
+        the transformed NE component of the gravity gradient tensor
+        
+    g_nd : xarray 2D DataArray
+
+        the transformed ND component of the gravity gradient tensor
+        
+    g_ee : xarray 2D DataArray
+
+        the transformed EE component of the gravity gradient tensor
+        
+    g_ed : xarray 2D DataArray
+
+        the transformed ED component of the gravity gradient tensor
+        
+    g_dd : xarray 2D DataArray
+
+        the transformed DD component of the gravity gradient tensor
 
     """
     e_chan = Ane.attrs['x_channel']

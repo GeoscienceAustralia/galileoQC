@@ -23,15 +23,15 @@ import galileoQC.gridFiles.gridutility as gut
 
 def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None, plot_flag=False, verbose=False):
     """
-    Apply the Craig Transform to (`Guv` + i `Gne`), mask the resulting grid
-    to `mask_region` (NOT IMPLEMENTED),
-    and return the real part and imaginary part as two grids.
+    Apply the Craig Transform to (`Guv` + i `Gne`), producing gravity and
+    the gravity gradients, and return the resulting grids.
 
     Calculation can be to zero-th or first order.
     
     - 2D FFT of Craig function
     - multiply by kernel
     - inverse 2D FFT
+    - mask and trim
 
     Parameters
     ----------
@@ -73,15 +73,33 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
 
         the calculated imaginary part of the down component of gravity
         
-
     gD_raw : xarray 2D DataArray
 
-        the ????? of the down component of gravity
+        the calculated of the down component of gravity with filled NaNs retained
         
+    g_nn : xarray 2D DataArray
 
-    gamma : xarray Dataset of 6 x 2D DataArrays
+        the transformed NN component of the gravity gradient tensor
+        
+    g_ne : xarray 2D DataArray
 
-        the calculated gravity gradient tensor components
+        the transformed NE component of the gravity gradient tensor
+        
+    g_nd : xarray 2D DataArray
+
+        the transformed ND component of the gravity gradient tensor
+        
+    g_ee : xarray 2D DataArray
+
+        the transformed EE component of the gravity gradient tensor
+        
+    g_ed : xarray 2D DataArray
+
+        the transformed ED component of the gravity gradient tensor
+        
+    g_dd : xarray 2D DataArray
+
+        the transformed DD component of the gravity gradient tensor
         
     """
     
