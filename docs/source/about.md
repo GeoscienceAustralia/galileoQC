@@ -15,7 +15,7 @@ __galileoQC__ provides functions to:
 - transform curvature data ($\Gamma_{uv}$, $\Gamma_{ne}$) to gravity and all tensor components;
 - check consistency of supplied data in various forms.
 
-These various checks are designed largely in line with the Airborne Gravity Deed from Geoscience Australia. The Deed provides a standard technical specification for airborne gravity surveys and is intended for use in contracts for airborne gravity surveys. galileoQC provides a number of additional checks beyond those explicitly laid out in the Deed; these check the data against best practice and/or provide additional information for the person performing the QC.
+These various checks are designed largely in line with the Airborne Gravimetry and Gravity Gradiometry Technical Standards from Geoscience Australia [^GravDeed]. __galileoQC__ provides a number of additional checks beyond those explicitly laid out in the Standards; these check the data against best practice and/or provide additional information for the person performing the QC.
 
 The tested, and preferred, method of using __galileoQC__ is via a JupyterLab notebook. Many examples are available as JupyterLab notebooks in [Tutorials](tutorials-target). The notebooks can be used as templates for new QC projects if that is useful. They provide a method of keeping the reporting of the QC together with its analysis.
 
@@ -60,6 +60,8 @@ This license requires that reusers give credit to the creator. It allows reusers
 license.md
 ```
 
-## The Airborne Gravity Deed
+## The Airborne Gravimetry and Gravity Gradiometry Technical Standards
 
-TBD
+This document [^GravDeed] defines Geoscience Australia’s technical requirements for the acquisition, processing, documentation and delivery of airborne gravimetry and gravity gradiometry data. It is intended to accompany a Geoscience Australia Request for Quotation for these services. However, it is structured such that external users can reference the document for survey design, quality assessment, data management, and review. The document provides a consistent framework for survey quality control, technical specifications and data naming. This framework enables results to be assessed, traced and compared across surveys and systems, supports future reassessment and cross-validation, and improves the consistency and quality of national gravity data coverage.
+
+

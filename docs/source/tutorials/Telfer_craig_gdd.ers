@@ -1,0 +1,35 @@
+DatasetHeader Begin
+    Version        = "5.5"
+    Name           = "g_dd"
+    LastUpdated    = Sat 24 Oct 2026 05:28:14 UTC
+    DataSetType    = ERStorage
+    DataType       = Raster
+    ByteOrder      = LSBFirst
+    ZUnits          = "E"
+    Comments       = "written by galileoQC.write_ers"
+    CoordinateSpace Begin
+        Datum           = "NONE"
+        Projection      = "NONE"
+        CRS             = "NONE"
+        CoordinateType  = EN
+        Units           = "METERS"
+        Rotation        = 0:0:0.0
+    CoordinateSpace End
+    RasterInfo Begin
+        CellType      = IEEE8ByteReal
+        NullCellValue = -999999
+        CellInfo Begin
+            Xdimension = 80.0
+            Ydimension = 80.0
+        CellInfo End
+        NrOfLines        = 810
+        NrOfCellsPerLine = 794
+        RegistrationCoord Begin
+            Eastings   = 390384.64
+            Northings  = 7557820.33
+        RegistrationCoord End
+        RegistrationCellX    = 0
+        RegistrationCellY    = 809
+        NrOfBands    = 1
+    RasterInfo End
+DatasetHeader End
