@@ -60,8 +60,10 @@ This license requires that reusers give credit to the creator. It allows reusers
 license.md
 ```
 
+(deed-target)=
 ## The Airborne Gravimetry and Gravity Gradiometry Technical Standards
 
 This document [^GravDeed] defines Geoscience Australia’s technical requirements for the acquisition, processing, documentation and delivery of airborne gravimetry and gravity gradiometry data. It is intended to accompany a Geoscience Australia Request for Quotation for these services. However, it is structured such that external users can reference the document for survey design, quality assessment, data management, and review. The document provides a consistent framework for survey quality control, technical specifications and data naming. This framework enables results to be assessed, traced and compared across surveys and systems, supports future reassessment and cross-validation, and improves the consistency and quality of national gravity data coverage.
 
+[^GravDeed]: Miller, R., McCubbine, J., Dransfield, M., 2026 Airborne Gravimetry and Gravity Gradiometry Technical Standards - Data Acquisition, Processing and Supply. Record 2026/02. Commonwealth of Australia (Geoscience Australia). https://pid.geoscience.gov.au/dataset/ga/151371
 
