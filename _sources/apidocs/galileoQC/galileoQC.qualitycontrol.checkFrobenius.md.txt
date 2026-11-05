@@ -1,0 +1,75 @@
+# {py:mod}`galileoQC.qualitycontrol.checkFrobenius`
+
+```{py:module} galileoQC.qualitycontrol.checkFrobenius
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkFrobenius <galileoQC.qualitycontrol.checkFrobenius.checkFrobenius>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius.checkFrobenius
+    :summary:
+    ```
+* - {py:obj}`_FTGeigen <galileoQC.qualitycontrol.checkFrobenius._FTGeigen>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius._FTGeigen
+    :summary:
+    ```
+* - {py:obj}`_FTGTransform <galileoQC.qualitycontrol.checkFrobenius._FTGTransform>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius._FTGTransform
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkFrobenius.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkFrobenius.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius.groupName
+```
+
+````
+
+````{py:function} checkFrobenius(whizzFile, il1='Inline1_raw', il2='Inline2_raw', il3='Inline3_raw', cr1='Cross1_raw', cr2='Cross2_raw', cr3='Cross3_raw', noiselimit=30.0, lines=[], verbose=True, plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkFrobenius.checkFrobenius
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius.checkFrobenius
+```
+````
+
+````{py:function} _FTGeigen(Txx, Txy, Txz, Tyy, Tyz, Tzz, line='', noiselimit=30.0, plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkFrobenius._FTGeigen
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius._FTGeigen
+```
+````
+
+````{py:function} _FTGTransform(il1, il2, il3, cr1, cr2, cr3)
+:canonical: galileoQC.qualitycontrol.checkFrobenius._FTGTransform
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFrobenius._FTGTransform
+```
+````

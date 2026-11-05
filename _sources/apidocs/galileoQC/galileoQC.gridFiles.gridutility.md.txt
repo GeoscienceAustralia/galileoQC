@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.gridFiles.gridutility`
+
+```{py:module} galileoQC.gridFiles.gridutility
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridutility
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`report_gridStats <galileoQC.gridFiles.gridutility.report_gridStats>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.gridutility.report_gridStats
+    :summary:
+    ```
+* - {py:obj}`maskGridByPolygon <galileoQC.gridFiles.gridutility.maskGridByPolygon>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.gridutility.maskGridByPolygon
+    :summary:
+    ```
+* - {py:obj}`automask <galileoQC.gridFiles.gridutility.automask>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.gridutility.automask
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} report_gridStats(my_grid, mask_polygon=[], title=None)
+:canonical: galileoQC.gridFiles.gridutility.report_gridStats
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridutility.report_gridStats
+```
+````
+
+````{py:function} maskGridByPolygon(my_grid, mask_polygon, x_chan='x', y_chan='y')
+:canonical: galileoQC.gridFiles.gridutility.maskGridByPolygon
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridutility.maskGridByPolygon
+```
+````
+
+````{py:function} automask(xd_grid, xd_located, width)
+:canonical: galileoQC.gridFiles.gridutility.automask
+
+```{autodoc2-docstring} galileoQC.gridFiles.gridutility.automask
+```
+````

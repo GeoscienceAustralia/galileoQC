@@ -1,0 +1,144 @@
+# {py:mod}`galileoQC.whizzFiles.reportData`
+
+```{py:module} galileoQC.whizzFiles.reportData
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`reportWhizz <galileoQC.whizzFiles.reportData.reportWhizz>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportWhizz
+    :summary:
+    ```
+* - {py:obj}`reportLines <galileoQC.whizzFiles.reportData.reportLines>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportLines
+    :summary:
+    ```
+* - {py:obj}`reportChannels <galileoQC.whizzFiles.reportData.reportChannels>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportChannels
+    :summary:
+    ```
+* - {py:obj}`reportFlights <galileoQC.whizzFiles.reportData.reportFlights>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportFlights
+    :summary:
+    ```
+* - {py:obj}`reportSampling <galileoQC.whizzFiles.reportData.reportSampling>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportSampling
+    :summary:
+    ```
+* - {py:obj}`_distanceFlown <galileoQC.whizzFiles.reportData._distanceFlown>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData._distanceFlown
+    :summary:
+    ```
+* - {py:obj}`_lineLength <galileoQC.whizzFiles.reportData._lineLength>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData._lineLength
+    :summary:
+    ```
+* - {py:obj}`whizzAttrExists <galileoQC.whizzFiles.reportData.whizzAttrExists>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.whizzAttrExists
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.reportData.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.reportData.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.reportData.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.reportData.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.reportData.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.projectName
+```
+
+````
+
+````{py:function} reportWhizz(whizzFile, line='', channel='')
+:canonical: galileoQC.whizzFiles.reportData.reportWhizz
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportWhizz
+```
+````
+
+````{py:function} reportLines(whizzFile)
+:canonical: galileoQC.whizzFiles.reportData.reportLines
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportLines
+```
+````
+
+````{py:function} reportChannels(whizzFile, channel='', verbose=False)
+:canonical: galileoQC.whizzFiles.reportData.reportChannels
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportChannels
+```
+````
+
+````{py:function} reportFlights(whizzFile, flightChannel='', lines=[], detailed=False)
+:canonical: galileoQC.whizzFiles.reportData.reportFlights
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportFlights
+```
+````
+
+````{py:function} reportSampling(whizzFile, timeChannel='', xChannel='', yChannel='')
+:canonical: galileoQC.whizzFiles.reportData.reportSampling
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.reportSampling
+```
+````
+
+````{py:function} _distanceFlown(whizzFile, x='', y='', lines=[])
+:canonical: galileoQC.whizzFiles.reportData._distanceFlown
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData._distanceFlown
+```
+````
+
+````{py:function} _lineLength(x, y)
+:canonical: galileoQC.whizzFiles.reportData._lineLength
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData._lineLength
+```
+````
+
+````{py:function} whizzAttrExists(group, my_attr)
+:canonical: galileoQC.whizzFiles.reportData.whizzAttrExists
+
+```{autodoc2-docstring} galileoQC.whizzFiles.reportData.whizzAttrExists
+```
+````

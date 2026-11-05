@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms._pad_grids`
+
+```{py:module} galileoQC.transforms._pad_grids
+```
+
+```{autodoc2-docstring} galileoQC.transforms._pad_grids
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_pad_grids <galileoQC.transforms._pad_grids._pad_grids>`
+  - ```{autodoc2-docstring} galileoQC.transforms._pad_grids._pad_grids
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _pad_grids(Gne_grid, Guv_grid, pad_cells=0, mode='regional', regional_grid=None, firstorder=False, verbose=False)
+:canonical: galileoQC.transforms._pad_grids._pad_grids
+
+```{autodoc2-docstring} galileoQC.transforms._pad_grids._pad_grids
+```
+````

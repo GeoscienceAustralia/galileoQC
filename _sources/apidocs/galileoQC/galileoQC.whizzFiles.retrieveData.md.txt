@@ -1,0 +1,122 @@
+# {py:mod}`galileoQC.whizzFiles.retrieveData`
+
+```{py:module} galileoQC.whizzFiles.retrieveData
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`getWhizzData <galileoQC.whizzFiles.retrieveData.getWhizzData>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getWhizzData
+    :summary:
+    ```
+* - {py:obj}`getLineData <galileoQC.whizzFiles.retrieveData.getLineData>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getLineData
+    :summary:
+    ```
+* - {py:obj}`getChannelAttrs <galileoQC.whizzFiles.retrieveData.getChannelAttrs>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getChannelAttrs
+    :summary:
+    ```
+* - {py:obj}`getLineXChannel <galileoQC.whizzFiles.retrieveData.getLineXChannel>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getLineXChannel
+    :summary:
+    ```
+* - {py:obj}`getChannels <galileoQC.whizzFiles.retrieveData.getChannels>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getChannels
+    :summary:
+    ```
+* - {py:obj}`getLines <galileoQC.whizzFiles.retrieveData.getLines>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getLines
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.retrieveData.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.retrieveData.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.retrieveData.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.retrieveData.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.projectName
+```
+
+````
+
+````{py:function} getWhizzData(whizzFile, line, channel)
+:canonical: galileoQC.whizzFiles.retrieveData.getWhizzData
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getWhizzData
+```
+````
+
+````{py:function} getLineData(linegroup, channel)
+:canonical: galileoQC.whizzFiles.retrieveData.getLineData
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getLineData
+```
+````
+
+````{py:function} getChannelAttrs(linegroup, channel, myattribute='Units')
+:canonical: galileoQC.whizzFiles.retrieveData.getChannelAttrs
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getChannelAttrs
+```
+````
+
+````{py:function} getLineXChannel(whizzFile, line, x, channel)
+:canonical: galileoQC.whizzFiles.retrieveData.getLineXChannel
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getLineXChannel
+```
+````
+
+````{py:function} getChannels(whizzFile)
+:canonical: galileoQC.whizzFiles.retrieveData.getChannels
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getChannels
+```
+````
+
+````{py:function} getLines(whizzFile)
+:canonical: galileoQC.whizzFiles.retrieveData.getLines
+
+```{autodoc2-docstring} galileoQC.whizzFiles.retrieveData.getLines
+```
+````

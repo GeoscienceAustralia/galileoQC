@@ -1,0 +1,75 @@
+# {py:mod}`galileoQC.qualitycontrol.checkClearance`
+
+```{py:module} galileoQC.qualitycontrol.checkClearance
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkSafeClearance <galileoQC.qualitycontrol.checkClearance.checkSafeClearance>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.checkSafeClearance
+    :summary:
+    ```
+* - {py:obj}`checkClearance <galileoQC.qualitycontrol.checkClearance.checkClearance>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.checkClearance
+    :summary:
+    ```
+* - {py:obj}`checkDrape <galileoQC.qualitycontrol.checkClearance.checkDrape>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.checkDrape
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkClearance.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkClearance.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.groupName
+```
+
+````
+
+````{py:function} checkSafeClearance(whizzFile, minimumAllowedClearance, clearance_chan='', altitude_chan='', terrain_chan='', xChannel='', yChannel='', plot_flag=False)
+:canonical: galileoQC.qualitycontrol.checkClearance.checkSafeClearance
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.checkSafeClearance
+```
+````
+
+````{py:function} checkClearance(whizzFile, nominalClearance, clearance_chan='', altitude_chan='', terrain_chan='', allowance=20.0, maxDistance=1000.0, xChannel='', yChannel='')
+:canonical: galileoQC.qualitycontrol.checkClearance.checkClearance
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.checkClearance
+```
+````
+
+````{py:function} checkDrape(whizzFile, altitude, drapeChannel, warningClearance=20.0, xChannel='', yChannel='', plot_flag=True)
+:canonical: galileoQC.qualitycontrol.checkClearance.checkDrape
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkClearance.checkDrape
+```
+````

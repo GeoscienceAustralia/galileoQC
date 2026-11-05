@@ -1,0 +1,133 @@
+# {py:mod}`galileoQC.gridFiles.oddeven`
+
+```{py:module} galileoQC.gridFiles.oddeven
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`updateLineTracks <galileoQC.gridFiles.oddeven.updateLineTracks>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven.updateLineTracks
+    :summary:
+    ```
+* - {py:obj}`calcMeanTrack <galileoQC.gridFiles.oddeven.calcMeanTrack>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven.calcMeanTrack
+    :summary:
+    ```
+* - {py:obj}`oddevenlines <galileoQC.gridFiles.oddeven.oddevenlines>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven.oddevenlines
+    :summary:
+    ```
+* - {py:obj}`_getOddEvenLines <galileoQC.gridFiles.oddeven._getOddEvenLines>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven._getOddEvenLines
+    :summary:
+    ```
+* - {py:obj}`_getPlannedLines <galileoQC.gridFiles.oddeven._getPlannedLines>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven._getPlannedLines
+    :summary:
+    ```
+* - {py:obj}`_getTravCtrlLines <galileoQC.gridFiles.oddeven._getTravCtrlLines>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven._getTravCtrlLines
+    :summary:
+    ```
+* - {py:obj}`altsample_grid <galileoQC.gridFiles.oddeven.altsample_grid>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven.altsample_grid
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.oddeven.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.oddeven.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.oddeven.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.oddeven.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.oddeven.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven.projectName
+```
+
+````
+
+````{py:function} updateLineTracks(whizzFile, lines=[], x='', y='', trackError=5.0, verbose=False)
+:canonical: galileoQC.gridFiles.oddeven.updateLineTracks
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven.updateLineTracks
+```
+````
+
+````{py:function} calcMeanTrack(lineGroup, easting, northing)
+:canonical: galileoQC.gridFiles.oddeven.calcMeanTrack
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven.calcMeanTrack
+```
+````
+
+````{py:function} oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, bdist=None, maxiters=100, hs=True)
+:canonical: galileoQC.gridFiles.oddeven.oddevenlines
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven.oddevenlines
+```
+````
+
+````{py:function} _getOddEvenLines(whizz_file)
+:canonical: galileoQC.gridFiles.oddeven._getOddEvenLines
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven._getOddEvenLines
+```
+````
+
+````{py:function} _getPlannedLines(whizz_file)
+:canonical: galileoQC.gridFiles.oddeven._getPlannedLines
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven._getPlannedLines
+```
+````
+
+````{py:function} _getTravCtrlLines(whizz_file)
+:canonical: galileoQC.gridFiles.oddeven._getTravCtrlLines
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven._getTravCtrlLines
+```
+````
+
+````{py:function} altsample_grid(whizz_file, channel, filter_length, grid_space, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=1, hs=True)
+:canonical: galileoQC.gridFiles.oddeven.altsample_grid
+
+```{autodoc2-docstring} galileoQC.gridFiles.oddeven.altsample_grid
+```
+````

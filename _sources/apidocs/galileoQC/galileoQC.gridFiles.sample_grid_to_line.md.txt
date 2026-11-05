@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.gridFiles.sample_grid_to_line`
+
+```{py:module} galileoQC.gridFiles.sample_grid_to_line
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`sample_grid_to_line <galileoQC.gridFiles.sample_grid_to_line.sample_grid_to_line>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line.sample_grid_to_line
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.sample_grid_to_line.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.sample_grid_to_line.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.sample_grid_to_line.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.sample_grid_to_line.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line.projectName
+```
+
+````
+
+````{py:function} sample_grid_to_line(grid, hdfPath, lines=[])
+:canonical: galileoQC.gridFiles.sample_grid_to_line.sample_grid_to_line
+
+```{autodoc2-docstring} galileoQC.gridFiles.sample_grid_to_line.sample_grid_to_line
+```
+````

@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.gridFiles.whizz_to_xarray`
+
+```{py:module} galileoQC.gridFiles.whizz_to_xarray
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`whizz_to_xarray <galileoQC.gridFiles.whizz_to_xarray.whizz_to_xarray>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray.whizz_to_xarray
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.whizz_to_xarray.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.whizz_to_xarray.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.whizz_to_xarray.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.whizz_to_xarray.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray.projectName
+```
+
+````
+
+````{py:function} whizz_to_xarray(whizz_file, z_chan, *, n_chan='', e_chan='', lines=[], remove_mean=False, diff_one=False, skipcontrols=False, controls=[], verbose=False)
+:canonical: galileoQC.gridFiles.whizz_to_xarray.whizz_to_xarray
+
+```{autodoc2-docstring} galileoQC.gridFiles.whizz_to_xarray.whizz_to_xarray
+```
+````

@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms._grid_match`
+
+```{py:module} galileoQC.transforms._grid_match
+```
+
+```{autodoc2-docstring} galileoQC.transforms._grid_match
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_grid_match <galileoQC.transforms._grid_match._grid_match>`
+  - ```{autodoc2-docstring} galileoQC.transforms._grid_match._grid_match
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _grid_match(local, regional)
+:canonical: galileoQC.transforms._grid_match._grid_match
+
+```{autodoc2-docstring} galileoQC.transforms._grid_match._grid_match
+```
+````

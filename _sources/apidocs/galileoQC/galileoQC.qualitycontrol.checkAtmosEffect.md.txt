@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkAtmosEffect`
+
+```{py:module} galileoQC.qualitycontrol.checkAtmosEffect
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkAtmosEffect <galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect
+    :summary:
+    ```
+* - {py:obj}`_atmosEffect <galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkAtmosEffect.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkAtmosEffect.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect.groupName
+```
+
+````
+
+````{py:function} checkAtmosEffect(whizzFile, atmosCorr, lines=[], GRS80_height='')
+:canonical: galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect.checkAtmosEffect
+```
+````
+
+````{py:function} _atmosEffect(height)
+:canonical: galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkAtmosEffect._atmosEffect
+```
+````
