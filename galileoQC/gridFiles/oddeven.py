@@ -30,6 +30,7 @@ from galileoQC.qualitycontrol.psdChannelDiff import _time_frequency
 from galileoQC.gridFiles.graphicsShaded import graphicsShaded
 from galileoQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from galileoQC.gridFiles.xarray_to_grid import xarray_to_grid
+from galileoQC.gridFiles.lowpass_grid import lowpass_grid
 from galileoQC.gridFiles.xdImage import xdImage
 import galileoQC.gridFiles.gridutility as gut
 
@@ -177,8 +178,9 @@ def calcMeanTrack(lineGroup, easting, northing):
     return track
 
 
-def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='neighbours', 
-    mask_polygon=[], mask_pixels=1, numneighbours=1, bdist=None, maxiters=100, hs=True
+def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], method='minc', 
+    mask_polygon=[], mask_pixels=1, numneighbours=1, bdist=None, maxiters=100, filter_length=None,
+    hs=True
 ):
     """
     Performs odd-even analysis of the `channel` data in `whizz_file`. The data are
@@ -214,7 +216,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
 
         The gridding algorithm to use in interpolating the data. Available are the Verde methods:
         "neighbours", "bicubic", and "biharmonic" as well as "minc" and the SciPy GridData "linear" method.
-        The "neighbours" method is much faster if `pykdtree` is installed. Default `neighbours` method.
+        The "neighbours" method is much faster if `pykdtree` is installed. Default `minc` method.
 
     mask_polygon : numpy 2D array, optional
 
@@ -237,6 +239,10 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     maxiters : int, optional
 
         Maximum number of iterations for minc method. The default is 100.
+
+    filter_length : Float, optional
+
+        Wavelength in metres of low-pass filter to apply to the odd-even difference grid. Default None.
 
     hs : Bool, optional
 
@@ -289,6 +295,9 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
         mask_polygon=mask_polygon, mask_pixels=mask_pixels, numneighbours=numneighbours, bdist=bdist, maxiters=maxiters)
     d_grid = even_grid - odd_grid
 
+    if not filter_length is None:
+        d_grid = lowpass_grid(d_grid, filter_length, filtername='cos2', plot_flag=False)
+
     # A common user error is to specify too small a grid cell size leading to lots of NaNs.
     # It would be better to only count N(NaNs) inside the mask_polygon - another time.
     isnull = d_grid.isnull()
@@ -298,7 +307,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
     if num_gridcells - num_nans < 10:
         print(f'\nOf {num_gridcells} grid cells, {num_nans} are NaN. A larger grid_space will reduce the number of NaNs.')
     if d_grid.shape[0] * d_grid.shape[1] == num_nan.values.tolist():
-        print('The difference gid is all NaNs. No image or statistics can be produced.')
+        print('The difference grid is all NaNs. No image or statistics can be produced.')
         return
 
     # Subtraction does not preserve attributes

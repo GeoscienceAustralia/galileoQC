@@ -58,6 +58,7 @@ from galileoQC.gridFiles.whizz_to_xarray import whizz_to_xarray
 from galileoQC.gridFiles.oddeven import updateLineTracks
 from galileoQC.gridFiles.oddeven import oddevenlines, altsample_grid
 from galileoQC.gridFiles.imageAllInDir import imageAllInDir
+from galileoQC.gridFiles.lowpass_grid import lowpass_grid
 
 # AGG (Falcon) checks
 from galileoQC.qualitycontrol.diffNoiseVturb import diffNoiseVturb

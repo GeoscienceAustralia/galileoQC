@@ -22,7 +22,7 @@ author = 'Mark Helm Dransfield'
 try:
     version = release = importlib.metadata.version('galileoQC')
 except importlib.metadata.PackageNotFoundError:
-    version = release = '1.0.18'  # fallback version
+    version = release = '1.0.19'  # fallback version
 
 
 # version = release = importlib.metadata.version('galileoQC')

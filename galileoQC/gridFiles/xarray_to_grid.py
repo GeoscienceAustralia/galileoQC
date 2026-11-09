@@ -138,12 +138,12 @@ def xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_p
         )
         # 2. Define the grid region and coordinates
         if region is None:
-            region = vd.get_region([my_data[x_chan], my_data[y_chan]])
+            region = vd.get_region((my_data[x_chan], my_data[y_chan]))
             myreg = float(region[0].values), float(region[1].values), float(region[2].values), float(region[3].values)
         else:
             myreg = float(region[0]), float(region[1]), float(region[2]), float(region[3])
 
-        east, north = vd.grid_coordinates(region=myreg, spacing=grid_space)
+        east, north = vd.grid_coordinates(region=myreg, spacing=grid_space, adjust="region")
         
         # 3. Grid by the chosen method
         if method == 'neighbours':
