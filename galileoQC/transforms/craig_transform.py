@@ -193,42 +193,82 @@ def craig_transform(
         regional_grid_file = None
         regional_grid = None
 
+    # No data so must want a synthetic model ...
     if whizzFile is None:
         cell_size = 10.0
         pad_cells = 256
         result_units='um/s/s'
         padding_mode = "mean"
         
-        n, e, d, Ann, Ane, And, Aee, Aed, Add, Auv, AD = sphereSurvey(numstns)
+        n, e, d, a_nn, a_ne, a_nd, a_ee, a_ed, a_dd, a_uv, a_D = sphereSurvey(numstns)
         # need data in xarray datasets
-        Guv_syn = _make_xr(Auv, 'Guv', 'E', n, e)
-        Gne_syn = _make_xr(Ane, 'Gne', 'E', n, e)
-        gD_syn  = _make_xr(AD, 'gD', 'um/s/s', n, e)
-        origD_grid_syn, _ = xarray_to_grid(gD_syn, cell_size, region=None, method='minc',
+        gD_syn  = _make_xr(a_D, 'gD', 'um/s/s', n, e)
+        Guv_syn = _make_xr(a_uv, 'Guv', 'E', n, e)
+        Gnn_syn = _make_xr(a_nn, 'Gnn', 'E', n, e)
+        Gne_syn = _make_xr(a_ne, 'Gne', 'E', n, e)
+        Gnd_syn = _make_xr(a_nd, 'Gnd', 'E', n, e)
+        Gee_syn  = _make_xr(a_ee, 'Gee', 'E', n, e)
+        Ged_syn  = _make_xr(a_ed, 'Ged', 'E', n, e)
+        Gdd_syn  = _make_xr(a_dd, 'Gdd', 'E', n, e)
+        gD_grid_syn, _ = xarray_to_grid(gD_syn, cell_size, region=None, method='minc',
                   mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
                  )
-        gD_grid_syn, gD_err_syn, Ane_grid = gravity_from_curv(
+        Gnn_grid_syn, _ = xarray_to_grid(Gnn_syn, cell_size, region=None, method='minc',
+                  mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
+                 )
+        Gne_grid_syn, _ = xarray_to_grid(Gne_syn, cell_size, region=None, method='minc',
+                  mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
+                 )
+        Gnd_grid_syn, _ = xarray_to_grid(Gnd_syn, cell_size, region=None, method='minc',
+                  mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
+                 )
+        Gee_grid_syn, _ = xarray_to_grid(Gee_syn, cell_size, region=None, method='minc',
+                  mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
+                 )
+        Ged_grid_syn, _ = xarray_to_grid(Ged_syn, cell_size, region=None, method='minc',
+                  mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
+                 )
+        Gdd_grid_syn, _ = xarray_to_grid(Gdd_syn, cell_size, region=None, method='minc',
+                  mask_polygon=[], mask_pixels=0, numneighbours=5, bdist=None, maxiters=100
+                 )
+
+        # Now have Craig estimate from curvatures
+        gD_grid, gD_err, gD_raw, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd = gravity_from_curv(
             Gne_syn, Guv_syn, cell_size, gd_chan=gd_chan, altitude=None,
             result_units=result_units, survey_polygon=survey_polygon,
             pad_cells=pad_cells, padding_mode=padding_mode, regional_grid=None,
             firstorder=False
         )
 
-        if plot_flag:
-            report_gridStats(gD_err_syn)
-            xdImage(gD_err_syn, 'gD_err_syn (um/s/s)', hs=False)
-            report_gridStats(gD_grid_syn)
-            xdImage(gD_grid_syn, 'gD_grid_syn (um/s/s)', hs=False)
-            report_gridStats(origD_grid_syn)
-            xdImage(origD_grid_syn, 'origD_grid_syn (um/s/s)', hs=False)
-            diff = origD_grid_syn.data[1:-1,1:-1] - gD_grid_syn.data
-        diff_gD = gD_grid_syn.copy()
-        diff_gD.data = diff
-        if plot_flag:
-            report_gridStats(diff_gD)
-            xdImage(diff_gD, 'origD_grid_syn-gD_grid_syn (um/s/s)', hs=False)
-
-        gD_grid = gD_grid_syn
+        # report_gridStats(gD_err_c)
+        # xdImage(gD_err_c, 'Craig gD_err (um/s/s)', hs=False)
+        # report_gridStats(gD_grid_c)
+        # xdImage(gD_grid_c, 'Craig gD_grid (um/s/s)', hs=False)
+        # diff = gD_grid_c.data[1:-1,1:-1] - gD_grid_syn.data
+        # diff_gD = gD_grid_syn.copy()
+        # diff_gD.data = diff
+        # report_gridStats(diff_gD)
+        # xdImage(diff_gD, 'origD_grid_syn-gD_grid_syn (um/s/s)', hs=False)
+        fig, axs = plt.subplots(ncols=6, nrows=3, figsize=(12.0,6.0))
+        g_nn.plot.pcolormesh(ax=axs[0,0], cmap='viridis')#, xlim=(440000.0, 502000.0), ylim=(7801000.0, 7880000.0), cmap='viridis', vmin=-160.0, vmax=250.0)
+        g_ne.plot.pcolormesh(ax=axs[0,1], cmap='viridis')
+        g_nd.plot.pcolormesh(ax=axs[0,2], cmap='viridis')
+        Gnn_grid_syn.plot.pcolormesh(ax=axs[0,3], cmap='viridis')
+        Gne_grid_syn.plot.pcolormesh(ax=axs[0,4], cmap='viridis')
+        Gnd_grid_syn.plot.pcolormesh(ax=axs[0,5], cmap='viridis')
+        axs[1, 0].axis('off')
+        g_ee.plot.pcolormesh(ax=axs[1,1], cmap='viridis')
+        g_ed.plot.pcolormesh(ax=axs[1,2], cmap='viridis')
+        axs[1, 3].axis('off')
+        Gee_grid_syn.plot.pcolormesh(ax=axs[1,4], cmap='viridis')
+        Ged_grid_syn.plot.pcolormesh(ax=axs[1,5], cmap='viridis')
+        gD_grid.plot.pcolormesh(ax=axs[2,0], cmap='viridis')
+        axs[2, 1].axis('off')
+        g_dd.plot.pcolormesh(ax=axs[2,2], cmap='viridis')
+        gD_grid_syn.plot.pcolormesh(ax=axs[2,3], cmap='viridis')
+        axs[2, 4].axis('off')
+        Gdd_grid_syn.plot.pcolormesh(ax=axs[2,5], cmap='viridis')
+        fig.suptitle('Synthetic: Craig-derived (l) and True (r) gravity');
     else:
         print('Reading located data from whizz file.')
         Ane = whizz_to_xarray(whizzFile, gne_chan)

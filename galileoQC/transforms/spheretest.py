@@ -13,7 +13,7 @@ License: CC BY-SA
 import numpy as np
 import xarray as xr
 
-def sphereSurvey(numstns=20):
+def sphereSurvey(numstns=None):
     """
     Creates an airborne survey over 3 point mass sources, calculates all
     gravity acceleration vector and curvature tensor outputs.
@@ -38,6 +38,8 @@ def sphereSurvey(numstns=20):
 
     """
     # survey parameters - note that the loop order below is important.
+    if numstns is None:
+        numstns = 20
     nn = 201
     ne = 201
     de = numstns
@@ -60,7 +62,7 @@ def sphereSurvey(numstns=20):
     rs = 50
     xs = np.zeros((3))
 
-    Ann, Ane, And, Aee, Aed, Add, Auv, AD = sphere(xm, xs, rs, ps)
+    a_nn, a_ne, a_nd, a_ee, a_ed, a_dd, a_uv, a_D = sphere(xm, xs, rs, ps)
 
     # sphere 2 parameters and calculate
 
@@ -68,9 +70,9 @@ def sphereSurvey(numstns=20):
     rs = 80
     xs = np.array((0.0, 230.0, 0.0))
 
-    A2nn, A2ne, A2nd, A2ee, A2ed, A2dd, A2uv, AD2 = sphere(xm, xs, rs, ps)
+    a_2nn, a_2ne, a_2nd, a_2ee, a_2ed, a_2dd, a_2uv, a_D2 = sphere(xm, xs, rs, ps)
 
-    return xm[:,0], xm[:,1], xm[:,2], Ann+A2nn, Ane+A2ne, And+A2nd, Aee+A2ee, Aed+A2ed, Add+A2dd, Auv+A2uv, AD+AD2
+    return xm[:,0], xm[:,1], xm[:,2], a_nn+a_2nn, a_ne+a_2ne, a_nd+a_2nd, a_ee+a_2ee, a_ed+a_2ed, a_dd+a_2dd, a_uv+a_2uv, a_D+a_D2
 
 
 def sphere(xm, xs, rs, ps):
@@ -114,16 +116,16 @@ def sphere(xm, xs, rs, ps):
     M = ps * 4 / 3 * np.pi * rs**3 * 1E3	# kg, *1E3 to convert ps: gm/cc to kg/m^3
     GM3 = G * M * 3 * 1E9					# Eo
     GM = G * M * 1E9						# Eo
-    GMu = G * M * 1E6						# um/s/s
+    GM_u = G * M * 1E6						# um/s/s
 
     nO = len(xm)                            # the number of observations
-    Gnn = np.zeros(nO)
-    Gne = np.zeros(nO)
-    Gnd = np.zeros(nO)
-    Gee = np.zeros(nO)
-    Ged = np.zeros(nO)
-    Gdd = np.zeros(nO)
-    Guv = np.zeros(nO)
+    G_nn = np.zeros(nO)
+    G_ne = np.zeros(nO)
+    G_nd = np.zeros(nO)
+    G_ee = np.zeros(nO)
+    G_ed = np.zeros(nO)
+    G_dd = np.zeros(nO)
+    G_uv = np.zeros(nO)
     gD = np.zeros(nO)
 
     for n in range(0, nO):
@@ -131,16 +133,16 @@ def sphere(xm, xs, rs, ps):
         if n < 3:
             print(dx)
         r = np.sqrt(dx[0]**2 + dx[1]**2 + dx[2]**2)
-        Gne[n] = GM3 * dx[0] * dx[1] / r**5
-        Gnd[n] = GM3 * dx[0] * dx[2] / r**5
-        Ged[n] = GM3 * dx[1] * dx[2] / r**5
-        Guv[n] = GM3 * (dx[0]**2 - dx[1]**2) / r**5 / 2
-        Gdd[n] = GM * (3 * dx[2]**2 - r**2) / r**5
-        Gee[n] = GM * (3 * dx[1]**2 - r**2) / r**5
-        Gnn[n] = GM * (3 * dx[0]**2 - r**2) / r**5
-        gD[n] = - GMu * dx[2] / r**3
+        G_ne[n] = GM3 * dx[0] * dx[1] / r**5
+        G_nd[n] = GM3 * dx[0] * dx[2] / r**5
+        G_ed[n] = GM3 * dx[1] * dx[2] / r**5
+        G_uv[n] = GM3 * (dx[0]**2 - dx[1]**2) / r**5 / 2
+        G_dd[n] = GM * (3 * dx[2]**2 - r**2) / r**5
+        G_ee[n] = GM * (3 * dx[1]**2 - r**2) / r**5
+        G_nn[n] = GM * (3 * dx[0]**2 - r**2) / r**5
+        gD[n] = - GM_u * dx[2] / r**3
 
-    return Gnn, Gne, Gnd, Gee, Ged, Gdd, Guv, gD
+    return G_nn, G_ne, G_nd, G_ee, G_ed, G_dd, G_uv, gD
 
 
 def _make_xr(data, name, units, n, e, n_chan='northing', e_chan='easting'):

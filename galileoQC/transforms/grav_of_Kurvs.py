@@ -141,13 +141,13 @@ def grav_of_Kurvs(Gne, Guv, firstorder=False, survey_polygon=None, nan_mask=None
         root2_theta = np.sqrt(2.0) * tiltangle_rad
         craig_d -= 2.0 * root2_theta * (1 + 1j) * (kn - ke) * (k ** 2.0) / ((ke - 1j * kn) ** 4.0)
         print("Making first order tilt correction to transform FROM gravity.")
-    hD = craig_d * kurv_fft / 2.0 / np.pi
-    hnn = craig_nn * kurv_fft / 2.0 / np.pi
-    hne = craig_ne * kurv_fft / 2.0 / np.pi
-    hnd = craig_nd * kurv_fft / 2.0 / np.pi
-    hee = craig_ee * kurv_fft / 2.0 / np.pi
-    hed = craig_ed * kurv_fft / 2.0 / np.pi
-    hdd = craig_dd * kurv_fft / 2.0 / np.pi
+    hD = craig_d * kurv_fft / 2.0 / np.pi # Need 2pi because of the k defn; cancels for gradients
+    hnn = craig_nn * kurv_fft
+    hne = craig_ne * kurv_fft
+    hnd = craig_nd * kurv_fft
+    hee = craig_ee * kurv_fft
+    hed = craig_ed * kurv_fft
+    hdd = craig_dd * kurv_fft
     
     # Then inverse transform, ...
     gD_tr = xrft.idft(hD, detrend='linear', window=True, true_phase=True, true_amplitude=True)
