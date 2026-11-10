@@ -1,0 +1,121 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "a4cfa174-7b98-48ff-be54-048af968c37a",
+   "metadata": {},
+   "source": [
+    "# Compare to Ground Gravity"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8d46ec6d-08dd-429a-9d8d-44aee127b43f",
+   "metadata": {},
+   "source": [
+    "Airborne gravity test lines are flown to allow comparison with ground gravity. When making such comparisons, it is useful to know the sampling and quality of the ground gravity and, in Australia, this can be assessed by plotLinesOnGroundStns. \n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1be19015-847c-41de-a105-55cddf9ce37b",
+   "metadata": {},
+   "source": [
+    "___\n",
+    "We access the Canobie data for an example data set."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "84494cbf-1839-4818-ba27-6033a93809ea",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc\n",
+    "\n",
+    "data_root = r'./CanobieData/'\n",
+    "canobieHDF_file = Path(r'./CanobieData/Canobie.hdf5')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a318a197-a996-46f7-a6fb-e2e3a3af3c4d",
+   "metadata": {},
+   "source": [
+    "___\n",
+    "We need to know the line number of at least one line, so here we report all the line numbers so that we can select one."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f4bc464d-1799-4075-8348-790f5b9c3f44",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportLines(canobieHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a2343595-5ad1-4860-b5f5-f323df8e1ff7",
+   "metadata": {},
+   "source": [
+    "___\n",
+    "And now we plot our flight-line over scatter plots of the ground gravity, and its accuracy, station reliability, and height error. The data are read from the Geoscience Australia site via `pooch`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9b680262-580e-45c1-858d-b8f3418f4977",
+   "metadata": {},
+   "source": [
+    "In this case, gravity accuracy is rated pretty good and height errors small; The data in dark colours (upper right plot) are of poor reliability; these look to be from some small exploration surveys and some data collected along roads. The regularly spaced gravity (yellow dots) are rated of high reliability.\n",
+    "\n",
+    "Overall, it seems that the ground gravity data here are pretty good."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1b6086f6-3dde-4e8f-9227-93169509d14b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.plotLinesOnGroundStns(canobieHDF_file, '100020.000', \n",
+    "\tfig_title='My Test Line over Ground Gravity Stations')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3f6dccd7-7d08-4248-93fc-39e87da708d3",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

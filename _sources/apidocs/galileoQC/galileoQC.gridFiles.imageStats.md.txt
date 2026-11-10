@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.gridFiles.imageStats`
+
+```{py:module} galileoQC.gridFiles.imageStats
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.imageStats
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`imageStats <galileoQC.gridFiles.imageStats.imageStats>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.imageStats.imageStats
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} imageStats(whizzFile='')
+:canonical: galileoQC.gridFiles.imageStats.imageStats
+
+```{autodoc2-docstring} galileoQC.gridFiles.imageStats.imageStats
+```
+````

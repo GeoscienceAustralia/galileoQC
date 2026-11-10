@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.gridFiles.traceImages`
+
+```{py:module} galileoQC.gridFiles.traceImages
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.traceImages
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`traceImages <galileoQC.gridFiles.traceImages.traceImages>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.traceImages.traceImages
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} traceImages(file1, file2, file3, plotTitle, units='')
+:canonical: galileoQC.gridFiles.traceImages.traceImages
+
+```{autodoc2-docstring} galileoQC.gridFiles.traceImages.traceImages
+```
+````

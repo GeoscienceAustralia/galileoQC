@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.whizzFiles.whizzToXYZ`
+
+```{py:module} galileoQC.whizzFiles.whizzToXYZ
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`whizzToXYZ <galileoQC.whizzFiles.whizzToXYZ.whizzToXYZ>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ.whizzToXYZ
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.whizzToXYZ.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.whizzToXYZ.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.whizzToXYZ.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.whizzToXYZ.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ.projectName
+```
+
+````
+
+````{py:function} whizzToXYZ(whizzfilePath, chans, wids, precisions, xyzFilePath='', verbose=False)
+:canonical: galileoQC.whizzFiles.whizzToXYZ.whizzToXYZ
+
+```{autodoc2-docstring} galileoQC.whizzFiles.whizzToXYZ.whizzToXYZ
+```
+````

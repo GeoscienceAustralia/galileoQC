@@ -1,0 +1,155 @@
+# {py:mod}`galileoQC.whizzFiles.gdfReader`
+
+```{py:module} galileoQC.whizzFiles.gdfReader
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`asegToHDF <galileoQC.whizzFiles.gdfReader.asegToHDF>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.asegToHDF
+    :summary:
+    ```
+* - {py:obj}`extract_from_record <galileoQC.whizzFiles.gdfReader.extract_from_record>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.extract_from_record
+    :summary:
+    ```
+* - {py:obj}`extract_line <galileoQC.whizzFiles.gdfReader.extract_line>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.extract_line
+    :summary:
+    ```
+* - {py:obj}`save_rec_lists <galileoQC.whizzFiles.gdfReader.save_rec_lists>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.save_rec_lists
+    :summary:
+    ```
+* - {py:obj}`record_list_to_float <galileoQC.whizzFiles.gdfReader.record_list_to_float>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.record_list_to_float
+    :summary:
+    ```
+* - {py:obj}`_getDesiredChannel <galileoQC.whizzFiles.gdfReader._getDesiredChannel>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._getDesiredChannel
+    :summary:
+    ```
+* - {py:obj}`_getDesiredChannels <galileoQC.whizzFiles.gdfReader._getDesiredChannels>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._getDesiredChannels
+    :summary:
+    ```
+* - {py:obj}`_ascii_check <galileoQC.whizzFiles.gdfReader._ascii_check>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._ascii_check
+    :summary:
+    ```
+* - {py:obj}`_index_containing_substring <galileoQC.whizzFiles.gdfReader._index_containing_substring>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._index_containing_substring
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.gdfReader.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.gdfReader.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.gdfReader.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.gdfReader.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.projectName
+```
+
+````
+
+````{py:function} asegToHDF(gdf_datfile, whizzFile='', lineChannel='LINE', flightChannel='', dateChannel='', omitChannels=[], verbose=False)
+:canonical: galileoQC.whizzFiles.gdfReader.asegToHDF
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.asegToHDF
+```
+````
+
+````{py:function} extract_from_record(myrec, starts, ends)
+:canonical: galileoQC.whizzFiles.gdfReader.extract_from_record
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.extract_from_record
+```
+````
+
+````{py:function} extract_line(record_list, gdf, lineChannelName)
+:canonical: galileoQC.whizzFiles.gdfReader.extract_line
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.extract_line
+```
+````
+
+````{py:function} save_rec_lists(wizLines, current_line, channelNames, channelindices, pytypes, nulls, record_lists, gdf)
+:canonical: galileoQC.whizzFiles.gdfReader.save_rec_lists
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.save_rec_lists
+```
+````
+
+````{py:function} record_list_to_float(record_lists, pytypes, nulls)
+:canonical: galileoQC.whizzFiles.gdfReader.record_list_to_float
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader.record_list_to_float
+```
+````
+
+````{py:function} _getDesiredChannel(gdf, channelName)
+:canonical: galileoQC.whizzFiles.gdfReader._getDesiredChannel
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._getDesiredChannel
+```
+````
+
+````{py:function} _getDesiredChannels(gdf, lineChannel, flightChannel, dateChannel, omitChannels, verbose=False)
+:canonical: galileoQC.whizzFiles.gdfReader._getDesiredChannels
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._getDesiredChannels
+```
+````
+
+````{py:function} _ascii_check(gdf_datfile)
+:canonical: galileoQC.whizzFiles.gdfReader._ascii_check
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._ascii_check
+```
+````
+
+````{py:function} _index_containing_substring(the_list, substring)
+:canonical: galileoQC.whizzFiles.gdfReader._index_containing_substring
+
+```{autodoc2-docstring} galileoQC.whizzFiles.gdfReader._index_containing_substring
+```
+````

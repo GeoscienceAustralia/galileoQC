@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms._pad_mean`
+
+```{py:module} galileoQC.transforms._pad_mean
+```
+
+```{autodoc2-docstring} galileoQC.transforms._pad_mean
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_pad_mean <galileoQC.transforms._pad_mean._pad_mean>`
+  - ```{autodoc2-docstring} galileoQC.transforms._pad_mean._pad_mean
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _pad_mean(grid, pad_cells)
+:canonical: galileoQC.transforms._pad_mean._pad_mean
+
+```{autodoc2-docstring} galileoQC.transforms._pad_mean._pad_mean
+```
+````

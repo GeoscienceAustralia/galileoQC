@@ -1,0 +1,290 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "8eed31df-90e3-47d2-8e82-bbaacfbfcd06",
+   "metadata": {},
+   "source": [
+    "# Gravimetry corrections"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "553c2df3-6b49-4a36-947c-c167a7931591",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "The supplied data should include the correction data in separate channels, and these data can be checked with the four QC functions below.\n",
+    "\n",
+    "Here we use the Eastern Victoria airborne gravity survey data that was imported into a geowhizz file in the Data_Import notebook."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5f9f68eb-c8b1-4a09-af5d-b410f79632ec",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4a8feb69-d21f-4212-bb4a-636d079c6d1e",
+   "metadata": {},
+   "source": [
+    "Import the required modules, and set the path to the geowhizz files."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "27d9a03b-5ce6-4960-bea1-cbdbda0619b3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "\n",
+    "import galileoQC as qc\n",
+    "\n",
+    "EastVicHDF_file = Path(r'./EastVicData/EastVic.hdf5')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "519b9e44-3f2a-4888-8e72-d257a97773ff",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not EastVicHDF_file.exists():\n",
+    "    %run ./Prepare_EastVicData.ipynb"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cf2c675d-d1ae-4d2a-b92f-37f399fff749",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5144604d-3b53-4d28-a746-cee115480170",
+   "metadata": {},
+   "source": [
+    "As the aircraft changes height, the mass of atmosphere above the gravimeter changes and the consequent change in the measured gravity must be corrected for. The **atmospheric correction** should be:\n",
+    "\n",
+    "$$\\delta g_{atm}=8.74 - 9.9 \\times 10^{-4} h + 3.56 \\times 10^{-8} h^{2}$$\n",
+    "\n",
+    "where $h$ is the ellipsoidal height in $m$ and $\\delta g_{atm}$ is in $\\mu ms^{-2}$.\n",
+    "\n",
+    "`checkAtmosEffect` relies on the knowing the units of the atmospheric correction channel. Usually one sets the units when the geowhizz file is created but it can be done at any time by the command (of course, using your own file name, and channel name, and units):\n",
+    "\n",
+    "```python\n",
+    "qc.updateChannelAttributes(EastVicHDF_file, 'ATMCOR', units='mGal')\n",
+    "```\n",
+    "\n",
+    "The result of `checkAtmosEffect` is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied atmospheric correction data and that resulting from the use of the formula above.\n",
+    "\n",
+    "Typically there are differences of less than $0.1\\,\\mu ms^{-2}$ due to the limited precision of the data. Errors up to even $1.0\\,\\mu ms^{-2}$ are acceptable.\n",
+    "\n",
+    "In this example all results are consistent with the correct formula being used and consequently the data pass."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d8d2cef9-3af7-48a4-9373-3a33cb7f03bd",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.checkAtmosEffect(EastVicHDF_file, 'ATMCOR', GRS80_height='MGA_Z')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1abb33d6-0a8b-4429-9dd1-f97bf73c7a8e",
+   "metadata": {},
+   "source": [
+    "The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than $0.06\\,\\mu m s^{-2}$ which can be attributed to the limited precision of the data in text format."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c7f3eb5f-9446-4cbf-9813-dc2463961ce4",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d0c4fc1d-38b1-41e8-82cf-49cb8cb01f79",
+   "metadata": {},
+   "source": [
+    "The **free-air, or height, correction** must use the second-order approximation to correct for the vertical gravity effect due to height changes above the GRS80 ellipsoid:\n",
+    "\n",
+    "$$\\delta g_{h}=-\\left(3.087691 - 0.004398 \\sin^2{\\phi}\\right) h + 7.2125 \\times 10^{-7} h^{2}$$\n",
+    "\n",
+    "where $h$ is the ellipsoidal height in $m$, $\\phi$ is the latitude in decimal degrees, and $\\delta g_{h}$ is in $\\mu ms^{-2}$.\n",
+    "\n",
+    "As with `checkAtmosEffect`, `checkFreeAirCorr` relies on the units for the input correction channel being set in the geowhizz file.\n",
+    "\n",
+    "The result of `checkFreeAirCorr` is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied atmospheric correction data and that resulting from the use of the formula above.\n",
+    "\n",
+    "Occasionally, the supplied free-air correction data will have the opposite sign to that in the equation, and `checkFreeAirCorr` provides an optional parameter `changesign` to allow for this possibility. If the results from `checkFreeAirCorr` are much larger than $1.0$, this may be the reason. In that case, simply set `changesign=True` and try again.\n",
+    "\n",
+    "Typically there are differences of less than $0.1\\,\\mu ms^{-2}$ due to the limited precision of the data. Errors up to even $1.0\\,\\mu ms^{-2}$ are acceptable.\n",
+    "\n",
+    "In this example all results are consistent with the correct formula being used and so the data pass."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9e4dcf34-9c4a-4f54-946c-9956c1fb59d3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkFreeAirCorr(EastVicHDF_file, 'FACOR_GRS80', changesign=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bd8e48bb-c1c3-48e7-a62f-5c6c7d2e7d92",
+   "metadata": {},
+   "source": [
+    "The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than $0.07\\,\\mu m s^{-2}$ which can be attributed to the limited precision of the data in text format."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bd730895-f022-48b0-bfc0-96d0d73be460",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "36522f8d-8175-4eaa-8e65-c48707a0b6d8",
+   "metadata": {},
+   "source": [
+    "The **Eotvos correction** removes the change in measured gravity due to the change in centrifugal acceleration resulting from the east-west component of the aircraft's velocity. This effect is well-known in marine gravimetry but the higher velocity of an aircraft necessitate the use of a more accurate formula:\n",
+    "\n",
+    "$$\\delta g_{Eotvos}=2\\omega_{E} \\nu_{E} \\cos\\left(\\phi\\right) + \\frac{\\nu_{N}^{2}}{R_{M}+h} + \\frac{\\nu_{E}^{2}}{R_{N}+h}$$\n",
+    "\n",
+    "where $\\omega_{E}$ is the Earth's rotation rate in radians per second, $\\phi$ is the latitude in decimal degrees, $h$ is the ellipsoidal height in $m$, $R_{M}$ and $R_{N}$ are the prime vertical and meridian radii of curvature respectively (in $m$), $\\nu_{N}$ and $\\nu_{E}$ are the north and east components respectively of the aircraft velocity in $ms^{-2}$ and $\\delta g_{Eotvos}$ is in $\\mu ms^{-2}$.\n",
+    "\n",
+    "As with the other correction check functions, `checkEotvosCorr` relies on the units for the input correction channel being set in the geowhizz file.\n",
+    "\n",
+    "The result of `checkEotvosCorr` is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied Eotvos correction data and that resulting from the use of the formula above.\n",
+    "\n",
+    "Typically there are differences of up to about $1.0\\,\\mu ms^{-2}$ due to the limited precision of the data. Errors up to a few $\\mu ms^{-2}$ are acceptable.\n",
+    "\n",
+    "In this example all results are consistent with the correct formula being used and so the data pass."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d301bce6-aa51-4ee9-9e1f-80e7b6b55e67",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkEotvosCorr(EastVicHDF_file, 'EOTCOR', east_vel='V_EAST', north_vel='V_NORTH', changesign=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "de34bbea-8f0b-407e-b4db-32012e418cc3",
+   "metadata": {},
+   "source": [
+    "The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than $0.09\\,\\mu m s^{-2}$ which can be attributed to the limited precision of the data in text format."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "adace950-d78d-492b-9d77-5e2642a9d16e",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6e8b2a32-d1ff-4907-b22f-c85670f354bd",
+   "metadata": {},
+   "source": [
+    "The **latitude, or normal, correction** is the theoretical gravity $g_{T}$ on the GRS80 ellipsoid at latitude (south or north) $\\phi$:\n",
+    "\n",
+    "$$\\delta g_{T}=\\frac{g_{e} \\left(1+k \\sin^2\\phi\\right)}{\\sqrt{\\left(1-e^2 \\sin^2 \\phi\\right)}}$$\n",
+    "\n",
+    "where $g_{e}$ is 978032.67715 mGal, $k$ is 0.001931851353, and $e^{2}$ is 0.0066943800229.\n",
+    "\n",
+    "As with the other gravimetry correction checks, `checkLatCorr` relies on the units for the input correction channel being set in the geowhizz file.\n",
+    "\n",
+    "The result of `checkLatCorr` is a statistical analysis plot showing, for each flight-line, the mean, standard deviation, and range of the difference between the supplied latitude correction data and that resulting from the use of the formula above.\n",
+    "\n",
+    "Occasionally, the supplied latitude correction data will have the opposite sign to that in the equation, and `checkLatCorr` provides an optional parameter `changesign` to allow for this possibility. If the results from `checkLatCorr` are much larger than $1.0$, this may be the reason. In that case, simply set `changesign=True` and try again.\n",
+    "\n",
+    "Typically there are differences of less than $0.1\\,\\mu ms^{-2}$ due to the limited precision of the data. Errors up to even $1.0\\,\\mu ms^{-2}$ are acceptable.\n",
+    "\n",
+    "In this example all results are consistent with the correct formula being used and consequently the data pass."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "24bce9f2-0b17-4f92-a17a-37e42a7d0c2c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkLatCorr(EastVicHDF_file, 'LATCOR')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dd97d3e3-4bcc-459e-bc26-e87822c8792c",
+   "metadata": {},
+   "source": [
+    "The figure above shows a statistical analysis of the atmospheric correction check. The mean (solid squares), range (open circles) and one standard deviation (small horizontal line) summarise the statistics. In this example, all errors are less than $0.06\\,\\mu m s^{-2}$ which can be attributed to the limited precision of the data in text format."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

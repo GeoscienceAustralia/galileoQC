@@ -1,0 +1,42 @@
+# {py:mod}`galileoQC.gridFiles.lowpass_grid`
+
+```{py:module} galileoQC.gridFiles.lowpass_grid
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.lowpass_grid
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`lowpass_grid <galileoQC.gridFiles.lowpass_grid.lowpass_grid>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.lowpass_grid.lowpass_grid
+    :summary:
+    ```
+* - {py:obj}`_check_grid <galileoQC.gridFiles.lowpass_grid._check_grid>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.lowpass_grid._check_grid
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} lowpass_grid(agrid, low_lambda, filtername='cos2', plot_flag=False)
+:canonical: galileoQC.gridFiles.lowpass_grid.lowpass_grid
+
+```{autodoc2-docstring} galileoQC.gridFiles.lowpass_grid.lowpass_grid
+```
+````
+
+````{py:function} _check_grid(grid)
+:canonical: galileoQC.gridFiles.lowpass_grid._check_grid
+
+```{autodoc2-docstring} galileoQC.gridFiles.lowpass_grid._check_grid
+```
+````

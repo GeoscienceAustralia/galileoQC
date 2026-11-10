@@ -1,0 +1,321 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b1ef67d2-8816-433c-9292-d0d44f6c0981",
+   "metadata": {},
+   "source": [
+    "# Prepare 2012 Kauring AirGrav ASEG-GDF2 data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "aa1bad7e-bf35-430f-b1ba-f2c4937e5758",
+   "metadata": {},
+   "source": [
+    "**__See EastVic Data for latest organisation of Prepare tutorials__**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e10dd2e0-63fd-4c58-be63-34e469f2d10a",
+   "metadata": {},
+   "source": [
+    "This short tutorial demonstrates the preparation of ASEG-GDF2 data for QC review.\n",
+    "\n",
+    "We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format elsewhere in the __galileoQC__ documentation.)\n",
+    "\n",
+    "For this example we are using the data from the Kauring airborne gravity survey flown by SGL in 2012.\n",
+    "\n",
+    "This step is reasonably straightforward and once complete, the QC of the data should proceed quickly and smoothly, and the outputs will be clearly documented so that the JupyterLab notebook can serve as the QC report."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f0a4ee9e-c138-4345-af0c-67eb71af9965",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0e6ee51f-c20b-4e77-b2b9-e206fae1db28",
+   "metadata": {},
+   "source": [
+    "**Import modules and set filenames**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "db844d81-1b03-4481-8972-02cf00d11a0b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC  as qc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "13cbd4cf-a8b2-4602-9073-6c77dc4977f6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dx = Path(r'./Kauring_grv/GRAV.DAT')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f08182b9-3de2-43c9-a9b5-60de8a1e152a",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "18f9f21c-054c-457b-abc6-288dd2a80ab5",
+   "metadata": {},
+   "source": [
+    "**2012 Kauring Gravimeter Survey**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "83da5f5a-8d3a-48c4-84f8-61ecfef26f1d",
+   "metadata": {},
+   "source": [
+    "`asegToHDF` does all the work. You must specify the channel containing the line number so that it can organise the data by flight-line. Optionally, you can also supply the channels containing the flight number, and date (not present in the 2012 Kauring data), and a list of channels you do not want copied across to the geowhizz HDF file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "87d5fe05-e48e-40fa-95e9-1d40f34dfe3d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# asegToHdf fails if the file exists so delete it if it does. CHECK\n",
+    "if dx.with_suffix('.hdf5').exists(): \n",
+    "    dx.with_suffix('.hdf5').unlink()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "203b9299-79c1-454c-b6ec-99b288fd5e1f",
+   "metadata": {},
+   "source": [
+    "Here we omit many channels to keep the volume of data in the repository reasonably sized."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a52ae639-cb5e-43b0-a837-7a1a5bd54da9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dh = qc.asegToHDF(Path(dx),\n",
+    "            lineChannel='LINE',\n",
+    "            flightChannel='FLIGHT',\n",
+    "            omitChannels=['SECOND', 'DAYOFYEAR', 'YEAR',\n",
+    "            'ALTTER', 'BAREEARTHTER', 'DEMTER', 'FZ', 'AZ',\n",
+    "            'GRVRAW', 'LATCOR', 'EOTCOR', 'FACOR', 'GRVFRA100S', 'INTCOR',\n",
+    "            'GRVFRAL100S', 'FTBCOR_267', 'GRVFAL0600M', 'GRVFAL1000M',\n",
+    "            'FVDBGL0600M_267', 'FVDBGL1000M_267', 'GNDGRV_FA_UPWARD',\n",
+    "            'GRVBGL0600M_267', 'GRVBGL1000M_267', 'GNDGRV_BG_UPWARD'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d0f8db66-fd9b-49cc-812e-c85193c3305a",
+   "metadata": {},
+   "source": [
+    "\n",
+    "Once the file is created, we can add in the project and block name. These are used in plot titles, keeping the report informative and clear.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "eca1c970-4bbb-4a39-9625-cea419434644",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "block_name = 'Kauring Western Australia SGL 2012'\n",
+    "project_name = 'Kauring Airborne Gravity'\n",
+    "qc.updateProject(dh, acquirer='SGL', projectName=project_name, blockID=block_name)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "627067b7-6ee0-4212-b53e-4e956c1dc388",
+   "metadata": {},
+   "source": [
+    "The CoordFrame metadata provides the names of default channels, and related coordinate information, for the QC functions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "344bc485-93b0-4b56-b02e-322764e93715",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.updateCoordFrame(dh, \n",
+    "                    lat='LATITUDE', \n",
+    "                    lon='LONGITUD', \n",
+    "                    x='EASTING', \n",
+    "                    y='NORTHING', \n",
+    "                    time='UTCSECOND', \n",
+    "                    alt='GPSZ', \n",
+    "                    geoDatum='WGS84', \n",
+    "                    htDatum='GRS80', \n",
+    "                    projection='UTM', \n",
+    "                    utmz='50')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9326cb24-8d55-4197-965f-6c947707cb06",
+   "metadata": {},
+   "source": [
+    "The `line_type` tells `updateLineAttributes` how to extract the planned line number, the segment number, and the repeat number from each reported survey line number. It also allows it to classify flight-lines as traverse or control lines. This information is used by various QC functions.\n",
+    "\n",
+    "More details on Line Types can be found elsewhere in the documentation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7089def7-e8af-4184-b8db-4575515587f3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.updateLineAttributes(dh, line_type='SGL_Kauring')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "998e2731-c5bd-438d-b41a-d830475b8177",
+   "metadata": {},
+   "source": [
+    "Now we can report the contents of our new geowhizz file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dd6fd529-6e1a-4ea0-af00-19b4f95adfa3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportWhizz(dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ddbec3c5-f216-4187-a7fa-bda45f15dc14",
+   "metadata": {},
+   "source": [
+    "The units, and the description, if it exists and is formatted according to the standard, are copied from the DFN file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dfbea56a-7390-41d8-b157-ecc5d592ffd0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportChannels(dh, verbose=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "01086439-5e0a-411b-9804-2a53fe89788e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportSampling(dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "04929bd4-c496-48fc-b9aa-a60093846218",
+   "metadata": {},
+   "source": [
+    "We can check that the traverse and control lines have been correctly classified. We have not asked for a classification on the basis of odd or even line-numbering."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "38e84b85-5ec6-4012-92ac-76e16a0a5ce6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportWhizz(dh, line='100100')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a29bafd7-2724-4ebe-a9b7-3a8f24ecd1bc",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "92efa84b-a81e-4a81-bf83-7dd86594799b",
+   "metadata": {},
+   "source": [
+    "**Make a flight-line map**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "23a1b2d1-d392-4dbf-b404-78cf6f733972",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.linesMap([dh], whizzPlanFile=dh)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "636dfe46-b6d1-4753-9e75-6beecfcaf725",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.whizzFiles.updateLineVariety`
+
+```{py:module} galileoQC.whizzFiles.updateLineVariety
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineVariety
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`updateLineVariety <galileoQC.whizzFiles.updateLineVariety.updateLineVariety>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineVariety.updateLineVariety
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.updateLineVariety.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateLineVariety.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.updateLineVariety.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineVariety.groupName
+```
+
+````
+
+````{py:function} updateLineVariety(whizzFile, trav_lines=[], ctrl_lines=[])
+:canonical: galileoQC.whizzFiles.updateLineVariety.updateLineVariety
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateLineVariety.updateLineVariety
+```
+````

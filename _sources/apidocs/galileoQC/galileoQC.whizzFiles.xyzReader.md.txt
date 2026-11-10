@@ -1,0 +1,89 @@
+# {py:mod}`galileoQC.whizzFiles.xyzReader`
+
+```{py:module} galileoQC.whizzFiles.xyzReader
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`xyzToHDF <galileoQC.whizzFiles.xyzReader.xyzToHDF>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.xyzToHDF
+    :summary:
+    ```
+* - {py:obj}`read_xyz_header <galileoQC.whizzFiles.xyzReader.read_xyz_header>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.read_xyz_header
+    :summary:
+    ```
+* - {py:obj}`readXYZ <galileoQC.whizzFiles.xyzReader.readXYZ>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.readXYZ
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.xyzReader.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.xyzReader.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.xyzReader.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.xyzReader.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.projectName
+```
+
+````
+
+````{py:function} xyzToHDF(xyzFilePath='', hdfFilePath='', projectName='', verbose=False)
+:canonical: galileoQC.whizzFiles.xyzReader.xyzToHDF
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.xyzToHDF
+```
+````
+
+````{py:function} read_xyz_header(filename)
+:canonical: galileoQC.whizzFiles.xyzReader.read_xyz_header
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.read_xyz_header
+```
+````
+
+````{py:function} readXYZ(filename, verbose=False)
+:canonical: galileoQC.whizzFiles.xyzReader.readXYZ
+
+```{autodoc2-docstring} galileoQC.whizzFiles.xyzReader.readXYZ
+```
+````

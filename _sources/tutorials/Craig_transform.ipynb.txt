@@ -1,0 +1,560 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "e616d9bc-3813-4837-92a6-a7471062ba48",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "# Craig Transform\n",
+    "\n",
+    "Transforming $G_{UV},\\,G_{NE}$ to $g_{D}$"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a06cc2ad-af4b-4a21-b3a1-d2089701034c",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "## Theory"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6ac96774-eef8-4960-aed7-ee9fc5ba09fc",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "### The Craig transform"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "41a4edd7-e67b-4958-a550-fdd425f8ffcd",
+   "metadata": {},
+   "source": [
+    "The Craig transform provides functionality to generate gravity from differential curvatures.\n",
+    "\n",
+    "This tutorial demonstrates its use on publicly available data (resources.vic.gov.au) from the Fosterville Falcon airborne gravity gradiometer survey."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fa4bbadb-e859-4bf7-854f-a0b39f7375d7",
+   "metadata": {},
+   "source": [
+    "The Craig transform calculates any or all components of the gravity gradient and the gravity acceleration from measured differential curvature gradients. The transform is performed in the wavenumber domain using the Fourier transform. The gravity gradient tensor is derived from:\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma\\right)=\\frac{2}{\\left(k_{N}+i k_{E}\\right)^{2}}\\begin{bmatrix}k_N^2 & k_N k_E & ik_N k \\\\ & k_E^2 & i k_E k \\\\  &  & -k^2 \\\\\\end{bmatrix}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "and the gravitational acceleration vector from\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\mathbf{g}\\right)=\\frac{2}{\\left(k_{N}+i k_{E}\\right)^{2}}\\begin{bmatrix}-ik_N & -ik_E & -k \\end{bmatrix}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "where $k=\\sqrt{k_N^2+k_E^2}$ is the radial wavenumber on the horizontal plane.\n",
+    "\n",
+    "The implementation here derives the vertical gravitational acceleration:\n",
+    "\n",
+    "$$\\mathcal{F}\\left(g_D\\right)=\\frac{-2k}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "and the gravity gradient components:\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma_{NN}\\right)=\\frac{2k_{N}^2}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma_{NE}\\right)=\\frac{2k_{N}k_{E}}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma_{ND}\\right)=\\frac{2ik_{N}k}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma_{EE}\\right)=\\frac{2k_{E}^2}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma_{ED}\\right)=\\frac{2ik_Ek}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n",
+    "$$\\mathcal{F}\\left(\\Gamma_{DD}\\right)=\\frac{-2k^2}{\\left(k_{N}+i k_{E}\\right)^{2}}\\mathcal{F}\\left(\\Gamma_{UV}+i \\Gamma_{NE}\\right)$$\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "19236319-e655-4bf7-a030-f4610230ff63",
+   "metadata": {},
+   "source": [
+    "The method proceeds in several steps.\n",
+    "\n",
+    "1. The measured differential curvature ($\\Gamma_{UV}$ and $\\Gamma_{NE}$) data are separately gridded. This is done by minimum curvature with a default cell size 1/4 of the line spacing although the user may select their own value. Grid cells further than 3 cells from a located data value are marked \"missing\".\n",
+    "\n",
+    "1. Each grid is padded to extend the size of the grid in all four directions, and to fill any missing data. The padding may be done by sampling from a regional gravity grid, by filling with the mean value, or by a constant value. Regional gravity padding provides the best result. The regional grid is transformed by the reverse Craig transform to the differential curvature components and interpolated onto the locations of the measured differential curvature grids.\n",
+    "\n",
+    "1. The padded data are transformed to $g_D$ and each gradient component using the equations above. Then the cells that were padded for the transform are marked as missing since they did not originally have a measured value. The grid is then trimmed to the smallest rectangle possible without removing good data.\n",
+    "\n",
+    "1. This grid is sampled back to the `whizzFile` from which the differential curvature data originated. #?#?#?#"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "aacda4b7-098d-47f0-8440-2e64725c1044",
+   "metadata": {},
+   "source": [
+    "Note that the method treats all data as though it is located on a horizontal plane. This is a good approximation for many airborne gravity gradient surveys but will give inaccurate results for surveys draped to follow rugged terrain."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5ab5a991-9058-4e3e-a633-847c7da26b19",
+   "metadata": {},
+   "source": [
+    "For true potential fields, the inverse-transformed result is purely real. For real data however, the imaginary part is generally non-zero, reflecting errors in the data. It is useful therefore to check an image of the imaginary part of the output. It should be much smaller in amplitude than the real part."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "42745496-fa6d-4a0b-b23a-a6aac5544356",
+   "metadata": {
+    "jp-MarkdownHeadingCollapsed": true,
+    "tags": []
+   },
+   "source": [
+    "### Masking"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c115300d-ed78-4d4c-9f17-78537b55be9e",
+   "metadata": {},
+   "source": [
+    "It is worth making some comments describing the masking of the data. Several issues are relevant:\n",
+    "\n",
+    "1. The survey boundary may be quite complex (as the Fosterville example shows). One cannot expect a simple rectangle, nor even a polygon or other convex shape. There may be holes (mathematically, the survey area might not be simply connected).\n",
+    "1. There may be missing data within the survey boundary.\n",
+    "1. The interpolation to grid routine will generally interpolate into holes and into areas of missing data.\n",
+    "1. The Craig transform requires a completely filled rectngle of data.\n",
+    "1. The padding for the Craig transform extends the data to the borders of a rectangle that is well beyond the survey boundary.\n",
+    "1. The final product should have missing data where the survey had missing data, and anywhere outside the survey boundary.\n",
+    "\n",
+    "Accordingly, the code remembers the missing value area of the gridded data (called internally the `nanmask`) and, if provided, the survey boundary. The current iteration of the code only allows polygonal survey boundaries so holes are ignored in the survey boundary. Holes will be honoured if they are filled with missing-data values or have no data provided, although the grid interpolation will encroach into holes.\n",
+    "\n",
+    "With regard to data coverage, the process looks like:\n",
+    "\n",
+    "1. Interpolate Gne, Guv data to regular grid with missing data values at grid points further than some small fixed number of grid cells from located data.\n",
+    "2. Store the missing data mask as `nanmask`.\n",
+    "3. Pad the grids. Several methods are available but the recommended method pads to a large rectangle with regional Gne and Guv, using the regional data to also fill the missing data points.\n",
+    "4. Expand the nanmask to the same area.\n",
+    "5. Process the data to the final gD and gravity gradient grids. This will cover the entire padded area.\n",
+    "6. Mask the missing data values according to nanmask.\n",
+    "7. If a survey boundary is provided, mask areas outside the survey boundary as missing value.\n",
+    "8. Trim the grid back to the smallest cardinal rectangle possible by trimming only missing values"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "792b6baf-09e1-4c4a-b843-091d16caba51",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "### Conforming"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e6cf2667-4c08-4f1c-8a4d-aa889e56786d",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "## Fosterville Example"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d2fd690e-1f7e-4738-91ce-1903a67e15b7",
+   "metadata": {},
+   "source": [
+    "The Fosterville data were downloaded from Resources Victoria. The located data were in ASEG-GDF2 format and these were written to `whizzFile` in HDF5 format. Most channels were omitted to reduce the data volume. It is this minimalist data set that is used here. \n",
+    "\n",
+    "The regional data were extracted and downloaded from GADDS.\n",
+    "\n",
+    "For no particular reason, this example uses the free-air data."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "61060354-30ab-43d3-8a25-4c0d8e15daf4",
+   "metadata": {},
+   "source": [
+    "___\n",
+    "Import the required modules, and set the path to the geowhizz files."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "339a6934-c9c2-40a7-883d-ef1033b771ed",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc\n",
+    "\n",
+    "data_root = r'./FostervilleData/'\n",
+    "FostervilleHDF_file = Path(data_root + r'Foster_craig.hdf5')\n",
+    "regional_fa_ers = Path(data_root + r'Gravmap2019-grid-grv_fa.ers')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7c74ba40-1050-4644-bfa1-9f438eaa4641",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not FostervilleHDF_file.exists():\n",
+    "    print(\"Ask Mark for help!!!\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d5b51e9a-82a9-4988-aa05-644096541ad8",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# Find the channel names for the free-air Gne and Guv data\n",
+    "qc.reportChannels(FostervilleHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bb004aa3-92e1-4c52-aff2-7c6c7109f09d",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# Here we impose an artificial survey polygon to see the behaviour of the code.\n",
+    "gD_grid, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd = qc.craig_transform(\n",
+    "    whizzFile=FostervilleHDF_file, \n",
+    "    gne_chan='Falc_A_NE_0p00_0p18Hz_MeanLev', \n",
+    "    guv_chan='Falc_A_UV_0p00_0p18Hz_MeanLev',\n",
+    "    gd_chan=None,\n",
+    "    result_units='um/s/s',\n",
+    "    survey_polygon=[\n",
+    "        (260000, 5941000),\n",
+    "        (280000, 5941000),\n",
+    "        (280000, 5969000),\n",
+    "        (260000, 5969000),\n",
+    "    ],\n",
+    "    pad_cells=256, \n",
+    "    padding_mode=\"regional\", \n",
+    "    regional_grid_file=regional_fa_ers,\n",
+    "    regional_grav_units='gu',\n",
+    "    firstorder=True,\n",
+    "    conforming=True,\n",
+    "    plot_flag=False\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "15947e0c-a1a3-4da2-a8fb-9824261516ac",
+   "metadata": {},
+   "source": [
+    "___\n",
+    "It is a little easier to see the details if we image the final result as a shaded image (below). The results show a small imaginary part as expected, and the final gravity grid matches the regional gravity well while retaining the new short wavelength information from the survey."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4681d9ea-8866-45d7-a117-d2cb63fb313e",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.xdImage(gD_grid, 'derived BG1', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "afe9d55a-0258-476f-a947-30d76fef7378",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.xdImage(gD_grid, 'derived BG', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5441c0a2-d9f6-4563-b0ef-a7e3fb4eea3c",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.xdImage(g_ed, 'derived Ged', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2ab59c42-0ab1-48e3-b841-6fa7a7d0a427",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "regional, _ = qc.gridfile_to_xa(regional_fa_ers)\n",
+    "cropped_regional = regional.sel(x=slice(260000, 280000), y=slice(5940000, 5970000))\n",
+    "qc.xdImage(cropped_regional, 'regional BG', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6e5a0323-779a-422b-b9f8-284b5d1ba8ef",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "## Telfer Example"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "21c214c9-f9c2-410c-8640-9572a3486449",
+   "metadata": {},
+   "source": [
+    "The Telfer survey data were downloaded from the Geological Survey of Western Australia at https://geodownloads.dmp.wa.gov.au/downloads/geophysics/71234/, and the regional grid from GADDS. The data are complete Bouguer gravity."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c8b31542-1a82-491a-9fc4-be9bb43336b7",
+   "metadata": {},
+   "source": [
+    "They are currently disabled for reasons of data volume."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "344a5d83-3f00-4f2c-b10f-ecf96690179c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc\n",
+    "\n",
+    "data_root = r'./TelferData/'\n",
+    "TelferHDF_file = Path(data_root + r'Telfer_craig.hdf5')\n",
+    "\n",
+    "# Downloaded from GADDS (complete Bouguer grid, 2019)\n",
+    "regional_cb_ers = Path(data_root + r'Gravmap2019-grid-grv_cscba.ers')\n",
+    "\n",
+    "# The final conformed complete Bouguer by Xcalibur.\n",
+    "true_gd_ers = Path(data_root + r'2131_1_Fourier_gD_2p67_conformed_final.ers')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a9ea4ad2-7fa0-45f0-be7e-99196647caac",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not TelferHDF_file.exists():\n",
+    "    print(\"Ask Mark for help!!!\")\n",
+    "    # %run ./Prepare_EastVicData.ipynb"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2b0c37a2-6855-4c29-b768-6c6cc36a0c79",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# Find the channel names for the Gne and Guv data\n",
+    "qc.reportChannels(TelferHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "87080b0f-9301-4a8b-a200-0b983eeb5220",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mask_polygon = [(410898 , 7622722), (453935, 7575693), (433181, 7557737), (390139, 7604799)]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4e212ab7-2357-444a-8edd-b7dbdef2cfc9",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "gD_grid, g_nn, g_ne, g_nd, g_ee, g_ed, g_dd = qc.craig_transform(\n",
+    "    whizzFile=TelferHDF_file,\n",
+    "    gne_chan='A_NE_2p67',\n",
+    "    guv_chan='A_UV_2p67',\n",
+    "    gd_chan=None,\n",
+    "    cell_size=80.0,\n",
+    "    result_units='um/s/s',\n",
+    "    survey_polygon=mask_polygon,\n",
+    "    pad_cells=256,\n",
+    "    padding_mode=\"mean\",\n",
+    "    regional_grid_file=regional_cb_ers,\n",
+    "    regional_grav_units='um/s/s',\n",
+    "    conforming=True,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0ee55060-aadf-4e09-9dff-ab35bf3e9d18",
+   "metadata": {},
+   "source": [
+    "For Telfer, we have the final conformed complete Bouguer data as supplied by the survey provider so we can compare it with our result.\n",
+    "\n",
+    "Below are shaded images of the survey provider's result (the \"true BG\") multiplied by 10.0 to convert the data to um/s/s, and of our result. They look very similar but the colorbars suggest some difference.\n",
+    "\n",
+    "Below the images are grid reports. The \"true\" result has a very similar standard deviation and mean but a larger range. It also has a smaller cell size. It is reasonable to suppose that the smaller cell size has allowed more extreme values so this is a possible explanation for the larger range.\n",
+    "\n",
+    "Either way, our result is very similar and certainly acceptable."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c25962fe-c38a-4e9d-b50c-4e879c673fc7",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "true_bg, _ = qc.gridfile_to_xa(true_gd_ers)\n",
+    "qc.xdImage(true_bg*10, 'true BG [um/s/s]')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6e795bfe-4654-40a1-91c1-e380f498fb3e",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.xdImage(gD_grid, 'derived BG', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e5c939e6-fd01-4ecd-80aa-e2a4462ca950",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.xdImage(g_nd, 'derived $\\\\Gamma_{ND}$', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9b2a38c2-045e-4dca-82f2-be4cdb24b71b",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.xdImage(g_dd, 'derived $\\\\Gamma_{DD}$', hs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7987125f-c1d9-4404-b01a-d426e5b409ad",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from galileoQC.gridFiles.gridutility import report_gridStats\n",
+    "report_gridStats(gD_grid)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "99dea100-3a51-48ac-95b2-9e928d986a0b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "report_gridStats(true_bg*10)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d1e68cd-29d2-43c2-94dd-2eefb20c5ddb",
+   "metadata": {},
+   "source": [
+    "And we can write any of the grids to an ERS file. For example, the Gdd grid:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "64636764-c4fd-4bd4-86db-94da0cfcfe92",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Telfer_Gdd_grid_file = Path(data_root + r'Telfer_craig_gdd.ers')\n",
+    "qc.write_ers(Telfer_Gdd_grid_file, g_dd)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "04fd1ff3-e7a6-4d5a-9e8f-f0de344c49da",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  },
+  "toc-showtags": true
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
