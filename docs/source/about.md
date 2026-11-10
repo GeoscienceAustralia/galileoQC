@@ -12,7 +12,7 @@ __galileoQC__ provides functions to:
 - report on the noise characteristics of gradiometry data;
 - report on the quality of aeromagnetic data;
 - interpolate data to regular grids, and image and display those grids;
-- transform curvature data ($\Gamma_{uv}$, $\Gamma_{ne}$) to gravity and all tensor components;
+- transform curvature data ($\Gamma_{UV}$, $\Gamma_{NE}$) to gravity and all tensor components;
 - check consistency of supplied data in various forms.
 
 These various checks are designed largely in line with the Airborne Gravimetry and Gravity Gradiometry Technical Standards from Geoscience Australia [^GravDeed]. __galileoQC__ provides a number of additional checks beyond those explicitly laid out in the Standards; these check the data against best practice and/or provide additional information for the person performing the QC.

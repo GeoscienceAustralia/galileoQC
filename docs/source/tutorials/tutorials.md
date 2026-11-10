@@ -88,9 +88,9 @@ Falcon_Noise_Analysis.ipynb
 
 ## FTG Noise Analysis
 
-The FTG is a single-complement, three-axis gradiometer. On each axis, it measures ($\Gamma_{xy}^{i}$ and $\Gamma_{uv}^{i}$) relative to that ($i$-th) axis. Theoretically, the sum of the three $\Gamma_{uv}^{i}$ should equal zero and variations from zero reflect error in the measurement. The actual quantity, called the *in-line sum*[^Murphy2010], must be scaled for the number of axes and is expressed as:
+The FTG is a single-complement, three-axis gradiometer. On each axis, it measures ($\Gamma_{XY}^{i}$ and $\Gamma_{UV}^{i}$) relative to that ($i$-th) axis. Theoretically, the sum of the three $\Gamma_{UV}^{i}$ should equal zero and variations from zero reflect error in the measurement. The actual quantity, called the *in-line sum*[^Murphy2010], must be scaled for the number of axes and is expressed as:
 
-> $$ \eta = \frac{\Gamma_{uv}^{1} + \Gamma_{uv}^{2} + \Gamma_{uv}^{3}}{\sqrt{3}} $$
+> $$ \eta = \frac{\Gamma_{UV}^{1} + \Gamma_{UV}^{2} + \Gamma_{UV}^{3}}{\sqrt{3}} $$
 
 The in-line sum tends generally to increase with turbulence so it is useful to plot it against turbulence. 
 
