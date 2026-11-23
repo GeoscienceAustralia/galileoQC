@@ -1,0 +1,53 @@
+# {py:mod}`galileoQC.qualitycontrol.checkGaps`
+
+```{py:module} galileoQC.qualitycontrol.checkGaps
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkGaps
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkGaps <galileoQC.qualitycontrol.checkGaps.checkGaps>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkGaps.checkGaps
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkGaps.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkGaps.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkGaps.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkGaps.groupName
+```
+
+````
+
+````{py:function} checkGaps(whizzFile, ignored_chans=[], maxGapSec=0.0, maxNumGaps=0, lines=[], verbose=True)
+:canonical: galileoQC.qualitycontrol.checkGaps.checkGaps
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkGaps.checkGaps
+```
+````

@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkFreeAirCorr`
+
+```{py:module} galileoQC.qualitycontrol.checkFreeAirCorr
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkFreeAirCorr <galileoQC.qualitycontrol.checkFreeAirCorr.checkFreeAirCorr>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr.checkFreeAirCorr
+    :summary:
+    ```
+* - {py:obj}`_freeAirCorrection <galileoQC.qualitycontrol.checkFreeAirCorr._freeAirCorrection>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr._freeAirCorrection
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkFreeAirCorr.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkFreeAirCorr.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr.groupName
+```
+
+````
+
+````{py:function} checkFreeAirCorr(whizzFile, faCorr, latitude='', GRS80_height='', lines=[], changesign=False)
+:canonical: galileoQC.qualitycontrol.checkFreeAirCorr.checkFreeAirCorr
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr.checkFreeAirCorr
+```
+````
+
+````{py:function} _freeAirCorrection(height, latitude)
+:canonical: galileoQC.qualitycontrol.checkFreeAirCorr._freeAirCorrection
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkFreeAirCorr._freeAirCorrection
+```
+````

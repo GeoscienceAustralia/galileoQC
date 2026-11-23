@@ -1,0 +1,64 @@
+# {py:mod}`galileoQC.qualitycontrol.checkXYPlan`
+
+```{py:module} galileoQC.qualitycontrol.checkXYPlan
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkXYPlan <galileoQC.qualitycontrol.checkXYPlan.checkXYPlan>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan.checkXYPlan
+    :summary:
+    ```
+* - {py:obj}`_plot_exceeding_line <galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkXYPlan.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkXYPlan.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan.groupName
+```
+
+````
+
+````{py:function} checkXYPlan(planPaths, measPath, lines=[], planX='', planY='', measX='', measY='', allowance=200.0, maxCounter=0, maxDistance=0, known='', needConvertToGeodetic=False, crs_epsg=0, plot_flag=False, verbose=False)
+:canonical: galileoQC.qualitycontrol.checkXYPlan.checkXYPlan
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan.checkXYPlan
+```
+````
+
+````{py:function} _plot_exceeding_line(x, y, xP, yP, xM, yM, measX, measY, allowance, line, planLine, dirn, geoCoords=False)
+:canonical: galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkXYPlan._plot_exceeding_line
+```
+````

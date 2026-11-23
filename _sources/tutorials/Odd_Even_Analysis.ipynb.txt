@@ -1,0 +1,372 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b1ef67d2-8816-433c-9292-d0d44f6c0981",
+   "metadata": {},
+   "source": [
+    "# Odd - Even Analysis"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e10dd2e0-63fd-4c58-be63-34e469f2d10a",
+   "metadata": {},
+   "source": [
+    "Odd - Even analysis consists of separating a survey into odd- and even-numbered flight-lines, gridding each separately and then calculating the RMS difference between the two resultant grids.\n",
+    "\n",
+    "We will use the 2012 Kauring gravimetry data in this notebook. If you haven't already, run the `Prepare_ASEGGDF2` notebook so that the survey data are ready for QC."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ede166ab-fcd1-46bd-a76f-d2a93088edbc",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e348d4ff-5b51-428f-9fba-56f164a416a1",
+   "metadata": {},
+   "source": [
+    "First, import the required modules, and set the path to the geowhizz file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "db844d81-1b03-4481-8972-02cf00d11a0b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC  as qc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "13cbd4cf-a8b2-4602-9073-6c77dc4977f6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dh = Path(r'./Kauring_grv/GRAV.hdf5')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5e0a026d-316a-4230-b066-342e9ee4db3d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not dh.exists():\n",
+    "    %run ./Prepare_2012KauringData.ipynb"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ec6f4e44-6098-41d0-9785-b6a7fbff56fc",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "04929bd4-c496-48fc-b9aa-a60093846218",
+   "metadata": {},
+   "source": [
+    "We can use `reportLines` to see that the traverse and control lines have been correctly classified. But we have not classified on the basis of odd or even line-numbering yet."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "38e84b85-5ec6-4012-92ac-76e16a0a5ce6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportLines(dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7f1958d6-3aea-4cd6-93d9-93eb58a8363e",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4c289b22-2e8f-48d6-910c-af4590b2ad63",
+   "metadata": {},
+   "source": [
+    "Furthermore, the flight-line map shows that there are two distinct blocks in the file. We don't want the smaller block with closer line spacing and different line directions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "23a1b2d1-d392-4dbf-b404-78cf6f733972",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.linesMap([dh], whizzPlanFile=dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fe92cbee-585e-4d88-9f64-2a33d31a269f",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0022fd66-7c63-42c8-974b-eb52b10ef16b",
+   "metadata": {},
+   "source": [
+    "We want only the flight-lines whose line-number starts with a \"1\". First, we copy and paste them from the `qc.reportLines` output, making sure we capture all traverse and control lines that start with a \"1\", and no others."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c88bb4c4-69f1-405e-a226-73b70f1992cf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "gm_lines = ['100100', '100200', '100300', '100400', '100500', '100600', '100700', '100800', \n",
+    "            '100900', '10100', '101000', '101100', '101200', '101300', '101400', '101500', \n",
+    "            '101600', '101700', '101800', '101900', '10200', '102000', '102100', '102200', \n",
+    "            '102300', '102400', '102500', '102600', '102700', '102800', '102900', '10300', \n",
+    "            '103000', '103100', '103200', '103300', '103400', '103500', '103600', '103700', \n",
+    "            '103800', '103900', '10400', '104000', '104100', '104200', '104300', '104400', \n",
+    "            '104500', '104600', '104700', '104800', '104900', '10500', '105000', '105100', \n",
+    "            '105200', '105300', '105400', '105500', '105600', '105700', '105800', '105900', \n",
+    "            '10600', '106000', '106100', '106200', '106300', '106400', '106500', '106600', \n",
+    "            '106700', '106800', '106900', '10700', '107000', '107100', '107200', '107300', \n",
+    "            '107400', '107500', '107600', '107700', '107800', '107900', '10800', '108000', \n",
+    "            '108100', '108200', '108300', '108400', '108500', '108600', '108700', '108800', \n",
+    "            '108900', '10900', '109000', '109100', '109200', '109300', '109400', '109500', \n",
+    "            '109600', '109700', '109800', '109900', '11000', '110000', '110100', '110200', \n",
+    "            '110300', '110400', '110500', '110600', '110700', '110800', '110900', '11100']"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fdca7da4-542a-42a2-9a37-5eeb5259a193",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e1058e31-42a2-4061-995e-5f95811b7282",
+   "metadata": {},
+   "source": [
+    "The flight-line map shows that we have the ones we want."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ae7738d0-44b9-401d-a5f2-dd43d0a45d4a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.linesMap([dh], whizzPlanFile=dh, planLines=gm_lines)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c02a89b0-9f69-415c-8848-2fd3ef6ed5a4",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3198c8c6-7c3f-4e2f-98c8-11d5e91749ce",
+   "metadata": {},
+   "source": [
+    "Now, we write a short script to sort them into odd and even numbered line-lists."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ff29a53d-ee0e-4ec9-bc26-a39992ce49f7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "odd = []\n",
+    "even = []\n",
+    "for line in gm_lines:\n",
+    "    num = int(float(line)/100)\n",
+    "    if num % 2 == 0:\n",
+    "        even.append(line)# Even \n",
+    "    else:\n",
+    "        odd.append(line) # Odd"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fd604232-4108-4cb6-8277-b6df501c8595",
+   "metadata": {},
+   "source": [
+    " ... and we update the survey meta-data with these lists, and report the lines so we can check we have what we want. (`updateOddOrEven` ignore control lines for assigning parity.)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e3b02e45-0d24-46ad-af8b-7ccc2e57c966",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.updateOddOrEven(whizzFile=dh, oddlines=odd, evenlines=even, planFile='', verbose=False)\n",
+    "qc.reportLines(dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7854946d-792b-4956-99c4-8a836d54430c",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e71d5faa-bbaa-4ec6-9df0-1fd2e4c78968",
+   "metadata": {},
+   "source": [
+    "Now we can perform the odd-even analysis. The default gridding parameters have been accepted here so the grid is not great. However, the RMS difference between odd and even numbered lines is $0.57\\,mGal$ which is a good result."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "975772d6-629b-4ec4-a5fa-da5f038f4307",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.oddevenlines(dh, 'GRVBGL100S_267', 200.0)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1403a2dc-27d0-4cf7-b766-23fcab01eab3",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ba325979-88bb-4bbd-afb3-fd53a0b72cd9",
+   "metadata": {},
+   "source": [
+    "Alternatively, you can always enter the lists of odd and even lines directly into the function call. This can be useful if, for example, you want to omit some lines from the analysis. Here is an example."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ff8ff582-134a-4b21-be9d-d0b30ad693f0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# First remove the control lines from the even and odd lines (`updateOddOrEven`\n",
+    "# does this automatically for us in the previous example):\n",
+    "controls = ['10100', '10200', '10300', '10400', '10500', '10600', '10700',\n",
+    "            '10800', '10900', '11000', '11100']\n",
+    "new_even = even.copy()\n",
+    "new_odd = odd.copy()\n",
+    "for ctrl in controls:\n",
+    "    if ctrl in new_even:\n",
+    "        new_even.remove(ctrl)\n",
+    "    if ctrl in new_odd:\n",
+    "        new_odd.remove(ctrl)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3d5f7e71-707d-4175-9e30-43c496609213",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Now remove the \"unwanted\" first even line:\n",
+    "modified_even = new_even.pop(0)\n",
+    "qc.oddevenlines(dh, 'GRVBGL100S_267', 200.0, oddlines=new_odd, evenlines=new_even)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7d107633-7a4d-4131-ab71-679a9dd0eeb2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportChannels(dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "787a3dab-b34a-49c4-99cb-d36b6b4c09b7",
+   "metadata": {},
+   "source": [
+    "Sometimes, the odd-even difference results are dominated by short-wavelength signal and therefore not a reasonable representation of the error. There is an option to low-pass filter the data before statistical analysis and display. The filter used is the same $\\cos_{2}$ filter as used in the conforming. One only needs to specify the filter 50% gain wavelength."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fd21c35c-3559-4abc-b60f-b9b315a2f93f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Now low-pass the grid before analysis:\n",
+    "qc.oddevenlines(dh, 'GRVBGL100S_267', 200.0, oddlines=new_odd, evenlines=new_even, filter_length=10000.0, method='minc')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8e67f968-0765-4db0-aa00-c8de1f5bb6ef",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

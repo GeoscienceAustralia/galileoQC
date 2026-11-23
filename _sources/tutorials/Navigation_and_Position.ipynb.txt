@@ -1,0 +1,416 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "c517647d-3226-4224-bfac-5ebc53a64bbe",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "# Navigation and Position QC"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "25962e27-ac45-4add-a2bc-63890e044324",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "Ensure you have run the Prepare_XYZ notebook first so that the data are prepared for review."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a91f7387-18b7-43c7-911f-fcd8eca062b3",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5dbc91c7-e1a2-4839-9a52-5950f9f4a226",
+   "metadata": {},
+   "source": [
+    "Import the required modules, and set the path to the geowhizz files."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6541a9e4-d579-44cf-839d-a97a80ef6513",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b0ec9460-4290-44bd-8840-e76d537ee3e0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "EastVicHDF_file = Path(r'./EastVicData/EastVic.hdf5')\n",
+    "EastVicTestHDF_file = Path(r'./EastVicData/EastVicTest.hdf5')\n",
+    "EastVicRepHDF_file = Path(r'./EastVicData/EastVicRepeats.hdf5')\n",
+    "EastVicHDF_plan = Path(r'./EastVicData/EastVicPlan.hdf5')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "35c055b3-33d4-427b-8c61-9a6be4ed7bb2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not (EastVicHDF_file.exists() and EastVicTestHDF_file.exists() and EastVicRepHDF_file.exists() and EastVicHDF_plan.exists()):\n",
+    "    %run ./Prepare_EastVicData.ipynb"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "358c3e34-130b-4277-be5b-502e6c7724a9",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b8f68dad-8c4a-4be9-bde0-3f2c09031d7f",
+   "metadata": {},
+   "source": [
+    "**GNSS**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "096d3ba4-1197-4b4e-886e-8de5f2dabc38",
+   "metadata": {},
+   "source": [
+    "Accurate knowledge of the sensor position is important. In gravimetry, it is critical for calculating the kinematic accelerations that must be removed from the gravimeter measurements. In gradiometry the accuracy requirement is not quite as demanding but it is still important since it limits the accuracy of the terrain corrections.\n",
+    "\n",
+    "The accuracy of GNSS (Global Navigation Satellite System) positions is usually better when the number of visible satellites, `NSATS`, is large and the position, vertical and horizontal dilutions of position (PDOP, `VDOP` and `HDOP` respectively) are small. Contracts will often stipulate the minimum number of satellites, and maximum values for PDOP, VDOP and HDOP. The requirements tend to be a little more demanding for gravimetry than for gradiometry.\n",
+    "\n",
+    "Typical values might be:\n",
+    "\n",
+    "    airborne gravimetry - a minimum of 6 GNSS satellites visible, and PDOP, HDOP and VDOP to not exceed 4;\n",
+    "    airborne gradi0metry - a minimum of 5 GNSS satellites visible, and PDOP, HDOP and VDOP to not exceed 4.   "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a174f726-d465-4f5f-ab75-57edc8938603",
+   "metadata": {},
+   "source": [
+    "The values of these variables (number of satellites, HDOP, VDOP and PDOP) must be recorded as channels in the data, for each data point. The values in these channels are checked:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6a13da87-f1e1-45ed-a596-bc53db6657fc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkGNSS(EastVicHDF_file, 'NSATS', 'PDOP', 'VDOP', 'HDOP', nsats_min=5, max_pdop=4, \n",
+    "                  max_hdop=4, max_vdop=4)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "84a1b469-7880-4c73-8380-dfc054ac2e63",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b5bef891-c750-4da2-ba46-8970308c1762",
+   "metadata": {},
+   "source": [
+    "**Horizontal Position**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a2341d13-beb2-44f2-9f19-934656e622de",
+   "metadata": {},
+   "source": [
+    "Typically surveys are planned so that the aircraft traverses a series of parallel lines, collecting data along each. The line spacing is an important determinant of the spatial resolution of the survey. Furthermore, the data are usually gridded at a cell spacing approximately one-fifth of the planned line spacing.\n",
+    "\n",
+    "If the actual flight path deviates significantly from the planned path, then there will be areas of the survey where the spatial resolution of the data may be poorer than desired, and there will be areas where the gridding must interpolate over more grid cells between measurements than planned. Interpolation errors will be accordingly greater in those areas as a consequence.\n",
+    "\n",
+    "The aircraft position is allowed to deviate horizontally from the planned survey line by more than `allowance` metres for a distance no greater than `maxDistance` metres. Options exist to limit the distance to that traversed in a given `maxDuration` number of seconds, or a given `maxCounter` number of fiducials.\n",
+    "\n",
+    "Ideally the `allowance` would be much smaller than the intended grid cell width, and the `maxDistance` no greater than about one cell width. For gravimetry and gravity gradiometry these ideal restrictions can lead, with typical survey aircraft, to situations in which the instrumentation experiences significant accelerations as the aircraft path is corrected. These large aircraft accelerations can result in increased sensor error so it is better to allow a larger `maxDistance` and optimise for gentle corrections to the flight path. A 1 km distance is appropriate.\n",
+    "\n",
+    "The check in this example requires that all flown lines are within $40\\,m$ of the planned line, with any exceedances persisting for less than $1000\\,m$. The check is repeated for just line `2345.510` to demonstrate the plotting that occurs should a line fail the check."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e6796f42-f9c0-42fe-b4ab-f64a886b36ec",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkXYPlan(EastVicHDF_plan, EastVicHDF_file, allowance=40.0, maxCounter=0,\n",
+    "               maxDistance=1000.0, plot_flag=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "975c1b40-4378-4d23-aef6-1f70af9ac498",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%matplotlib widget\n",
+    "qc.checkXYPlan(EastVicHDF_plan, EastVicHDF_file, allowance=300.0, maxCounter=0,\n",
+    "               maxDistance=1000.0, plot_flag=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "33b11e0b-2b95-4471-9332-1d7bc98e4152",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b06fd974-f9d7-4134-adbf-85927d94ceef",
+   "metadata": {},
+   "source": [
+    "**Vertical Position**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7b34a0cb-50ab-4c39-bfda-dd7329c7cd1c",
+   "metadata": {},
+   "source": [
+    "The vertical positions of the measurements are also constrained. The spatial resolution of the data is affected by the ground clearance, the sample spacing, and the filtering applied to the data. It is desirable to fly sufficiently low that the spatial resolution is not limited by survey height. The climb rate of the aircraft, as well as the presence of any obstacles limits this in practice.\n",
+    "\n",
+    "Specifications might require the position to be close to a given height above the ground, or some constant altitude relative to a datum (geoid or ellipsoidal altitude) but often the requirement is that the aircraft remain within a given distance of a preplanned survey height, often called the drape.\n",
+    "\n",
+    "Here we check that the aircraft remains within $20\\,m$ of the planned height, with no exceedances persisting for more than $1000\\,m$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ed4e7a28-0bf2-4db3-bd82-83f5ccd2c2a3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkVertPlan(EastVicHDF_plan, EastVicHDF_file, allowance=20.0, maxCounter=0,\n",
+    "                 maxDistance=1000.0, plot_flag=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6239cc09-1ba2-4383-95aa-e8cb6bb22718",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "87c4d8a9-04bf-494b-86f8-2c9cc2e25f67",
+   "metadata": {},
+   "source": [
+    "**Segment Lengths**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "839fc040-a400-445b-8900-1176a618ba1d",
+   "metadata": {},
+   "source": [
+    "For operational reasons, a single planned survey line might be flown as a series of line segments, or as one segment. The length of all individually flown segments must exceed some minimum length. There are several reasons for setting a minimum. Where data are to be tie-line levelled, the segment must cross several control lines and so must be longer than two or three control line separations. For analysis of the spectral content or the statistics of the data, the segment length should be much longer than the spatial resolution of the data. And, for gradiometer surveys, the segment length should be large enough to allow for the noise reduction using regression against dynamic variables.\n",
+    "\n",
+    "Typically the minimum length might around $10\\,km$ for gradiometry and around $40\\,km$ for gravimetry. This gravimetry analysis sets the minimum at $38\\,km$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "02365a01-f986-42a4-9d19-f057faca3e32",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkLineLengths(EastVicHDF_file, min_len=38.0)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "23254db8-207b-438c-a2a1-edd2b2c083e3",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d5684c09-59a0-4f7c-abc2-39cb433292b1",
+   "metadata": {},
+   "source": [
+    "**Line Overlaps**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "08c975fc-4f1c-4e65-bb84-faf346cfe3ca",
+   "metadata": {},
+   "source": [
+    "When a survey line is flown as more than one segment, the segments must overlap by some minimum amount in order to avoid any end-of-line effects (including those due to filtering)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2ffc3275-fa3f-4499-8433-9de1acd6597f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkOverlaps(EastVicHDF_file, min_overlap=10., plot_flag=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7cca9c67-350c-4209-9548-c50d7f90128c",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a1aa6f79-4093-4c97-8e3e-623f0c072496",
+   "metadata": {},
+   "source": [
+    "**Heading**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8fa75f6e-c4a0-4ec0-8923-73a5a1651f73",
+   "metadata": {},
+   "source": [
+    "Occasionally contracts will set a specification on aircraft heading. Some care is required here because there is some risk of confusion about definitions. The track is the angle made between North and the line of motion of the aircraft (imagined as a track projected onto flat ground). The angle between North and the line defined by the nose-to-tail of the aircraft is the heading. Any cross wind will mean that the heading is different to the track. Nevertheless sometimes heading is reported as track, or vice versa.\n",
+    "\n",
+    "Another potential cause of confusion is the distinction between magnetic North and true North. Here we mean true North.\n",
+    "\n",
+    "And sometimes heading is called bearing.\n",
+    "\n",
+    "The checkHeading function checks the given `heading` channel against the given allowed angles (in degrees) and reports any differences greater than some allowed difference. If the `heading` channel contains track data, then that is what is checked. If the name of the `heading` channel is not supplied, then `checkHeading` calculates the **track** angle from the position data and checks against that.\n",
+    "\n",
+    "**Be warned**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dd906dbe-bdd6-46c1-ac77-7d4b44d664e6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkHeading(EastVicHDF_file, [232.0, 52], plot_flag=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9b77e87d-38c4-4e95-b31d-125299826be2",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a85edbe8-a2a8-461a-87e2-7ba89f99322c",
+   "metadata": {},
+   "source": [
+    "**Ground Speed**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9b6cedfd-ae07-4ebd-a5fe-3d400bd9cd56",
+   "metadata": {},
+   "source": [
+    "The data are measured at constant sample rate in time but we are interested in the location of the data in space and the data will be at a constant spacing on the ground only if the aircraft ground speed is constant. Tail winds and head winds make this difficult and some variation is inevitable.\n",
+    "\n",
+    "When the aircraft flies slower (into a head wind) the data have better spatial resolution, but a tail wind causes a faster ground speed and consequently poorer spatial resolution. In most conditions, a survey aircraft can fly within $15\\%$ - $20\\%$ of nominal, although nominal can vary significantly with aircraft.\n",
+    "\n",
+    "This example requires the data to be within $15\\%$ of $60\\,ms^{-2}$, with exceedances to persist for no further than $1000\\,m$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f07f1b14-b9f8-4163-b40f-9d5568c81771",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkSpeeds(EastVicHDF_file, nominalSpeed=55., allowance=0.15, maxDistance=1000.0, plot_flag=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "38eca712-a94f-4c2e-8f88-f7de878e6789",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

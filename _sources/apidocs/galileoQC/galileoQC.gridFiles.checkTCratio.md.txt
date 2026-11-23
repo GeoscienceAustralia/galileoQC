@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.gridFiles.checkTCratio`
+
+```{py:module} galileoQC.gridFiles.checkTCratio
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.checkTCratio
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkTCratio <galileoQC.gridFiles.checkTCratio.checkTCratio>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.checkTCratio.checkTCratio
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} checkTCratio(file000, filexxx, xxx, fileyyy, yyy, plotTitle, units='')
+:canonical: galileoQC.gridFiles.checkTCratio.checkTCratio
+
+```{autodoc2-docstring} galileoQC.gridFiles.checkTCratio.checkTCratio
+```
+````

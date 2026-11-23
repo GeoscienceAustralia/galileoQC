@@ -1,0 +1,29 @@
+# {py:mod}`galileoQC.whizzFiles`
+
+```{py:module} galileoQC.whizzFiles
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+galileoQC.whizzFiles.updateLineAttributes
+galileoQC.whizzFiles.xDatasetToXYZ
+galileoQC.whizzFiles.reportData
+galileoQC.whizzFiles.whizzToXYZ
+galileoQC.whizzFiles.updateChannelAttributes
+galileoQC.whizzFiles.gdfReader
+galileoQC.whizzFiles.xyzReader
+galileoQC.whizzFiles.pointfiles
+galileoQC.whizzFiles.updateLineVariety
+galileoQC.whizzFiles.updateOddOrEven
+galileoQC.whizzFiles.retrieveData
+galileoQC.whizzFiles.colReader
+galileoQC.whizzFiles.updateLineSpacing
+```

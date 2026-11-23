@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms._calc_padcells`
+
+```{py:module} galileoQC.transforms._calc_padcells
+```
+
+```{autodoc2-docstring} galileoQC.transforms._calc_padcells
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_calc_padcells <galileoQC.transforms._calc_padcells._calc_padcells>`
+  - ```{autodoc2-docstring} galileoQC.transforms._calc_padcells._calc_padcells
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} _calc_padcells(grid)
+:canonical: galileoQC.transforms._calc_padcells._calc_padcells
+
+```{autodoc2-docstring} galileoQC.transforms._calc_padcells._calc_padcells
+```
+````

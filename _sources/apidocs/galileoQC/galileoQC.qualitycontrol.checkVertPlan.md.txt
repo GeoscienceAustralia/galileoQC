@@ -1,0 +1,75 @@
+# {py:mod}`galileoQC.qualitycontrol.checkVertPlan`
+
+```{py:module} galileoQC.qualitycontrol.checkVertPlan
+```
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`checkVertPlan <galileoQC.qualitycontrol.checkVertPlan.checkVertPlan>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan.checkVertPlan
+    :summary:
+    ```
+* - {py:obj}`_interpolateVert <galileoQC.qualitycontrol.checkVertPlan._interpolateVert>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan._interpolateVert
+    :summary:
+    ```
+* - {py:obj}`_plot_vert_exceedance <galileoQC.qualitycontrol.checkVertPlan._plot_vert_exceedance>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan._plot_vert_exceedance
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.qualitycontrol.checkVertPlan.groupName>`
+  - ```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan.groupName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.qualitycontrol.checkVertPlan.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan.groupName
+```
+
+````
+
+````{py:function} checkVertPlan(planPaths, measPath, *, lines=[], planX='', planY='', planZ='', measX='', measY='', measZ='', allowance=30.0, maxCounter=13, maxDistance=0.0, known='', plot_flag=False, verbose=False)
+:canonical: galileoQC.qualitycontrol.checkVertPlan.checkVertPlan
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan.checkVertPlan
+```
+````
+
+````{py:function} _interpolateVert(xbase, ybase, xnew, ynew)
+:canonical: galileoQC.qualitycontrol.checkVertPlan._interpolateVert
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan._interpolateVert
+```
+````
+
+````{py:function} _plot_vert_exceedance(xm, z_dev, xP, zP, xM, zM, measX, measZ, allowance, line, planLine, dirn)
+:canonical: galileoQC.qualitycontrol.checkVertPlan._plot_vert_exceedance
+
+```{autodoc2-docstring} galileoQC.qualitycontrol.checkVertPlan._plot_vert_exceedance
+```
+````

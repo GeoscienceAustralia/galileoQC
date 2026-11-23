@@ -1,0 +1,75 @@
+# {py:mod}`galileoQC.transforms.conform`
+
+```{py:module} galileoQC.transforms.conform
+```
+
+```{autodoc2-docstring} galileoQC.transforms.conform
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`conform_from_file <galileoQC.transforms.conform.conform_from_file>`
+  - ```{autodoc2-docstring} galileoQC.transforms.conform.conform_from_file
+    :summary:
+    ```
+* - {py:obj}`conform <galileoQC.transforms.conform.conform>`
+  - ```{autodoc2-docstring} galileoQC.transforms.conform.conform
+    :summary:
+    ```
+* - {py:obj}`harmonicSurvey <galileoQC.transforms.conform.harmonicSurvey>`
+  - ```{autodoc2-docstring} galileoQC.transforms.conform.harmonicSurvey
+    :summary:
+    ```
+* - {py:obj}`_check_grid <galileoQC.transforms.conform._check_grid>`
+  - ```{autodoc2-docstring} galileoQC.transforms.conform._check_grid
+    :summary:
+    ```
+* - {py:obj}`_set_defaults <galileoQC.transforms.conform._set_defaults>`
+  - ```{autodoc2-docstring} galileoQC.transforms.conform._set_defaults
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} conform_from_file(loc_file, reg_file, loc_units, reg_units, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, plot_flag=False)
+:canonical: galileoQC.transforms.conform.conform_from_file
+
+```{autodoc2-docstring} galileoQC.transforms.conform.conform_from_file
+```
+````
+
+````{py:function} conform(local_in, regional, survey_polygon, rim=16, low_lambda=None, hi_lambda=None, pad_cells=None, original_mask=None, plot_flag=False)
+:canonical: galileoQC.transforms.conform.conform
+
+```{autodoc2-docstring} galileoQC.transforms.conform.conform
+```
+````
+
+````{py:function} harmonicSurvey(size=6000.0, lambdas=None)
+:canonical: galileoQC.transforms.conform.harmonicSurvey
+
+```{autodoc2-docstring} galileoQC.transforms.conform.harmonicSurvey
+```
+````
+
+````{py:function} _check_grid(grid)
+:canonical: galileoQC.transforms.conform._check_grid
+
+```{autodoc2-docstring} galileoQC.transforms.conform._check_grid
+```
+````
+
+````{py:function} _set_defaults(low_lambda, hi_lambda, pad_cells, survey_polygon, cell_size)
+:canonical: galileoQC.transforms.conform._set_defaults
+
+```{autodoc2-docstring} galileoQC.transforms.conform._set_defaults
+```
+````

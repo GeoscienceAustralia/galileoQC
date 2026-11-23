@@ -1,0 +1,122 @@
+# {py:mod}`galileoQC.whizzFiles.updateOddOrEven`
+
+```{py:module} galileoQC.whizzFiles.updateOddOrEven
+```
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`updateOddOrEven <galileoQC.whizzFiles.updateOddOrEven.updateOddOrEven>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven.updateOddOrEven
+    :summary:
+    ```
+* - {py:obj}`_set_plan_parities <galileoQC.whizzFiles.updateOddOrEven._set_plan_parities>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._set_plan_parities
+    :summary:
+    ```
+* - {py:obj}`_set_flown_parities <galileoQC.whizzFiles.updateOddOrEven._set_flown_parities>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._set_flown_parities
+    :summary:
+    ```
+* - {py:obj}`_approx_spacings <galileoQC.whizzFiles.updateOddOrEven._approx_spacings>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._approx_spacings
+    :summary:
+    ```
+* - {py:obj}`_line_fit <galileoQC.whizzFiles.updateOddOrEven._line_fit>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._line_fit
+    :summary:
+    ```
+* - {py:obj}`_linelength <galileoQC.whizzFiles.updateOddOrEven._linelength>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._linelength
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.whizzFiles.updateOddOrEven.groupName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.whizzFiles.updateOddOrEven.projectName>`
+  - ```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.whizzFiles.updateOddOrEven.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.whizzFiles.updateOddOrEven.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven.projectName
+```
+
+````
+
+````{py:function} updateOddOrEven(whizzFile='', x='', y='', oddlines=[], evenlines=[], planFile='', verbose=False)
+:canonical: galileoQC.whizzFiles.updateOddOrEven.updateOddOrEven
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven.updateOddOrEven
+```
+````
+
+````{py:function} _set_plan_parities(planFile, x='', y='', verbose=False)
+:canonical: galileoQC.whizzFiles.updateOddOrEven._set_plan_parities
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._set_plan_parities
+```
+````
+
+````{py:function} _set_flown_parities(whizzFile, planFile, verbose=False)
+:canonical: galileoQC.whizzFiles.updateOddOrEven._set_flown_parities
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._set_flown_parities
+```
+````
+
+````{py:function} _approx_spacings(linegroup, firstgroup, trav_spacing, x, y, tolerance=0.2)
+:canonical: galileoQC.whizzFiles.updateOddOrEven._approx_spacings
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._approx_spacings
+```
+````
+
+````{py:function} _line_fit(linegroup, x, y)
+:canonical: galileoQC.whizzFiles.updateOddOrEven._line_fit
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._line_fit
+```
+````
+
+````{py:function} _linelength(linegroup, x, y)
+:canonical: galileoQC.whizzFiles.updateOddOrEven._linelength
+
+```{autodoc2-docstring} galileoQC.whizzFiles.updateOddOrEven._linelength
+```
+````

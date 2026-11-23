@@ -1,0 +1,313 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "9ae77456-72fc-477a-944e-7530cee0b10d",
+   "metadata": {},
+   "source": [
+    "# Prepare Vinton Dome FTG data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "becf4dac-a31d-4694-803a-c79bb6b226f3",
+   "metadata": {},
+   "source": [
+    "**__See EastVic Data for latest organisation of Prepare tutorials__**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e12d6241-ef18-4168-b3ec-19ed29115a25",
+   "metadata": {},
+   "source": [
+    "The Geosoft XYZ data format file is commonly used in geophysics to transmit geophysical survey data in a text-readable form.\n",
+    "\n",
+    "This tutorial demonstrates the preparation of XYZ airborne gravity gradiometer data, from the Vinton Dome FTG survey, for QC. The preparation consists of converting the data to geoWhizz format and storing in a HDF5 file, compiling the project, line, and channel metadata."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "db57d138-1ecc-414f-bdcd-dbb7a135eb6d",
+   "metadata": {},
+   "source": [
+    "We need all the data in HDF5 geoWhizz format because all the QC functions expect that format. (More on the geoWhizz format elsewhere in the __galileoQC__ documentation.)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a95b5c95-25ce-439f-ba5e-6f754e28b2e8",
+   "metadata": {
+    "jp-MarkdownHeadingCollapsed": true,
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b02dddad-a441-457c-b7ae-274c449649a3",
+   "metadata": {},
+   "source": [
+    "First, import the required modules, and set the path to the XYZ file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3f30b81f-4f81-4fc6-8485-ab8638a1c745",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "70e88a9b-8e37-48b8-8bd6-1d5b48095e49",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# There was no plan data supplied with the Vinton Dome project.\n",
+    "vintonXYZ_file = Path(r'./VintonData/VintonDome.xyz')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5888790c-8c3d-4e9f-841e-e91f390bedb2",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8286296f-a186-4934-8891-1992f7519140",
+   "metadata": {},
+   "source": [
+    "**The Measured Survey Data**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dc07475c-45ea-4ed6-a2ab-64cf1ac170e5",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "vintonHDF_file = vintonXYZ_file.with_suffix(\".hdf5\")\n",
+    "if not vintonHDF_file.exists():\n",
+    "    vintonHDF_file = qc.xyzToHDF(vintonXYZ_file, projectName='Vinton Dome')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9ed009d1-770a-423d-a4b9-a5ad9b5d7b39",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "block_name = 'Vinton Dome Data'\n",
+    "qc.updateProject(vintonHDF_file, acquirer='Bell Geospace', blockID=block_name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8113d578-6d7a-470f-94d6-a6588cd24526",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.updateCoordFrame(vintonHDF_file, \n",
+    "                    lat='Lat', \n",
+    "                    lon='Lon', \n",
+    "                    x='X', \n",
+    "                    y='Y', \n",
+    "                    time='Time', \n",
+    "                    alt='Altitude', \n",
+    "                    geoDatum='WGS84', \n",
+    "                    htDatum='WGS84', \n",
+    "                    projection='UTM', \n",
+    "                    utmz='15')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1005e647-8283-4f23-8a72-a06575ade3aa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.updateChannelAttributes(vintonHDF_file, 'Altitude', units='m')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Drape', units='m', description='Planned Height')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Lat', units='degree')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Lon', units='degree')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Terrain', units='m')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Time', units='s')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'YYMMDD')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'HHMMSS')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'X', units='metre')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Y', units='metre')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Cross1_raw', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Cross2_raw', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Cross3_raw', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Inline1_raw', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Inline2_raw', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Inline3_raw', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'TC_Txx_100', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'TC_Txz_100', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'TC_Tyx_100', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'TC_Tyy_100', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'TC_Tyz_100', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'TC_Tzz_100', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Txx_slv', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Txz_slv', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Tyx_slv', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Tyy_slv', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Tyz_slv', units='eotvos')\n",
+    "qc.updateChannelAttributes(vintonHDF_file, 'Tzz_slv', units='eotvos')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1cb4dc73-6798-4f01-b1e0-b349ba9762b6",
+   "metadata": {},
+   "source": [
+    "The line numbering for Vinton Dome is not obvious but we need to be able to distinguish between traverse and control lines for several purposes, including odd-even grid analysis. So let's work it out and set the metadata appropriately for each flight-line."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9f884fd2-8708-4d0f-96b6-d1f5dd20014b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.updateLineVariety(vintonHDF_file, trav_lines=['11.000', '111.000', \n",
+    "                       '131.000', '131.100', '151.000', '151.100', '151.200', \n",
+    "                       '171.000', '191.000', '211.000', \n",
+    "                       '211.100', '231.000', '251.000', '271.000', '271.100', \n",
+    "                       '291.000', '291.100', '31.000', '31.100', \n",
+    "                       '311.000', '331.000', '351.000', '371.000', '371.100', \n",
+    "                       '391.000', '401.000', '411.000', '411.100', \n",
+    "                       '421.000', '431.000', '431.100', '441.000', '451.000', \n",
+    "                       '461.000', '461.100', '471.000', '481.000', '491.000', \n",
+    "                       '501.000', '501.100', '51.000', '51.100', \n",
+    "                       '511.000', '521.000', '531.000', '541.000', '541.100', \n",
+    "                       '541.200', '551.000', '561.000', '581.000',  \n",
+    "                       '601.000', '601.100', '621.000', '641.000', '641.100', \n",
+    "                       '661.000', '661.100', '681.000', '701.000', \n",
+    "                       '71.000', '721.000', '741.000', '741.100', '761.000', \n",
+    "                       '761.100', '781.000', '801.000', '821.000', \n",
+    "                       '841.000', '841.100', '861.000', '881.000',  \n",
+    "                       '91.000'], ctrl_lines=['10.000', '100.000', '110.000',  \n",
+    "                       '120.000', '130.000', '140.000', \n",
+    "                       '150.000', '160.000', \n",
+    "                       '170.000', '20.000', \n",
+    "                       '30.000', '40.000', \n",
+    "                       '50.000', '60.000', \n",
+    "                       '70.000', '80.000', '90.000'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "313cf244-6d5c-4d4a-8c02-a1c75306ddff",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportWhizz(vintonHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fac87102-f842-4c40-9c07-6eb3da50b7b1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportFlights(vintonHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b0a3690e-575f-4e8d-b25c-36e4819e206b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportSampling(vintonHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0ba9e8d5-8753-4a3d-b462-f9f791cb2ab4",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "654f8e7b-d252-497b-8aef-0ff8eadb963a",
+   "metadata": {},
+   "source": [
+    "**Make a survey flight-line map**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "03ba1a41-6128-43d1-ac0d-3f521ff5eb84",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "qc.linesMap([vintonHDF_file], whizzPlanFile=vintonHDF_file)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "877386d4-b15d-40ab-87e4-c9deae93999b",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "81a1e433-2308-4cae-a1b4-5774906f679b",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

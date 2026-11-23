@@ -1,0 +1,156 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "c517647d-3226-4224-bfac-5ebc53a64bbe",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "# Repeat Line Analysis"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "55aeb42d-7f0e-4b52-9ab6-4e4424313e9d",
+   "metadata": {},
+   "source": [
+    "For gravimeter surveys it is common to set a requirement on the gravity data repeatability. \n",
+    "\n",
+    "__galileoQC__ provides the `checkRepeatLines` function for repeat-line analysis. \n",
+    "\n",
+    "Here we demonstrate its use on the East Victorian airborne gravimetry survey data.\n",
+    "\n",
+    "Ensure you have run the `Prepare_EastVicData` notebook first so that the data are prepared for review."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1731fc11-7bea-496f-a4fe-b6c694058f69",
+   "metadata": {
+    "tags": []
+   },
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d41e6ef2-b07c-44f9-935d-d9886e7faa69",
+   "metadata": {},
+   "source": [
+    "Import the required modules, and set the path to the geowhizz files."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6541a9e4-d579-44cf-839d-a97a80ef6513",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "import galileoQC as qc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b0ec9460-4290-44bd-8840-e76d537ee3e0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dh = Path(r'./EastVicData/EastVicRepeats.hdf5')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bf63413f-4ac7-4cb8-bd5c-94137b40ef8f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if not dh.exists():\n",
+    "    %run ./Prepare_EastVicData.ipynb"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a1057f6c-a1b5-410f-b75d-8a93f4cbf31f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.reportLines(dh)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2968dfe6-9859-4ebe-9de1-47cc330db694",
+   "metadata": {},
+   "source": [
+    "___"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ba7ce30d-2e96-48b5-89af-209ea935e2c6",
+   "metadata": {},
+   "source": [
+    "Here is a repeat line check against the Bouguer gravity (filtered at $100\\,s$)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "032f279e-eae0-4e75-af60-0096af12b906",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "all_lines = ['7001.160', '7001.170', '7001.180', '7001.190', '7001.200', '7001.210',\n",
+    "             '7001.220', '7001.230', '7001.240', '7001.250']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e393beb0-63c7-4c1f-ad4d-770056cadd05",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "qc.checkRepeatLines([dh], 'B100s-267_GEOID', all_lines, xOffset=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "058a4514-7eb4-4e1f-a12f-803a01c6866c",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

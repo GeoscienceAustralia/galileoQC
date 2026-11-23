@@ -1,0 +1,31 @@
+# {py:mod}`galileoQC.transforms.gravity_from_curv`
+
+```{py:module} galileoQC.transforms.gravity_from_curv
+```
+
+```{autodoc2-docstring} galileoQC.transforms.gravity_from_curv
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`gravity_from_curv <galileoQC.transforms.gravity_from_curv.gravity_from_curv>`
+  - ```{autodoc2-docstring} galileoQC.transforms.gravity_from_curv.gravity_from_curv
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} gravity_from_curv(Ane, Auv, cell_size, gd_chan=None, altitude=None, result_units='um/s/s', survey_polygon=None, pad_cells=None, padding_mode='regional', regional_grid=None, firstorder=False, plot_flag=False, verbose=False)
+:canonical: galileoQC.transforms.gravity_from_curv.gravity_from_curv
+
+```{autodoc2-docstring} galileoQC.transforms.gravity_from_curv.gravity_from_curv
+```
+````

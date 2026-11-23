@@ -1,0 +1,67 @@
+# {py:mod}`galileoQC.gridFiles.xarray_to_grid`
+
+```{py:module} galileoQC.gridFiles.xarray_to_grid
+```
+
+```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`xarray_to_grid <galileoQC.gridFiles.xarray_to_grid.xarray_to_grid>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid.xarray_to_grid
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`groupName <galileoQC.gridFiles.xarray_to_grid.groupName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid.groupName
+    :summary:
+    ```
+* - {py:obj}`projectName <galileoQC.gridFiles.xarray_to_grid.projectName>`
+  - ```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid.projectName
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} groupName
+:canonical: galileoQC.gridFiles.xarray_to_grid.groupName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid.groupName
+```
+
+````
+
+````{py:data} projectName
+:canonical: galileoQC.gridFiles.xarray_to_grid.projectName
+:value: >
+   None
+
+```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid.projectName
+```
+
+````
+
+````{py:function} xarray_to_grid(my_data, grid_space, region=None, method='neighbours', mask_polygon=[], mask_pixels=1, numneighbours=5, bdist=None, maxiters=100)
+:canonical: galileoQC.gridFiles.xarray_to_grid.xarray_to_grid
+
+```{autodoc2-docstring} galileoQC.gridFiles.xarray_to_grid.xarray_to_grid
+```
+````
