@@ -101,20 +101,31 @@ def updateOddOrEven(whizzFile='', x='', y='', oddlines=[], evenlines=[], planFil
             lines_group = f[groupName]['Lines']
             for line in oddlines:
                 linegroup = lines_group[line]
-                if not (linegroup.attrs['LineVariety'] == 'Traverse'):
-                    continue
+                if 'LineVariety' in linegroup.attrs:
+                    if not (linegroup.attrs['LineVariety'] == 'Traverse'):
+                        continue
+                    else:
+                        linegroup.attrs['Parity'] = True
+                        if verbose:
+                            print(f'Line {line}: Parity = {linegroup.attrs["Parity"]}.')
                 else:
-                    linegroup.attrs['Parity'] = True
-                    if verbose:
-                        print(f'Line {line}: Parity = {linegroup.attrs["Parity"]}.')
+                    print(f'Warning - line {line} ignored since it has no LineVariety attribute.')
+                    print(f'    need to run updateLineAttributes with `line_type` set.')
+                    return
+                
             for line in evenlines:
-                linegroup = lines_group[line]
-                if not (linegroup.attrs['LineVariety'] == 'Traverse'):
-                    continue
+                if 'LineVariety' in linegroup.attrs:
+                    linegroup = lines_group[line]
+                    if not (linegroup.attrs['LineVariety'] == 'Traverse'):
+                        continue
+                    else:
+                        linegroup.attrs['Parity'] = False
+                        if verbose:
+                            print(f'Line {line}: Parity = {linegroup.attrs["Parity"]}.')
                 else:
-                    linegroup.attrs['Parity'] = False
-                    if verbose:
-                        print(f'Line {line}: Parity = {linegroup.attrs["Parity"]}.')
+                    print(f'Warning - line {line} ignored since it has no LineVariety attribute.')
+                    print(f'    need to run updateLineAttributes with `line_type` set.')
+                    return
         return
 
     elif (not planFile == '') and whizzFile == '':

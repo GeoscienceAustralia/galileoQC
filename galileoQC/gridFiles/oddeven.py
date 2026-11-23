@@ -328,6 +328,7 @@ def oddevenlines(whizz_file, channel, grid_space, oddlines=[], evenlines=[], met
 
     gut.report_gridStats(d_grid, mask_polygon=mask_polygon, title='odd-even difference')
 
+    return
 
 def _getOddEvenLines(whizz_file):
     """

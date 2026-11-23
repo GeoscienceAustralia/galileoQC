@@ -91,6 +91,7 @@ def lowpass_grid(agrid, low_lambda, filtername='cos2', plot_flag=False):
     # Filling holes in the original local grid (may want to restrict this to smallest
     # enclosing rectangle or, better, a convex hull)
     local = agrid.copy()
+    mymask = np.isnan(agrid.data)
     local.rio.write_crs(4283, inplace=True)
     local.rio.write_nodata(np.nan, encoded=True, inplace=True)
     local = local.rio.interpolate_na(method='nearest')
@@ -153,7 +154,7 @@ def lowpass_grid(agrid, low_lambda, filtername='cos2', plot_flag=False):
         xdImage(local_out.real, f'low-pass filtered, detrended grid {da_extremes(local_out.real)}', hs=True)
         xdImage(low_grav, f'low-pass filtered grid (trend restored) {da_extremes(low_grav)}', hs=True)
 
-    return low_grav
+    return low_grav.where(~mymask, drop=False)
 
 
 def _check_grid(grid):
